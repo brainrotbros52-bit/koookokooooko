@@ -393,6 +393,47 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .qcard.ready{border-color:#7A4A2C;background:radial-gradient(ellipse at 0% 50%,rgba(224,122,60,.12),transparent 60%),#171210}
 .qcard.claimed{opacity:.7}
 .qclaim:disabled{opacity:.6}
+.adm-entry{width:100%;display:flex;align-items:center;gap:12px;min-height:64px;padding:0 14px 0 12px;border-radius:16px;background:radial-gradient(ellipse at 0% 50%,rgba(224,122,60,.14),transparent 60%),#171210;border:1px solid #7A4A2C;text-align:left}
+.adm-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.adm-st{display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:14px;background:#171210;border:1px solid #2E241E}
+.adm-st span{font-size:11px;font-weight:700;color:#A8988A}.adm-st b{font-size:18px;font-weight:700}.adm-st small{font-size:11px;color:#8C7D71}
+.adm-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}.adm-tabs::-webkit-scrollbar{display:none}
+.adm-tabs button{flex:none;display:flex;align-items:center;gap:6px;height:38px;padding:0 13px;border-radius:12px;background:#171210;border:1px solid #2E241E;color:#CDBFB2;font-weight:800;font-size:13px}
+.adm-tabs button.on{background:#F2E9E1;color:#1A0F09;border-color:#F2E9E1}
+.adm-tabs button i{font-style:normal;font-size:11px;min-width:0;padding:0 5px;border-radius:6px;background:#E07A3C;color:#1A0F09}.adm-tabs button i:empty{display:none}
+.adm-card{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:16px;background:#171210;border:1px solid #2E241E}
+.adm-card.hot{border-color:#3E9A63}
+.adm-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px}
+.adm-sub{font-size:12px;color:#A8988A}
+.adm-nick{align-self:flex-start;display:flex;align-items:center;gap:6px;height:32px;padding:0 10px;border-radius:9px;background:#0E0B0A;border:1px dashed #5A4334;color:#CDBFB2;font-size:13px}
+.adm-nick b{color:#F2E9E1}
+.adm-its{display:flex;flex-direction:column;gap:4px}
+.adm-it{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 10px;border-radius:9px;background:#120E0C;border-left:3px solid var(--c);font-size:13px}
+.adm-it small{font-size:11px;color:#A8988A;width:100%}.adm-it em{margin-left:auto;font-style:normal;font-weight:800}
+.adm-acts{display:flex;gap:6px;flex-wrap:wrap;align-items:stretch}
+.adm-acts>button{height:40px;padding:0 12px;border-radius:10px;font-size:13px;box-shadow:none;flex:1 1 auto}
+.ghost.danger{color:#F08A66;border-color:#4A2A1E}
+.warn{background:#B5481F!important;color:#fff!important;border-color:#B5481F!important}
+.adm-in{display:flex;align-items:center;gap:6px;height:40px;padding:0 10px;border-radius:10px;background:#0E0B0A;border:1px solid #2E241E;flex:1 1 140px}
+.adm-in span{font-size:11px;color:#8C7D71;font-weight:700;white-space:nowrap}.adm-in input{width:100%;min-width:0;background:none;border:0;outline:none;color:#F2E9E1;font:800 14px Manrope,sans-serif}
+.adm-form{display:flex;flex-direction:column;gap:8px}
+.adm-form input,.adm-form select{height:44px;padding:0 12px;border-radius:12px;background:#0E0B0A;border:1px solid #2E241E;color:#F2E9E1;font:600 14px Manrope,sans-serif;outline:none;min-width:0}
+.adm-form input:focus,.adm-form select:focus{border-color:#7A4A2C}
+.adm-form .fire{height:46px;font-size:14px;box-shadow:none}
+.adm-li{display:flex;align-items:center;gap:10px;padding:8px 6px 8px 10px;border-radius:10px;background:#120E0C}
+.adm-li b{font-size:13px}.adm-li small{display:block;font-size:11px}
+.adm-li .dot,.adm-case .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.adm-x{width:30px;height:30px;flex:none;border-radius:8px;background:none;border:1px solid #2E241E;display:flex;align-items:center;justify-content:center}
+.adm-x.warn{background:#B5481F!important}
+.adm-cols{display:flex;gap:8px}.adm-cols button{width:30px;height:30px;border-radius:50%;border:2px solid transparent}.adm-cols button.on{border-color:#F2E9E1;box-shadow:0 0 0 2px #0E0B0A inset}
+.adm-ck{display:flex;align-items:center;gap:8px;font-size:13px;color:#CDBFB2}.adm-ck input{accent-color:#E07A3C;width:18px;height:18px}
+.adm-case summary{display:flex;align-items:center;gap:8px;list-style:none;cursor:pointer;font-size:14px}.adm-case summary::-webkit-details-marker{display:none}
+.adm-pick{display:flex;flex-direction:column;gap:4px;max-height:260px;overflow:auto}
+.adm-pick label{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;background:#120E0C;border:1px solid transparent;font-size:13px;font-weight:700;cursor:pointer}
+.adm-pick label.on{border-color:#7A4A2C;background:#1F1611}.adm-pick input{accent-color:#E07A3C;width:16px;height:16px;margin:0}
+.adm-pick em,.adm-ch em{margin-left:auto;font-style:normal;color:#A8988A;font-size:12px}
+.adm-ch{display:flex;flex-direction:column;gap:3px;padding:8px 10px;border-radius:10px;background:#0E0B0A}.adm-ch span{display:flex;gap:8px;font-size:12px}
+.adm-kv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.adm-kv span{display:flex;flex-direction:column;gap:2px;padding:8px;border-radius:10px;background:#0E0B0A;font-size:10px;color:#8C7D71;font-weight:700}.adm-kv b{font-size:14px;color:#F2E9E1}
 /* меню */
 .m2{display:flex;flex-direction:column;gap:14px;padding:12px 14px 20px;min-height:100%}
 .m2>.sec{margin:6px 2px -4px}
@@ -905,6 +946,17 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
       </div>
     </section>
 
+    <!-- ===== АДМИН-ПАНЕЛЬ (видна только админам; сервер проверяет права сам) ===== -->
+    <section class="screen" data-s="admin">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+        <div class="ptitle"><h1>Админ-панель</h1><span class="muted" style="font-size:13px">Видна только тебе</span></div>
+        <button class="iconbtn card" id="admRefresh" aria-label="Обновить"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDBFB2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg></button>
+      </div>
+      <div class="adm-stats" id="admStats"></div>
+      <div class="adm-tabs" id="admTabs"></div>
+      <div id="admBody" style="display:flex;flex-direction:column;gap:10px"></div>
+    </section>
+
     <!-- ===== НАСТРОЙКИ ===== -->
     <section class="screen" data-s="settings">
       <div class="ptitle"><h1>Настройки</h1></div>
@@ -914,6 +966,11 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
         <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #2E241E;font-weight:700;font-size:15px">Уведомления от бота<input type="checkbox" class="toggle"></label>
         <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;font-weight:700;font-size:15px">Скрыть ник в ленте<input type="checkbox" class="toggle"></label>
       </div>
+      <button class="adm-entry" id="admEntry" data-go="admin" hidden>
+        <span class="prow-ic" style="background:#2A1C14;border-color:#7A4A2C"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F0A27A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z M9 12l2 2 4-4"/></svg></span>
+        <span class="prow-t"><b>Админ-панель</b><span class="muted">Заявки, выводы, кейсы, промокоды, игроки</span></span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
       <div class="card" style="border-radius:16px;overflow:hidden" id="slinks"></div>
       <p class="muted" style="margin:0;font-size:12px;text-align:center">BRAINFIRE · версия 0.1</p>
     </section>
@@ -1073,7 +1130,7 @@ const ERR={
   deposit_active:'У тебя уже есть заявка в очереди',wager_left:'Сначала отыграй баланс',daily_wait:'Бонус ещё не доступен',
   unauthorized:'Открой приложение через Telegram',bad_nick:'Неверный ник Roblox',game_active:'Сначала закончи текущую игру',
   target_cheap:'Цель должна быть дороже ставки',banned:'Аккаунт заблокирован',bad_items:'Предметы не найдены — обнови страницу',
-  cannot_cancel:'Заявку уже взяли в работу',open_first:'Сначала открой клетку',no_game:'Игра не найдена',server_error:'Ошибка сервера, попробуй ещё раз'
+  cannot_cancel:'Заявку уже взяли в работу',not_admin:'Нет прав администратора',bad_input:'Проверь поля',bad_case_id:'id кейса: латиница, цифры, - или _',item_owned:'Этот предмет есть у игроков — удалить нельзя',no_user:'Игрок не найден',quest_not_done:'Квест ещё не выполнен',quest_claimed:'Награда уже получена',no_quest:'Квест не найден',open_first:'Сначала открой клетку',no_game:'Игра не найдена',server_error:'Ошибка сервера, попробуй ещё раз'
 };
 const API={
   on:()=>LIVE,lastError:null,
@@ -1112,6 +1169,7 @@ const ITEMS=[
  {name:'Trippi Troppi',mono:'TR',r:'common',p:90,ch:'18%'},
  {name:'Frigo Camelo',mono:'FC',r:'common',p:60,ch:'20%'}];
 const fmt=n=>Math.round(n).toLocaleString('ru-RU');
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const RB=p=>p>=1000?'myth':p>=400?'legend':p>=150?'epic':p>=70?'rare':'common';
 const mk=n=>n.split(/\s+/).filter(w=>!/^(and|or|of|the|di)$/i.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase();
 // предмет с сервера → объект сайта
@@ -1135,7 +1193,7 @@ const MENU={
  account:[{s:'settings',k:'settings',t:'Настройки',d:'Звук, уведомления',c:'#CDBFB2'}]};
 let cur='home';
 const EMBERS=Array.from({length:16},()=>`<i class="em" style="left:${(Math.random()*100).toFixed(1)}%;--dx:${(Math.random()*60-30).toFixed(0)}px;animation-duration:${(3+Math.random()*4).toFixed(2)}s;animation-delay:-${(Math.random()*6).toFixed(2)}s;${Math.random()<.4?'width:2px;height:2px;':''}"></i>`).join('');
-const owner={home:'home',case:'home',win:'home'};
+const owner={home:'home',case:'home',win:'home',admin:'settings'};
 function drawMenu(){
  const act=owner[cur]||cur;
  const big={home:{t:'Кейсы',d:'24 кейса',k:'cases',c:'#E07A3C'},upgrade:{t:'Апгрейд',d:'до ×10',k:'upgrade',c:'#DDA650'}};
@@ -1195,7 +1253,7 @@ function drawMenu(){
   </div>
  </div></div>`;
 }
-const BACK={case:'home',win:'case'};
+const BACK={case:'home',win:'case',admin:'settings'};
 function syncBack(){if(!tg||!tg.BackButton)return;(cur==='home')?tg.BackButton.hide():tg.BackButton.show();}
 if(tg&&tg.BackButton)tg.BackButton.onClick(()=>{const os=document.querySelector('.sheet.open');if(os){closeSheet(os.id);return;}if($('depModal').classList.contains('open')){closeDeposit();return;}if($('phone').classList.contains('open')){$('phone').classList.remove('open');return;}if(!spinning&&!upBusy)go(BACK[cur]||'home');});
 function go(s){
@@ -1203,6 +1261,7 @@ function go(s){
  if(s==='case'&&!spinning)buildReels(MS[mIdx]);
  if(s==='upgrade')drawUp();
  if(s==='quests')loadQuests();
+ if(s==='admin')admOpen();
  if(s==='bonus')drawDaily();
  if(s==='profile'){drawProfile();wDraw();}
 
@@ -1352,7 +1411,7 @@ function fakeSrc(it){const r=Math.random();
  return {src:'draw',from:'',cost:0};}
 const fakeDrop=(ts)=>{const it=roll();return {...it,...fakeSrc(it),user:NICKS[Math.random()*NICKS.length|0],ts:ts||Date.now()};};
 let feedReady=false,feedLast=0;
-const srvDrop=o=>({name:o.name,p:o.price,r:o.rarity,mono:mk(o.name),user:o.user,src:o.src,from:o.from||(o.src==='upgrade'?'':''),cost:o.cost,ts:Date.parse(o.ts),id:'f'+o.id});
+const srvDrop=o=>({name:esc(o.name),p:o.price,r:o.rarity,mono:mk(o.name),user:esc(o.user),src:o.src,from:o.from||(o.src==='upgrade'?'':''),cost:o.cost,ts:Date.parse(o.ts),id:'f'+o.id});
 async function liveFeed(){
  const top=await API.call('top',{},true);TOP=top?srvDrop(top):null;drawTop();
  const first=await API.call('feed',{after:0},true)||[];
@@ -1793,7 +1852,7 @@ function drawProfile(){
  }else if(LIVE){
   $('pbody').innerHTML='<p class="muted" style="text-align:center;font-size:13px;padding:20px 0">Загружаем историю…</p>';
   API.call('history',{}).then(h=>{if(pTab!==1||!h)return;
-   const GN={case:'Кейс',upgrade:'Апгрейд',mines:'Мины',sell:'Продажа',deposit:'Пополнение',withdraw:'Вывод',bonus:'Бонус',promo:'Промокод'};
+   const GN={admin:'Начисление',quest:'Квест',case:'Кейс',upgrade:'Апгрейд',mines:'Мины',sell:'Продажа',deposit:'Пополнение',withdraw:'Вывод',bonus:'Бонус',promo:'Промокод'};
    $('pbody').innerHTML=h.length?`<div style="display:flex;flex-direction:column;gap:8px">${h.map(e=>{const x=e.item?mkItem(e.item):null;
     const v=e.game==='withdraw'?-e.bet:e.payout-e.bet;const c=v>0?'#7FD49A':v<0?'#F08A66':'#CDBFB2';
     return `<div class="card" style="display:flex;align-items:center;gap:12px;padding:8px 14px 8px 8px;border-radius:14px">
@@ -2115,6 +2174,147 @@ let DAILY_LAST=null;
 // демо: если пропустил больше суток после доступности — серия с 1 дня
 setInterval(()=>{if(!LIVE&&DAILY_LAST&&Date.now()-DAILY_LAST>1728e5){DAILY_DAY=1;DAILY_STREAK=0;DAILY_NEXT=null;drawDaily();}},60000);
 setInterval(drawDaily,30000);
+
+/* =====================================================================
+   АДМИН-ПАНЕЛЬ. Все действия идут на сервер (action 'admin'),
+   сервер сам проверяет, что ты в таблице admins.
+   ===================================================================== */
+const ADM_TABS=[['dep','Заявки'],['wd','Выводы'],['cases','Кейсы'],['items','Предметы'],['promo','Промо'],['users','Игроки']];
+let admTab='dep',admData={},admUserQ='';
+const RCOL=r=>R[r]||'#A8988A';
+async function adm(op,args,quiet){const r=await API.call('admin',{op,args:args||{}});if(r&&r.msg&&!quiet){toast(r.msg);haptic('success');}return r;}
+// двойное нажатие для опасных действий
+function sure(btn){if(btn.dataset.sure==='1')return true;const t=btn.textContent;btn.dataset.sure='1';btn.textContent='Точно?';btn.classList.add('warn');
+ setTimeout(()=>{if(btn.isConnected){btn.dataset.sure='';btn.textContent=t;btn.classList.remove('warn');}},2500);return false;}
+async function admOpen(){if(!USER.admin){go('settings');return;}admTabsDraw();admStats();admLoad();}
+async function admStats(){const o=await adm('overview',{},true);if(!o)return;const prof=o.bets_today-o.wins_today;
+ $('admStats').innerHTML=[['Игроков',fmt(o.players),o.players_today?'+'+o.players_today+' сегодня':''],['Заявок в очереди',o.dep_queue,'выводов: '+o.wd_queue],
+  ['Пополнено сегодня',fmt(o.dep_today),'монет'],['Профит сегодня',(prof>=0?'+':'−')+fmt(Math.abs(prof)),'ставки '+fmt(o.bets_today)]]
+  .map(([t,v,d],i)=>`<div class="adm-st"><span>${t}</span><b class="u num" style="${i===3?`color:${prof>=0?'#7FD49A':'#F08A66'}`:''}">${v}</b><small>${d}</small></div>`).join('');
+ const dq=ADM_TABS.findIndex(t=>t[0]==='dep'),wq=ADM_TABS.findIndex(t=>t[0]==='wd');
+ const tb=$('admTabs').children;if(tb[dq])tb[dq].querySelector('i').textContent=o.dep_queue||'';if(tb[wq])tb[wq].querySelector('i').textContent=o.wd_queue||'';}
+function admTabsDraw(){$('admTabs').innerHTML=ADM_TABS.map(([k,t])=>`<button class="${k===admTab?'on':''}" data-t="${k}">${t}<i></i></button>`).join('');}
+$('admTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;admTab=b.dataset.t;admTabsDraw();admStats();admLoad();haptic('light');};
+$('admRefresh').onclick=()=>{haptic('light');admStats();admLoad();};
+const admEmpty=t=>`<p class="muted" style="text-align:center;font-size:14px;padding:26px 0;margin:0">${t}</p>`;
+const admItemsList=L=>`<div class="adm-its">${L.map(x=>`<span class="adm-it" style="--c:${RCOL(x.r||x.rarity||RB(x.price))}"><b>${esc(x.name)}</b>${x.q?` ×${x.q}`:''}${x.buffs&&x.buffs.length?`<small>${x.buffs.map(esc).join(', ')}</small>`:''}<em class="num">${fmt(x.price*(1+(x.pct||0)/100)*(x.q||1))}</em></span>`).join('')}</div>`;
+const who=x=>`${x.username?'@'+esc(x.username):'без ника'} · <span class="num">${x.tg_id}</span>`;
+async function admLoad(){
+ const B=$('admBody');B.innerHTML=admEmpty('Загружаем…');
+ if(admTab==='dep'){const L=await adm('deposits',{},true)||[];admData.dep=L;
+  B.innerHTML=L.length?L.map(d=>`<div class="adm-card${d.status==='processing'?' hot':''}">
+   <div class="adm-row"><b class="u">#${d.id}</b><span class="badge" style="background:${d.status==='processing'?'#14301F':'#2A1C14'};color:${d.status==='processing'?'#7FD49A':'#F0A27A'}">${d.status==='processing'?'в работе':d.pos+' в очереди'}</span><span class="muted" style="margin-left:auto;font-size:12px">${ago(Date.parse(d.ts))}</span></div>
+   <div class="adm-sub">${who(d)}</div>
+   <button class="adm-nick" data-copy="${esc(d.nick)}">Roblox: <b>${esc(d.nick)}</b> ${ic('M9 9h11v11H9zM5 15V6a2 2 0 0 1 2-2h8','#A8988A',13,2.2)}</button>
+   ${admItemsList(d.items)}
+   <div class="adm-row"><span class="muted">Сумма</span><b class="num">${fmt(d.sum)}</b>${d.bonus?`<span class="muted">+ промо ${esc(d.promo)}</span><b class="num" style="color:#7FD49A">+${fmt(d.bonus)}</b>`:''}</div>
+   <div class="adm-acts">
+    ${d.status==='queued'?`<button class="ghost" data-a="deposit_take" data-id="${d.id}">В работу</button>`:''}
+    <label class="adm-in"><span>Начислить</span><input type="number" inputmode="numeric" value="${d.sum}" id="ds${d.id}"></label>
+    <button class="fire" data-a="deposit_confirm" data-id="${d.id}">Принять</button>
+    <button class="ghost danger" data-a="deposit_reject" data-id="${d.id}">Отклонить</button>
+   </div></div>`).join(''):admEmpty('Очередь пуста 👌');}
+ else if(admTab==='wd'){const L=await adm('withdrawals',{},true)||[];
+  B.innerHTML=L.length?L.map(w=>`<div class="adm-card">
+   <div class="adm-row"><b class="u">#${w.id}</b><b class="num" style="margin-left:auto">${COIN(13)} ${fmt(w.total)}</b></div>
+   <div class="adm-sub">${who(w)} · ${ago(Date.parse(w.ts))}</div>
+   <button class="adm-nick" data-copy="${esc(w.nick)}">Отправить на: <b>${esc(w.nick)}</b> ${ic('M9 9h11v11H9zM5 15V6a2 2 0 0 1 2-2h8','#A8988A',13,2.2)}</button>
+   ${admItemsList(w.items)}
+   <div class="adm-acts"><button class="fire" data-a="withdraw_done" data-id="${w.id}">Отправлено</button>
+    <button class="ghost danger" data-a="withdraw_cancel" data-id="${w.id}">Отменить (вернуть)</button></div></div>`).join(''):admEmpty('Выводов нет');}
+ else if(admTab==='items'){const L=await adm('items',{},true)||[];admData.items=L;
+  B.innerHTML=`<div class="adm-card"><b>Добавить предмет</b>
+    <div class="adm-form"><input id="aiName" placeholder="Название, например Tralalero Tralala" maxlength="60">
+     <div style="display:flex;gap:8px"><input id="aiPrice" type="number" inputmode="numeric" placeholder="Цена" style="flex:1">
+      <select id="aiKind"><option value="br">Брейнрот</option><option value="gr">Гир</option></select></div>
+     <button class="fire" data-a="item_add">Добавить</button></div>
+    <span class="muted" style="font-size:12px">Редкость ставится по цене: до 70 обычный · 70+ редкий · 150+ эпик · 400+ легенда · 1000+ мифик. Та же кнопка с тем же названием меняет цену.</span></div>
+   ${L.length?`<div class="adm-card" style="gap:6px">${L.map(x=>`<div class="adm-li"><span class="dot" style="background:${RCOL(x.rarity)}"></span><span style="flex:1;min-width:0"><b>${esc(x.name)}</b><small class="muted">${x.kind==='gr'?'гир':'брейнрот'}${x.cases?` · в кейсах: ${x.cases}`:''}${x.owned?` · у игроков: ${x.owned}`:''}</small></span><b class="num">${fmt(x.price)}</b>
+     <button class="adm-x" data-a="item_delete" data-name="${esc(x.name)}" aria-label="Удалить">${ic('M6 6l12 12M18 6L6 18','#8C7D71',14,2.4)}</button></div>`).join('')}</div>`:admEmpty('Предметов пока нет')}`;}
+ else if(admTab==='cases'){const[L,IT]=await Promise.all([adm('cases',{},true),adm('items',{},true)]);admData.cases=L||[];admData.items=IT||[];
+  const BR=(IT||[]).filter(x=>x.kind==='br');
+  const COLS=['#E07A3C','#A8988A','#6E9CC4','#A57DCB','#DDA650','#E2643A','#7FD49A'];
+  B.innerHTML=`<div class="adm-card"><b>Новый кейс</b>
+    <div class="adm-form"><div style="display:flex;gap:8px"><input id="acId" placeholder="id латиницей: fire" maxlength="30" style="flex:1"><input id="acPrice" type="number" inputmode="numeric" placeholder="Цена" style="width:100px"></div>
+     <input id="acName" placeholder="Название: Огненный" maxlength="40">
+     <div class="adm-cols" id="acCols">${COLS.map((c,i)=>`<button data-c="${c}" class="${i?'':'on'}" style="background:${c}" aria-label="Цвет ${c}"></button>`).join('')}</div>
+     <label class="adm-ck"><input type="checkbox" id="acHot"> метка «ХИТ»</label>
+     <button class="fire" data-a="case_add">Создать кейс</button></div></div>
+   ${(L||[]).length?(L||[]).map(c=>{const inC=new Set(c.items.map(i=>i.name));return `<details class="adm-card adm-case" data-id="${esc(c.id)}">
+    <summary><span class="dot" style="background:${esc(c.color)}"></span><b style="flex:1">${esc(c.name)}${c.hot?' <span class="badge" style="background:#3A1D12;color:#F0A27A">ХИТ</span>':''}${c.active?'':' <span class="badge" style="background:#241B16;color:#8C7D71">спрятан</span>'}</b>
+     <span class="num">${COIN(12)} ${fmt(c.price)}</span><span class="badge num" style="background:${c.rtp>100?'#3A1A12':'#14301F'};color:${c.rtp>100?'#F08A66':'#7FD49A'}">${c.rtp!=null?c.rtp+'%':'—'}</span></summary>
+    <span class="muted" style="font-size:12px">Отметь брейнротов в кейсе — шансы посчитаются сами (кейс отдаёт в среднем указанный %).</span>
+    <div class="adm-pick">${BR.map(x=>`<label class="${inC.has(x.name)?'on':''}"><input type="checkbox" value="${esc(x.name)}" ${inC.has(x.name)?'checked':''}><span style="color:${RCOL(x.rarity)}">${esc(x.name)}</span><em class="num">${fmt(x.price)}</em></label>`).join('')||'<span class="muted">Сначала добавь брейнротов во вкладке «Предметы»</span>'}</div>
+    <div class="adm-acts"><label class="adm-in"><span>Отдача %</span><input type="number" value="90" min="50" max="99" class="acRtp"></label>
+     <button class="fire" data-a="case_set_items" data-id="${esc(c.id)}">Сохранить и посчитать шансы</button></div>
+    ${c.items.length?`<div class="adm-ch">${c.items.map(i=>`<span><b style="color:${RCOL(i.rarity)}">${esc(i.name)}</b><em class="num">${fmt(i.price)} · ${String(i.chance).replace('.',',')}%</em></span>`).join('')}</div>`:''}
+    <div class="adm-acts"><button class="ghost" data-a="case_toggle" data-id="${esc(c.id)}">${c.active?'Спрятать':'Показать'}</button><button class="ghost danger" data-a="case_delete" data-id="${esc(c.id)}">Удалить кейс</button></div>
+   </details>`;}).join(''):admEmpty('Кейсов пока нет')}`;
+  $('acCols').onclick=e=>{const b=e.target.closest('button');if(!b)return;[...$('acCols').children].forEach(x=>x.classList.toggle('on',x===b));};
+  B.querySelectorAll('.adm-pick input').forEach(i=>i.onchange=()=>i.parentElement.classList.toggle('on',i.checked));}
+ else if(admTab==='promo'){const L=await adm('promos',{},true)||[];
+  B.innerHTML=`<div class="adm-card"><b>Новый промокод</b>
+    <div class="adm-form"><input id="apCode" placeholder="КОД, например GIFT50" maxlength="30" style="text-transform:uppercase">
+     <select id="apKind"><option value="coins">Монеты на баланс сразу</option><option value="deposit">+% к следующему пополнению</option></select>
+     <div style="display:flex;gap:8px"><input id="apVal" type="number" inputmode="numeric" placeholder="Сколько (монет или %)" style="flex:1"><input id="apUses" type="number" inputmode="numeric" placeholder="Активаций (∞)" style="width:130px"></div>
+     <button class="fire" data-a="promo_add">Создать</button></div>
+    <span class="muted" style="font-size:12px">Каждый игрок может активировать код один раз. Монеты с промокода отыгрываются ×3.</span></div>
+   ${L.length?`<div class="adm-card" style="gap:6px">${L.map(p=>`<div class="adm-li" style="${p.active?'':'opacity:.5'}"><span style="flex:1;min-width:0"><b class="u" style="letter-spacing:.04em">${esc(p.code)}</b>
+     <small class="muted">${p.kind==='coins'?fmt(p.value)+' монет':'+'+p.value+'% к пополнению'} · использовано ${p.used}${p.uses_left!=null?` · осталось ${p.uses_left}`:' · без лимита'}${p.active?'':' · выключен'}</small></span>
+     ${p.active?`<button class="ghost" style="height:34px;padding:0 10px;font-size:12px" data-a="promo_off" data-code="${esc(p.code)}">Выключить</button>`:''}</div>`).join('')}</div>`:admEmpty('Промокодов пока нет')}`;}
+ else if(admTab==='users'){
+  B.innerHTML=`<div class="adm-card"><div style="display:flex;gap:8px"><label class="srch" style="flex:1;height:44px"><input id="auQ" value="${esc(admUserQ)}" placeholder="Telegram ID или @ник"></label>
+   <button class="fire" data-a="user_find" style="height:44px;padding:0 16px;border-radius:12px;font-size:13px;box-shadow:none">Найти</button></div></div><div id="auRes"></div>`;
+  $('auQ').onkeydown=e=>{if(e.key==='Enter')B.querySelector('[data-a="user_find"]').click();};
+  admUsers();}
+}
+async function admUsers(){const L=await adm('user_find',{q:admUserQ},true)||[];const R2=$('auRes');if(!R2)return;
+ R2.innerHTML=L.length?L.map(u=>`<div class="adm-card" style="margin-top:10px">
+  <div class="adm-row"><b>${u.username?'@'+esc(u.username):esc(u.first_name||'без имени')}</b>${u.is_partner?'<span class="badge" style="background:#2B2010;color:#E8BC72">партнёр</span>':''}${u.is_banned?'<span class="badge" style="background:#3A1A12;color:#F08A66">бан</span>':''}
+   <button class="adm-nick" style="margin-left:auto" data-copy="${u.id}">ID ${u.id}</button></div>
+  <div class="adm-kv"><span>Баланс<b class="num">${fmt(u.balance)}</b></span><span>Отыгрыш<b class="num">${fmt(u.wager_left)}</b></span><span>Пополнил<b class="num">${fmt(u.deposited)}</b></span><span>Предметов<b class="num">${u.inv}</b></span></div>
+  <div class="adm-acts"><label class="adm-in"><span>Сумма</span><input type="number" inputmode="numeric" placeholder="100" id="ub${u.id}"></label>
+   <button class="fire" data-a="user_add" data-id="${u.id}">Начислить</button><button class="ghost" data-a="user_sub" data-id="${u.id}">Списать</button></div>
+  <div class="adm-acts"><button class="ghost" data-a="user_partner" data-id="${u.id}" data-on="${!u.is_partner}">${u.is_partner?'Забрать партнёрку':'Выдать партнёрку'}</button>
+   <button class="ghost" data-a="user_wager_reset" data-id="${u.id}">Обнулить отыгрыш</button>
+   <button class="ghost danger" data-a="user_ban" data-id="${u.id}" data-on="${!u.is_banned}">${u.is_banned?'Разбанить':'Забанить'}</button></div>
+ </div>`).join(''):admEmpty('Никого не нашли');}
+$('admBody').addEventListener('click',async e=>{
+ const cp=e.target.closest('[data-copy]');if(cp){navigator.clipboard&&navigator.clipboard.writeText(cp.dataset.copy).catch(()=>{});toast('Скопировано: '+cp.dataset.copy);haptic('light');return;}
+ const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a,id=b.dataset.id;
+ const danger=['deposit_reject','withdraw_cancel','case_delete','item_delete','user_ban','promo_off'];
+ if(danger.includes(a)&&!sure(b))return;
+ let r=null;b.disabled=true;
+ try{
+  if(a==='deposit_take'||a==='deposit_reject'||a==='withdraw_done'||a==='withdraw_cancel')r=await adm(a,{id});
+  else if(a==='deposit_confirm'){const v=$('ds'+id).value;r=await adm(a,{id,sum:v});}
+  else if(a==='item_add'){const name=$('aiName').value.trim(),price=+$('aiPrice').value;if(!name||!(price>0)){toast('Введи название и цену');b.disabled=false;return;}
+   r=await adm(a,{name,price,kind:$('aiKind').value});if(r){$('aiName').value='';$('aiPrice').value='';}}
+  else if(a==='item_delete')r=await adm(a,{name:b.dataset.name});
+  else if(a==='case_add'){const cid=$('acId').value.trim().toLowerCase(),name=$('acName').value.trim(),price=+$('acPrice').value;
+   if(!/^[a-z0-9_-]{2,30}$/.test(cid)){toast('id: латиница, цифры, - или _');b.disabled=false;return;}
+   if(!name||!(price>0)){toast('Введи название и цену');b.disabled=false;return;}
+   const col=($('acCols').querySelector('.on')||{}).dataset;r=await adm(a,{id:cid,name,price,color:col?col.c:'#E07A3C',hot:$('acHot').checked});}
+  else if(a==='case_set_items'){const box=b.closest('.adm-case');const items=[...box.querySelectorAll('.adm-pick input:checked')].map(i=>i.value);
+   if(items.length<2){toast('Выбери хотя бы 2 брейнрота');b.disabled=false;return;}
+   const rtp=Math.min(99,Math.max(50,+box.querySelector('.acRtp').value||90))/100;r=await adm(a,{id,items,rtp});}
+  else if(a==='case_toggle'||a==='case_delete')r=await adm(a,{id});
+  else if(a==='promo_add'){const code=$('apCode').value.trim().toUpperCase(),value=+$('apVal').value,uses=$('apUses').value.trim();
+   if(!/^[A-Z0-9_-]{2,30}$/.test(code)||!(value>0)){toast('Код: латиница/цифры, и сколько дать');b.disabled=false;return;}
+   r=await adm(a,{code,kind:$('apKind').value,value,uses});}
+  else if(a==='promo_off')r=await adm(a,{code:b.dataset.code});
+  else if(a==='user_find'){admUserQ=$('auQ').value.trim();b.disabled=false;admUsers();return;}
+  else if(a==='user_add'||a==='user_sub'){const v=Math.floor(+$('ub'+id).value);if(!(v>0)){toast('Введи сумму');b.disabled=false;return;}
+   r=await adm('user_balance',{id,delta:a==='user_add'?v:-v});}
+  else if(a==='user_partner'||a==='user_ban')r=await adm(a,{id,on:b.dataset.on==='true'});
+  else if(a==='user_wager_reset')r=await adm(a,{id});
+ }finally{if(b.isConnected)b.disabled=false;}
+ if(r){admStats();if(admTab==='users')admUsers();else{const open=[...document.querySelectorAll('.adm-case[open]')].map(d=>d.dataset.id);await admLoad();
+  open.forEach(o=>{const d=document.querySelector(`.adm-case[data-id="${CSS.escape(o)}"]`);if(d)d.open=true;});}
+  if(a.startsWith('case_')||a.startsWith('item_'))loadCatalog();
+  if(a.startsWith('user_')&&+id===+USER.id)loadMe();}
+});
+
 /* ---------- рефералка ---------- */
 const refUrl=`https://t.me/${CONFIG.BOT_USERNAME}?start=${USER.ref}`;
 $('refLink').textContent=refUrl.replace('https://','');
@@ -2140,6 +2340,7 @@ function applyState(st,quiet){
  WG.left=st.wager_left;WG.total=st.wager_total;
  STATS=st.stats||STATS;BEST=st.best?{...mkItem(st.best),src:st.best.src}:null;
  USER.partner=!!st.is_partner;$('partnerRow').hidden=!USER.partner;
+ USER.admin=!!st.is_admin;$('admEntry').hidden=!USER.admin;
  DAILY_NEXT=st.daily_next?Date.parse(st.daily_next):null;DAILY_DAY=st.daily_day||1;DAILY_STREAK=st.daily_streak||0;
  if(Array.isArray(st.daily_rewards)&&st.daily_rewards.length===7)DAYS=st.daily_rewards.map(Number);
  if(st.daily_amount!=null)DAILY_AMOUNT=+st.daily_amount;
@@ -2167,7 +2368,7 @@ async function loadCatalog(){
  if(!LIVE)return;
  const c=await API.call('catalog',{},true);if(!c)return;
 catalogLoaded=true;
- CASES.length=0;c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,items:k.items.map(mkItem)}));drawCases();
+ CASES.length=0;c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,items:(k.items||[]).map(mkItem)}));drawCases();
  UP_TARGETS=c.upgrade.map(mkItem);
  DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,mono:mk(o.name)}));
  DEP.gr=c.deposit.gr.map((o,i)=>({key:'gr'+i,name:o.name,p:o.price,r:o.rarity,mono:mk(o.name)}));
