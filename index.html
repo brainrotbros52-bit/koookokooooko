@@ -382,6 +382,17 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .wd-it{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:12px;background:#171210;border:1px solid #2E241E;cursor:pointer}
 .wd-it.on{border-color:#E07A3C;background:#1F1611}
 .wd-it input{width:18px;height:18px;accent-color:#E07A3C;margin:0}
+.dcard{display:flex;align-items:center;gap:14px;padding:12px 12px 12px 14px;border-radius:16px;width:100%;text-align:left}
+.dcard:hover{border-color:#5A4334}
+.dcard-ic{width:48px;height:48px;border-radius:12px;background:#1F1814;display:flex;align-items:center;justify-content:center;flex:none}
+.dday{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;border-radius:10px;background:#120E0C;border:1px solid #2E241E}
+.dday span{font-size:10px;font-weight:700;color:#A8988A}.dday b{font-size:12px;color:#CDBFB2}
+.dday.got{background:#1F1814}
+.dday.now{background:#2A1C14;border-color:#7A4A2C;box-shadow:0 0 14px rgba(224,122,60,.25)}.dday.now span{color:#F0A27A}.dday.now b{color:#F2E9E1}
+.qcard{border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.qcard.ready{border-color:#7A4A2C;background:radial-gradient(ellipse at 0% 50%,rgba(224,122,60,.12),transparent 60%),#171210}
+.qcard.claimed{opacity:.7}
+.qclaim:disabled{opacity:.6}
 /* меню */
 .m2{display:flex;flex-direction:column;gap:14px;padding:12px 14px 20px;min-height:100%}
 .m2>.sec{margin:6px 2px -4px}
@@ -574,36 +585,19 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
         <div class="feed" id="drops"></div>
       </div>
 
-      <div style="position:relative;overflow:hidden;border-radius:18px;background:#171210;border:1px solid #3A2B22;padding:18px">
-        <div aria-hidden="true" style="position:absolute;right:-60px;bottom:-90px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(224,122,60,.28) 0%,rgba(224,122,60,0) 65%)"></div>
-        <svg aria-hidden="true" style="position:absolute;right:18px;top:16px" width="70" height="90" viewBox="0 0 24 32" fill="none" stroke="#E07A3C" stroke-opacity=".5" stroke-width="1.2" stroke-linejoin="round"><path d="M12 1c1.5 5 8 8 8 16a8 8 0 0 1-16 0c0-4 2-6.5 3.6-8.2.4 2.8 1.6 4.2 3.1 4.8C10.7 8.4 11 5 12 1z"/><path d="M12 30a4 4 0 0 1-4-4c0-2.5 2.4-4 4-6.5 1.6 2.5 4 4 4 6.5a4 4 0 0 1-4 4z"/></svg>
-        <div style="position:relative;display:flex;flex-direction:column;gap:12px">
-          <span class="sec">Промокод дня · <span class="num" id="timer" style="color:#F2E9E1">05:42:17</span></span>
-          <h2 class="u" style="font-weight:700;font-size:25px;line-height:1.1"><span style="color:#E9A06A">+15%</span> к пополнению</h2>
-          <div style="display:flex;gap:8px">
-            <button id="copy" aria-label="Скопировать промокод EMBER15" style="display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:12px;background:#0E0B0A;border:1px dashed #5A4334">
-              <span class="u" style="font-weight:700;font-size:14px;letter-spacing:.08em">EMBER15</span>
-              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A8988A" stroke-width="2" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
-            </button>
-            <button class="fire depBtn" style="height:44px;padding:0 18px;border-radius:12px;font-size:14px;box-shadow:none">Пополнить</button>
-          </div>
+      <button class="card dcard" id="homeDaily" data-go="bonus">
+        <div aria-hidden="true" class="dcard-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#D9A55B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v4H3zM5 12v9h14v-9M12 8v13M12 8c-2-4-6-4-5-1 .5 1 5 1 5 1zM12 8c2-4 6-4 5-1-.5 1-5 1-5 1z"/></svg></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;text-align:left">
+          <span style="font-weight:800;font-size:15px">Ежедневный бонус</span>
+          <span class="muted" style="font-size:13px" id="homeDailyTxt">День 1 · заходи каждый день</span>
         </div>
-      </div>
-
-      <div class="card" style="display:flex;align-items:center;gap:14px;padding:12px 12px 12px 14px;border-radius:16px">
-        <div aria-hidden="true" style="width:48px;height:48px;border-radius:12px;background:#1F1814;display:flex;align-items:center;justify-content:center">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D9A55B" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="10" width="18" height="10" rx="1.5"/><path d="M3 10V8a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v2"/><rect x="10" y="8" width="4" height="5" rx="1"/></svg>
-        </div>
-        <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0">
-          <span style="font-weight:800;font-size:15px">Бесплатный кейс</span>
-          <span class="muted" style="font-size:13px">Следующий через <span class="num" style="color:#F2E9E1">3 ч 29 м</span></span>
-        </div>
-        <div class="bar" style="width:56px"><i style="width:71%;background:#D9A55B"></i></div>
-      </div>
+        <span class="badge" id="homeDailyBadge" style="background:#E07A3C;color:#1A0F09;padding:6px 10px">Забрать</span>
+      </button>
 
       <div style="display:flex;flex-direction:column;gap:14px">
         <div class="sec-title"><span></span><h2 class="u">Кейсы</h2><span></span></div>
         <div id="cases" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px"></div>
+        <p class="muted" id="casesEmpty" hidden style="text-align:center;font-size:14px;padding:30px 0;margin:0">Кейсы скоро появятся 🔥</p>
       </div>
     </section>
 
@@ -815,9 +809,9 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
     <section class="screen" data-s="bonus">
       <div class="ptitle"><h1>Бонусы</h1><span class="muted" style="font-size:13px">Заходи каждый день и зови друзей</span></div>
       <div class="card" style="border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px">
-        <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-weight:800;font-size:16px">Ежедневная награда</h2><span class="muted" style="font-size:13px">серия: <b style="color:#F2E9E1">3 дня</b></span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-weight:800;font-size:16px">Ежедневная награда</h2><span class="muted" style="font-size:13px" id="streakTxt">серия: <b style="color:#F2E9E1">0 дней</b></span></div>
         <div id="days" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px"></div>
-        <button class="fire" style="height:50px;font-size:15px" id="dailyClaim">Забрать 30</button>
+        <button class="fire" style="height:50px;font-size:15px" id="dailyClaim">Забрать</button>
       </div>
       <div style="position:relative;overflow:hidden;border-radius:18px;background:#171210;border:1px solid #3A2B22;padding:16px;display:flex;flex-direction:column;gap:12px">
         <div aria-hidden="true" style="position:absolute;right:-70px;top:-70px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(224,122,60,.22),rgba(224,122,60,0) 65%)"></div>
@@ -828,16 +822,16 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
           <button class="fire" style="height:44px;padding:0 16px;border-radius:12px;font-size:14px;box-shadow:none" id="refCopy">Копировать</button>
         </div>
         <div style="position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
-          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px">4</div><div class="muted" style="font-size:12px">друга</div></div>
-          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px">312</div><div class="muted" style="font-size:12px">заработано</div></div>
-          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px;color:#E9A06A">48</div><div class="muted" style="font-size:12px">к выводу</div></div>
+          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px">0</div><div class="muted" style="font-size:12px">друзей</div></div>
+          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px">0</div><div class="muted" style="font-size:12px">заработано</div></div>
+          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px;color:#E9A06A">0</div><div class="muted" style="font-size:12px">к выводу</div></div>
         </div>
       </div>
     </section>
 
     <!-- ===== КВЕСТЫ ===== -->
     <section class="screen" data-s="quests">
-      <div class="ptitle"><h1>Квесты</h1><span class="muted" style="font-size:13px">Обновятся через <b class="num" style="color:#F2E9E1">14:22:05</b></span></div>
+      <div class="ptitle"><h1>Квесты</h1><span class="muted" style="font-size:13px">Обновятся через <b class="num" style="color:#F2E9E1" id="qReset">—</b></span></div>
       <div id="qtabs" class="seg" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
       <div id="qlist" style="display:flex;flex-direction:column;gap:8px"></div>
     </section>
@@ -906,7 +900,7 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
             <button class="fire" id="promoGo" style="height:44px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none">Активировать</button>
           </div>
         </details>
-        <button class="prow" id="partnerRow" data-go="bonus" hidden><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E9A06A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="prow-t"><b>Партнёрка</b><span class="muted">4 друга · 10% с депозитов</span></span><b class="num" style="color:#7FD49A;font-size:14px">+312</b><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        <button class="prow" id="partnerRow" data-go="bonus" hidden><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E9A06A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="prow-t"><b>Партнёрка</b><span class="muted">10% с депозитов друзей</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
         <button class="prow" data-go="settings"><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDBFB2" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 4v4M9 10v4M17 16v4"/></svg></span><span class="prow-t"><b>Настройки</b><span class="muted">Звук, уведомления, язык</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       </div>
     </section>
@@ -1040,9 +1034,9 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
    SUPABASE_URL указан → всё идёт через твою базу Supabase.
    ===================================================================== */
 const CONFIG={
-  SUPABASE_URL:'https://iubcymzjennfjsrytvmi.supabase.co/rest/v1/',            // Project URL, например 'https://abcdefgh.supabase.co'
-  SUPABASE_ANON_KEY:'8748187603:AAGdcmorQr1uXDUqeFjFlXoi7UkhlWcdcuc',       // anon public key (Project Settings → API Keys)
-  BOT_USERNAME:'brainrotfirebot',// юзернейм бота без @ — для реферальной ссылки
+  SUPABASE_URL:'https://iubcymzjennfjsrytvmi.supabase.co',   // адрес твоего проекта Supabase
+  SUPABASE_ANON_KEY:'',       // publishable key (sb_publishable_...) или старый anon key — Project Settings → API Keys
+  BOT_USERNAME:'brainfire_bot',// юзернейм бота без @ — для реферальной ссылки
   BOT_NICK:'BrainFire_Trade'   // ник аккаунта в Roblox, которому кидают трейд
 };
 const LIVE=!!CONFIG.SUPABASE_URL;
@@ -1087,7 +1081,8 @@ const API={
     API.lastError=null;
     try{
       const r=await fetch(CONFIG.SUPABASE_URL.replace(/\/$/,'')+'/functions/v1/api',{method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+CONFIG.SUPABASE_ANON_KEY,'apikey':CONFIG.SUPABASE_ANON_KEY},
+        headers:{'Content-Type':'application/json','apikey':CONFIG.SUPABASE_ANON_KEY,
+          ...(CONFIG.SUPABASE_ANON_KEY.startsWith('eyJ')?{'Authorization':'Bearer '+CONFIG.SUPABASE_ANON_KEY}:{})},
         body:JSON.stringify({action,initData:tg?tg.initData:'',...(body||{})})});
       const j=await r.json().catch(()=>({error:'server_error'}));
       if(j.error){API.lastError=j.error;if(!silent)toast(ERR[j.error]||'Ошибка: '+j.error);return null;}
@@ -1207,6 +1202,8 @@ function go(s){
  const prevS=cur;cur=s;if(prevS!==s)haptic('light');syncBack();document.querySelectorAll('.screen').forEach(e=>e.classList.toggle('on',e.dataset.s===s));
  if(s==='case'&&!spinning)buildReels(MS[mIdx]);
  if(s==='upgrade')drawUp();
+ if(s==='quests')loadQuests();
+ if(s==='bonus')drawDaily();
  if(s==='profile'){drawProfile();wDraw();}
 
  $('body').scrollTop=0;$('phone').classList.remove('open');drawMenu();
@@ -1374,10 +1371,12 @@ $('feedSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;feedMod
 const CASES=[
  {name:'Тлеющий',p:49,c:R.common},{name:'Угольный',p:99,c:R.rare,hot:1},{name:'Жаровня',p:199,c:'#E07A3C'},
  {name:'Пепел Сахура',p:349,c:R.epic},{name:'Вулкан',p:799,c:R.legend,hot:1},{name:'Сердце пламени',p:1999,c:R.myth}];
-let casePrice=199;
+let casePrice=199,catalogLoaded=false;
+if(LIVE){CASES.length=0;}   // в боевом режиме кейсы приходят с сервера
 const fl=['Все','До 100','Легенды','Ивент'];let filter=0;
 function drawCases(){
  const list=CASES.filter(x=>filter===1?x.p<=100:filter===2?x.p>=799:true);
+ $('casesEmpty').hidden=!!list.length||(LIVE&&!catalogLoaded);
  $('cases').innerHTML=list.map(x=>`
  <button class="card" data-case="${x.name}" data-price="${x.p}" style="text-align:left;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:16px">
   ${x.hot?'<span class="badge" style="position:absolute;top:10px;left:10px;background:#3A1D12;color:#F0A27A">ХИТ</span>':''}
@@ -1395,10 +1394,7 @@ $('cases').onclick=e=>{const b=e.target.closest('[data-case]');if(!b)return;$('c
  CUR_CASE=CASES.find(x=>x.name===b.dataset.case)||null;CASE_ITEMS=CUR_CASE&&CUR_CASE.items?CUR_CASE.items:ITEMS;drawCaseItems();drawTotal();go('case');};
 drawCases();
 
-/* таймер и промокод */
-let t=5*3600+42*60+17;const p2=n=>String(n).padStart(2,'0');
-setInterval(()=>{t=Math.max(0,t-1);$('timer').textContent=`${p2(t/3600|0)}:${p2(t%3600/60|0)}:${p2(t%60)}`;},1000);
-$('copy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText('EMBER15').catch(()=>{});toast('Промокод скопирован');};
+const p2=n=>String(n).padStart(2,'0');
 
 /* ---------- кейс: рулетка ---------- */
 let CASE_ITEMS=ITEMS,CUR_CASE=null;              // содержимое открытого кейса
@@ -1440,7 +1436,8 @@ async function spin(){
   if(!res||!res.items){spinning=false;$('openBtn').disabled=false;return;}
   addWager(cost,'Кейс «'+$('caseName').textContent+'»');
   winners=res.items.map(it=>({...mkItem(it),sid:it.id}));applyState(res.state,true);
- }else{addWager(cost,'Кейс «'+$('caseName').textContent+'»');setBal(bal-cost);winners=Array.from({length:n},()=>roll());}
+ }else{addWager(cost,'Кейс «'+$('caseName').textContent+'»');setBal(bal-cost);winners=Array.from({length:n},()=>roll());
+  QD.cases+=n;QD.spend+=cost;QD.legend+=winners.filter(x=>x.r==='legend'||x.r==='myth').length;}
  lastWin=winners.map(x=>({...x,id:x.sid||uid++}));
  const d=buildReels(n,winners);const rw=$('reels').clientWidth;
  const fast=$('fast').checked,step=d.tw+8;
@@ -1541,7 +1538,7 @@ function renderWin(){
 /* ---------- апгрейдер ---------- */
 let upSel=new Set(),upTarget=null,upTab=0,upBusy=false,needleDeg=0;
 const UPQ=[1.5,2,3,5,10];
-let UP_TARGETS=ITEMS;                         // во что можно апгрейдить (с сервера — весь каталог)
+let UP_TARGETS=LIVE?[]:ITEMS;                         // во что можно апгрейдить (с сервера — весь каталог)
 const ARC=2*Math.PI*122;
 const stakeSum=()=>INV.filter(x=>upSel.has(x.id)).reduce((s,x)=>s+x.p,0);
 const upChance=()=>{const s=stakeSum();if(!s||!upTarget)return 0;return Math.min(75,s/upTarget.p*95);};
@@ -1598,7 +1595,7 @@ $('upBtn').onclick=async()=>{
   if(!res||typeof res.roll!=='number'){upBusy=false;drawUp();return;}
   r=Math.min(99.99,Math.max(0,res.roll));
   if(res.win&&r>=ch)r=Math.max(0,ch-0.5);if(!res.win&&r<ch)r=Math.min(99.99,ch+0.5);  // на случай округления
- }else r=Math.random()*100;
+ }else{r=Math.random()*100;QD.upgrades++;QD.spend+=stakeSum();if(r<ch&&upTarget&&(upTarget.r==='legend'||upTarget.r==='myth'))QD.legend++;}
  addWager(stakeSum(),'Апгрейд');
  $('wheel').classList.remove('win','lose');$('wheel').classList.add('busy');$('chanceSub').textContent='крутим…';
  const win=r<ch;
@@ -1676,35 +1673,65 @@ $('mbtn').onclick=async()=>{
   if(mBusy)return;mBusy=true;const res=await API.call('mines_start',{bet,mines});mBusy=false;if(!res)return;
   mGame=res.game.id;addWager(bet,'Мины');applyState(res.state);resetGrid();bombs=new Set();mState='play';drawMines();haptic('medium');return;
  }
- addWager(bet,'Мины');setBal(bal-bet);resetGrid();bombs=new Set();while(bombs.size<mines)bombs.add(Math.random()*25|0);mState='play';drawMines();};
+ addWager(bet,'Мины');QD.mines++;QD.spend+=bet;setBal(bal-bet);resetGrid();bombs=new Set();while(bombs.size<mines)bombs.add(Math.random()*25|0);mState='play';drawMines();};
 document.querySelectorAll('[data-bet]').forEach(b=>b.onclick=()=>{if(mState==='play')return;const v=Math.max(1,Math.floor((+$('bet').value||1)*+b.dataset.bet));$('bet').value=v;drawMines();});
 $('bet').oninput=()=>drawMines();
 seg($('mcount'),MC.map(n=>n+' мин'),0,i=>{mines=MC[i];if(mState!=='play'){resetGrid();mState='idle';}drawMines();});
 
 /* ---------- бонусы ---------- */
-const DAYS=[10,15,20,30,40,60,100];
-$('days').innerHTML=DAYS.map((v,i)=>{const done=i<3,today=i===3;return `
- <div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;border-radius:10px;
-  ${today?'background:#2A1C14;border:1px solid #7A4A2C':done?'background:#1F1814;border:1px solid #2E241E':'background:#120E0C;border:1px solid #2E241E'}">
-  <span style="font-size:10px;font-weight:700;color:${today?'#F0A27A':'#A8988A'}">${i+1} д</span>
-  ${done?ic('M5 12l5 5 9-10','#D9A55B',16,2.4):`<b class="num" style="font-size:12px;color:${today?'#F2E9E1':'#CDBFB2'}">${v}</b>`}
- </div>`}).join('');
+let DAYS=[10,15,20,30,40,60,100];   // награды по дням серии (с сервера — своя таблица daily_rewards)
+let DAILY_DAY=1,DAILY_STREAK=0;       // какой день доступен следующим, сколько уже забрано подряд
+function drawDays(){
+ const ready=!DAILY_NEXT||DAILY_NEXT<=Date.now();
+ $('days').innerHTML=DAYS.map((v,i)=>{const d=i+1;
+  const got=ready?d<DAILY_DAY:d<=DAILY_STREAK;      // уже забранные дни серии
+  const now=ready&&d===DAILY_DAY;                    // день, который можно забрать сейчас
+  return `<div class="dday${now?' now':''}${got?' got':''}"><span>${d} д</span>${got?ic('M5 12l5 5 9-10','#D9A55B',16,2.4):`<b class="num">${v}</b>`}</div>`;}).join('');
+ const st=ready?DAILY_DAY-1:DAILY_STREAK;
+ $('streakTxt').innerHTML=`серия: <b style="color:#F2E9E1">${st} ${st%10===1&&st%100!==11?'день':[2,3,4].includes(st%10)&&![12,13,14].includes(st%100)?'дня':'дней'}</b>`;
+}
 
 /* ---------- квесты ---------- */
-const Q=[[
- {t:'Открой 5 кейсов',d:3,n:5,r:25},{t:'Сыграй 3 раунда в Мины',d:3,n:3,r:20},{t:'Сделай апгрейд',d:0,n:1,r:15},{t:'Пополни баланс от 100',d:0,n:1,r:40}],[
- {t:'Открой 50 кейсов',d:31,n:50,r:250},{t:'Выбей легендарку',d:1,n:1,r:150},{t:'Пригласи 3 друзей',d:1,n:3,r:300}]];
-let qTab=0;
-function drawQ(){$('qlist').innerHTML=Q[qTab].map(q=>{const done=q.d>=q.n;return `
- <div class="card" style="border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;${done?'border-color:#5A3A26':''}">
+// демо-счётчики (в боевом режиме прогресс считает сервер по настоящим играм)
+const QD={cases:0,mines:0,upgrades:0,deposit:0,legend:0,spend:0,bonus:0},QCLAIM=new Set();
+const QDEMO=[
+ {id:'d_cases',period:'day',title:'Открой 5 кейсов',kind:'cases',goal:5,reward:25},{id:'d_mines',period:'day',title:'Сыграй 3 раунда в Мины',kind:'mines',goal:3,reward:20},
+ {id:'d_upgrade',period:'day',title:'Сделай апгрейд',kind:'upgrades',goal:1,reward:15},{id:'d_deposit',period:'day',title:'Пополни баланс от 100',kind:'deposit',goal:100,reward:40},
+ {id:'w_cases',period:'week',title:'Открой 50 кейсов',kind:'cases',goal:50,reward:250},{id:'w_legend',period:'week',title:'Выбей легендарку или мифик',kind:'legend',goal:1,reward:150},
+ {id:'w_spend',period:'week',title:'Поставь 5 000 монет',kind:'spend',goal:5000,reward:300}];
+let qTab=0,QLIST=[],Q_DAY_RESET=null,Q_WEEK_RESET=null,qBusy=false;
+function demoResets(){const n=new Date();const d=new Date(n);d.setHours(24,0,0,0);const w=new Date(d);w.setDate(d.getDate()+((8-d.getDay())%7));return [d.getTime(),w.getTime()];}
+async function loadQuests(){
+ if(LIVE){const r=await API.call('quests',{},true);if(!r)return;QLIST=r.list;Q_DAY_RESET=Date.parse(r.day_reset);Q_WEEK_RESET=Date.parse(r.week_reset);}
+ else{QLIST=QDEMO.map(q=>({...q,progress:Math.min(q.goal,QD[q.kind]),claimed:QCLAIM.has(q.id)}));[Q_DAY_RESET,Q_WEEK_RESET]=demoResets();}
+ drawQ();
+}
+function drawQ(){
+ const L=QLIST.filter(q=>q.period===(qTab===0?'day':'week'));
+ $('qlist').innerHTML=L.length?L.map(q=>{const done=q.progress>=q.goal,cl=q.claimed,p=Math.min(100,q.progress/q.goal*100);return `
+ <div class="card qcard${done&&!cl?' ready':''}${cl?' claimed':''}">
   <div style="display:flex;align-items:center;gap:12px">
-   <div class="m-ic">${ic(done?'M5 12l5 5 9-10':I.quests,done?'#E07A3C':'#A8988A',20)}</div>
-   <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px">${q.t}</div><div class="muted num" style="font-size:12px">${Math.min(q.d,q.n)} / ${q.n}</div></div>
-   ${done?`<button class="fire" style="height:40px;padding:0 14px;border-radius:10px;font-size:13px;box-shadow:none" data-toast="+${q.r} на баланс">+${q.r}</button>`
-         :`<span class="badge num" style="background:#241B16;color:#D9A55B;padding:6px 10px">+${q.r}</span>`}
+   <div class="m-ic">${ic(cl||done?'M5 12l5 5 9-10':I.quests,cl?'#7FD49A':done?'#E07A3C':'#A8988A',20)}</div>
+   <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px">${q.title}</div>
+    <div class="muted num" style="font-size:12px;display:flex;align-items:center;gap:6px">${fmt(Math.min(q.progress,q.goal))} / ${fmt(q.goal)} · награда ${COIN(11)}<b style="color:#D9A55B">${fmt(q.reward)}</b></div></div>
+   ${cl?`<span class="badge" style="background:#14301F;color:#7FD49A;padding:7px 10px">Получено</span>`
+     :done?`<button class="fire qclaim" data-q="${q.id}" style="height:40px;padding:0 16px;border-radius:10px;font-size:13px;box-shadow:none">Забрать</button>`
+     :`<span class="badge" style="background:#241B16;color:#8C7D71;padding:7px 10px">В процессе</span>`}
   </div>
-  <div class="bar"><i style="width:${Math.min(100,q.d/q.n*100)}%"></i></div>
- </div>`}).join('');}
+  <div class="bar"><i style="width:${cl?100:p}%;${cl?'background:#3E9A63':''}"></i></div>
+ </div>`;}).join(''):'<p class="muted" style="text-align:center;font-size:14px;padding:24px 0">Квестов пока нет</p>';
+ drawQReset();
+}
+function drawQReset(){const t=qTab===0?Q_DAY_RESET:Q_WEEK_RESET;if(!t){$('qReset').textContent='—';return;}
+ const l=Math.max(0,t-Date.now()),d=Math.floor(l/864e5),h=Math.floor(l%864e5/36e5),m=Math.floor(l%36e5/6e4),sec=Math.floor(l%6e4/1e3);
+ $('qReset').textContent=d?`${d} д ${h} ч`:`${p2(h)}:${p2(m)}:${p2(sec)}`;
+ if(l===0&&cur==='quests'&&!qBusy){qBusy=true;setTimeout(()=>{qBusy=false;loadQuests();},1500);}}
+setInterval(()=>{if(cur==='quests')drawQReset();},1000);
+$('qlist').addEventListener('click',async e=>{const b=e.target.closest('.qclaim');if(!b||qBusy)return;qBusy=true;b.disabled=true;
+ if(LIVE){const r=await API.call('quest_claim',{id:b.dataset.q});qBusy=false;if(!r){b.disabled=false;return;}
+  applyState(r.state);QLIST=r.quests.list;drawQ();haptic('success');toast('+'+fmt(r.reward)+' на баланс');return;}
+ const q=QDEMO.find(x=>x.id===b.dataset.q);QCLAIM.add(q.id);setBal(bal+q.reward);wAddNeed(q.reward*WAGER_BONUS,'квест ×3');qBusy=false;
+ haptic('success');toast('+'+fmt(q.reward)+' на баланс');loadQuests();});
 seg($('qtabs'),['Ежедневные','Недельные'],0,i=>{qTab=i;drawQ();});
 
 /* ---------- розыгрыши ---------- */
@@ -1787,8 +1814,9 @@ function drawProfile(){
 $('pidCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(String(USER.id)).catch(()=>{});haptic('light');toast('ID скопирован');};
 $('ptabs2').onclick=e=>{const b=e.target.closest('button');if(!b)return;pTab=+b.dataset.i;[...$('ptabs2').children].forEach(x=>x.classList.toggle('on',x===b));haptic('light');drawProfile();};
 $('promoGo').onclick=async()=>{const v=$('promoIn').value.trim().toUpperCase();if(!v){toast('Введи код');haptic('error');return;}
- if(API.on()){const r=await API.call('promo',{code:v});if(!r){haptic('error');return;}applyState(r.state);haptic('success');toast('+'+fmt(r.amount)+' на баланс');$('promoIn').value='';return;}
- const P={START25:25};if(!P[v]){toast(PROMOS[v]?'Этот промокод работает при пополнении':'Такого промокода нет');haptic('error');return;}
+ if(API.on()){const r=await API.call('promo',{code:v});if(!r){haptic('error');return;}applyState(r.state);haptic('success');
+  toast(r.kind==='deposit'?`Промокод ${r.code}: +${r.value}% к следующему пополнению`:'+'+fmt(r.amount)+' на баланс');$('promoIn').value='';return;}
+ const P={};if(!P[v]){toast('Такого промокода нет');haptic('error');return;}
  if(usedPromos.has(v)){toast('Ты уже использовал этот промокод');haptic('error');return;}
  usedPromos.add(v);setBal(bal+P[v]);wAddNeed(P[v]*WAGER_BONUS,'промокод ×3');haptic('success');toast('+'+P[v]+' на баланс');$('promoIn').value='';};
 const usedPromos=new Set();
@@ -1819,7 +1847,7 @@ const DEP={
  gr:[['Speed Coil',40],['Gravity Coil',55],['Trap',65],['Bee Launcher',95],['Taser Gun',120],['Boogie Bomb',140],['Web Slinger',180],['Invisibility Cloak',220],
      ['Rage Table',260],['Body Swap Potion',340],['Quantum Cloner',600],['Laser Cape',900]]
 };
-for(const k in DEP)DEP[k]=DEP[k].map(([name,p],i)=>({key:k+i,name,p,r:RB(p),mono:mk(name)}));
+for(const k in DEP)DEP[k]=LIVE?[]:DEP[k].map(([name,p],i)=>({key:k+i,name,p,r:RB(p),mono:mk(name)}));
 let depTab='br',depAsc=true;const depQty={};
 const BUFFS=[
  {t:'Снижают',d:'цена ниже',c:'#F08A66',neg:1,open:1,l:[['Claws',-7.5],['Taco',-15]]},
@@ -1904,7 +1932,7 @@ function drawDep(){
   ${(()=>{const P=depTab==='br'?buffPct(x.key):0;return P?`<div class="dep-p num"><s style="color:#6B5D52;font-size:11px">${fmt(x.p)}</s>${coin()}<span style="color:${P<0?'#F08A66':'#7FD49A'}">${fmt(itemPrice(x))}</span></div>`:`<div class="dep-p num">${coin()}${fmt(x.p)}</div>`;})()}
   ${depTab==='br'?(()=>{const n=(depBuffs[x.key]||new Set()).size,P=buffPct(x.key);return `<button class="bbtn${n?' has':''}" data-bk="${x.key}">${n?`${n} ${n===1?'баф':n<5?'бафа':'бафов'} · <b style="color:${P<0?'#F08A66':'#7FD49A'}">${pct(+P.toFixed(1))}</b>`:'＋ Бафы'}</button>`;})():''}
   <div class="step"><button data-k="${x.key}" data-d="-1" aria-label="Убрать" ${q?'':'disabled'}>−</button><span class="num">${q}</span><button data-k="${x.key}" data-d="1" aria-label="Добавить">+</button></div>
- </div>`;}).join(''):`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:14px;padding:30px 0">Ничего не нашлось</p>`;
+ </div>`;}).join(''):`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:14px;padding:30px 0">${DEP[depTab].length?'Ничего не нашлось':'Список пока пуст — скоро добавим'}</p>`;
  drawDepBar();
 }
 function depSel(){const all=[...DEP.br,...DEP.gr];return all.filter(x=>depQty[x.key]).map(x=>({...x,q:depQty[x.key]}));}
@@ -1921,7 +1949,8 @@ $('depTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;depTab=
 ['depQ','depFrom','depTo'].forEach(id=>$(id).addEventListener('input',drawDep));
 $('depSort').onclick=()=>{depAsc=!depAsc;$('depSort').classList.toggle('desc',!depAsc);haptic('light');drawDep();};
 /* ---------- заявка на пополнение: ник + промокод → очередь ---------- */
-const PROMOS={EMBER15:15,FIRE10:10,HALLOWEEN:9};          // демо-промокоды: код → +% к пополнению
+const PROMOS={};          // демо-промокодов нет — создавай свои в базе (admin_add_promo)
+let DEP_PROMO=null;       // промокод +% к пополнению, активированный в профиле
 let DQ=null,dqNick='',dqTimer=null;                       // DQ — активная заявка
 const X_SVG='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDBFB2" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';const XBTN=`<button class="iconbtn card" data-close aria-label="Закрыть">${X_SVG}</button>`;
 const nickOk=v=>/^[A-Za-z0-9_]{3,20}$/.test(v);
@@ -1935,7 +1964,7 @@ function dqItemsHTML(S){return `<div class="dq-items">${S.map(x=>x._srv?`<div cl
 
 function dqForm(){
  const S=depSel(),sum=S.reduce((a,x)=>a+itemPrice(x)*x.q,0);
- const f={nick:dqNick,promo:'',pct:0};
+ const f={nick:dqNick,promo:DEP_PROMO?DEP_PROMO.code:'',pct:DEP_PROMO?+DEP_PROMO.value:0};
  const draw=()=>{
   const bonus=Math.round(sum*f.pct/100),ok=nickOk(f.nick);
   $('depSheetBox').innerHTML=`<div class="sheet-grab"></div>
@@ -1969,7 +1998,7 @@ function dqForm(){
   $('dqPromo').oninput=e=>{f.promo=e.target.value.trim().toUpperCase();};
   $('dqPromo').onkeydown=e=>{if(e.key==='Enter')$('dqPromoGo').click();};
   $('dqPromoGo').onclick=()=>{
-   if(f.pct){f.pct=0;f.promo='';haptic('light');draw();return;}
+   if(f.pct){f.pct=0;f.promo='';DEP_PROMO=null;haptic('light');draw();return;}
    const code=f.promo.toUpperCase();if(!code){$('dqPromoHint').innerHTML='<span style="color:#F08A66">Введи промокод</span>';haptic('error');return;}
    const bad=t=>{$('dqPromoHint').innerHTML='<span style="color:#F08A66">'+t+'</span>';$('dqPromo').parentElement.classList.add('err');haptic('error');};
    if(API.on()){
@@ -2039,7 +2068,7 @@ function dqTick(){clearInterval(dqTimer);
   if($('depSheet').classList.contains('open'))dqQueue();else dqPill();}
  else if(!DQ._t){DQ._t=Date.now();}
  else if(Date.now()-DQ._t>5000){   // демо: «бот принял трейд» и зачислил монеты
-  const got=DQ.sum+DQ.bonus;setBal(bal+got);wAddNeed(DQ.sum*WAGER_DEP+DQ.bonus*WAGER_BONUS,'пополнение ×1.5');
+  const got=DQ.sum+DQ.bonus;QD.deposit+=got;setBal(bal+got);wAddNeed(DQ.sum*WAGER_DEP+DQ.bonus*WAGER_BONUS,'пополнение ×1.5');
   DQ=null;clearInterval(dqTimer);dqPill();if($('depSheet').classList.contains('open'))closeSheet('depSheet');
   haptic('success');toast('Трейд принят — +'+fmt(got)+' на баланс');}
  },6000);}
@@ -2069,12 +2098,22 @@ function dqPill(){
 $('depGo').onclick=()=>{haptic('medium');if(DQ){dqQueue();openSheet('depSheet');return;}dqForm();openSheet('depSheet');};
 let DAILY_NEXT=null;
 function drawDaily(){const b=$('dailyClaim');if(!b)return;const left=DAILY_NEXT?DAILY_NEXT-Date.now():0;
- if(left>0){const h=Math.floor(left/36e5),m=Math.floor(left%36e5/6e4);b.disabled=true;b.textContent=`Следующий через ${h} ч ${m} м`;}
- else{b.disabled=false;b.textContent='Забрать '+DAILY_AMOUNT;}}
+ const amt=DAYS[DAILY_DAY-1]??DAILY_AMOUNT;
+ if(left>0){const h=Math.floor(left/36e5),m=Math.floor(left%36e5/6e4);b.disabled=true;b.textContent=`Следующий через ${h} ч ${m} м`;
+  $('homeDailyTxt').textContent=`День ${DAILY_DAY} · через ${h} ч ${m} м`;$('homeDailyBadge').textContent='Ждём';$('homeDailyBadge').style.cssText='background:#241B16;color:#A8988A;padding:6px 10px';}
+ else{b.disabled=false;b.textContent=`Забрать ${amt} · день ${DAILY_DAY}`;
+  $('homeDailyTxt').textContent=`День ${DAILY_DAY} · +${amt} монет`;$('homeDailyBadge').textContent='Забрать';$('homeDailyBadge').style.cssText='background:#E07A3C;color:#1A0F09;padding:6px 10px';}
+ if(typeof drawDays==='function')drawDays();}
 let DAILY_AMOUNT=30;
 $('dailyClaim').onclick=async()=>{
- if(API.on()){const r=await API.call('daily',{});if(!r){haptic('error');return;}applyState(r.state);haptic('success');toast('+'+fmt(r.amount)+' на баланс');return;}
- haptic('success');setBal(bal+DAILY_AMOUNT);toast('+'+DAILY_AMOUNT+' на баланс');wAddNeed(DAILY_AMOUNT*WAGER_BONUS,'бонус ×3');DAILY_NEXT=Date.now()+864e5;drawDaily();};
+ if(API.on()){const r=await API.call('daily',{});if(!r){haptic('error');return;}applyState(r.state);haptic('success');toast('День '+r.day+': +'+fmt(r.amount)+' на баланс');return;}
+ // демо: та же логика серии, что и на сервере
+ if(DAILY_NEXT&&DAILY_NEXT>Date.now())return;
+ const amt=DAYS[DAILY_DAY-1];haptic('success');setBal(bal+amt);toast('День '+DAILY_DAY+': +'+amt+' на баланс');wAddNeed(amt*WAGER_BONUS,'бонус ×3');
+ DAILY_STREAK=DAILY_DAY;DAILY_LAST=Date.now();DAILY_NEXT=DAILY_LAST+864e5;DAILY_DAY=DAILY_STREAK%7+1;QD.bonus++;drawDaily();};
+let DAILY_LAST=null;
+// демо: если пропустил больше суток после доступности — серия с 1 дня
+setInterval(()=>{if(!LIVE&&DAILY_LAST&&Date.now()-DAILY_LAST>1728e5){DAILY_DAY=1;DAILY_STREAK=0;DAILY_NEXT=null;drawDaily();}},60000);
 setInterval(drawDaily,30000);
 /* ---------- рефералка ---------- */
 const refUrl=`https://t.me/${CONFIG.BOT_USERNAME}?start=${USER.ref}`;
@@ -2101,7 +2140,10 @@ function applyState(st,quiet){
  WG.left=st.wager_left;WG.total=st.wager_total;
  STATS=st.stats||STATS;BEST=st.best?{...mkItem(st.best),src:st.best.src}:null;
  USER.partner=!!st.is_partner;$('partnerRow').hidden=!USER.partner;
- DAILY_NEXT=st.daily_next?Date.parse(st.daily_next):null;drawDaily();
+ DAILY_NEXT=st.daily_next?Date.parse(st.daily_next):null;DAILY_DAY=st.daily_day||1;DAILY_STREAK=st.daily_streak||0;
+ if(Array.isArray(st.daily_rewards)&&st.daily_rewards.length===7)DAYS=st.daily_rewards.map(Number);
+ if(st.daily_amount!=null)DAILY_AMOUNT=+st.daily_amount;
+ DEP_PROMO=st.deposit_promo||null;drawDaily();
  // активная заявка на пополнение
  if(st.deposit){const d=st.deposit;
   const items=(d.items||[]).map(o=>({_srv:1,name:o.name,q:o.q,r:RB(o.price),mono:mk(o.name),buffs:o.buffs||[],_tot:Math.round(o.price*(1+(o.pct||0)/100))*o.q}));
@@ -2124,6 +2166,7 @@ async function loadMe(){
 async function loadCatalog(){
  if(!LIVE)return;
  const c=await API.call('catalog',{},true);if(!c)return;
+catalogLoaded=true;
  CASES.length=0;c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,items:k.items.map(mkItem)}));drawCases();
  UP_TARGETS=c.upgrade.map(mkItem);
  DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,mono:mk(o.name)}));
