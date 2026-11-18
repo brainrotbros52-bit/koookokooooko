@@ -1,0 +1,2173 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<!-- Telegram Mini App SDK: даёт доступ к пользователю, кнопке «Назад», вибрации, оплате -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<title>BRAINFIRE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#070605;color:#F2E9E1;font-family:Manrope,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px}
+button{font-family:inherit;cursor:pointer;color:inherit}
+a{color:inherit}
+h1,h2,h3{margin:0}
+.u{font-family:Unbounded,sans-serif}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:#A8988A}
+.card{background:#171210;border:1px solid #2E241E}
+
+/* телефон */
+.phone{width:390px;height:844px;max-height:calc(100vh - 48px);position:relative;overflow:hidden;background:#0E0B0A;border-radius:28px;border:1px solid #2E241E;display:flex;flex-direction:column}
+@media (max-width:440px){body{padding:0}.phone{width:100%;height:100vh;max-height:none;border-radius:0;border:0}}
+.glow{position:absolute;left:-120px;right:-120px;bottom:-280px;height:620px;background:radial-gradient(ellipse at 50% 100%,rgba(224,110,50,.20) 0%,rgba(150,50,20,.08) 45%,rgba(14,11,10,0) 70%);pointer-events:none}
+.top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 10px;background:linear-gradient(#0E0B0A 70%,rgba(14,11,10,0))}
+.body{position:relative;flex:1;overflow-y:auto;scrollbar-width:none}
+.body::-webkit-scrollbar{display:none}
+.screen{display:none;flex-direction:column;gap:20px;padding:6px 16px 32px}
+.screen.on{display:flex;animation:in .22s ease}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.iconbtn{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;text-decoration:none;flex:none}
+.iconbtn.card:hover{border-color:#5A4334}
+.fire{border:0;background:#E07A3C;color:#1A0F09;font-weight:800;border-radius:14px;box-shadow:0 8px 28px rgba(224,122,60,.25),inset 0 -3px 0 rgba(120,40,10,.35)}
+.fire:hover{background:#E88A50}
+.fire:disabled{background:#3A2B22;color:#7E6E62;box-shadow:none;cursor:default}
+.ghost{background:#171210;border:1px solid #3A2B22;color:#F2E9E1;font-weight:700;border-radius:14px}
+.ghost:hover{border-color:#5A4334}
+.sec{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8988A}
+.ptitle{display:flex;flex-direction:column;gap:4px}
+.ptitle h1{font-family:Unbounded,sans-serif;font-weight:700;font-size:22px}
+.seg{display:grid;gap:6px;padding:4px;border-radius:14px;background:#171210;border:1px solid #2E241E}
+.seg button{height:40px;border:0;border-radius:10px;background:transparent;color:#A8988A;font-weight:800;font-size:13px}
+.seg button.on{background:#2A1C14;color:#F0A27A;box-shadow:inset 0 0 0 1px #5A3A26}
+.chip{height:36px;padding:0 14px;border-radius:10px;font-size:13px;font-weight:700;background:#171210;color:#CDBFB2;border:1px solid #2E241E}
+.chip.on{background:#F2E9E1;color:#1A0F09;border-color:#F2E9E1}
+.bar{height:6px;border-radius:3px;background:#2E241E;overflow:hidden}
+.bar>i{display:block;height:100%;background:#E07A3C;border-radius:3px}
+.badge{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:800;white-space:nowrap}
+
+/* внутри Telegram — на весь экран, без «рамки телефона» */
+html.tg body{padding:0;background:#0E0B0A}
+html.tg .phone{width:100%;height:var(--tg-viewport-stable-height,100vh);max-height:none;border-radius:0;border:0}
+html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
+
+/* огонь в меню */
+.drawer{overflow:hidden}
+.dscroll{position:relative;z-index:1;height:100%;overflow-y:auto;scrollbar-width:none}
+.dscroll::-webkit-scrollbar{display:none}
+.dfire{position:absolute;left:-20%;right:-20%;bottom:0;height:62%;pointer-events:none;overflow:hidden;z-index:0}
+.dfire .base{position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 50% 108%,rgba(226,100,58,.55),rgba(150,45,18,.2) 45%,rgba(14,11,10,0) 75%);animation:fBase 3.2s ease-in-out infinite}
+.dfire .fl{position:absolute;bottom:-40px;width:120px;height:260px;border-radius:50% 50% 45% 45%/60% 60% 40% 40%;background:radial-gradient(ellipse at 50% 80%,rgba(245,164,82,.68),rgba(226,100,58,.34) 40%,rgba(226,100,58,0) 70%);filter:blur(16px);mix-blend-mode:screen;transform-origin:50% 100%;animation:fTongue 2.6s ease-in-out infinite}
+.dfire .fl:nth-child(2){left:8%;animation-delay:-.4s;animation-duration:2.9s;height:220px}
+.dfire .fl:nth-child(3){left:30%;animation-delay:-1.1s;height:300px;width:150px}
+.dfire .fl:nth-child(4){left:52%;animation-delay:-.7s;animation-duration:2.3s;height:240px}
+.dfire .fl:nth-child(5){left:72%;animation-delay:-1.6s;animation-duration:3.1s;height:280px}
+.dfire .fl:nth-child(6){left:42%;animation-delay:-2s;animation-duration:2s;height:180px;width:90px;background:radial-gradient(ellipse at 50% 80%,rgba(255,215,160,.5),rgba(245,164,82,0) 65%)}
+.dfire .em{position:absolute;bottom:-6px;width:3px;height:3px;border-radius:50%;background:#FFC78A;box-shadow:0 0 6px 1px rgba(255,170,90,.8);opacity:0;animation:fEmber linear infinite}
+@keyframes fBase{50%{opacity:.75;transform:scaleY(.95)}}
+@keyframes fTongue{0%,100%{transform:scale(1,1) skewX(0);opacity:.8}25%{transform:scale(.92,1.08) skewX(4deg)}50%{transform:scale(1.06,.9) skewX(-3deg);opacity:1}75%{transform:scale(.95,1.12) skewX(2deg);opacity:.7}}
+@keyframes fEmber{0%{transform:translate(0,0);opacity:0}10%{opacity:1}70%{opacity:.8}100%{transform:translate(var(--dx),-420px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.dfire *{animation:none!important}}
+
+.live{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;background:#2A1510;color:#F08A66;font-size:11px;font-weight:800;letter-spacing:.08em}
+.live i{width:6px;height:6px;border-radius:50%;background:#F0643A;animation:livep 1.4s ease-in-out infinite}
+@keyframes livep{0%,100%{box-shadow:0 0 0 0 rgba(240,100,58,.6)}50%{box-shadow:0 0 0 5px rgba(240,100,58,0)}}
+.fseg{display:flex;gap:2px;padding:3px;border-radius:10px;background:#171210;border:1px solid #2E241E}
+.fseg button{height:28px;padding:0 10px;border:0;border-radius:7px;background:none;color:#A8988A;font-size:12px;font-weight:800}
+.fseg button.on{background:#2A1C14;color:#F0A27A}
+.feed{display:flex;gap:6px;overflow:hidden;margin-right:-16px;padding:2px 0;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
+.drop{position:relative;flex:none;width:72px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 6px 7px;border-radius:14px;background:#171210;border:1px solid #2E241E;overflow:hidden}
+.drop::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:2px;border-radius:2px;background:var(--c);box-shadow:0 0 10px var(--c)}
+.drop-art{width:100%;height:50px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 110%,color-mix(in srgb,var(--c) 45%,transparent),#1A1411 70%)}
+
+.drop-p{font-weight:800;font-size:12px}
+.drop-u{font-size:10px;color:#8C7D71;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drop.top{border-color:color-mix(in srgb,var(--c) 45%,#2E241E)}
+.drop.top::before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent 0 70%,color-mix(in srgb,var(--c) 55%,transparent) 80%,transparent 90%);animation:spinB 3s linear infinite;z-index:0;opacity:.6}
+.drop.top>*{position:relative;z-index:1}
+.drop.top .drop-art{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 30%,transparent)}
+@keyframes spinB{to{transform:rotate(360deg)}}
+.drop.fresh{animation:dropIn .55s cubic-bezier(.2,1.2,.3,1)}
+.drop.fresh .drop-art{animation:flash 1.2s ease-out}
+@keyframes dropIn{from{width:0;padding-left:0;padding-right:0;margin-right:-6px;opacity:0;transform:translateY(-10px) scale(.7)}}
+@keyframes flash{0%{filter:brightness(2.2)}100%{filter:none}}
+/* пополнение */
+.dtabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.dtabs button{display:flex;align-items:center;gap:10px;height:56px;padding:0 12px;border-radius:16px;background:#171210;border:1px solid #2E241E;color:#A8988A;font-weight:800;font-size:15px;transition:all .2s}
+.dtabs button:hover{border-color:#5A4334}
+.dtabs button.on{color:#F2E9E1;border-color:#7A4A2C;background:radial-gradient(ellipse at 20% 120%,rgba(224,122,60,.25),transparent 70%),#1F1611}
+.dt-ic{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:#1F1814;border:1px solid #3A2B22}
+.dtabs button.on .dt-ic{color:#1A0F09;background:#E07A3C;border-color:#E07A3C}
+.buffbar{display:flex;align-items:center;gap:12px;min-height:54px;padding:0 14px;border-radius:14px;background:linear-gradient(90deg,#221811,#171210);border:1px solid #3A2B22;width:100%;transition:border-color .2s}
+.buffbar:hover{border-color:#7A4A2C}
+.buff-dots{display:flex}.buff-dots i{width:14px;height:14px;border-radius:50%;border:2px solid #171210;margin-left:-5px}.buff-dots i:first-child{margin-left:0}
+.srch,.rng{display:flex;align-items:center;gap:8px;height:48px;padding:0 14px;border-radius:12px;background:#171210;border:1px solid #2E241E}
+.srch:focus-within,.rng:focus-within{border-color:#7A4A2C}
+.srch input,.rng input{flex:1;min-width:0;background:none;border:0;outline:none;color:#F2E9E1;font:600 15px Manrope,sans-serif}
+.srch input::placeholder,.rng input::placeholder{color:#6B5D52}
+.rng{flex:1;min-width:0}.rng span{font-size:13px}
+#depSort.desc svg{transform:scaleY(-1)}
+.dep{display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:14px;background:#171210;border:1px solid #2E241E;transition:border-color .2s,background .2s}
+.dep.sel{border-color:#E07A3C;background:#1F1611}
+.dep-art{position:relative;height:72px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.dep-art .u{font-weight:800;font-size:20px}
+.dep-n{font-size:12px;font-weight:700;line-height:1.25;min-height:30px;text-align:center}
+.dep-p{display:flex;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:800}
+.step{display:grid;grid-template-columns:32px 1fr 32px;align-items:center;height:34px;border-radius:10px;background:#0E0B0A;border:1px solid #2E241E;overflow:hidden}
+.step button{height:100%;border:0;background:none;color:#CDBFB2;font-size:18px;font-weight:700;line-height:1}
+.step button:hover:not(:disabled){background:#241B16;color:#F2E9E1}
+.step button:disabled{color:#3A2B22;cursor:default}
+.step span{text-align:center;font-weight:800;font-size:14px}
+.dep.sel .step{border-color:#7A4A2C}.dep.sel .step span{color:#F0A27A}
+.depbar{position:sticky;bottom:0;z-index:3;display:flex;align-items:center;gap:12px;margin:4px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(rgba(14,11,10,0),#0E0B0A 22%);}
+.depbar::before{content:"";position:absolute;left:16px;right:16px;top:14px;bottom:8px;border-radius:16px;background:#171210;border:1px solid #3A2B22;z-index:-1;box-shadow:0 -10px 30px rgba(0,0,0,.5)}
+.depbar>div{padding-left:12px}.depbar .fire{margin-right:8px}
+/* окно пополнения */
+.modal{position:absolute;inset:0;z-index:7;pointer-events:none;display:flex;align-items:center;justify-content:center;padding:12px}
+.modal-bg{position:absolute;inset:0;background:rgba(5,4,3,.72);backdrop-filter:blur(3px);opacity:0;transition:opacity .25s}
+.modal-box{position:relative;width:100%;max-width:460px;height:100%;max-height:820px;display:flex;flex-direction:column;border-radius:24px;background:#0E0B0A;border:1px solid #3A2B22;box-shadow:0 30px 80px rgba(0,0,0,.7);overflow:hidden;opacity:0;transform:translateY(16px) scale(.97);transition:opacity .25s,transform .3s cubic-bezier(.2,.8,.2,1)}
+.modal-box::before{content:"";position:absolute;left:-20%;right:-20%;top:-140px;height:260px;background:radial-gradient(ellipse at 50% 100%,rgba(224,122,60,.16),transparent 65%);pointer-events:none}
+.modal.open{pointer-events:auto}.modal.open .modal-bg{opacity:1}.modal.open .modal-box{opacity:1;transform:none}
+.modal-head{position:relative;display:flex;flex-direction:column;gap:6px;padding:16px 16px 12px;border-bottom:1px solid #2E241E}
+.modal-scroll{position:relative;flex:1;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:14px;padding:14px 16px 16px}
+.modal-scroll::-webkit-scrollbar{display:none}
+.qbtn{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#1F1814;border:1px solid #3A2B22;color:#CDBFB2}
+.qbtn:hover{border-color:#7A4A2C;color:#F0A27A}
+.faq-link{align-self:flex-start;display:flex;align-items:center;gap:6px;padding:0;background:none;border:0;color:#E9A06A;font-size:13px;font-weight:700}
+.faq-link span{border-bottom:1px dashed rgba(233,160,106,.5)}
+.faq-link:hover{color:#F2BC8E}
+.depbar.dm{position:relative;margin:0;padding:12px 16px;background:#120E0C;border-top:1px solid #2E241E}
+.depbar.dm::before{display:none}.depbar.dm>div{padding-left:0}.depbar.dm .fire{margin-right:0}
+/* шторки */
+.sheet{position:absolute;inset:0;z-index:8;pointer-events:none}
+.sheet-bg{position:absolute;inset:0;background:rgba(5,4,3,.65);opacity:0;transition:opacity .25s}
+.sheet-box{position:absolute;left:0;right:0;bottom:0;max-height:86%;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:16px;padding:10px 16px calc(20px + env(safe-area-inset-bottom));background:#0E0B0A;border-top:1px solid #3A2B22;border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+.sheet-box::before{content:"";position:absolute;left:-20%;right:-20%;top:-120px;height:220px;background:radial-gradient(ellipse at 50% 100%,rgba(224,122,60,.12),transparent 65%);pointer-events:none}
+.sheet-box>*{flex-shrink:0}
+.sheet-grab{width:40px;height:4px;border-radius:2px;background:#3A2B22;margin:0 auto}
+.sheet.open{pointer-events:auto}.sheet.open .sheet-bg{opacity:1}.sheet.open .sheet-box{transform:none}
+.acc{border-radius:14px;background:#171210;border:1px solid #2E241E;overflow:hidden}
+.acc>button{width:100%;display:flex;align-items:center;gap:8px;min-height:50px;padding:0 14px;background:none;border:0;text-align:left}
+.acc>button b{font-family:Unbounded,sans-serif;font-size:13px;letter-spacing:.04em}
+.acc>button svg{transition:transform .25s}
+.acc.open{border-color:#3A2B22}.acc.open>button{background:#1F1611}.acc.open>button svg{transform:rotate(180deg)}
+.acc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.acc.open .acc-body{grid-template-rows:1fr}
+.acc-body>div{overflow:hidden}
+.bgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:8px}
+.bf{display:flex;align-items:center;gap:8px;min-height:44px;padding:6px 10px 6px 6px;border-radius:10px;background:#120E0C;border:1px solid #241B16}
+.bf-ic{width:30px;height:30px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;font:800 10px Unbounded,sans-serif}
+.bf-n{flex:1;min-width:0;font-size:12px;font-weight:700;line-height:1.2}
+.bf-v{font-size:13px;font-weight:800;white-space:nowrap}
+.bex{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:14px;background:#171210;border:1px solid #2E241E}
+.bex-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:800;font-size:14px}
+.bex-chip{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px;border-radius:9px;background:#0E0B0A;border:1px solid #3A2B22}
+.btiers{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+.btiers::-webkit-scrollbar{display:none}
+.btiers button{flex:none;display:flex;align-items:center;gap:7px;height:38px;padding:0 12px;border-radius:12px;background:#171210;border:1px solid #2E241E;color:#CDBFB2;font-weight:800;font-size:13px}
+.btiers button i{font-style:normal;font-size:11px;color:#8C7D71;background:#0E0B0A;padding:2px 6px;border-radius:6px}
+.btiers button .dot{width:7px;height:7px;border-radius:50%;background:var(--c)}
+.btiers button.on{background:#F2E9E1;color:#1A0F09;border-color:#F2E9E1}.btiers button.on i{background:#1A0F0918;color:#1A0F09}
+.bcloud{display:flex;flex-wrap:wrap;gap:6px}
+.btag{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 4px 0 12px;border-radius:999px;background:#171210;border:1px solid #2E241E;font-size:13px;font-weight:700}
+.btag::before{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--w);background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--c) 16%,transparent) 65%,transparent);pointer-events:none}
+.btag>*{position:relative}
+.btag-v{height:26px;padding:0 9px;border-radius:999px;display:inline-flex;align-items:center;font-size:12px;font-weight:800;background:color-mix(in srgb,var(--c) 18%,#0E0B0A);color:var(--c)}
+.btag.neg .btag-v{background:#3A1A12;color:#F08A66}
+.btag.bpk{cursor:pointer;padding-left:6px;transition:border-color .15s,background .15s,transform .1s}
+.btag.bpk:hover{border-color:#5A4334}
+.btag.bpk:active{transform:scale(.96)}
+.btag-ck{width:20px;height:20px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;border:1.5px solid #4A382C;background:#0E0B0A;transition:all .15s}
+.btag.bpk.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,#171210)}
+.btag.bpk.on .btag-ck{background:var(--c);border-color:var(--c)}
+.btag.neg.bpk.on{border-color:#F08A66}.btag.neg.bpk.on .btag-ck{background:#F08A66;border-color:#F08A66}
+.bfoot{position:sticky;bottom:calc(-20px - env(safe-area-inset-bottom));display:flex;gap:8px;margin:0 -16px calc(-20px - env(safe-area-inset-bottom));padding:12px 16px calc(16px + env(safe-area-inset-bottom));background:linear-gradient(rgba(14,11,10,0),#0E0B0A 30%)}
+.bfoot .ghost:disabled{opacity:.4;cursor:default}
+.bbtn{height:28px;border-radius:8px;border:1px dashed #4A382C;background:none;color:#A8988A;font-size:11px;font-weight:800;padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:all .15s}
+.bbtn:hover{border-color:#7A4A2C;color:#F0A27A}
+.bbtn.has{border-style:solid;border-color:#3A2B22;background:#1F1814;color:#CDBFB2}
+.steps{display:flex;flex-direction:column;gap:10px;counter-reset:st}
+.steps li{list-style:none;display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.45;color:#CDBFB2}
+.steps li::before{counter-increment:st;content:counter(st);flex:none;width:26px;height:26px;border-radius:8px;background:#2A1C14;border:1px solid #7A4A2C;color:#F0A27A;font:800 12px Unbounded,sans-serif;display:flex;align-items:center;justify-content:center}
+/* переливающийся логотип */
+.logo-t{font-family:Unbounded,sans-serif;font-weight:800;letter-spacing:.04em;display:inline-flex}
+.logo-t>span{background-image:linear-gradient(100deg,var(--l1) 0%,var(--l2) 25%,var(--l3) 50%,var(--l2) 75%,var(--l1) 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:logoShift 3.2s linear infinite}
+.lt-a{--l1:#F2E9E1;--l2:#FFE0B0;--l3:#F5B070}
+.lt-b{--l1:#E8622A;--l2:#F5A452;--l3:#FFE0A8;animation-delay:-.4s!important}
+.logo-t{filter:drop-shadow(0 0 6px rgba(232,98,42,.25));animation:logoGlow 2.4s ease-in-out infinite}
+.logo-ic{filter:drop-shadow(0 0 4px rgba(240,140,70,.55));animation:logoGlow 2.4s ease-in-out infinite}
+@keyframes logoShift{to{background-position:-200% 0}}
+@keyframes logoGlow{50%{filter:drop-shadow(0 0 10px rgba(240,140,70,.55))}}
+@media (prefers-reduced-motion:reduce){.logo-t>span,.logo-t,.logo-ic{animation:none}}
+.coin{flex:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.bal-coin{position:relative;display:inline-flex;border-radius:50%;overflow:hidden}
+.bal-coin::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);animation:coinShine 3.6s ease-in-out infinite}
+@keyframes coinShine{0%,70%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+/* подсказка ленты */
+.ftip{position:absolute;z-index:6;width:250px;display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:14px;background:#1A1411;border:1px solid #3A2B22;box-shadow:0 14px 40px rgba(0,0,0,.6);opacity:0;transform:translateY(-4px);pointer-events:none;transition:opacity .15s,transform .15s}
+.ftip::before{content:"";position:absolute;top:-6px;left:calc(var(--ax,50%) - 6px);width:12px;height:12px;background:#1A1411;border-left:1px solid #3A2B22;border-top:1px solid #3A2B22;transform:rotate(45deg)}
+.ftip.show{opacity:1;transform:none}
+.ftip-src{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:#0E0B0A;border:1px solid #2E241E;font-size:12px;font-weight:700}
+.drop{cursor:pointer;transition:transform .15s,border-color .15s}
+.drop-art{perspective:400px;background:none!important;padding:0}
+.da-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.3,1.3,.5,1)}
+.da-f,.da-b{position:absolute;inset:0;border-radius:10px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.da-f{background:radial-gradient(circle at 50% 110%,color-mix(in srgb,var(--c) 45%,transparent),#1A1411 70%)}
+.da-f .u{font-weight:800;font-size:16px;color:var(--c)}
+.da-b{transform:rotateY(180deg);background:radial-gradient(circle at 50% 100%,color-mix(in srgb,var(--sc) 35%,transparent),#1A1411 72%);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--sc) 35%,transparent)}
+.drop:hover .da-in,.drop:focus-visible .da-in,.drop.flip .da-in{transform:rotateY(180deg)}
+.drop-u{position:relative;height:13px;width:100%}
+.du-i,.du-s{position:absolute;inset:0;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:opacity .2s,transform .2s}
+.du-s{opacity:0;transform:translateY(4px);color:var(--sc);font-weight:800}
+.drop:hover .du-i,.drop:focus-visible .du-i,.drop.flip .du-i{opacity:0;transform:translateY(-4px)}
+.drop:hover .du-s,.drop:focus-visible .du-s,.drop.flip .du-s{opacity:1;transform:none}
+.drop:hover,.drop:focus-visible{transform:translateY(-2px);border-color:color-mix(in srgb,var(--c) 60%,#2E241E);outline:none}
+/* топ дроп */
+.topdrop{position:relative;overflow:hidden;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:16px;background:#171210;border:1px solid #3A2B22}
+.topdrop.new{animation:tdNew 1.2s ease-out}
+@keyframes tdNew{0%{box-shadow:0 0 0 0 rgba(232,188,114,.7)}100%{box-shadow:0 0 0 18px rgba(232,188,114,0)}}
+.td-glow{position:absolute;left:-50px;top:-70px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 35%,transparent),transparent 65%);animation:fBase 3.4s ease-in-out infinite}
+.td-art{position:relative;width:60px;height:60px;flex:none;border-radius:16px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--c) 40%,transparent),#1A1411 72%);border:1px solid color-mix(in srgb,var(--c) 55%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 8%,transparent),0 8px 22px color-mix(in srgb,var(--c) 25%,transparent)}
+.td-art .u{font-weight:800;font-size:20px;color:var(--c)}
+.td-crown{position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-8deg);filter:drop-shadow(0 2px 6px rgba(232,188,114,.6))}
+.td-lbl{align-self:flex-start;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:6px;background:#2B2010;color:#E8BC72}
+.td-price{display:inline-flex;align-items:center;gap:5px;font-family:Unbounded,sans-serif;font-weight:700;font-size:15px}
+.sec-title{display:flex;align-items:center;gap:12px;margin-top:4px}
+.sec-title h2{font-weight:700;font-size:20px;flex:none}
+.sec-title span{flex:1;height:1px;background:linear-gradient(90deg,transparent,#5A3A26)}
+.sec-title span:last-child{background:linear-gradient(90deg,#5A3A26,transparent)}
+/* профиль */
+.pcard{position:relative;overflow:hidden;border-radius:22px;background:#171210;border:1px solid #3A2B22}
+.pbanner{position:relative;height:92px;overflow:hidden;background:radial-gradient(ellipse at 70% 120%,rgba(224,110,50,.35),transparent 60%),linear-gradient(#1F140E,#140E0B)}
+.pbanner::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,#171210)}
+.phead{position:relative;display:flex;align-items:flex-end;gap:12px;padding:0 14px;margin-top:-42px}
+.pava-wrap{position:relative;width:84px;height:84px;flex:none}
+.pava-ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#A3301A,#E8622A,#F5A452,#FFE0A8,#F5A452,#E8622A,#A3301A);animation:spinB 4s linear infinite;filter:drop-shadow(0 0 10px rgba(232,98,42,.55))}
+.pava{position:absolute;inset:4px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#2A1C14;border:3px solid #171210;font-weight:800;font-size:28px;color:#F0A27A}
+.plvl{position:absolute;right:-2px;bottom:2px;min-width:26px;height:22px;padding:0 6px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#E07A3C;color:#1A0F09;font-size:11px;font-weight:800;border:2px solid #171210}
+.pname{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding-bottom:6px}
+.pname h1{font-weight:800;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pico{width:28px;height:28px;flex:none;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#1F1814;border:1px solid #3A2B22;color:#A8988A}
+.pico:hover{color:#F0A27A;border-color:#7A4A2C}
+.pid{align-self:flex-start;display:flex;align-items:center;gap:6px;height:26px;padding:0 8px;border-radius:8px;background:#0E0B0A;border:1px solid #2E241E;color:#A8988A;font-size:12px;font-weight:700}
+.pid:hover{color:#F2E9E1;border-color:#5A4334}
+.pbal{display:flex;flex-direction:column;gap:12px;padding:14px;margin-top:12px;border-top:1px solid #2E241E}
+.pwager{display:flex;flex-direction:column;gap:6px}
+.pbest{position:relative;overflow:hidden;display:flex;align-items:center;gap:12px;padding:12px;border-radius:18px;background:#171210;border:1px solid #3A2B22}
+.pbest-glow{position:absolute;left:-40px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 30%,transparent),transparent 65%)}
+.pbest-src{position:absolute;right:10px;bottom:10px;display:flex;align-items:center;gap:5px;height:28px;padding:0 6px 0 8px;border-radius:8px;background:#0E0B0A;border:1px solid #2E241E;color:#CDBFB2;font-size:11px;font-weight:700}
+.pbest-src:hover{border-color:#5A4334}
+.pstats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pstat{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;background:#171210;border:1px solid #2E241E}
+.pstat>div{display:flex;flex-direction:column;gap:1px;min-width:0}
+.pstat b{font-weight:700;font-size:17px}.pstat span{font-size:11px;color:#A8988A}
+.ps-ic{width:40px;height:40px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#1F1814;border:1px solid #3A2B22}
+.pinv{display:flex;flex-direction:column;gap:12px;padding:12px;border-radius:18px;background:#120E0C;border:1px solid #2E241E}
+.pinv button:disabled{opacity:.4;cursor:default;box-shadow:none}
+.pitem{display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:12px;background:#171210;border:1px solid #2E241E}
+.pitem-sell{display:flex;align-items:center;justify-content:center;gap:4px;height:32px;border-radius:9px;background:#0E0B0A;border:1px solid #3A2B22;color:#F2E9E1;font-size:12px;font-weight:800}
+.pitem-sell:hover{border-color:#E07A3C;background:#1F1611}
+.pempty{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 0 8px}
+.ppart{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:18px;background:#171210;border:1px solid #3A2B22}
+.ppart-glow{position:absolute;right:-60px;top:-80px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(224,122,60,.18),transparent 65%)}
+.pp-box{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:12px;background:#0E0B0A;border:1px solid #2E241E}
+/* профиль v2 */
+.hero{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 16px 4px;margin:-6px -16px 0;overflow:hidden}
+.hero-fire{position:absolute;inset:0;overflow:hidden;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 52%,#000 20%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 52%,#000 20%,transparent 100%)}
+.hero>*:not(.hero-fire){position:relative;z-index:1}
+.hero{padding-bottom:14px!important}
+.hero-fire .dfire{left:0;right:0;top:0;bottom:0;height:auto!important;overflow:visible}
+.hero .pava-wrap{position:relative;width:100px;height:100px;margin-bottom:4px}
+.hero .pava{inset:5px;font-size:34px;border-width:4px;border-color:#0E0B0A}
+.hero-name{font-weight:800;font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero .pid{align-self:center}
+.lvl{position:relative;width:100%;max-width:260px;display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.lvl-bar{height:6px;border-radius:3px;background:#2E241E;overflow:hidden}
+.lvl-bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#A3301A,#E8622A,#F5A452);box-shadow:0 0 10px rgba(232,98,42,.6)}
+.wallet{display:flex;align-items:center;gap:14px;padding:16px;border-radius:20px;background:radial-gradient(ellipse at 0% 100%,rgba(224,122,60,.14),transparent 60%),#171210;border:1px solid #3A2B22}
+.wring{position:relative;width:64px;height:64px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.wring svg{position:absolute;inset:0;filter:drop-shadow(0 0 6px rgba(127,212,154,.35))}
+.wring span{position:relative;font-weight:800;font-size:14px;line-height:1}
+.wring small{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;color:#A8988A;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.wallet{padding-bottom:20px!important}
+.wbtn{height:50px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;box-shadow:none}
+.stbox{border-radius:18px;background:#171210;border:1px solid #2E241E;overflow:hidden}
+.strow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.strow>div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 4px}
+.strow>div+div{border-left:1px solid #2E241E}
+.strow b{font-weight:700;font-size:16px}.strow span{font-size:11px;color:#A8988A}
+.rec{display:flex;align-items:center;gap:10px;padding:10px 14px 10px 10px;border-top:1px solid #2E241E;background:linear-gradient(90deg,rgba(232,188,114,.06),transparent)}
+.utabs{display:flex;gap:20px;border-bottom:1px solid #2E241E;margin-bottom:-6px}
+.utabs button{position:relative;height:42px;padding:0;background:none;border:0;color:#8C7D71;font-weight:800;font-size:15px;display:flex;align-items:center;gap:6px}
+.utabs button i{font-style:normal;font-size:11px;padding:2px 6px;border-radius:6px;background:#241B16;color:#CDBFB2}
+.utabs button.on{color:#F2E9E1}
+.utabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:2px;background:#E07A3C;box-shadow:0 0 8px rgba(224,122,60,.8)}
+.plist{border-radius:18px;background:#171210;border:1px solid #2E241E;overflow:hidden}
+.plist>*+*{border-top:1px solid #2E241E}
+.prow{width:100%;display:flex;align-items:center;gap:12px;min-height:62px;padding:0 14px 0 12px;background:none;border:0;text-align:left;cursor:pointer;list-style:none}
+.prow::-webkit-details-marker{display:none}
+.prow:hover{background:rgba(255,255,255,.02)}
+.prow-ic{width:38px;height:38px;flex:none;border-radius:11px;display:flex;align-items:center;justify-content:center;background:#1F1814;border:1px solid #3A2B22}
+.prow-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}.prow-t b{font-size:14px}.prow-t span{font-size:12px}
+.prow-d[open] summary svg:last-child{transform:rotate(90deg)}
+.prow-d summary svg:last-child{transition:transform .2s}
+/* отыгрыш */
+.wring{background:none;border:0;padding:0;cursor:pointer;transition:transform .15s}
+.wring:hover{transform:scale(1.05)}
+.wring svg{filter:drop-shadow(0 0 6px rgba(240,140,70,.35))}
+.wring.ok svg{filter:drop-shadow(0 0 6px rgba(127,212,154,.35))}
+.wdBtn.locked{opacity:.55;background:#120E0C!important;color:#8C7D71!important;box-shadow:none!important;border:1px dashed #3A2B22!important}
+.wtoast{position:absolute;left:50%;top:70px;z-index:9;transform:translate(-50%,-10px);opacity:0;transition:all .25s;padding:7px 12px;border-radius:999px;background:#1F1611;border:1px solid #5A3A26;color:#F0A27A;font-size:12px;font-weight:800;white-space:nowrap;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.wtoast.show{opacity:1;transform:translate(-50%,0)}
+.wtoast.done{background:#14301F;border-color:#3E9A63;color:#7FD49A}
+.wtoast.need{background:#2B2010;border-color:#5A4320;color:#E8BC72}
+.wbig{display:flex;align-items:center;gap:16px;padding:14px;border-radius:16px;background:#171210;border:1px solid #2E241E}
+.wbig-ring{position:relative;width:96px;height:96px;flex:none;display:flex;align-items:center;justify-content:center}
+.wbig-ring svg{position:absolute;inset:0}.wbig-ring b{position:relative;font-size:20px;font-weight:700}
+.wkv{display:flex;justify-content:space-between;align-items:baseline;font-size:13px}.wkv b{font-size:15px}
+.wcols{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wcols>div{padding:12px;border-radius:14px;background:#120E0C;border:1px solid #2E241E}
+.wcols ul{margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+.wcap{font-size:12px;letter-spacing:.02em}
+.wr{list-style:none;display:flex;gap:6px;align-items:flex-start;font-size:12px;line-height:1.35;color:#CDBFB2}.wr svg{margin-top:1px;flex:none}
+.wrates{display:flex;gap:8px}.wrates span{flex:1;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#171210;border:1px solid #2E241E;font-size:12px;color:#CDBFB2}
+.wrates b{font-family:Unbounded,sans-serif;color:#E9A06A;font-size:14px}
+.wlog{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:#120E0C;border:1px solid #241B16;font-size:13px;font-weight:700}
+.wlog>span:first-child{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wlog b{color:#7FD49A;font-size:13px}
+[hidden]{display:none!important}
+/* заявка и очередь */
+.phone:has(.dq-pill:not([hidden])) .toast{bottom:74px}
+.dq-step{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#E9A06A}
+.dq-items{display:flex;flex-direction:column;gap:6px;max-height:170px;overflow:auto;scrollbar-width:none}
+.dq-it{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:12px;background:#171210;border:1px solid #2E241E}
+.dq-field{display:flex;flex-direction:column;gap:6px}
+.dq-field label{font-size:13px;font-weight:800}
+.dq-hint{font-size:12px;color:#8C7D71}
+.srch.err{border-color:#B5481F!important}.srch.okk{border-color:#3E9A63}
+.srch input:disabled{color:#7FD49A;opacity:1}
+.dq-sum{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:14px;background:#171210;border:1px solid #2E241E}
+#dqSend:disabled{background:#3A2B22;color:#7E6E62;box-shadow:none;cursor:default}
+.dq-q{display:flex;align-items:center;gap:16px;padding:16px;border-radius:18px;background:radial-gradient(ellipse at 0% 50%,rgba(224,122,60,.16),transparent 60%),#171210;border:1px solid #3A2B22}
+.dq-q.me{border-color:#3E9A63;background:radial-gradient(ellipse at 0% 50%,rgba(127,212,154,.16),transparent 60%),#171210}
+.dq-pos{position:relative;width:76px;height:76px;flex:none;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1F1611;border:2px solid #E07A3C}
+.dq-q.me .dq-pos{border-color:#7FD49A;background:#14251B}
+.dq-pos b{font-size:28px;line-height:1;font-weight:700}
+.dq-pos small{font-size:9px;font-weight:800;color:#A8988A;text-transform:uppercase;letter-spacing:.04em}
+.dq-pulse{position:absolute;inset:-2px;border-radius:50%;border:2px solid #E07A3C;animation:dqp 2s ease-out infinite}
+.dq-pulse.d2{animation-delay:1s}
+.dq-q.me .dq-pulse{border-color:#7FD49A}
+@keyframes dqp{from{transform:scale(1);opacity:.8}to{transform:scale(1.45);opacity:0}}
+.dq-bot{display:flex;flex-direction:column;gap:8px;padding:12px 12px 12px 14px;border-radius:16px;background:#120E0C;border:1px dashed #5A4334}
+.dq-more{border-radius:14px;background:#171210;border:1px solid #2E241E;padding:0 12px}
+.dq-more summary{list-style:none;cursor:pointer;padding:12px 0;font-size:13px;font-weight:700;color:#CDBFB2}
+.dq-more summary::-webkit-details-marker{display:none}
+.dq-more summary::after{content:"›";float:right;transition:transform .2s;color:#6B5D52;font-size:18px;line-height:1}
+.dq-more[open] summary::after{transform:rotate(90deg)}
+.dq-more .dq-items{padding-bottom:12px}
+.dq-pill{position:absolute!important;left:50%;bottom:18px;width:auto!important;z-index:6;transform:translateX(-50%);display:flex;align-items:center;gap:8px;height:42px;padding:0 16px;border-radius:999px;background:#1F1611;border:1px solid #7A4A2C;color:#F0A27A;font-size:13px;font-weight:800;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.6);animation:pillIn .3s cubic-bezier(.2,1.3,.4,1)}
+.dq-pill.me{background:#14301F;border-color:#3E9A63;color:#7FD49A}
+.dq-dot{width:8px;height:8px;border-radius:50%;background:currentColor;animation:livep 1.4s ease-in-out infinite}
+@keyframes pillIn{from{transform:translate(-50%,20px);opacity:0}}
+.age{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 50% 110%,rgba(224,110,50,.25),transparent 60%),#0E0B0A}
+.age-box{display:flex;flex-direction:column;align-items:center;gap:14px;max-width:340px}
+.age-ck{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:14px;background:#171210;border:1px solid #2E241E;font-size:13px;line-height:1.4;cursor:pointer;width:100%}
+.age-ck input{width:20px;height:20px;flex:none;accent-color:#E07A3C;margin:0}
+#ageGo:disabled,#wdGo:disabled{background:#3A2B22;color:#7E6E62;box-shadow:none;cursor:default}
+.wd-it{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:12px;background:#171210;border:1px solid #2E241E;cursor:pointer}
+.wd-it.on{border-color:#E07A3C;background:#1F1611}
+.wd-it input{width:18px;height:18px;accent-color:#E07A3C;margin:0}
+/* меню */
+.m2{display:flex;flex-direction:column;gap:14px;padding:12px 14px 20px;min-height:100%}
+.m2>.sec{margin:6px 2px -4px}
+.me{position:relative;overflow:hidden;border-radius:20px;background:#171210;border:1px solid #3A2B22}
+.me::before{content:"";position:absolute;right:-60px;bottom:-80px;width:220px;height:200px;background:radial-gradient(circle,rgba(224,122,60,.22),rgba(224,122,60,0) 65%);pointer-events:none}
+.me.on{border-color:#7A4A2C}
+.me-top{position:relative;width:100%;display:flex;align-items:center;gap:12px;padding:12px;background:none;border:0;border-bottom:1px solid #2E241E;transition:background .2s}
+.me-top:hover{background:rgba(255,255,255,.02)}
+.me-ava{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;color:#F0A27A;background:#2A1C14;box-shadow:0 0 0 2px #0E0B0A,0 0 0 4px #E07A3C,0 0 18px rgba(224,122,60,.4);flex:none;margin:2px}
+.me-top:hover .me-ava{box-shadow:0 0 0 2px #0E0B0A,0 0 0 4px #F0A060,0 0 26px rgba(240,160,96,.6)}
+.me-bal{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 12px 12px 14px}
+.me-set{position:relative;width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;background:none;border:0;border-top:1px solid #2E241E;color:#CDBFB2;transition:background .2s,color .2s}
+.me-set:hover{background:rgba(255,255,255,.02);color:#F2E9E1}
+.me-set.on{color:#F0A27A}
+.me-set-ic{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#1F1814;border:1px solid #3A2B22}
+.me-set.on .me-set-ic{border-color:#7A4A2C;background:#2A1C14}
+.mg{position:relative;overflow:hidden;height:128px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:2px;padding:14px;border-radius:18px;background:#171210;border:1px solid #2E241E;text-align:left;transition:border-color .2s,background .2s}
+.mg::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 20%,var(--c),transparent 60%);opacity:.12;transition:opacity .25s}
+.mg:hover{border-color:#5A4334}.mg:hover::before{opacity:.22}
+.mg.on{border-color:var(--c);background:#1C1410}.mg.on::before{opacity:.28}
+.mg-ic{position:absolute;right:-12px;top:-10px;opacity:.55;transition:transform .3s,opacity .3s}
+.mg:hover .mg-ic,.mg.on .mg-ic{opacity:.9;transform:rotate(-6deg) scale(1.05)}
+.mg-t{position:relative;font-family:Unbounded,sans-serif;font-weight:700;font-size:16px}
+.mg-d{position:relative;font-size:12px;color:#A8988A}
+.mg-go{position:absolute;right:12px;bottom:12px;width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:#241B16;color:#A8988A}
+.mg.on .mg-go{background:var(--c);color:#1A0F09}
+.mines{display:flex;align-items:center;gap:14px;padding:12px 14px 12px 12px;border-radius:18px;background:#171210;border:1px solid #2E241E;transition:border-color .2s}
+.mines:hover{border-color:#5A4334}.mines.on{border-color:#E2643A;background:#1C1410}
+.mines-grid{display:grid;grid-template-columns:repeat(3,12px);gap:3px;padding:7px;border-radius:12px;background:#0E0B0A;border:1px solid #2E241E;flex:none}
+.mines-grid i{width:12px;height:12px;border-radius:3px;background:#2A201A}
+.mines-grid i.g{background:#DDA650;box-shadow:0 0 6px rgba(221,166,80,.6)}
+.mines-grid i.b{background:#E2643A;box-shadow:0 0 6px rgba(226,100,58,.7)}
+.rw{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 4px 12px;border-radius:16px;background:#171210;border:1px solid #2E241E;transition:border-color .2s}
+.rw:hover{border-color:#5A4334}.rw.on{border-color:#7A4A2C;background:#1F1611}
+.rw-ic{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%,#2A1F18,#171210 75%);border:1px solid #3A2B22}
+.rw.on .rw-ic{border-color:#E07A3C}
+.rw-b{position:absolute;top:8px;right:8px;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:#E07A3C;color:#1A0F09;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.m2-foot{margin-top:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding-top:8px;border-top:1px solid #2E241E}
+.ft{display:flex;flex-direction:column;align-items:center;gap:5px;min-height:56px;justify-content:center;border-radius:12px;background:none;border:0;color:#A8988A;font-size:12px;font-weight:700;transition:background .2s,color .2s}
+.ft:hover{background:#171210;color:#F2E9E1}.ft.on{color:#F0A27A;background:#1F1611}
+
+.scrim{position:absolute;inset:0;background:rgba(5,4,3,.6);opacity:0;pointer-events:none;transition:opacity .25s;z-index:5}
+.drawer{position:absolute;top:0;bottom:0;left:0;width:330px;max-width:88%;background:#0E0B0A;border-right:1px solid #2E241E;transform:translateX(-102%);transition:transform .28s cubic-bezier(.2,.8,.2,1);z-index:6;overflow:auto;box-shadow:20px 0 60px rgba(0,0,0,.5);scrollbar-width:none}
+.phone.open .scrim{opacity:1;pointer-events:auto}
+.phone.open .drawer{transform:none}
+.m{display:flex;flex-direction:column;gap:18px;padding:16px}
+.m-sec{margin:4px 0 -8px}
+.m-tile{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:14px;padding:14px;border-radius:16px;background:#171210;border:1px solid #2E241E;text-align:left;min-height:104px}
+.m-tile:hover,.m-row:hover{border-color:#5A4334;background:#1C1512}
+.m-tile.on,.m-row.on{border-color:#7A4A2C;background:#1F1611}
+.m-ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#1F1814;border:1px solid #3A2B22;flex:none}
+.on .m-ic{background:#2A1C14;border-color:#7A4A2C}
+.m-me-btn{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:6px;border:0;background:none;border-radius:14px;transition:background .2s}
+.m-me-btn:hover{background:#1F1814}
+.m-ava{position:relative;width:48px;height:48px;border-radius:14px;background:#2A1C14;border:1px solid #7A4A2C;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#F0A27A;flex:none;transition:box-shadow .2s,border-color .2s}
+.m-me-btn:hover .m-ava,.m-me.on .m-ava{border-color:#E07A3C;box-shadow:0 0 0 3px rgba(224,122,60,.18)}
+.m-me.on{border-color:#7A4A2C;background:#1F1611}
+.m-row{display:flex;align-items:center;gap:12px;min-height:58px;padding:0 14px 0 8px;border-radius:14px;background:#171210;border:1px solid #2E241E;text-align:left;width:100%}
+
+/* предметы */
+.tile{border-radius:12px;display:flex;align-items:center;justify-content:center}
+.toggle{appearance:none;width:44px;height:26px;border-radius:13px;background:#2E241E;position:relative;cursor:pointer;transition:background .2s;flex:none;margin:0}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#A8988A;transition:all .2s}
+.toggle:checked{background:#E07A3C}
+.toggle:checked::after{left:21px;background:#1A0F09}
+
+/* мины */
+.mgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:10px;border-radius:18px;background:#120E0C;border:1px solid #2E241E}
+.cell{aspect-ratio:1;border-radius:12px;border:1px solid #2E241E;background:#1F1814;box-shadow:inset 0 -3px 0 rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;transition:transform .12s}
+.cell:hover:not(:disabled){border-color:#5A4334;transform:translateY(-1px)}
+.cell:disabled{cursor:default}
+.cell.gem{background:radial-gradient(circle at 50% 40%,rgba(221,166,80,.35),#1A1411 75%);border-color:rgba(221,166,80,.5);box-shadow:none}
+.cell.boom{background:radial-gradient(circle at 50% 40%,rgba(226,100,58,.45),#1A1411 75%);border-color:#E2643A;box-shadow:none}
+.cell.dim{opacity:.45}
+/* рулетка */
+.reels{display:flex;flex-direction:column;gap:8px}
+.reel{position:relative;width:100%;border-radius:18px;background:#120E0C;border:1px solid #2E241E;overflow:hidden}
+.track{position:absolute;left:0;display:flex;gap:8px;will-change:transform;backface-visibility:hidden}
+.rt{flex:none;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:transform .3s,box-shadow .3s,opacity .3s}
+.rt span.n{font-size:11px;font-weight:700;color:#CDBFB2;text-align:center;padding:0 6px;line-height:1.2}
+.rt{transition:opacity .5s,transform .5s cubic-bezier(.2,1.4,.4,1),box-shadow .5s}
+.reel.done .rt{opacity:.3}
+.reel.done .rt.win{opacity:1;transform:scale(1.06);box-shadow:0 0 0 2px var(--c),0 0 30px var(--c)}
+.mk{position:absolute;top:0;bottom:0;left:50%;width:0;z-index:3;pointer-events:none}
+.mk::before{content:"";position:absolute;top:10px;bottom:10px;left:-1px;width:2px;border-radius:1px;background:linear-gradient(rgba(240,160,96,0),#F0A060 18%,#FFD2A8 50%,#F0A060 82%,rgba(240,160,96,0));box-shadow:0 0 10px 1px rgba(224,122,60,.6)}
+.mk::after{content:"";position:absolute;top:0;bottom:0;left:-22px;width:44px;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(224,122,60,.16),rgba(224,122,60,0));opacity:0;transition:opacity .4s}
+.spinning .mk::after{opacity:1}
+.cap{position:absolute;left:-11px;width:22px;height:15px;transform-origin:50% 0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+.cap.t{top:-1px}
+.cap.b{bottom:-1px;transform:scaleY(-1);transform-origin:50% 50%}
+.cap.t.tick{animation:tickT .16s ease-out}
+.cap.b.tick{animation:tickB .16s ease-out}
+@keyframes tickT{30%{transform:rotate(-14deg) translateY(1px)}}
+@keyframes tickB{30%{transform:scaleY(-1) rotate(14deg) translateY(1px)}}
+.reel.tense{border-color:#7A4A2C;box-shadow:0 0 0 1px rgba(224,122,60,.25),0 0 30px rgba(224,122,60,.18);transition:box-shadow .8s,border-color .8s}
+.reel.tense .mk::before{animation:beat .7s ease-in-out infinite}
+.reel.tense .mk::after{opacity:1;animation:beatG .7s ease-in-out infinite}
+.reel.tense .fade{background:linear-gradient(90deg,#0B0807 0%,rgba(11,8,7,.6) 28%,rgba(18,14,12,0) 42%,rgba(18,14,12,0) 58%,rgba(11,8,7,.6) 72%,#0B0807 100%);transition:background .8s}
+@keyframes beat{50%{box-shadow:0 0 18px 4px rgba(240,160,96,.9)}}
+@keyframes beatG{50%{transform:scaleX(1.8)}}
+.reel.done .mk::before{background:linear-gradient(rgba(255,210,168,0),#FFD2A8 18%,#fff 50%,#FFD2A8 82%,rgba(255,210,168,0))}
+.reel .fade{position:absolute;inset:0;background:linear-gradient(90deg,#120E0C 0%,rgba(18,14,12,0) 22%,rgba(18,14,12,0) 78%,#120E0C 100%);z-index:1;pointer-events:none}
+.spinning .reel{border-color:#5A3A26}
+/* апгрейдер */
+.arcc{transform-origin:135px 135px;transform:rotate(90deg);transition:stroke-dasharray .5s cubic-bezier(.2,.8,.2,1),transform .5s cubic-bezier(.2,.8,.2,1)}
+.edge{transform-origin:135px 135px;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.wheel.busy #arcGlow{animation:arcPulse 1.2s ease-in-out infinite}
+@keyframes arcPulse{50%{opacity:.65}}
+.wheel.win #arcGlow{filter:brightness(1.25)}
+.wheel.lose #arcGlow{filter:grayscale(.7) brightness(.6)}
+
+.wheel{position:relative;width:270px;height:270px;margin:0 auto}
+.wheel svg{position:absolute;inset:0}
+.needle{position:absolute;inset:0;transform:rotate(0deg)}
+#ntail{opacity:.08}
+.wheel-c{position:absolute;inset:58px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#1F1814,#120E0C 70%);border:1px solid #2E241E;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center}
+.wheel-c{overflow:hidden}
+.wheel-c>span{position:relative;z-index:1;text-shadow:0 2px 12px rgba(14,11,10,.9)}
+.wheel .wlogo{position:absolute;left:50%;top:50%;right:auto;bottom:auto;width:128px;height:128px;transform:translate(-50%,-52%);stroke:url(#fireG);stroke-width:1.15;fill:url(#fireG);fill-opacity:.1;opacity:.5;transition:opacity .4s,stroke .4s;animation:glowF 2.6s ease-in-out infinite}
+@keyframes glowF{0%,100%{filter:drop-shadow(0 0 3px rgba(224,100,58,.35))}50%{filter:drop-shadow(0 0 9px rgba(240,160,96,.6))}}
+.wheel.busy .wheel-c .wlogo{animation:flick 1.1s ease-in-out infinite}
+@keyframes flick{0%,100%{opacity:.5;transform:translate(-50%,-52%) scale(1)}50%{opacity:.8;transform:translate(-50%,-53%) scale(1.04);filter:drop-shadow(0 0 10px rgba(224,122,60,.6))}}
+.wheel.win .wheel-c .wlogo{opacity:.85;animation:glowW 1.4s ease-in-out infinite}
+@keyframes glowW{0%,100%{filter:drop-shadow(0 0 8px rgba(221,166,80,.6))}50%{filter:drop-shadow(0 0 16px rgba(255,210,150,.9))}}
+.wheel.lose .wheel-c .wlogo{opacity:.3;filter:grayscale(.6) brightness(.7);animation:none}
+.wheel.win .wheel-c{border-color:#DDA650;box-shadow:0 0 40px rgba(221,166,80,.35)}
+.wheel.lose .wheel-c{border-color:#E2643A;box-shadow:0 0 40px rgba(226,100,58,.35)}
+.slot{border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:8px;background:#171210;border:1px solid #2E241E;min-width:0}
+.pick{text-align:left;display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:12px;background:#171210;border:1px solid #2E241E;position:relative}
+.pick:hover{border-color:#5A4334}
+.pick.sel{border-color:#E07A3C;background:#1F1611}
+.pick.sel::after{content:"";position:absolute;top:6px;right:6px;width:16px;height:16px;border-radius:50%;background:#E07A3C url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231A0F09' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/11px no-repeat}
+.toast{position:absolute;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;transition:all .25s;z-index:9;padding:10px 16px;border-radius:12px;background:#F2E9E1;color:#1A0F09;font-weight:800;font-size:13px;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="logoG" gradientUnits="userSpaceOnUse" x1="0" y1="24" x2="0" y2="13" spreadMethod="reflect">
+    <stop offset="0" stop-color="#A3301A"/><stop offset=".35" stop-color="#E8622A"/><stop offset=".7" stop-color="#F5A452"/><stop offset="1" stop-color="#FFE0A8"/>
+  </linearGradient>
+  <radialGradient id="coinFace" cx=".36" cy=".3" r=".8"><stop offset="0" stop-color="#FFE9B8"/><stop offset=".38" stop-color="#F7B860"/><stop offset=".78" stop-color="#E2742E"/><stop offset="1" stop-color="#B0441C"/></radialGradient>
+  <linearGradient id="coinRim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD592"/><stop offset=".5" stop-color="#C85A24"/><stop offset="1" stop-color="#6E220E"/></linearGradient>
+  <symbol id="coin" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="11.2" fill="url(#coinRim)"/>
+    <circle cx="12" cy="12" r="9.2" fill="url(#coinFace)"/>
+    <circle cx="12" cy="12" r="7.7" fill="none" stroke="#7A2A10" stroke-opacity=".35" stroke-width=".9" stroke-dasharray="1.2 1.3"/>
+    <path d="M12 5.4c.6 2.1 3 3.3 3 6.3a3 3 0 0 1-6 0c0-1.45.72-2.35 1.32-3 .18 1 .66 1.56 1.2 1.8 0-2 .18-3.36.48-5.1z" fill="#7A2A10" fill-opacity=".78"/>
+    <path d="M12 17.4a1.3 1.3 0 0 1-1.3-1.3c0-.85.78-1.3 1.3-2.15.52.85 1.3 1.3 1.3 2.15a1.3 1.3 0 0 1-1.3 1.3z" fill="#7A2A10" fill-opacity=".78"/>
+    <ellipse cx="8.6" cy="7.4" rx="2.6" ry="1.4" fill="#fff" fill-opacity=".38" transform="rotate(-35 8.6 7.4)"/>
+  </symbol></defs></svg>
+<div class="phone" id="phone">
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="top">
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="iconbtn card" id="burger" aria-label="Открыть меню">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </button>
+      <button data-go="home" aria-label="На главную" style="display:flex;align-items:center;gap:8px;background:none;border:0;padding:0">
+        <svg class="logo-ic" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="url(#logoG)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3.5 5 5.5 5 10.5a5 5 0 0 1-10 0c0-2.4 1.2-3.9 2.2-5 .3 1.7 1.1 2.6 2 3 0-3.3.3-5.6.8-8.5z"/><path d="M12 21a2.2 2.2 0 0 1-2.2-2.2c0-1.4 1.3-2.2 2.2-3.6.9 1.4 2.2 2.2 2.2 3.6A2.2 2.2 0 0 1 12 21z"/></svg>
+        <span class="u logo-t" style="font-size:16px"><span class="lt-a">BRAIN</span><span class="lt-b">FIRE</span></span>
+      </button>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <div class="card" style="display:flex;align-items:center;gap:7px;height:44px;padding:0 12px 0 10px;border-radius:12px">
+        <span class="bal-coin"><svg class="coin" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#coin"/></svg></span>
+        <span class="num bal" style="font-weight:800;font-size:15px">0</span>
+      </div>
+      <button class="iconbtn depBtn" aria-label="Пополнить баланс" style="border:0;background:#E07A3C;color:#1A0F09">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="body" id="body">
+
+    <!-- ===== КЕЙСЫ (главная) ===== -->
+    <section class="screen" data-s="home">
+      <div class="topdrop" id="topDrop"></div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="live"><i></i>LIVE</span>
+            <span style="font-weight:800;font-size:15px">Лента дропов</span>
+          </div>
+          <div class="fseg" id="feedSeg"><button class="on" data-f="all">Все</button><button data-f="top">Топ</button></div>
+        </div>
+        <div class="feed" id="drops"></div>
+      </div>
+
+      <div style="position:relative;overflow:hidden;border-radius:18px;background:#171210;border:1px solid #3A2B22;padding:18px">
+        <div aria-hidden="true" style="position:absolute;right:-60px;bottom:-90px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(224,122,60,.28) 0%,rgba(224,122,60,0) 65%)"></div>
+        <svg aria-hidden="true" style="position:absolute;right:18px;top:16px" width="70" height="90" viewBox="0 0 24 32" fill="none" stroke="#E07A3C" stroke-opacity=".5" stroke-width="1.2" stroke-linejoin="round"><path d="M12 1c1.5 5 8 8 8 16a8 8 0 0 1-16 0c0-4 2-6.5 3.6-8.2.4 2.8 1.6 4.2 3.1 4.8C10.7 8.4 11 5 12 1z"/><path d="M12 30a4 4 0 0 1-4-4c0-2.5 2.4-4 4-6.5 1.6 2.5 4 4 4 6.5a4 4 0 0 1-4 4z"/></svg>
+        <div style="position:relative;display:flex;flex-direction:column;gap:12px">
+          <span class="sec">Промокод дня · <span class="num" id="timer" style="color:#F2E9E1">05:42:17</span></span>
+          <h2 class="u" style="font-weight:700;font-size:25px;line-height:1.1"><span style="color:#E9A06A">+15%</span> к пополнению</h2>
+          <div style="display:flex;gap:8px">
+            <button id="copy" aria-label="Скопировать промокод EMBER15" style="display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:12px;background:#0E0B0A;border:1px dashed #5A4334">
+              <span class="u" style="font-weight:700;font-size:14px;letter-spacing:.08em">EMBER15</span>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A8988A" stroke-width="2" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+            </button>
+            <button class="fire depBtn" style="height:44px;padding:0 18px;border-radius:12px;font-size:14px;box-shadow:none">Пополнить</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="display:flex;align-items:center;gap:14px;padding:12px 12px 12px 14px;border-radius:16px">
+        <div aria-hidden="true" style="width:48px;height:48px;border-radius:12px;background:#1F1814;display:flex;align-items:center;justify-content:center">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D9A55B" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="10" width="18" height="10" rx="1.5"/><path d="M3 10V8a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v2"/><rect x="10" y="8" width="4" height="5" rx="1"/></svg>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0">
+          <span style="font-weight:800;font-size:15px">Бесплатный кейс</span>
+          <span class="muted" style="font-size:13px">Следующий через <span class="num" style="color:#F2E9E1">3 ч 29 м</span></span>
+        </div>
+        <div class="bar" style="width:56px"><i style="width:71%;background:#D9A55B"></i></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="sec-title"><span></span><h2 class="u">Кейсы</h2><span></span></div>
+        <div id="cases" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px"></div>
+      </div>
+    </section>
+
+    <!-- ===== ОТКРЫТИЕ КЕЙСА ===== -->
+    <section class="screen" data-s="case">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button data-go="home" class="iconbtn card" aria-label="Назад к кейсам">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="ptitle"><h1 id="caseName">Жаровня</h1><span class="muted" style="font-size:13px" id="caseSub">9 брейнротов</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <div class="reels" id="reels" style="width:100%"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div id="mult" class="seg" role="group" aria-label="Сколько кейсов" style="grid-template-columns:repeat(4,minmax(0,1fr))"></div>
+        <button id="openBtn" class="fire" style="height:56px;font-size:16px">Открыть за <span class="num" id="total">199</span></button>
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;font-size:14px;color:#CDBFB2">Быстрое открытие<input type="checkbox" class="toggle" id="fast"></label>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <h2 class="u" style="font-weight:700;font-size:17px">Что внутри</h2>
+        <div id="items" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"></div>
+      </div>
+    </section>
+
+    <!-- ===== ВЫИГРЫШ ===== -->
+    <section class="screen" data-s="win" style="min-height:100%;justify-content:space-between" id="winBody"></section>
+
+    <!-- ===== АПГРЕЙД ===== -->
+    <section class="screen" data-s="upgrade">
+      <div class="ptitle"><h1>Апгрейд</h1><span class="muted" style="font-size:13px">Поставь предметы — крути колесо — забирай дороже</span></div>
+
+      <div class="wheel" id="wheel">
+        <svg viewBox="0 0 270 270" aria-hidden="true" style="overflow:visible">
+          <defs>
+            <linearGradient id="arcG" gradientUnits="userSpaceOnUse" x1="0" y1="262" x2="0" y2="8">
+              <stop offset="0" stop-color="#FFE0A0"/><stop offset=".3" stop-color="#F5A452"/><stop offset=".65" stop-color="#E2643A"/><stop offset="1" stop-color="#9E2E16"/>
+            </linearGradient>
+            <radialGradient id="bezG" cx=".5" cy="1" r=".9"><stop offset="0" stop-color="#E07A3C" stop-opacity=".35"/><stop offset="1" stop-color="#E07A3C" stop-opacity="0"/></radialGradient>
+          </defs>
+          <circle cx="135" cy="135" r="134" fill="none" stroke="url(#bezG)" stroke-width="1.5"/>
+          <circle cx="135" cy="135" r="134" fill="none" stroke="#2E241E" stroke-width="1" opacity=".7"/>
+          <circle cx="135" cy="135" r="122" fill="none" stroke="#120E0C" stroke-width="24"/>
+          <g>
+            <circle cx="135" cy="135" r="122" fill="none" stroke="#221A15" stroke-width="15"/>
+            <circle class="arcc" id="arcGlow" cx="135" cy="135" r="122" fill="none" stroke="url(#arcG)" stroke-width="15" stroke-dasharray="0 766.5" opacity=".9"/>
+          </g>
+          <circle class="arcc" id="arcHi" cx="135" cy="135" r="126" fill="none" stroke="#FFF0D8" stroke-width="1.6" stroke-dasharray="0 790" opacity=".55"/>
+          <circle class="arcc" id="arc" cx="135" cy="135" r="122" fill="none" stroke="url(#arcG)" stroke-width="22" stroke-dasharray="0 766.5" opacity=".35" style="filter:blur(7px)"/>
+          <g id="edges" style="opacity:0;transition:opacity .3s">
+            <line class="edge" id="edgeL" x1="135" y1="3" x2="135" y2="29" stroke="#FFE8C8" stroke-width="2.5" stroke-linecap="round" style="filter:drop-shadow(0 0 4px rgba(255,200,140,.9))"/>
+            <line class="edge" id="edgeR" x1="135" y1="3" x2="135" y2="29" stroke="#FFE8C8" stroke-width="2.5" stroke-linecap="round" style="filter:drop-shadow(0 0 4px rgba(255,200,140,.9))"/>
+          </g>
+          <line x1="135.0" y1="43.0" x2="135.0" y2="32.0" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="143.5" y1="38.4" x2="143.9" y2="33.4" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="151.8" y1="39.5" x2="152.7" y2="34.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="160.1" y1="41.3" x2="161.4" y2="36.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="168.2" y1="43.8" x2="169.9" y2="39.2" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="176.0" y1="47.1" x2="178.1" y2="42.6" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="181.0" y1="55.3" x2="186.5" y2="45.8" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="190.6" y1="55.5" x2="193.5" y2="51.4" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="197.4" y1="60.7" x2="200.6" y2="56.9" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="203.6" y1="66.4" x2="207.1" y2="62.9" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="209.3" y1="72.6" x2="213.1" y2="69.4" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="214.5" y1="79.4" x2="218.6" y2="76.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="214.7" y1="89.0" x2="224.2" y2="83.5" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="222.9" y1="94.0" x2="227.4" y2="91.9" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="226.2" y1="101.8" x2="230.8" y2="100.1" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="228.7" y1="109.9" x2="233.5" y2="108.6" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="230.5" y1="118.2" x2="235.5" y2="117.3" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="231.6" y1="126.5" x2="236.6" y2="126.1" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="227.0" y1="135.0" x2="238.0" y2="135.0" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="231.6" y1="143.5" x2="236.6" y2="143.9" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="230.5" y1="151.8" x2="235.5" y2="152.7" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="228.7" y1="160.1" x2="233.5" y2="161.4" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="226.2" y1="168.2" x2="230.8" y2="169.9" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="222.9" y1="176.0" x2="227.4" y2="178.1" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="214.7" y1="181.0" x2="224.2" y2="186.5" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="214.5" y1="190.6" x2="218.6" y2="193.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="209.3" y1="197.4" x2="213.1" y2="200.6" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="203.6" y1="203.6" x2="207.1" y2="207.1" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="197.4" y1="209.3" x2="200.6" y2="213.1" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="190.6" y1="214.5" x2="193.5" y2="218.6" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="181.0" y1="214.7" x2="186.5" y2="224.2" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="176.0" y1="222.9" x2="178.1" y2="227.4" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="168.2" y1="226.2" x2="169.9" y2="230.8" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="160.1" y1="228.7" x2="161.4" y2="233.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="151.8" y1="230.5" x2="152.7" y2="235.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="143.5" y1="231.6" x2="143.9" y2="236.6" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="135.0" y1="227.0" x2="135.0" y2="238.0" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="126.5" y1="231.6" x2="126.1" y2="236.6" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="118.2" y1="230.5" x2="117.3" y2="235.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="109.9" y1="228.7" x2="108.6" y2="233.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="101.8" y1="226.2" x2="100.1" y2="230.8" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="94.0" y1="222.9" x2="91.9" y2="227.4" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="89.0" y1="214.7" x2="83.5" y2="224.2" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="79.4" y1="214.5" x2="76.5" y2="218.6" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="72.6" y1="209.3" x2="69.4" y2="213.1" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="66.4" y1="203.6" x2="62.9" y2="207.1" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="60.7" y1="197.4" x2="56.9" y2="200.6" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="55.5" y1="190.6" x2="51.4" y2="193.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="55.3" y1="181.0" x2="45.8" y2="186.5" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="47.1" y1="176.0" x2="42.6" y2="178.1" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="43.8" y1="168.2" x2="39.2" y2="169.9" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="41.3" y1="160.1" x2="36.5" y2="161.4" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="39.5" y1="151.8" x2="34.5" y2="152.7" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="38.4" y1="143.5" x2="33.4" y2="143.9" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="43.0" y1="135.0" x2="32.0" y2="135.0" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="38.4" y1="126.5" x2="33.4" y2="126.1" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="39.5" y1="118.2" x2="34.5" y2="117.3" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="41.3" y1="109.9" x2="36.5" y2="108.6" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="43.8" y1="101.8" x2="39.2" y2="100.1" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="47.1" y1="94.0" x2="42.6" y2="91.9" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="55.3" y1="89.0" x2="45.8" y2="83.5" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="55.5" y1="79.4" x2="51.4" y2="76.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="60.7" y1="72.6" x2="56.9" y2="69.4" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="66.4" y1="66.4" x2="62.9" y2="62.9" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="72.6" y1="60.7" x2="69.4" y2="56.9" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="79.4" y1="55.5" x2="76.5" y2="51.4" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="89.0" y1="55.3" x2="83.5" y2="45.8" stroke="#5A4334" stroke-width="2" stroke-linecap="round"/>
+            <line x1="94.0" y1="47.1" x2="91.9" y2="42.6" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="101.8" y1="43.8" x2="100.1" y2="39.2" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="109.9" y1="41.3" x2="108.6" y2="36.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="118.2" y1="39.5" x2="117.3" y2="34.5" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="126.5" y1="38.4" x2="126.1" y2="33.4" stroke="#2E241E" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <div class="needle" id="needle">
+          <svg viewBox="0 0 270 270" aria-hidden="true" style="overflow:visible">
+            <defs>
+              <radialGradient id="cmG"><stop offset="0" stop-color="#FFF4E2"/><stop offset=".35" stop-color="#FFD2A8"/><stop offset=".7" stop-color="#F0A060"/><stop offset="1" stop-color="#E2643A" stop-opacity="0"/></radialGradient>
+            </defs>
+            <g id="ntail" style="filter:blur(.6px)">
+              <path d="M27.28 77.72A122 122 0 0 1 32.72 68.50" stroke="#E2643A" stroke-width="3.6" stroke-linecap="round" opacity="0.007" fill="none"/>
+              <path d="M32.02 69.58A122 122 0 0 1 38.16 60.80" stroke="#E2643A" stroke-width="4.3" stroke-linecap="round" opacity="0.026" fill="none"/>
+              <path d="M37.38 61.82A122 122 0 0 1 44.17 53.55" stroke="#E2643A" stroke-width="4.9" stroke-linecap="round" opacity="0.053" fill="none"/>
+              <path d="M43.33 54.50A122 122 0 0 1 50.73 46.78" stroke="#E2643A" stroke-width="5.6" stroke-linecap="round" opacity="0.089" fill="none"/>
+              <path d="M49.82 47.66A122 122 0 0 1 57.80 40.53" stroke="#E2643A" stroke-width="6.2" stroke-linecap="round" opacity="0.133" fill="none"/>
+              <path d="M56.81 41.35A122 122 0 0 1 65.32 34.85" stroke="#E2643A" stroke-width="6.9" stroke-linecap="round" opacity="0.185" fill="none"/>
+              <path d="M64.28 35.59A122 122 0 0 1 73.26 29.77" stroke="#E2643A" stroke-width="7.5" stroke-linecap="round" opacity="0.244" fill="none"/>
+              <path d="M72.17 30.43A122 122 0 0 1 81.57 25.32" stroke="#E2643A" stroke-width="8.1" stroke-linecap="round" opacity="0.310" fill="none"/>
+              <path d="M80.43 25.89A122 122 0 0 1 90.20 21.52" stroke="#F0A060" stroke-width="8.8" stroke-linecap="round" opacity="0.384" fill="none"/>
+              <path d="M89.02 22.00A122 122 0 0 1 99.10 18.40" stroke="#F0A060" stroke-width="9.4" stroke-linecap="round" opacity="0.464" fill="none"/>
+              <path d="M97.88 18.78A122 122 0 0 1 108.21 15.98" stroke="#F0A060" stroke-width="10.1" stroke-linecap="round" opacity="0.551" fill="none"/>
+              <path d="M106.96 16.27A122 122 0 0 1 117.48 14.26" stroke="#F0A060" stroke-width="10.7" stroke-linecap="round" opacity="0.644" fill="none"/>
+              <path d="M116.22 14.45A122 122 0 0 1 126.85 13.27" stroke="#F0A060" stroke-width="11.4" stroke-linecap="round" opacity="0.744" fill="none"/>
+              <path d="M125.58 13.36A122 122 0 0 1 136.28 13.01" stroke="#F0A060" stroke-width="12.0" stroke-linecap="round" opacity="0.850" fill="none"/>
+            </g>
+            <circle cx="135" cy="13" r="17" fill="url(#cmG)" opacity=".55"/>
+            <path d="M126 13c0-5 3.5-9 9-9 4 0 6.5 2 9 4.5L152 13l-7.9 4.5C141.5 20 139 22 135 22c-5.5 0-9-4-9-9z" fill="#F0A060" stroke="#0E0B0A" stroke-width="1.6" stroke-linejoin="round" transform="rotate(180 135 13)" style="filter:drop-shadow(0 0 6px rgba(240,160,96,.9))"/>
+            <circle cx="135" cy="13" r="4.2" fill="#FFF4E2"/>
+            <path d="M135 31l-5.5 9h11z" fill="#F2E9E1" stroke="#0E0B0A" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="wheel-c" id="wheelC">
+          <svg class="wlogo" viewBox="0 0 24 24" aria-hidden="true" stroke-linecap="round" stroke-linejoin="round">
+            <defs>
+              <linearGradient id="fireG" gradientUnits="userSpaceOnUse" x1="0" y1="24" x2="0" y2="15" spreadMethod="reflect">
+                <stop offset="0" stop-color="#A3301A"/><stop offset=".35" stop-color="#E8622A"/><stop offset=".7" stop-color="#F5A452"/><stop offset="1" stop-color="#FFE0A8"/>
+              </linearGradient>
+            </defs><path d="M12 2c1 3.5 5 5.5 5 10.5a5 5 0 0 1-10 0c0-2.4 1.2-3.9 2.2-5 .3 1.7 1.1 2.6 2 3 0-3.3.3-5.6.8-8.5z"/><path d="M12 21a2.2 2.2 0 0 1-2.2-2.2c0-1.4 1.3-2.2 2.2-3.6.9 1.4 2.2 2.2 2.2 3.6A2.2 2.2 0 0 1 12 21z"/></svg>
+          <span class="u num" id="chance" style="font-weight:800;font-size:34px;line-height:1">0%</span>
+          <span class="muted" style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase" id="chanceSub">шанс</span>
+          <span class="num" id="upX" style="font-size:13px;font-weight:800;color:#E9A06A;margin-top:4px">—</span>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+        <div class="slot"><span class="sec" style="font-size:11px">Ставлю</span><div id="upFrom"></div></div>
+        <div class="slot" style="border-color:#5A3A26"><span class="sec" style="font-size:11px;color:#F0A27A">Получу</span><div id="upTo"></div></div>
+      </div>
+      <div id="upQuick" class="seg" style="grid-template-columns:repeat(5,minmax(0,1fr))"></div>
+      <button class="fire" id="upBtn" style="height:56px;font-size:16px" disabled>Улучшить</button>
+      <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;margin-top:-8px;font-size:14px;color:#CDBFB2">Быстрая прокрутка<input type="checkbox" class="toggle" id="upFast"></label>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div id="upTabs" class="seg" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
+        <div id="upList" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"></div>
+      </div>
+    </section>
+    <!-- ===== МИНЫ ===== -->
+    <section class="screen" data-s="mines">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px">
+        <div class="ptitle"><h1>Мины</h1><span class="muted" style="font-size:13px">Открывай клетки, не задень мину</span></div>
+        <div style="text-align:right"><div class="sec" style="font-size:11px">Множитель</div><div class="u num" id="mx" style="font-weight:800;font-size:22px;color:#E9A06A">×1.00</div></div>
+      </div>
+      <div class="mgrid" id="mgrid"></div>
+      <div class="card" style="display:flex;justify-content:space-between;padding:12px 14px;border-radius:14px;font-size:13px">
+        <span class="muted">Следующая клетка</span><span class="num" style="font-weight:800" id="mnext">×1.13</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span class="sec">Ставка</span>
+        <div style="display:flex;gap:8px">
+          <div class="card" style="flex:1;display:flex;align-items:center;gap:8px;height:48px;padding:0 14px;border-radius:12px">
+            <svg class="coin" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#coin"/></svg>
+            <input id="bet" type="number" value="100" min="1" aria-label="Ставка" class="num" style="width:100%;background:none;border:0;color:#F2E9E1;font:800 16px Manrope,sans-serif;outline:none">
+          </div>
+          <button class="ghost" style="width:52px;height:48px;border-radius:12px" data-bet="0.5">½</button>
+          <button class="ghost" style="width:52px;height:48px;border-radius:12px" data-bet="2">×2</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span class="sec">Количество мин</span>
+        <div id="mcount" class="seg" style="grid-template-columns:repeat(4,minmax(0,1fr))"></div>
+      </div>
+      <button class="fire" id="mbtn" style="height:56px;font-size:16px">Начать игру</button>
+    </section>
+
+    <!-- ===== БОНУСЫ ===== -->
+    <section class="screen" data-s="bonus">
+      <div class="ptitle"><h1>Бонусы</h1><span class="muted" style="font-size:13px">Заходи каждый день и зови друзей</span></div>
+      <div class="card" style="border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-weight:800;font-size:16px">Ежедневная награда</h2><span class="muted" style="font-size:13px">серия: <b style="color:#F2E9E1">3 дня</b></span></div>
+        <div id="days" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px"></div>
+        <button class="fire" style="height:50px;font-size:15px" id="dailyClaim">Забрать 30</button>
+      </div>
+      <div style="position:relative;overflow:hidden;border-radius:18px;background:#171210;border:1px solid #3A2B22;padding:16px;display:flex;flex-direction:column;gap:12px">
+        <div aria-hidden="true" style="position:absolute;right:-70px;top:-70px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(224,122,60,.22),rgba(224,122,60,0) 65%)"></div>
+        <h2 style="position:relative;font-weight:800;font-size:16px">Реферальная программа</h2>
+        <p class="muted" style="position:relative;margin:0;font-size:14px;line-height:1.45">Получай <b style="color:#E9A06A">10%</b> с каждого пополнения друга. Друг получает +5% к первому депозиту.</p>
+        <div style="position:relative;display:flex;gap:8px">
+          <div style="flex:1;min-width:0;display:flex;align-items:center;height:44px;padding:0 12px;border-radius:12px;background:#0E0B0A;border:1px dashed #5A4334;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="refLink">t.me/brainfire_bot?start=fortik</div>
+          <button class="fire" style="height:44px;padding:0 16px;border-radius:12px;font-size:14px;box-shadow:none" id="refCopy">Копировать</button>
+        </div>
+        <div style="position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px">4</div><div class="muted" style="font-size:12px">друга</div></div>
+          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px">312</div><div class="muted" style="font-size:12px">заработано</div></div>
+          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px;color:#E9A06A">48</div><div class="muted" style="font-size:12px">к выводу</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== КВЕСТЫ ===== -->
+    <section class="screen" data-s="quests">
+      <div class="ptitle"><h1>Квесты</h1><span class="muted" style="font-size:13px">Обновятся через <b class="num" style="color:#F2E9E1">14:22:05</b></span></div>
+      <div id="qtabs" class="seg" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
+      <div id="qlist" style="display:flex;flex-direction:column;gap:8px"></div>
+    </section>
+
+    <!-- ===== РОЗЫГРЫШИ ===== -->
+    <section class="screen" data-s="draws">
+      <div class="ptitle"><h1>Розыгрыши</h1><span class="muted" style="font-size:13px">Участвуй бесплатно — нужен депозит от 100</span></div>
+      <div id="dtabs" class="seg" style="grid-template-columns:repeat(3,minmax(0,1fr))"></div>
+      <div id="dcard"></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <h2 class="u" style="font-weight:700;font-size:17px">Прошлые победители</h2>
+        <div id="dwin" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+    </section>
+
+    <!-- ===== ПРОФИЛЬ ===== -->
+    <section class="screen" data-s="profile">
+      <div class="hero">
+        <div class="hero-fire" id="pBanner"></div>
+        <div class="pava-wrap">
+          <div class="pava-ring"></div>
+          <div class="pava u uava">F</div>
+        </div>
+        <div style="position:relative;display:flex;align-items:center;gap:6px;max-width:100%">
+          <h1 class="uname hero-name">@Fortik2213</h1>
+          <button class="pico" aria-label="Изменить ник" data-toast="Ник берётся из Telegram"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/></svg></button>
+        </div>
+        <button class="pid" id="pidCopy" aria-label="Скопировать ID"><span class="uid num">ID 48213</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 9h11v11H9zM5 15V6a2 2 0 0 1 2-2h8"/></svg></button>
+      </div>
+
+      <div class="wallet">
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+          <span class="sec" style="font-size:11px">Мой баланс</span>
+          <span class="u num" style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:28px;line-height:1"><svg class="coin" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><use href="#coin"/></svg><span class="bal">0</span></span>
+          <span id="wState" style="font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px"></span>
+        </div>
+        <button class="wring" id="wRing" aria-label="Как работает отыгрыш">
+          <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="wgG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F5A452"/><stop offset="1" stop-color="#E2643A"/></linearGradient></defs><circle cx="32" cy="32" r="26" fill="none" stroke="#2E241E" stroke-width="6"/><circle id="wArc" cx="32" cy="32" r="26" fill="none" stroke="url(#wgG)" stroke-width="6" stroke-linecap="round" stroke-dasharray="0 163.4" transform="rotate(-90 32 32)" style="transition:stroke-dasharray .6s cubic-bezier(.2,.8,.2,1)"/></svg>
+          <span class="num" id="wPct">0%</span>
+          <small>отыгрыш</small>
+        </button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:-10px">
+        <button class="fire wbtn depBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Пополнить</button>
+      </div>
+
+      <div class="stbox">
+        <div class="strow">
+          <div><b class="u num" id="stCases">0</b><span>кейсов</span></div>
+          <div><b class="u num" id="stUp">0</b><span>апгрейдов</span></div>
+          <div><b class="u num" id="stMines">0</b><span>мины</span></div>
+          <div><b class="u num" id="stWd">0</b><span>выведено</span></div>
+        </div>
+        <div class="rec" id="pBest"></div>
+      </div>
+
+      <div class="utabs" id="ptabs2"><button class="on" data-i="0">Инвентарь <i id="invCnt">0</i></button><button data-i="1">История</button></div>
+      <div id="ptabs" style="display:none"></div>
+      <div id="pbody"></div>
+
+      <div class="plist">
+        <details class="prow-d">
+          <summary class="prow"><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E9A06A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h18v4H3zM5 12v9h14v-9M12 8v13M12 8c-2-4-6-4-5-1 .5 1 5 1 5 1zM12 8c2-4 6-4 5-1-.5 1-5 1-5 1z"/></svg></span><span class="prow-t"><b>Промокод</b><span class="muted">Есть код? Введи его</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></summary>
+          <div style="display:flex;gap:8px;padding:0 12px 12px">
+            <label class="srch" style="flex:1;min-width:0;height:44px"><input id="promoIn" placeholder="Введи код" aria-label="Промокод" style="text-transform:uppercase;letter-spacing:.06em"></label>
+            <button class="fire" id="promoGo" style="height:44px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none">Активировать</button>
+          </div>
+        </details>
+        <button class="prow" id="partnerRow" data-go="bonus" hidden><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E9A06A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="prow-t"><b>Партнёрка</b><span class="muted">4 друга · 10% с депозитов</span></span><b class="num" style="color:#7FD49A;font-size:14px">+312</b><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        <button class="prow" data-go="settings"><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDBFB2" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 4v4M9 10v4M17 16v4"/></svg></span><span class="prow-t"><b>Настройки</b><span class="muted">Звук, уведомления, язык</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </section>
+
+    <!-- ===== НАСТРОЙКИ ===== -->
+    <section class="screen" data-s="settings">
+      <div class="ptitle"><h1>Настройки</h1></div>
+      <div class="card" style="border-radius:16px;overflow:hidden">
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #2E241E;font-weight:700;font-size:15px">Звук<input type="checkbox" class="toggle" checked></label>
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #2E241E;font-weight:700;font-size:15px">Вибрация<input type="checkbox" class="toggle" checked></label>
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #2E241E;font-weight:700;font-size:15px">Уведомления от бота<input type="checkbox" class="toggle"></label>
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;font-weight:700;font-size:15px">Скрыть ник в ленте<input type="checkbox" class="toggle"></label>
+      </div>
+      <div class="card" style="border-radius:16px;overflow:hidden" id="slinks"></div>
+      <p class="muted" style="margin:0;font-size:12px;text-align:center">BRAINFIRE · версия 0.1</p>
+    </section>
+  </main>
+
+  <div class="scrim" id="scrim"></div>
+  <aside class="drawer" id="drawer" aria-label="Меню"></aside>
+  <!-- ===== ПОПОЛНЕНИЕ (всплывающее окно) ===== -->
+  <div class="modal" id="depModal" aria-hidden="true">
+    <div class="modal-bg" data-mclose></div>
+    <div class="modal-box" role="dialog" aria-label="Пополнение">
+      <div class="modal-head">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <h2 class="u" style="font-weight:700;font-size:21px">Пополнение</h2>
+            <button class="qbtn" aria-label="Как работает пополнение" data-toast="Внеси предметы трейдом — монеты придут сами"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.5M12 17h.01"/></svg></button>
+          </div>
+          <button class="iconbtn card" data-mclose aria-label="Закрыть"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDBFB2" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+        <button class="faq-link" data-toast="Откроются частые вопросы"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.5M12 17h.01"/></svg><span>Вопросы о пополнении</span></button>
+      </div>
+      <div class="modal-scroll">
+      <div class="dtabs" id="depTabs">
+        <button class="on" data-t="br"><span class="dt-ic">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 0V5a1 1 0 0 0-1-1zM15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 0"/><path d="M9 9h.01M15 9h.01M8 13c1 1 2 1.5 4 1.5s3-.5 4-1.5"/></svg></span>Брейнроты</button>
+        <button data-t="gr"><span class="dt-ic">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 3.5l6 6-9 9H5.5v-6z"/><path d="M12 6l6 6M4 20l3-3"/></svg></span>Гирсы</button>
+      </div>
+
+      <button class="buffbar" id="buffOpen">
+        <span class="buff-dots" aria-hidden="true"><i style="background:#E8BC72"></i><i style="background:#F0A060"></i><i style="background:#E2643A"></i></span>
+        <span style="flex:1;text-align:left"><b style="font-size:14px">Бафы</b> <span class="muted" style="font-size:13px">— доплата начисляется сама</span></span>
+        <span class="badge" style="background:#2B2010;color:#E8BC72">до +125%</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label class="srch">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C7D71" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input id="depQ" type="search" placeholder="Поиск по названию" aria-label="Поиск по названию">
+        </label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label class="rng"><span class="muted">от</span><input id="depFrom" type="number" inputmode="numeric" min="0" placeholder="0" aria-label="Цена от"></label>
+          <label class="rng"><span class="muted">до</span><input id="depTo" type="number" inputmode="numeric" min="0" placeholder="∞" aria-label="Цена до"></label>
+          <button class="iconbtn card" id="depSort" aria-label="Сортировка по цене" style="color:#F0A27A">
+            <svg id="sortIc" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16M3 16l4 4 4-4M14 6h7M14 11h5M14 16h3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="depGrid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"></div>
+
+      </div>
+      <div class="depbar dm" id="depBar">
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+          <span class="muted" style="font-size:12px" id="depCnt">Ничего не выбрано</span>
+          <span class="u num" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:18px"><svg class="coin" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#coin"/></svg><span id="depSum">0</span><span id="depBonus" style="font-size:12px;font-family:Manrope,sans-serif;font-weight:800;color:#7FD49A"></span></span>
+        </div>
+        <button class="fire" id="depGo" style="height:50px;padding:0 22px;font-size:15px" disabled>Внести</button>
+      </div>
+    </div>
+  </div>
+  <!-- шторка бафов -->
+  <div class="sheet" id="buffSheet" aria-hidden="true">
+    <div class="sheet-bg" data-close></div>
+    <div class="sheet-box" role="dialog" aria-label="Бафы">
+      <div class="sheet-grab"></div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <h2 class="u" style="font-weight:700;font-size:20px" id="buffTitle">Бафы</h2>
+          <p class="muted" style="margin:0;font-size:13px;line-height:1.45" id="buffSub">Отметь бафы, которые есть на твоём брейнроте, — цена пересчитается. Бафы складываются.</p>
+        </div>
+        <button class="iconbtn card" data-close aria-label="Закрыть"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDBFB2" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="bex" id="buffEx"></div>
+      <div class="btiers" id="buffTiers"></div>
+      <label class="srch" style="height:44px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8C7D71" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="buffQ" type="search" placeholder="Найти баф" aria-label="Найти баф"></label>
+      <div id="buffList" style="display:flex;flex-direction:column;gap:16px;min-height:200px"></div>
+      <div class="bfoot" id="buffFoot"></div>
+    </div>
+  </div>
+  <!-- шторка отыгрыша -->
+  <div class="sheet" id="wagerSheet" aria-hidden="true">
+    <div class="sheet-bg" data-close></div>
+    <div class="sheet-box" role="dialog" aria-label="Отыгрыш">
+      <div class="sheet-grab"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><h2 class="u" style="font-weight:700;font-size:20px">Отыгрыш</h2>
+        <button class="iconbtn card" data-close aria-label="Закрыть"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDBFB2" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div id="wagerBody" style="display:flex;flex-direction:column;gap:14px"></div>
+    </div>
+  </div>
+  <!-- шторка вывода -->
+  <div class="sheet" id="wdSheet" aria-hidden="true">
+    <div class="sheet-bg" data-close></div>
+    <div class="sheet-box" role="dialog" aria-label="Вывод" id="wdBox"></div>
+  </div>
+  <!-- шторка подтверждения депозита -->
+  <div class="sheet" id="depSheet" aria-hidden="true">
+    <div class="sheet-bg" data-close></div>
+    <div class="sheet-box" role="dialog" aria-label="Подтверждение пополнения" id="depSheetBox"></div>
+  </div>
+  <div class="age" id="ageGate" hidden>
+    <div class="age-box">
+      <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="url(#logoG)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c1 3.5 5 5.5 5 10.5a5 5 0 0 1-10 0c0-2.4 1.2-3.9 2.2-5 .3 1.7 1.1 2.6 2 3 0-3.3.3-5.6.8-8.5z"/><path d="M12 21a2.2 2.2 0 0 1-2.2-2.2c0-1.4 1.3-2.2 2.2-3.6.9 1.4 2.2 2.2 2.2 3.6A2.2 2.2 0 0 1 12 21z"/></svg>
+      <h2 class="u" style="font-weight:700;font-size:22px">Только 18+</h2>
+      <p class="muted" style="margin:0;font-size:14px;line-height:1.5;text-align:center">BRAINFIRE — игры на удачу с внутриигровыми предметами. Играй только на то, что готов потерять.</p>
+      <label class="age-ck"><input type="checkbox" id="ageCk"><span>Мне есть 18 лет, я согласен с правилами</span></label>
+      <button class="fire" id="ageGo" style="height:54px;width:100%;font-size:15px" disabled>Войти</button>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+</div>
+
+<script>
+/* =====================================================================
+   НАСТРОЙКИ  — заполни 4 строки (см. README.md)
+   SUPABASE_URL пустой → демо-режим: всё считается в браузере, баланс 0.
+   SUPABASE_URL указан → всё идёт через твою базу Supabase.
+   ===================================================================== */
+const CONFIG={
+  SUPABASE_URL:'',            // Project URL, например 'https://abcdefgh.supabase.co'
+  SUPABASE_ANON_KEY:'sb_publishable_7C7DudTjUTGZrGLPNCdDEw_6lERL7Kjsb_publishable_7C7DudTjUTGZrGLPNCdDEw_6lERL7Kj',       // anon public key (Project Settings → API Keys)
+  BOT_USERNAME:'brainfire_bot',// юзернейм бота без @ — для реферальной ссылки
+  BOT_NICK:'BrainFire_Trade'   // ник аккаунта в Roblox, которому кидают трейд
+};
+const LIVE=!!CONFIG.SUPABASE_URL;
+
+/* ---------- Telegram Mini App ---------- */
+const tg=window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initData?window.Telegram.WebApp:null;
+if(tg){
+  document.documentElement.classList.add('tg');
+  tg.ready();tg.expand();
+  try{tg.setHeaderColor('#0E0B0A');tg.setBackgroundColor('#0E0B0A');tg.setBottomBarColor&&tg.setBottomBarColor('#0E0B0A');}catch(e){}
+  try{tg.disableVerticalSwipes&&tg.disableVerticalSwipes();}catch(e){}   // чтобы приложение не закрывалось свайпом при прокрутке
+}
+const TU=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user||null;
+const USER={
+  id:TU?TU.id:48213,
+  name:TU?(TU.username?'@'+TU.username:[TU.first_name,TU.last_name].filter(Boolean).join(' ')):'@Fortik2213',
+  ava:TU&&TU.photo_url?`<img src="${TU.photo_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`:((TU?(TU.first_name||TU.username||'?'):'F')[0]||'?').toUpperCase(),
+  ref:TU?String(TU.id):'fortik'
+};
+/* вибрация телефона (работает только внутри Telegram) */
+let _hLast=0;
+function haptic(kind){
+  if(!tg||!tg.HapticFeedback)return;
+  try{
+    if(kind==='tick'){const n=performance.now();if(n-_hLast<55)return;_hLast=n;tg.HapticFeedback.selectionChanged();}
+    else if(kind==='success'||kind==='error'||kind==='warning')tg.HapticFeedback.notificationOccurred(kind);
+    else tg.HapticFeedback.impactOccurred(kind||'light');
+  }catch(e){}
+}
+/* запросы к серверу (Supabase Edge Function «api»). initData проверяется на сервере */
+const ERR={
+  no_money:'Недостаточно средств',bad_promo:'Такого промокода нет или он закончился',promo_used:'Ты уже использовал этот промокод',
+  promo_for_deposit:'Этот промокод работает при пополнении',promo_for_profile:'Этот промокод вводится в профиле',
+  deposit_active:'У тебя уже есть заявка в очереди',wager_left:'Сначала отыграй баланс',daily_wait:'Бонус ещё не доступен',
+  unauthorized:'Открой приложение через Telegram',bad_nick:'Неверный ник Roblox',game_active:'Сначала закончи текущую игру',
+  target_cheap:'Цель должна быть дороже ставки',banned:'Аккаунт заблокирован',bad_items:'Предметы не найдены — обнови страницу',
+  cannot_cancel:'Заявку уже взяли в работу',open_first:'Сначала открой клетку',no_game:'Игра не найдена',server_error:'Ошибка сервера, попробуй ещё раз'
+};
+const API={
+  on:()=>LIVE,lastError:null,
+  async call(action,body,silent){
+    API.lastError=null;
+    try{
+      const r=await fetch(CONFIG.SUPABASE_URL.replace(/\/$/,'')+'/functions/v1/api',{method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+CONFIG.SUPABASE_ANON_KEY,'apikey':CONFIG.SUPABASE_ANON_KEY},
+        body:JSON.stringify({action,initData:tg?tg.initData:'',...(body||{})})});
+      const j=await r.json().catch(()=>({error:'server_error'}));
+      if(j.error){API.lastError=j.error;if(!silent)toast(ERR[j.error]||'Ошибка: '+j.error);return null;}
+      return j.data;
+    }catch(e){API.lastError='network';if(!silent)toast('Нет связи с сервером');return null;}
+  }
+};
+
+const $=id=>document.getElementById(id);
+const R={common:'#A8988A',rare:'#6E9CC4',epic:'#A57DCB',legend:'#DDA650',myth:'#E2643A'};
+const RN={common:'Обычный',rare:'Редкий',epic:'Эпический',legend:'Легендарный',myth:'Мифический'};
+const COIN=w=>`<svg class="coin" width="${w}" height="${w}" viewBox="0 0 24 24" aria-hidden="true"><use href="#coin"/></svg>`;
+const ic=(d,c='#E07A3C',s=22,w=1.9)=>`<svg aria-hidden="true" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
+const tileBg=c=>`background:radial-gradient(circle at 50% 35%,${c}40 0%,#1A1411 72%);border:1px solid ${c}55;border-bottom:3px solid ${c}`;
+const mono=(x,s)=>`<span class="u" style="font-weight:800;font-size:${s}px;color:${R[x.r]}">${x.mono}</span>`;
+const toast=t=>{const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),1500);};
+
+/* ---------- данные ---------- */
+const ITEMS=[
+ {name:'Bombardiro Crocodilo',mono:'BC',r:'legend',p:1480,ch:'1,1%'},
+ {name:'Tralalero Tralala',mono:'TT',r:'myth',p:2140,ch:'0,4%'},
+ {name:'Tung Tung Sahur',mono:'TS',r:'epic',p:640,ch:'2,8%'},
+ {name:'Cappuccino Assassino',mono:'CA',r:'epic',p:520,ch:'3,6%'},
+ {name:'Lirili Larila',mono:'LL',r:'rare',p:260,ch:'9,5%'},
+ {name:'Brr Brr Patapim',mono:'BP',r:'rare',p:210,ch:'11%'},
+ {name:'Chimpanzini Bananini',mono:'CB',r:'rare',p:180,ch:'12%'},
+ {name:'Trippi Troppi',mono:'TR',r:'common',p:90,ch:'18%'},
+ {name:'Frigo Camelo',mono:'FC',r:'common',p:60,ch:'20%'}];
+const fmt=n=>Math.round(n).toLocaleString('ru-RU');
+const RB=p=>p>=1000?'myth':p>=400?'legend':p>=150?'epic':p>=70?'rare':'common';
+const mk=n=>n.split(/\s+/).filter(w=>!/^(and|or|of|the|di)$/i.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+// предмет с сервера → объект сайта
+const mkItem=o=>({name:o.name,p:o.price,r:o.rarity||RB(o.price),mono:mk(o.name),id:o.id,src:o.src,cn:o.chance,ch:o.chance!=null?String(o.chance).replace('.',',')+'%':''});
+let uidSeed=1;const INV=[];   // инвентарь игрока (с сервера или пустой в демо)
+
+/* ---------- навигация ---------- */
+const I={
+ cases:'M3 11h18v9H3zM3 11V9a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v2M10 11v4h4v-4',
+ upgrade:'M12 20V6M6 12l6-6 6 6M5 3h14',
+ mines:'M10 21a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM15 8l2-2M18 2v2M21 5h-2M20 2.8l-1.4 1.4M7.5 12.5a3 3 0 0 1 2.5-2.5',
+ bonus:'M3 8h18v4H3zM5 12v9h14v-9M12 8v13M12 8c-2-4-6-4-5-1 .5 1 5 1 5 1zM12 8c2-4 6-4 5-1-.5 1-5 1-5 1z',
+ quests:'M10 6h10M10 12h10M10 18h10M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 11M3.5 18l1.5 1.5L7.5 17',
+ draws:'M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 21h8M9 17h6',
+ profile:'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0',
+ settings:'M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 4v4M9 10v4M17 16v4',
+ x:'M6 6l12 12M18 6L6 18',chev:'M9 6l6 6-6 6',gem:'M6 3h12l3 6-9 12L3 9zM3 9h18M9 3l3 6 3-6M12 21V9'};
+const MENU={
+ games:[{s:'home',k:'cases',t:'Кейсы',d:'Все кейсы'},{s:'upgrade',k:'upgrade',t:'Апгрейд',d:'Улучши предмет'},{s:'mines',k:'mines',t:'Мины',d:'Найди и не взорвись',wide:1,badge:'NEW'}],
+ rewards:[{s:'bonus',k:'bonus',t:'Бонусы',d:'Ежедневный, рефералы'},{s:'quests',k:'quests',t:'Квесты',d:'Задания и награды',meta:'<span class="badge" style="background:#3A1D12;color:#F0A27A">2 новых</span>'},{s:'draws',k:'draws',t:'Розыгрыши',d:'День, неделя, месяц',meta:'<span class="badge num" style="background:#2B2010;color:#E8BC72">6 ч</span>'}],
+ account:[{s:'settings',k:'settings',t:'Настройки',d:'Звук, уведомления',c:'#CDBFB2'}]};
+let cur='home';
+const EMBERS=Array.from({length:16},()=>`<i class="em" style="left:${(Math.random()*100).toFixed(1)}%;--dx:${(Math.random()*60-30).toFixed(0)}px;animation-duration:${(3+Math.random()*4).toFixed(2)}s;animation-delay:-${(Math.random()*6).toFixed(2)}s;${Math.random()<.4?'width:2px;height:2px;':''}"></i>`).join('');
+const owner={home:'home',case:'home',win:'home'};
+function drawMenu(){
+ const act=owner[cur]||cur;
+ const big={home:{t:'Кейсы',d:'24 кейса',k:'cases',c:'#E07A3C'},upgrade:{t:'Апгрейд',d:'до ×10',k:'upgrade',c:'#DDA650'}};
+ const game=(s)=>{const g=big[s];return `<button data-go="${s}" class="mg${act===s?' on':''}" style="--c:${g.c}">
+   <span class="mg-ic">${ic(I[g.k],g.c,80,1.2)}</span>
+   <span class="mg-t">${g.t}</span><span class="mg-d">${g.d}</span>
+   <span class="mg-go">${ic(I.chev,'currentColor',16,2.4)}</span></button>`;};
+ const rw=[{s:'bonus',k:'bonus',t:'Бонусы',b:'+30',bc:'#D9A55B'},{s:'quests',k:'quests',t:'Квесты',b:'2'},{s:'draws',k:'draws',t:'Розыгрыши',b:'6 ч',bc:'#D9A55B'}];
+ $('drawer').innerHTML=`<div class="dfire" aria-hidden="true"><div class="base"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div>${EMBERS}</div><div class="dscroll"><div class="m2">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+   <span class="u" style="display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;letter-spacing:.04em">${ic('M12 2c1 3.5 5 5.5 5 10.5a5 5 0 0 1-10 0c0-2.4 1.2-3.9 2.2-5 .3 1.7 1.1 2.6 2 3 0-3.3.3-5.6.8-8.5zM12 21a2.2 2.2 0 0 1-2.2-2.2c0-1.4 1.3-2.2 2.2-3.6.9 1.4 2.2 2.2 2.2 3.6A2.2 2.2 0 0 1 12 21z','url(#logoG)',20,2).replace('<svg','<svg class="logo-ic"')}<span class="logo-t"><span class="lt-a">BRAIN</span><span class="lt-b">FIRE</span></span></span>
+   <button class="iconbtn m-close" aria-label="Закрыть меню" style="background:none;border:0;color:#A8988A">${ic(I.x,'currentColor',20,2.2)}</button>
+  </div>
+
+  <div class="me${act==='profile'?' on':''}">
+   <button data-go="profile" class="me-top" aria-label="Открыть профиль">
+    <span class="me-ava u">${USER.ava}</span>
+    <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;text-align:left">
+     <span style="font-weight:800;font-size:16px">${USER.name}</span>
+     <span class="muted" style="font-size:12px">Открыть профиль</span>
+    </span>
+    ${ic(I.chev,'#6B5D52',18,2.2)}
+   </button>
+   <div class="me-bal">
+    <span style="display:flex;flex-direction:column;gap:2px">
+     <span class="muted" style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Баланс</span>
+     <span class="u num" style="display:flex;align-items:center;gap:7px;font-weight:700;font-size:20px">${COIN(18)}<span class="bal">${fmt(bal)}</span></span>
+    </span>
+    <button class="fire depBtn" style="height:40px;padding:0 14px;border-radius:11px;font-size:13px;box-shadow:none;display:flex;align-items:center;gap:6px">${ic('M12 5v14M5 12h14','currentColor',15,2.8)}Пополнить</button>
+   </div>
+   <button data-go="settings" class="me-set${act==='settings'?' on':''}">
+    <span class="me-set-ic">${ic(I.settings,'currentColor',17,2)}</span>
+    <span style="flex:1;text-align:left;font-weight:700;font-size:14px">Настройки</span>
+    ${ic(I.chev,'#6B5D52',16,2.2)}
+   </button>
+  </div>
+
+  <div class="sec">Игры</div>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">${game('home')}${game('upgrade')}</div>
+  <button data-go="mines" class="mines${act==='mines'?' on':''}">
+   <span class="mines-grid" aria-hidden="true">${Array.from({length:9},(_,i)=>`<i class="${i===4?'b':i===1||i===6?'g':''}"></i>`).join('')}</span>
+   <span style="flex:1;display:flex;flex-direction:column;gap:2px;text-align:left"><span style="font-weight:800;font-size:16px">Мины</span><span class="muted" style="font-size:12px">Найди и не взорвись</span></span>
+   <span class="badge" style="background:#E07A3C;color:#1A0F09">NEW</span>
+  </button>
+
+  <div class="sec">Награды</div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">${rw.map(r=>`
+   <button data-go="${r.s}" class="rw${act===r.s?' on':''}">
+    <span class="rw-ic">${ic(I[r.k],act===r.s?'#F0A27A':'#D9A55B',24,1.8)}</span>
+    <span style="font-weight:800;font-size:13px">${r.t}</span>
+    <span class="rw-b" style="${r.bc?`background:#2B2010;color:${r.bc}`:''}">${r.b}</span>
+   </button>`).join('')}</div>
+
+  <div class="m2-foot">
+   <button data-toast="Откроется чат с поддержкой" class="ft">${ic('M4 12a8 8 0 1 1 3.3 6.5L4 20l1-3.6A8 8 0 0 1 4 12z','currentColor',18,2)}Поддержка</button>
+   <button data-toast="Откроются частые вопросы" class="ft">${ic('M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.5M12 17h.01','currentColor',18,2)}FAQ</button>
+  </div>
+ </div></div>`;
+}
+const BACK={case:'home',win:'case'};
+function syncBack(){if(!tg||!tg.BackButton)return;(cur==='home')?tg.BackButton.hide():tg.BackButton.show();}
+if(tg&&tg.BackButton)tg.BackButton.onClick(()=>{const os=document.querySelector('.sheet.open');if(os){closeSheet(os.id);return;}if($('depModal').classList.contains('open')){closeDeposit();return;}if($('phone').classList.contains('open')){$('phone').classList.remove('open');return;}if(!spinning&&!upBusy)go(BACK[cur]||'home');});
+function go(s){
+ const prevS=cur;cur=s;if(prevS!==s)haptic('light');syncBack();document.querySelectorAll('.screen').forEach(e=>e.classList.toggle('on',e.dataset.s===s));
+ if(s==='case'&&!spinning)buildReels(MS[mIdx]);
+ if(s==='upgrade')drawUp();
+ if(s==='profile'){drawProfile();wDraw();}
+
+ $('body').scrollTop=0;$('phone').classList.remove('open');drawMenu();
+}
+document.addEventListener('click',e=>{
+ const g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return;}
+ const t=e.target.closest('[data-toast]');if(t)toast(t.dataset.toast);
+});
+$('burger').onclick=()=>$('phone').classList.add('open');
+$('scrim').onclick=()=>$('phone').classList.remove('open');
+$('drawer').addEventListener('click',e=>{if(e.target.closest('.m-close'))$('phone').classList.remove('open');});
+let bal=0;
+const setBal=v=>{bal=v;document.querySelectorAll('.bal').forEach(e=>e.textContent=fmt(bal));wNorm();};
+/* ===== ОТЫГРЫШ =====
+   депозит → ×1.5 от суммы к отыгрышу; бонусные монеты → ×3
+   засчитывается: кейсы (цена), апгрейд (стоимость предметов), мины (ставка)
+   не засчитывается: продажа предметов, бесплатный кейс, бонусные ставки
+   ограничение: остаток не больше, чем у тебя есть (баланс + инвентарь);
+   если всё проиграно (меньше 10) — отыгрыш сбрасывается в 0 */
+const WAGER_DEP=1.5,WAGER_BONUS=3;   // множители отыгрыша
+var WG={left:0,total:0,log:[]};
+var STATS={cases:0,upgrades:0,mines:0,withdrawn:0},BEST=null;   // статистика профиля
+const funds=()=>bal+(typeof INV!=='undefined'?INV.reduce((a,x)=>a+x.p,0):0);
+function wNorm(){
+ if(LIVE){wDraw();return;}          // с сервером отыгрыш считает база
+ if(WG.left<=0){WG.left=0;WG.total=0;wDraw();return;}
+ const f=funds();
+ if(f<10){WG.left=0;WG.total=0;wToast('Отыгрыш сброшен — средства закончились');}
+ else if(WG.left>f){const cut=WG.left-f;WG.left=f;WG.total=Math.max(WG.left,WG.total-cut);}
+ wDraw();
+}
+function wAddNeed(v,why){if(v<=0||LIVE)return;WG.left+=Math.round(v);WG.total+=Math.round(v);wNorm();wToast('+'+fmt(Math.round(v))+' к отыгрышу · '+why,'need');}
+function addWager(v,label){
+ if(LIVE){if(v>0&&WG.left>0){WG.log.unshift({t:label,v:Math.min(WG.left,Math.round(v)),ts:Date.now()});WG.log=WG.log.slice(0,8);}return;}
+ if(WG.left<=0||v<=0)return;const d=Math.min(WG.left,Math.round(v));WG.left-=d;
+ WG.log.unshift({t:label,v:d,ts:Date.now()});WG.log=WG.log.slice(0,8);
+ if(WG.left===0){WG.total=0;wToast('Отыгрыш выполнен — вывод доступен','done');haptic('success');}
+ else wToast('−'+fmt(d)+' к отыгрышу');
+ wDraw();
+}
+function wToast(t,k){const e=document.createElement('div');e.className='wtoast'+(k?' '+k:'');e.textContent=t;$('phone').appendChild(e);setTimeout(()=>e.classList.add('show'),20);setTimeout(()=>{e.classList.remove('show');setTimeout(()=>e.remove(),300);},1900);}
+function wDraw(){
+ if(!$('wArc'))return;
+ const done=WG.left<=0,p=done?100:Math.max(0,Math.min(99,Math.floor((WG.total-WG.left)/WG.total*100)));
+ $('wArc').style.strokeDasharray=`${163.4*p/100} 163.4`;$('wArc').style.stroke=done?'#7FD49A':'url(#wgG)';
+ $('wPct').textContent=p+'%';$('wRing').classList.toggle('ok',done);
+ $('wState').innerHTML=done?`${ic('M5 12l5 5 9-10','#7FD49A',13,3)}<span style="color:#7FD49A">Можно выводить</span>`
+  :`${ic('M12 8v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z','#E9A06A',13,2.4)}<span style="color:#E9A06A">Осталось отыграть ${fmt(WG.left)}</span>`;
+ document.querySelectorAll('.wdBtn').forEach(b=>{b.classList.toggle('locked',!done);});
+ const wb=$('wdBtn');if(wb)wb.lastChild.textContent=done?'Вывести':'Вывод закрыт';
+}
+function wSheet(){
+ const done=WG.left<=0,p=done?100:Math.floor((WG.total-WG.left)/WG.total*100);
+ const row=(ok,t)=>`<li class="wr${ok?'':' no'}">${ic(ok?'M5 12l5 5 9-10':'M6 6l12 12M18 6L6 18',ok?'#7FD49A':'#F08A66',14,3)}<span>${t}</span></li>`;
+ $('wagerBody').innerHTML=`
+  <div class="wbig">
+   <div class="wbig-ring"><svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="40" fill="none" stroke="#2E241E" stroke-width="8"/><circle cx="48" cy="48" r="40" fill="none" stroke="${done?'#7FD49A':'url(#wgG)'}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${251.3*p/100} 251.3" transform="rotate(-90 48 48)"/></svg><b class="u num">${p}%</b></div>
+   <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+    <div class="wkv"><span class="muted">Нужно поставить</span><b class="num">${fmt(WG.total)}</b></div>
+    <div class="wkv"><span class="muted">Уже поставлено</span><b class="num">${fmt(WG.total-WG.left)}</b></div>
+    <div class="wkv"><span class="muted">Осталось</span><b class="num" style="color:${done?'#7FD49A':'#E9A06A'}">${fmt(WG.left)}</b></div>
+   </div>
+  </div>
+  <p class="muted" style="margin:0;font-size:13px;line-height:1.5">Чтобы вывести, нужно поставить в <b style="color:#F2E9E1">1,5 раза</b> больше суммы пополнений. Это защищает от обмена через сайт. Отыгрыш не сгорает, а ещё <b style="color:#F2E9E1">никогда не бывает больше, чем у тебя есть</b> — и полностью сбрасывается, если баланс закончился.</p>
+  <div class="wcols">
+   <div><b class="wcap" style="color:#7FD49A">Засчитывается</b><ul>${row(1,'Кейсы — по цене')}${row(1,'Апгрейд — по стоимости предметов')}${row(1,'Мины — по ставке')}</ul></div>
+   <div><b class="wcap" style="color:#F08A66">Не засчитывается</b><ul>${row(0,'Продажа предметов')}${row(0,'Бесплатный кейс')}${row(0,'Бонусные монеты')}</ul></div>
+  </div>
+  <div class="wrates"><span><b>×1.5</b> пополнение</span><span><b>×3</b> бонусы и промокоды</span></div>
+  ${WG.log.length?`<div style="display:flex;flex-direction:column;gap:6px"><b style="font-size:14px">Последние ставки</b>${WG.log.map(l=>`<div class="wlog"><span>${l.t}</span><span class="muted" style="font-size:11px">${ago(l.ts)}</span><b class="num">−${fmt(l.v)}</b></div>`).join('')}</div>`:''}
+  <button class="fire" data-close style="height:50px;font-size:15px">${done?'Понятно':'Играть'}</button>`;
+ openSheet('wagerSheet');
+}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#wRing')){haptic('light');wSheet();return;}
+ const w=e.target.closest('.wdBtn');if(w){haptic('light');wdOpen();}
+});
+
+function seg(el,labels,idx,onPick){
+ const draw=()=>{el.innerHTML=labels.map((l,i)=>`<button data-i="${i}" class="${i===idx?'on':''}" aria-pressed="${i===idx}">${l}</button>`).join('');};
+ el.onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;idx=+b.dataset.i;draw();onPick(idx);};
+ draw();onPick(idx);
+}
+
+/* ---------- главная ---------- */
+/* переворот плитки ленты: вместо брейнрота — откуда он выпал */
+const CHEST=c=>`<svg width="40" height="35" viewBox="0 0 96 84" fill="none" stroke="${c}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M48 4c2 5 9 8 9 15a9 9 0 0 1-18 0c0-3.5 2-5.5 3.4-7 .5 2.4 1.5 3.6 2.8 4.2C45 12 46.2 8 48 4z"/><path d="M14 46c0-9 5-14 14-14h40c9 0 14 5 14 14v2H14z"/><rect x="14" y="48" width="68" height="30" rx="3"/><path d="M30 34v44M66 34v44"/><rect x="42" y="42" width="12" height="15" rx="2.5"/></svg>`;
+function srcArt(d){
+ if(d.src==='case'){const c=(CASES.find(x=>x.name===d.from)||{c:'#E07A3C'}).c;return {c,html:CHEST(c),label:d.from};}
+ if(d.src==='upgrade')return {c:'#DDA650',html:ic(I.upgrade,'#DDA650',30,2),label:'Апгрейд'};
+ return {c:'#E8BC72',html:ic(I.draws,'#E8BC72',28,2),label:'Розыгрыш'};
+}
+$('drops').addEventListener('click',e=>{const d=e.target.closest('.drop');if(!d)return;const on=!d.classList.contains('flip');
+ document.querySelectorAll('#drops .drop.flip').forEach(x=>x.classList.remove('flip'));if(on)d.classList.add('flip');haptic('light');});
+
+/* топ дроп за 24 часа */
+let TOP={...ITEMS[1],user:'ma***k',src:'case',from:'Жаровня',cost:199,ts:Date.now()-5.2*3600e3};
+function drawTop(flash){
+ if(!TOP){$('topDrop').innerHTML=`<div class="td-glow" style="--c:#E07A3C"></div><div class="td-art" style="--c:#5A4334"><span class="u" style="font-size:18px">?</span></div>
+  <div style="position:relative;flex:1;display:flex;flex-direction:column;gap:4px"><span class="td-lbl">Топ дроп за 24 часа</span><b style="font-size:14px">Пока никто не выбил</b><span class="muted" style="font-size:12px">Открой кейс — может, это будешь ты</span></div>`;return;}
+ const d=TOP,c=R[d.r],x=d.cost?d.p/d.cost:0;
+ $('topDrop').innerHTML=`
+  <div class="td-glow" style="--c:${c}"></div>
+  <div class="td-art" style="--c:${c}"><span class="u">${d.mono}</span>
+   <svg class="td-crown" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z" fill="#E8BC72" stroke="#0E0B0A" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+  <div style="position:relative;flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+   <span class="td-lbl">Топ дроп за 24 часа</span>
+   <b class="u" style="font-size:14px;line-height:1.2;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.name}</b>
+   <span class="muted" style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.user} · ${srcText(d)}</span>
+   <div style="display:flex;align-items:center;gap:8px">
+    <span class="td-price num">${COIN(14)}${fmt(d.p)}</span>
+    ${x>=1.5?`<span class="badge num" style="background:#14301F;color:#7FD49A">×${x.toFixed(1)}</span>`:''}
+    <span class="muted" style="font-size:11px;margin-left:auto">${ago(d.ts)}</span>
+   </div>
+  </div>`;
+ if(flash){$('topDrop').classList.remove('new');void $('topDrop').offsetWidth;$('topDrop').classList.add('new');}
+}
+
+/* живая лента дропов */
+const NICKS=['ma***k','ka***a','de***n','vo***v','ro***z','ne***o','li***y','sa***h','ar***m','to***x','ju***e','pa***l'];
+let feedMode='all',FEED=[];
+const isTop=x=>x.r==='legend'||x.r==='myth';
+let dropSeq=0;const DROPS={};
+const ago=ts=>{const m=Math.floor((Date.now()-ts)/60000);return m<1?'только что':m<60?m+' мин назад':Math.floor(m/60)+' ч назад';};
+const SRC_IC={case:'M3 11h18v9H3zM3 11V9a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v2M10 11v4h4v-4',upgrade:'M12 20V6M6 12l6-6 6 6M5 3h14',draw:'M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 21h8M9 17h6'};
+const srcText=d=>d.src==='case'?`Кейс «${d.from}»`:d.src==='upgrade'?(d.from?`Апгрейд из ${d.from}`:'Апгрейд'):'Розыгрыш дня';
+function dropHTML(d,fresh){const c=R[d.r];if(!d.id){d.id=++dropSeq;}DROPS[d.id]=d;const S=srcArt(d);return `
+ <div class="drop${isTop(d)?' top':''}${fresh?' fresh':''}" style="--c:${c};--sc:${S.c}" data-id="${d.id}" tabindex="0" aria-label="${d.name}, ${d.user}, ${srcText(d)}">
+  <div class="drop-art"><div class="da-in">
+   <div class="da-f"><span class="u">${d.mono}</span></div>
+   <div class="da-b">${S.html}</div>
+  </div></div>
+  <div class="drop-p num">${fmt(d.p)}</div>
+  <div class="drop-u"><span class="du-i">${d.user}</span><span class="du-s">${S.label}</span></div>
+ </div>`;}
+function drawFeed(){const list=FEED.filter(d=>feedMode==='all'||isTop(d)).slice(0,14);
+ $('drops').innerHTML=list.length?list.map(d=>dropHTML(d)).join(''):`<span class="muted" style="font-size:13px;padding:30px 0">${feedMode==='top'?'Ждём легендарку…':'Пока тихо — будь первым'}</span>`;}
+function pushDrop(d){FEED.unshift(d);FEED=FEED.slice(0,40);if(!TOP||d.p>TOP.p){TOP=d;drawTop(true);if(!LIVE||feedReady)toast('Новый топ дроп: '+d.name);}
+ if(feedMode==='top'&&!isTop(d))return;
+ const box=$('drops');if(box.firstElementChild&&box.firstElementChild.classList.contains('muted'))box.innerHTML='';
+ box.insertAdjacentHTML('afterbegin',dropHTML(d,true));
+ while(box.children.length>14)box.lastElementChild.remove();}
+function fakeSrc(it){const r=Math.random();
+ if(r<.78){const cs=CASES.filter(c=>c.p<it.p*1.2);const c=(cs.length?cs:CASES)[Math.random()*(cs.length||CASES.length)|0];return {src:'case',from:c.name,cost:c.p};}
+ if(r<.95){const f=ITEMS.filter(x=>x.p<it.p);const x=f.length?f[Math.random()*f.length|0]:ITEMS[8];return {src:'upgrade',from:x.name,cost:x.p};}
+ return {src:'draw',from:'',cost:0};}
+const fakeDrop=(ts)=>{const it=roll();return {...it,...fakeSrc(it),user:NICKS[Math.random()*NICKS.length|0],ts:ts||Date.now()};};
+let feedReady=false,feedLast=0;
+const srvDrop=o=>({name:o.name,p:o.price,r:o.rarity,mono:mk(o.name),user:o.user,src:o.src,from:o.from||(o.src==='upgrade'?'':''),cost:o.cost,ts:Date.parse(o.ts),id:'f'+o.id});
+async function liveFeed(){
+ const top=await API.call('top',{},true);TOP=top?srvDrop(top):null;drawTop();
+ const first=await API.call('feed',{after:0},true)||[];
+ first.forEach(o=>{FEED.unshift(srvDrop(o));feedLast=Math.max(feedLast,o.id);});drawFeed();feedReady=true;
+ setInterval(async()=>{const L=await API.call('feed',{after:feedLast},true);if(!L)return;
+  L.forEach(o=>{feedLast=Math.max(feedLast,o.id);pushDrop(srvDrop(o));});},5000);
+ setInterval(async()=>{const t=await API.call('top',{},true);if(t&&(!TOP||t.price>TOP.p)){TOP=srvDrop(t);drawTop(true);}},60000);
+}
+function initFeed(){if(LIVE){TOP=null;liveFeed();return;}
+ for(let i=0;i<10;i++)FEED.push(fakeDrop(Date.now()-(i+1)*(40000+Math.random()*90000)));
+ FEED.splice(1,0,{...ITEMS[1],user:'ma***k',src:'case',from:'Жаровня',cost:199,ts:Date.now()-95000},{...ITEMS[0],user:'ka***a',src:'upgrade',from:'Tung Tung Sahur',cost:640,ts:Date.now()-160000});drawFeed();drawTop();
+ (function tick(){setTimeout(()=>{pushDrop(fakeDrop());tick();},1800+Math.random()*2600);})();}
+$('feedSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;feedMode=b.dataset.f;
+ [...$('feedSeg').children].forEach(x=>x.classList.toggle('on',x===b));drawFeed();};
+
+const CASES=[
+ {name:'Тлеющий',p:49,c:R.common},{name:'Угольный',p:99,c:R.rare,hot:1},{name:'Жаровня',p:199,c:'#E07A3C'},
+ {name:'Пепел Сахура',p:349,c:R.epic},{name:'Вулкан',p:799,c:R.legend,hot:1},{name:'Сердце пламени',p:1999,c:R.myth}];
+let casePrice=199;
+const fl=['Все','До 100','Легенды','Ивент'];let filter=0;
+function drawCases(){
+ const list=CASES.filter(x=>filter===1?x.p<=100:filter===2?x.p>=799:true);
+ $('cases').innerHTML=list.map(x=>`
+ <button class="card" data-case="${x.name}" data-price="${x.p}" style="text-align:left;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:16px">
+  ${x.hot?'<span class="badge" style="position:absolute;top:10px;left:10px;background:#3A1D12;color:#F0A27A">ХИТ</span>':''}
+  <div style="width:100%;height:108px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 85%,${x.c}33 0%,rgba(31,24,20,0) 70%),#1A1411">
+   <svg aria-hidden="true" width="88" height="77" viewBox="0 0 96 84" fill="none" stroke="${x.c}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M48 4c2 5 9 8 9 15a9 9 0 0 1-18 0c0-3.5 2-5.5 3.4-7 .5 2.4 1.5 3.6 2.8 4.2C45 12 46.2 8 48 4z"/>
+    <path d="M14 46c0-9 5-14 14-14h40c9 0 14 5 14 14v2H14z"/><rect x="14" y="48" width="68" height="30" rx="3"/>
+    <path d="M30 34v44M66 34v44"/><rect x="42" y="42" width="12" height="15" rx="2.5"/></svg></div>
+  <span style="font-weight:800;font-size:14px">${x.name}</span>
+  <span class="num" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:10px;background:#241B16;border:1px solid #3A2B22;font-weight:800;font-size:14px">
+   ${COIN(14)}${fmt(x.p)}</span>
+ </button>`).join('');
+}
+$('cases').onclick=e=>{const b=e.target.closest('[data-case]');if(!b)return;$('caseName').textContent=b.dataset.case;casePrice=+b.dataset.price;
+ CUR_CASE=CASES.find(x=>x.name===b.dataset.case)||null;CASE_ITEMS=CUR_CASE&&CUR_CASE.items?CUR_CASE.items:ITEMS;drawCaseItems();drawTotal();go('case');};
+drawCases();
+
+/* таймер и промокод */
+let t=5*3600+42*60+17;const p2=n=>String(n).padStart(2,'0');
+setInterval(()=>{t=Math.max(0,t-1);$('timer').textContent=`${p2(t/3600|0)}:${p2(t%3600/60|0)}:${p2(t%60)}`;},1000);
+$('copy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText('EMBER15').catch(()=>{});toast('Промокод скопирован');};
+
+/* ---------- кейс: рулетка ---------- */
+let CASE_ITEMS=ITEMS,CUR_CASE=null;              // содержимое открытого кейса
+const chOf=x=>typeof x.cn==='number'?x.cn:(parseFloat(String(x.ch||'1').replace(',','.'))||1);
+// в демо — случайный предмет по шансам; в боевом режиме — только для «прокрутки» ленты
+const roll=()=>{const L=CASE_ITEMS,sw=L.reduce((a,x)=>a+chOf(x),0);let r=Math.random()*sw;for(const x of L){r-=chOf(x);if(r<=0)return x;}return L[L.length-1];};
+function drawCaseItems(){
+ $('items').innerHTML=CASE_ITEMS.map(x=>`
+ <div class="card" style="display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:12px">
+  <div class="tile" style="height:64px;${tileBg(R[x.r])}">${mono(x,18)}</div>
+  <span style="font-size:12px;font-weight:700;line-height:1.25;min-height:30px">${x.name}</span>
+  <div class="num" style="display:flex;justify-content:space-between;font-size:11px"><b>${fmt(x.p)}</b><span class="muted">${x.ch}</span></div></div>`).join('');
+ const lg=CASE_ITEMS.filter(x=>x.r==='legend'||x.r==='myth').reduce((a,x)=>a+chOf(x),0),sw=CASE_ITEMS.reduce((a,x)=>a+chOf(x),0);
+ $('caseSub').textContent=`${CASE_ITEMS.length} брейнротов · шанс легенды ${(lg/sw*100).toFixed(1).replace('.',',')}%`;
+}
+const MS=[1,2,3,5];let mIdx=0,spinning=false,lastWin=[],uid=100;
+const drawTotal=()=>{$('total').textContent=fmt(casePrice*MS[mIdx]);};
+const LEN=90,STOP=80;
+function reelDims(n){return n===1?{h:132,tw:92,th:108,f:22}:n===2?{h:112,tw:80,th:92,f:19}:n===3?{h:96,tw:70,th:80,f:17}:{h:72,tw:56,th:60,f:14};}
+function buildReels(n,winners){
+ const d=reelDims(n);
+ $('reels').innerHTML=Array.from({length:n},(_,r)=>{
+  const list=Array.from({length:LEN},()=>roll());if(winners)list[STOP]=winners[r];
+  return `<div class="reel" style="height:${d.h}px"><div class="track" style="top:${(d.h-d.th)/2}px">${list.map((x,i)=>`
+   <div class="rt${winners&&i===STOP?' win':''}" style="--c:${R[x.r]}88;width:${d.tw}px;height:${d.th}px;${tileBg(R[x.r])}">
+    ${mono(x,d.f)}${n<=2?`<span class="n">${x.name}</span>`:''}</div>`).join('')}</div><div class="fade"></div><div class="mk"><svg class="cap t" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#E07A3C" stroke="#0E0B0A" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg><svg class="cap b" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#E07A3C" stroke="#0E0B0A" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg></div></div>`;}).join('');
+ const rw=$('reels').clientWidth||358;
+ document.querySelectorAll('#reels .track').forEach(t=>{t.style.transition='none';t.style.transform=`translate3d(${-(5*(d.tw+8)+d.tw/2-rw/2)}px,0,0)`;});
+ return d;
+}
+async function spin(){
+ if(spinning)return;const n=MS[mIdx],cost=casePrice*n;
+ if(cost>bal){toast('Недостаточно средств');haptic('error');return;}
+ spinning=true;$('openBtn').disabled=true;haptic('medium');
+ let winners;
+ if(API.on()){
+  // сервер сам списывает баланс и решает, что выпало
+  const res=await API.call('case_open',{case:CUR_CASE?CUR_CASE.id:$('caseName').textContent,count:n});
+  if(!res||!res.items){spinning=false;$('openBtn').disabled=false;return;}
+  addWager(cost,'Кейс «'+$('caseName').textContent+'»');
+  winners=res.items.map(it=>({...mkItem(it),sid:it.id}));applyState(res.state,true);
+ }else{addWager(cost,'Кейс «'+$('caseName').textContent+'»');setBal(bal-cost);winners=Array.from({length:n},()=>roll());}
+ lastWin=winners.map(x=>({...x,id:x.sid||uid++}));
+ const d=buildReels(n,winners);const rw=$('reels').clientWidth;
+ const fast=$('fast').checked,step=d.tw+8;
+ $('reels').classList.add('spinning');
+ const tracks=[...document.querySelectorAll('#reels .track')];
+ const C=-(STOP*step+d.tw/2-rw/2);           // победный предмет ровно под указателем
+ const edge=C+step/2;                        // граница между предыдущим и победным
+ const T=v=>`translate3d(${v}px,0,0)`;
+ // профиль скорости: плавный разгон → полный ход → долгое торможение
+ function profile(acc,pow){
+  const N=400,v=[],p=[0];
+  for(let k=0;k<=N;k++){const x=k/N;
+   v.push(x<acc?(x/acc)*(x/acc)*(3-2*(x/acc)):Math.pow(1-(x-acc)/(1-acc),pow));}
+  let sum=0;for(let k=1;k<=N;k++){sum+=(v[k]+v[k-1])/2;p.push(sum);}
+  return x=>{const f=Math.min(N,Math.max(0,x*N)),i=Math.floor(f),r=f-i;return (p[i]+(p[Math.min(N,i+1)]-p[i])*r)/sum;};
+ }
+ const io=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2, out=x=>1-Math.pow(1-x,3), lin=x=>x;
+ const caps=tracks.map(t=>[...t.closest('.reel').querySelectorAll('.cap')]);
+ let finished=0;
+ tracks.forEach((t,i)=>{
+  const x0=new DOMMatrixReadOnly(getComputedStyle(t).transform).m41;
+  const reel=t.closest('.reel');
+  let segs;
+  if(fast){
+   segs=[{to:C+(Math.random()-.5)*(d.tw-20),dur:2900+i*300,f:profile(.16,2.4)}];
+  }else{
+   const sc=Math.random(),extra=i*700;
+   if(sc<.4)      // зависает на краю соседнего… и в последний момент переползает
+    segs=[{to:edge+5,dur:9200+extra,f:profile(.17,2.6)},{to:edge+2,dur:1100,f:lin},{to:edge-8-Math.random()*16,dur:1400,f:io}];
+   else if(sc<.75) // долго ползёт через весь предмет и едва не уходит на следующий
+    segs=[{to:C-(d.tw/2-5),dur:11500+extra,f:profile(.15,3.3)}];
+   else            // почти проскакивает на следующий, но замирает у самой границы
+    segs=[{to:C-d.tw/2+12,dur:9800+extra,f:profile(.16,2.6)},{to:C-d.tw/2+3,dur:1500,f:out}];
+  }
+  const total=segs.reduce((a,x)=>a+x.dur,0);
+  if(!fast)setTimeout(()=>reel.classList.add('tense'),total*.62);
+  let si=0,from=x0,st=performance.now(),lastIdx=-1;
+  (function frame(now){
+   const sg=segs[si];let k=(now-st)/sg.dur;if(k>1)k=1;
+   const x=from+(sg.to-from)*sg.f(k);
+   t.style.transform=T(x);
+   const idx=Math.floor((rw/2-x+4)/step);
+   if(idx!==lastIdx){lastIdx=idx;caps[i].forEach(c=>{c.classList.remove('tick');c.getBoundingClientRect();c.classList.add('tick');});if(i===0)haptic('tick');}
+   if(k<1){requestAnimationFrame(frame);return;}
+   if(si<segs.length-1){from=sg.to;si++;st=now;requestAnimationFrame(frame);return;}
+   // остановка → пауза → плавно в центр
+   setTimeout(()=>{
+    reel.classList.remove('tense');reel.classList.add('done');
+    const a2=t.animate([{transform:T(sg.to)},{transform:T(C)}],{duration:650,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});
+    a2.onfinish=()=>{t.style.transform=T(C);a2.cancel();
+     if(++finished===tracks.length){haptic('success');}if(finished===tracks.length)setTimeout(()=>{spinning=false;$('openBtn').disabled=false;$('reels').classList.remove('spinning');renderWin();go('win');},1100);};
+   },fast?120:450);
+  })(st);
+ });
+}
+$('openBtn').onclick=spin;
+seg($('mult'),MS.map(n=>'×'+n),0,i=>{if(spinning)return;mIdx=i;drawTotal();buildReels(MS[i]);});
+drawCaseItems();
+
+/* ---------- выигрыш ---------- */
+function renderWin(){
+ const ws=lastWin,sum=ws.reduce((s,x)=>s+x.p,0),best=ws.slice().sort((a,b)=>b.p-a.p)[0],c=R[best.r];
+ const ratio=(sum/(casePrice*ws.length));
+ $('winBody').innerHTML=`
+ <div style="display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;padding-top:12px">
+  <span class="badge" style="padding:6px 12px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:${c}22;color:${c}">${RN[best.r]}</span>
+  <div style="position:relative;width:${ws.length>1?170:210}px;height:${ws.length>1?170:210}px;border-radius:32px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,${c}4D 0%,#1A1411 72%);border:1px solid ${c}73;box-shadow:0 0 0 8px ${c}0D,0 30px 80px ${c}40;animation:pop .5s cubic-bezier(.2,1.4,.4,1)">
+   <span class="u" style="font-weight:800;font-size:${ws.length>1?56:70}px;color:${c}">${best.mono}</span>
+   <span class="muted" style="position:absolute;bottom:12px;font-size:11px">[арт брейнрота]</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+   <h1 class="u" style="font-weight:700;font-size:${ws.length>1?20:25}px;line-height:1.15">${best.name}</h1>
+   <span class="muted" style="font-size:14px">из кейса «${$('caseName').textContent}» · ${ratio>=1?`окупился в <b style="color:#E8BC72">${ratio.toFixed(1).replace('.',',')}×</b>`:`вернулось <b style="color:#F2E9E1">${Math.round(ratio*100)}%</b>`}</span>
+  </div>
+  ${ws.length>1?`<div style="width:100%;display:grid;grid-template-columns:repeat(${Math.min(ws.length,5)},minmax(0,1fr));gap:6px">${ws.map(x=>`
+    <div class="card" style="padding:6px;border-radius:10px;display:flex;flex-direction:column;gap:4px">
+     <div class="tile" style="height:46px;${tileBg(R[x.r])}">${mono(x,13)}</div><b class="num" style="font-size:11px">${fmt(x.p)}</b></div>`).join('')}</div>`:''}
+  <div class="card" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 18px;border-radius:14px">
+   ${COIN(20)}<span class="num" style="font-weight:800;font-size:20px">${fmt(sum)}</span>
+  </div>
+ </div>
+ <div style="display:flex;flex-direction:column;gap:8px;padding-top:16px">
+  <button class="fire" id="winSell" style="height:56px;font-size:16px">Продать ${ws.length>1?'всё ':''}за ${fmt(sum)}</button>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+   <button class="ghost" style="height:50px;font-size:14px" id="winKeep">На склад</button>
+   <button class="ghost" style="height:50px;font-size:14px" id="winAgain">Крутить ещё</button>
+  </div>
+ </div>`;
+ // с сервером предметы уже лежат на складе — тут их только продаём или оставляем
+ $('winSell').onclick=async()=>{haptic('light');
+  if(API.on()){const r=await API.call('sell',{ids:ws.map(x=>x.id)});if(!r)return;applyState(r.state);}
+  else setBal(bal+sum);
+  toast('+'+fmt(sum)+' на баланс');go('case');};
+ $('winKeep').onclick=()=>{if(API.on())loadMe();else INV.unshift(...ws);toast('Добавлено на склад');go('profile');};
+ $('winAgain').onclick=()=>{if(API.on())loadMe();else INV.unshift(...ws);go('case');setTimeout(spin,250);};
+}
+
+/* ---------- апгрейдер ---------- */
+let upSel=new Set(),upTarget=null,upTab=0,upBusy=false,needleDeg=0;
+const UPQ=[1.5,2,3,5,10];
+let UP_TARGETS=ITEMS;                         // во что можно апгрейдить (с сервера — весь каталог)
+const ARC=2*Math.PI*122;
+const stakeSum=()=>INV.filter(x=>upSel.has(x.id)).reduce((s,x)=>s+x.p,0);
+const upChance=()=>{const s=stakeSum();if(!s||!upTarget)return 0;return Math.min(75,s/upTarget.p*95);};
+function slotHTML(list,empty){
+ if(!list.length)return `<div style="height:92px;border:1px dashed #3A2B22;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;text-align:center;padding:8px" class="muted">${empty}</div>`;
+ const x=list[0];
+ return `<div class="tile" style="height:92px;position:relative;${tileBg(R[x.r])}">${mono(x,26)}${list.length>1?`<span class="badge" style="position:absolute;top:6px;right:6px;background:#0E0B0A;color:#F2E9E1">+${list.length-1}</span>`:''}</div>
+  <span style="font-size:12px;font-weight:700;line-height:1.25;min-height:30px;display:block;margin-top:6px">${list.length>1?list.length+' предмета':x.name}</span>
+  <b class="num" style="font-size:13px;color:${R[x.r]}">${fmt(list.reduce((s,y)=>s+y.p,0))}</b>`;
+}
+function setArc(ch){ // дуга по центру снизу, в обе стороны
+ shownCh=ch;
+ for(const id of ['arc','arcGlow','arcHi']){const e=$(id);const L=id==='arcHi'?2*Math.PI*126:ARC;e.style.strokeDasharray=`${L*ch/100} ${L}`;e.style.transform=`rotate(${90-ch*1.8}deg)`;}
+ $('edges').style.opacity=ch?1:0;
+ $('edgeL').style.transform=`rotate(${180+ch*1.8}deg)`;$('edgeR').style.transform=`rotate(${180-ch*1.8}deg)`;
+}
+let shownCh=0;
+function drawUp(){
+ const sel=INV.filter(x=>upSel.has(x.id)),s=stakeSum();
+ if(upTarget&&upTarget.p<=s)upTarget=null;
+ $('upFrom').innerHTML=slotHTML(sel,'Выбери предметы<br>со склада');
+ $('upTo').innerHTML=slotHTML(upTarget?[upTarget]:[],'Выбери цель<br>или множитель');
+ const ch=upChance();
+ $('chance').textContent=ch?ch.toFixed(1).replace('.',',')+'%':'0%';
+ $('upX').textContent=upTarget&&s?'×'+(upTarget.p/s).toFixed(2):'—';
+ setArc(ch);
+ $('upBtn').disabled=!ch||upBusy;
+ $('upBtn').textContent=ch?`Улучшить · ${ch.toFixed(1).replace('.',',')}%`:'Улучшить';
+ if(upTab===0)$('upList').innerHTML=INV.length?INV.map(x=>`<button data-id="${x.id}" class="pick${upSel.has(x.id)?' sel':''}">
+   <div class="tile" style="width:100%;height:56px;${tileBg(R[x.r])}">${mono(x,16)}</div>
+   <span style="font-size:11px;font-weight:700;line-height:1.25;min-height:28px">${x.name}</span><b class="num" style="font-size:12px">${fmt(x.p)}</b></button>`).join('')
+   :`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:13px">Склад пуст — открой кейс</p>`;
+ else{const tl=UP_TARGETS.filter(x=>x.p>s).sort((a,b)=>a.p-b.p);
+  $('upList').innerHTML=tl.length?tl.map(x=>`<button data-t="${x.name}" class="pick${upTarget&&upTarget.name===x.name?' sel':''}">
+   <div class="tile" style="width:100%;height:56px;${tileBg(R[x.r])}">${mono(x,16)}</div>
+   <span style="font-size:11px;font-weight:700;line-height:1.25;min-height:28px">${x.name}</span>
+   <div class="num" style="display:flex;justify-content:space-between;font-size:12px"><b>${fmt(x.p)}</b>${s?`<span style="color:#E9A06A;font-weight:800">×${(x.p/s).toFixed(1)}</span>`:''}</div></button>`).join('')
+   :`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:13px">Нет предметов дороже ставки</p>`;}
+}
+$('upList').onclick=e=>{if(upBusy)return;const b=e.target.closest('.pick');if(!b)return;
+ if(b.dataset.id){const id=+b.dataset.id;upSel.has(id)?upSel.delete(id):upSel.add(id);}
+ else{const x=UP_TARGETS.find(i=>i.name===b.dataset.t);upTarget=upTarget&&upTarget.name===x.name?null:x;}
+ $('wheel').classList.remove('win','lose');$('chanceSub').textContent='шанс';drawUp();};
+seg($('upTabs'),['Мой склад','Выбрать цель'],0,i=>{upTab=i;drawUp();});
+seg($('upQuick'),UPQ.map(n=>'×'+n),-1,i=>{if(i<0||upBusy)return;const s=stakeSum();if(!s){toast('Сначала выбери предметы');return;}
+ const want=s*UPQ[i];upTarget=UP_TARGETS.filter(x=>x.p>s).sort((a,b)=>Math.abs(a.p-want)-Math.abs(b.p-want))[0]||null;
+ if(!upTarget)toast('Нет цели дороже');$('wheel').classList.remove('win','lose');$('chanceSub').textContent='шанс';drawUp();});
+$('upBtn').onclick=async()=>{
+ const ch=upChance();if(!ch||upBusy)return;upBusy=true;drawUp();haptic('medium');
+ let r,res=null;
+ if(API.on()){
+  // сервер решает исход: roll 0–100, выигрыш = roll < шанса
+  res=await API.call('upgrade',{items:[...upSel],target:upTarget.name});
+  if(!res||typeof res.roll!=='number'){upBusy=false;drawUp();return;}
+  r=Math.min(99.99,Math.max(0,res.roll));
+  if(res.win&&r>=ch)r=Math.max(0,ch-0.5);if(!res.win&&r<ch)r=Math.min(99.99,ch+0.5);  // на случай округления
+ }else r=Math.random()*100;
+ addWager(stakeSum(),'Апгрейд');
+ $('wheel').classList.remove('win','lose');$('wheel').classList.add('busy');$('chanceSub').textContent='крутим…';
+ const win=r<ch;
+ const target=180-ch*1.8+r*3.6;               // r<ch → внутри дуги внизу                       // где остановится стрелка
+ const start=needleDeg,end=start-(start%360)+360*($('upFast').checked?3:8)+((target%360)+360)%360;needleDeg=end;
+ const n=$('needle'),tail=$('ntail'),DUR=$('upFast').checked?2400:8200;
+ const ease=k=>{ // разгон 6% времени, затем очень мягкое затухание
+  const a=.06,p=3.4,A=p*a/(2*(1-a)+p*a);      // скорость на стыке совпадает — без рывка
+  if(k<a){const u=k/a;return A*u*u;}
+  const u=(k-a)/(1-a);return A+(1-A)*(1-Math.pow(1-u,p));};
+ const t0=performance.now();let prev=start;
+ (function fr(now){
+  let k=(now-t0)/DUR;if(k>1)k=1;
+  const ang=start+(end-start)*ease(k);
+  n.style.transform=`rotate(${ang}deg)`;
+  const sp=Math.abs(ang-prev);prev=ang;           // скорость → длина/яркость хвоста
+  tail.style.opacity=Math.min(1,.08+sp/7).toFixed(3);
+  if(k<1){requestAnimationFrame(fr);return;}
+  tail.style.transition='opacity .6s';tail.style.opacity='.08';setTimeout(()=>tail.style.transition='',700);
+  upDone();
+ })(t0);
+ function upDone(){setTimeout(wNorm,50);
+  $('wheel').classList.remove('busy');
+  if(res&&res.state){applyState(res.state,true);upSel=new Set();if(res.item)upSel.add(res.item.id);}
+  else{const sel=INV.filter(x=>upSel.has(x.id));for(const x of sel)INV.splice(INV.indexOf(x),1);upSel=new Set();}
+  if(win){const got=res&&res.item?mkItem(res.item):{...upTarget,id:uid++};if(!res){INV.unshift(got);upSel.add(got.id);}
+   $('wheel').classList.add('win');$('chanceSub').textContent='успех!';$('chanceSub').style.color='#E8BC72';toast(got.name+' — твой!');haptic('success');}
+  else{$('wheel').classList.add('lose');$('chanceSub').textContent='сгорело';$('chanceSub').style.color='#F08A66';toast('Не повезло');haptic('error');}
+  const keepCh=shownCh,keep=$('chance').textContent;upTarget=null;upBusy=false;drawUp();$('chance').textContent=keep;setArc(keepCh);
+  setTimeout(()=>{$('chanceSub').style.color='';},2500);
+  }
+};
+/* ---------- мины ---------- */
+const MC=[3,5,10,24];let mines=3,mState='idle',bombs=new Set(),opened=0;
+const gemSvg=ic(I.gem,'#E8BC72',26,1.8);
+const bombSvg=ic(I.mines,'#F08A66',26,1.8);
+function coef(k){let c=1;for(let i=0;i<k;i++)c*=(25-i)/(25-mines-i);return c*0.97;}
+function drawMines(reveal){
+ let h='';for(let i=0;i<25;i++){
+  const op=$('mgrid').dataset['o'+i];
+  let cls='cell',inner='';
+  if(op==='g'){cls+=' gem';inner=gemSvg;}
+  else if(op==='b'){cls+=' boom';inner=bombSvg;}
+  else if(reveal){if(bombs.has(i)){cls+=' boom dim';inner=bombSvg;}else{cls+=' gem dim';inner=gemSvg;}}
+  h+=`<button class="${cls}" data-c="${i}" aria-label="Клетка ${i+1}" ${mState!=='play'||op?'disabled':''}>${inner}</button>`;}
+ $('mgrid').innerHTML=h;
+ const bet=+$('bet').value||0;
+ $('mx').textContent='×'+(opened?coef(opened):1).toFixed(2);$('mnext').textContent='×'+coef(opened+1).toFixed(2);
+ const b=$('mbtn');
+ if(mState==='play'){b.textContent=opened?`Забрать ${fmt(Math.floor(bet*coef(opened)))}`:'Выбери клетку';b.disabled=!opened;}
+ else{b.textContent='Начать игру';b.disabled=false;}
+ document.querySelectorAll('#mcount button').forEach(x=>x.disabled=mState==='play');
+}
+function resetGrid(){for(let i=0;i<25;i++)delete $('mgrid').dataset['o'+i];opened=0;}
+let mGame=null,mBusy=false;                    // id игры на сервере
+$('mgrid').onclick=async e=>{const c=e.target.closest('.cell');if(!c||mState!=='play'||mBusy)return;const i=+c.dataset.c;
+ if(API.on()){
+  mBusy=true;const res=await API.call('mines_open',{game:mGame,cell:i});mBusy=false;if(!res)return;
+  if(res.boom){$('mgrid').dataset['o'+i]='b';bombs=new Set(res.bombs);mState='lost';drawMines(true);toast('Бум! Ставка сгорела');haptic('error');}
+  else{$('mgrid').dataset['o'+i]='g';opened=res.opened.length;
+   if(res.won){bombs=new Set(res.bombs);mState='won';drawMines(true);toast('+'+fmt(res.payout)+' на баланс');haptic('success');}
+   else{haptic('light');drawMines();}}
+  if(res.state)applyState(res.state);return;
+ }
+ if(bombs.has(i)){$('mgrid').dataset['o'+i]='b';mState='lost';drawMines(true);toast('Бум! Ставка сгорела');haptic('error');}
+ else{$('mgrid').dataset['o'+i]='g';opened++;if(opened===25-mines){cashOut();return;}drawMines();}};
+async function cashOut(){
+ if(API.on()){if(mBusy)return;mBusy=true;const res=await API.call('mines_cashout',{game:mGame});mBusy=false;if(!res)return;
+  bombs=new Set(res.bombs);mState='won';drawMines(true);toast('+'+fmt(res.payout)+' на баланс');haptic('success');applyState(res.state);return;}
+ haptic('success');const win=Math.floor((+$('bet').value||0)*coef(opened));setBal(bal+win);mState='won';drawMines(true);toast('+'+fmt(win)+' на баланс');}
+$('mbtn').onclick=async()=>{
+ if(mState==='play'){if(opened)cashOut();return;}
+ const bet=Math.floor(+$('bet').value||0);if(bet<=0||bet>bal){toast('Недостаточно средств');haptic('error');return;}
+ if(API.on()){
+  if(mBusy)return;mBusy=true;const res=await API.call('mines_start',{bet,mines});mBusy=false;if(!res)return;
+  mGame=res.game.id;addWager(bet,'Мины');applyState(res.state);resetGrid();bombs=new Set();mState='play';drawMines();haptic('medium');return;
+ }
+ addWager(bet,'Мины');setBal(bal-bet);resetGrid();bombs=new Set();while(bombs.size<mines)bombs.add(Math.random()*25|0);mState='play';drawMines();};
+document.querySelectorAll('[data-bet]').forEach(b=>b.onclick=()=>{if(mState==='play')return;const v=Math.max(1,Math.floor((+$('bet').value||1)*+b.dataset.bet));$('bet').value=v;drawMines();});
+$('bet').oninput=()=>drawMines();
+seg($('mcount'),MC.map(n=>n+' мин'),0,i=>{mines=MC[i];if(mState!=='play'){resetGrid();mState='idle';}drawMines();});
+
+/* ---------- бонусы ---------- */
+const DAYS=[10,15,20,30,40,60,100];
+$('days').innerHTML=DAYS.map((v,i)=>{const done=i<3,today=i===3;return `
+ <div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;border-radius:10px;
+  ${today?'background:#2A1C14;border:1px solid #7A4A2C':done?'background:#1F1814;border:1px solid #2E241E':'background:#120E0C;border:1px solid #2E241E'}">
+  <span style="font-size:10px;font-weight:700;color:${today?'#F0A27A':'#A8988A'}">${i+1} д</span>
+  ${done?ic('M5 12l5 5 9-10','#D9A55B',16,2.4):`<b class="num" style="font-size:12px;color:${today?'#F2E9E1':'#CDBFB2'}">${v}</b>`}
+ </div>`}).join('');
+
+/* ---------- квесты ---------- */
+const Q=[[
+ {t:'Открой 5 кейсов',d:3,n:5,r:25},{t:'Сыграй 3 раунда в Мины',d:3,n:3,r:20},{t:'Сделай апгрейд',d:0,n:1,r:15},{t:'Пополни баланс от 100',d:0,n:1,r:40}],[
+ {t:'Открой 50 кейсов',d:31,n:50,r:250},{t:'Выбей легендарку',d:1,n:1,r:150},{t:'Пригласи 3 друзей',d:1,n:3,r:300}]];
+let qTab=0;
+function drawQ(){$('qlist').innerHTML=Q[qTab].map(q=>{const done=q.d>=q.n;return `
+ <div class="card" style="border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;${done?'border-color:#5A3A26':''}">
+  <div style="display:flex;align-items:center;gap:12px">
+   <div class="m-ic">${ic(done?'M5 12l5 5 9-10':I.quests,done?'#E07A3C':'#A8988A',20)}</div>
+   <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px">${q.t}</div><div class="muted num" style="font-size:12px">${Math.min(q.d,q.n)} / ${q.n}</div></div>
+   ${done?`<button class="fire" style="height:40px;padding:0 14px;border-radius:10px;font-size:13px;box-shadow:none" data-toast="+${q.r} на баланс">+${q.r}</button>`
+         :`<span class="badge num" style="background:#241B16;color:#D9A55B;padding:6px 10px">+${q.r}</span>`}
+  </div>
+  <div class="bar"><i style="width:${Math.min(100,q.d/q.n*100)}%"></i></div>
+ </div>`}).join('');}
+seg($('qtabs'),['Ежедневные','Недельные'],0,i=>{qTab=i;drawQ();});
+
+/* ---------- розыгрыши ---------- */
+const DR=[{prize:ITEMS[3],time:'05:59:12',ppl:318},{prize:ITEMS[0],time:'3 д 14 ч',ppl:1204},{prize:ITEMS[1],time:'21 д 09 ч',ppl:4870}];
+const WIN=[['ka***a',ITEMS[3],'вчера'],['ro***z',ITEMS[2],'2 дня назад'],['ne***o',ITEMS[0],'неделю назад']];
+seg($('dtabs'),['День','Неделя','Месяц'],0,i=>{const d=DR[i],x=d.prize,c=R[x.r];
+ $('dcard').innerHTML=`<div style="position:relative;overflow:hidden;border-radius:20px;background:#171210;border:1px solid #3A2B22;padding:16px;display:flex;flex-direction:column;gap:14px">
+  <div aria-hidden="true" style="position:absolute;left:50%;top:-40px;width:300px;height:220px;transform:translateX(-50%);background:radial-gradient(ellipse,${c}30,rgba(0,0,0,0) 65%)"></div>
+  <div style="position:relative;display:flex;gap:14px;align-items:center">
+   <div class="tile" style="width:96px;height:96px;flex:none;border-radius:16px;${tileBg(c)}">${mono(x,30)}</div>
+   <div style="display:flex;flex-direction:column;gap:4px"><span class="badge" style="align-self:flex-start;background:${c}22;color:${c}">${RN[x.r]}</span>
+    <span style="font-weight:800;font-size:16px">${x.name}</span><span class="num muted" style="font-size:13px">стоимость <b style="color:#F2E9E1">${fmt(x.p)}</b></span></div>
+  </div>
+  <div style="position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+   <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="muted" style="font-size:12px">До итогов</div><div class="u num" style="font-weight:700;font-size:16px">${d.time}</div></div>
+   <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="muted" style="font-size:12px">Участников</div><div class="u num" style="font-weight:700;font-size:16px">${fmt(d.ppl)}</div></div>
+  </div>
+  <button class="fire" style="position:relative;height:52px;font-size:15px" data-toast="Ты участвуешь!">Участвовать</button>
+ </div>`;});
+$('dwin').innerHTML=WIN.map(([u,x,w])=>`<div class="card" style="display:flex;align-items:center;gap:12px;padding:8px 14px 8px 8px;border-radius:14px">
+ <div class="tile" style="width:44px;height:44px;border-radius:10px;${tileBg(R[x.r])}">${mono(x,13)}</div>
+ <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px">${u}</div><div class="muted" style="font-size:12px">${x.name}</div></div>
+ <span class="muted" style="font-size:12px">${w}</span></div>`).join('');
+
+/* ---------- профиль ---------- */
+const HIST=[['Жаровня',ITEMS[0],'+1 480','#DDA650'],['Апгрейд',ITEMS[2],'+640','#A57DCB'],['Мины · 5 мин','×2.47','+147','#E9A06A'],['Угольный',ITEMS[7],'+90','#A8988A'],['Мины · 3 мины','бум','−100','#E2643A']];
+let pTab=0,pBannerDone=false;
+function drawProfile(){
+ if(!pBannerDone){pBannerDone=true;$('pBanner').innerHTML=`<div class="dfire" style="height:100%"><div class="base"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div>${EMBERS}</div>`;}
+ // статистика и рекорд
+ $('stCases').textContent=fmt(STATS.cases);$('stUp').textContent=fmt(STATS.upgrades);$('stMines').textContent=fmt(STATS.mines);$('stWd').textContent=fmt(STATS.withdrawn);
+ const best=BEST||[...INV].sort((a,b)=>b.p-a.p)[0];
+ $('pBest').hidden=!best;
+ if(best){const bc=R[best.r];
+ $('pBest').innerHTML=`<div class="tile" style="width:44px;height:44px;flex:none;border-radius:12px;${tileBg(bc)}">${mono(best,14)}</div>
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+   <span style="font-size:11px;font-weight:700;color:#A8988A">Рекорд${best.src||best.from?' · '+(best.src||best.from):''}</span>
+   <b style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${best.name}</b></div>
+  <span class="u num" style="display:flex;align-items:center;gap:5px;font-weight:700;font-size:15px;color:${bc}">${COIN(15)}${fmt(best.p)}</span>`;}
+ $('invCnt').textContent=INV.length;
+ // вкладки
+ if(pTab===0){
+  const sum=INV.reduce((s,x)=>s+x.p,0);
+  $('pbody').innerHTML=`<div class="pinv">
+   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+    <span style="display:flex;flex-direction:column;gap:1px"><b style="font-size:14px">${INV.length} ${INV.length===1?'предмет':INV.length>1&&INV.length<5?'предмета':'предметов'}</b><span class="muted num" style="display:flex;align-items:center;gap:4px;font-size:12px">на ${COIN(11)}${fmt(sum)}</span></span>
+    <div style="display:flex;gap:6px"><button class="ghost" style="height:38px;padding:0 12px;border-radius:10px;font-size:13px" data-sell="all" ${INV.length?'':'disabled'}>Продать всё</button>
+    <button class="fire wdBtn" style="height:38px;padding:0 14px;border-radius:10px;font-size:13px;box-shadow:none" ${INV.length?'':'disabled'}>Вывод</button></div>
+   </div>
+   ${INV.length?`<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">${INV.map(x=>`
+    <div class="pitem" style="--c:${R[x.r]}">
+     <div class="tile" style="height:64px;${tileBg(R[x.r])}">${mono(x,18)}</div>
+     <span style="font-size:11px;font-weight:700;line-height:1.25;min-height:28px">${x.name}</span>
+     <button class="pitem-sell num" data-sell="${x.id}">${COIN(12)}${fmt(x.p)}</button></div>`).join('')}</div>`
+   :`<div class="pempty">${ic('M12 2c1 3.5 5 5.5 5 10.5a5 5 0 0 1-10 0c0-2.4 1.2-3.9 2.2-5 .3 1.7 1.1 2.6 2 3 0-3.3.3-5.6.8-8.5zM12 21a2.2 2.2 0 0 1-2.2-2.2c0-1.4 1.3-2.2 2.2-3.6.9 1.4 2.2 2.2 2.2 3.6A2.2 2.2 0 0 1 12 21z','#5A4334',44,1.4)}
+     <span class="muted" style="font-size:14px;text-align:center;line-height:1.45">Пока пусто. Открой кейс —<br>брейнрот появится здесь</span>
+     <button class="fire" data-go="home" style="height:44px;padding:0 18px;border-radius:12px;font-size:14px;box-shadow:none">К кейсам</button></div>`}
+  </div>`;
+ }else if(LIVE){
+  $('pbody').innerHTML='<p class="muted" style="text-align:center;font-size:13px;padding:20px 0">Загружаем историю…</p>';
+  API.call('history',{}).then(h=>{if(pTab!==1||!h)return;
+   const GN={case:'Кейс',upgrade:'Апгрейд',mines:'Мины',sell:'Продажа',deposit:'Пополнение',withdraw:'Вывод',bonus:'Бонус',promo:'Промокод'};
+   $('pbody').innerHTML=h.length?`<div style="display:flex;flex-direction:column;gap:8px">${h.map(e=>{const x=e.item?mkItem(e.item):null;
+    const v=e.game==='withdraw'?-e.bet:e.payout-e.bet;const c=v>0?'#7FD49A':v<0?'#F08A66':'#CDBFB2';
+    return `<div class="card" style="display:flex;align-items:center;gap:12px;padding:8px 14px 8px 8px;border-radius:14px">
+     <div class="tile" style="width:44px;height:44px;border-radius:10px;${x?tileBg(R[x.r]):'background:#1F1814;border:1px solid #3A2B22'}">${x?mono(x,13):ic(e.game==='mines'?I.mines:e.game==='deposit'?'M12 5v14M5 12h14':e.game==='withdraw'?'M7 17L17 7M8 7h9v9':I.bonus,'#A8988A',20)}</div>
+     <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x?x.name:GN[e.game]||e.game}</div><div class="muted" style="font-size:12px">${GN[e.game]||e.game}${e.src&&!['deposit','mines','upgrade'].includes(e.game)&&e.src!==GN[e.game]?' · '+e.src:''} · ${ago(Date.parse(e.ts))}</div></div>
+     <b class="num" style="font-size:14px;color:${c}">${v>0?'+':v<0?'−':''}${fmt(Math.abs(v))}</b></div>`;}).join('')}</div>`
+    :'<p class="muted" style="text-align:center;font-size:14px;padding:24px 0">Пока ничего не было</p>';});
+ }else $('pbody').innerHTML=!WG.log.length?'<p class="muted" style="text-align:center;font-size:14px;padding:24px 0">Пока ничего не было</p>':`<div style="display:flex;flex-direction:column;gap:8px">${WG.log.map(l=>`
+  <div class="card" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px">
+   <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px">${l.t}</div><div class="muted" style="font-size:12px">${ago(l.ts)}</div></div>
+   <b class="num" style="font-size:14px;color:#CDBFB2">−${fmt(l.v)}</b></div>`).join('')}</div>`;
+ if(false)$('pbody').innerHTML=`<div style="display:flex;flex-direction:column;gap:8px">${HIST.map(([src,x,v,c])=>`
+  <div class="card" style="display:flex;align-items:center;gap:12px;padding:8px 14px 8px 8px;border-radius:14px">
+   <div class="tile" style="width:44px;height:44px;border-radius:10px;${typeof x==='object'?tileBg(R[x.r]):'background:#1F1814;border:1px solid #3A2B22'}">${typeof x==='object'?mono(x,13):ic(I.mines,'#A8988A',20)}</div>
+   <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px">${typeof x==='object'?x.name:x}</div><div class="muted" style="font-size:12px">${src}</div></div>
+   <b class="num" style="font-size:14px;color:${c}">${v}</b></div>`).join('')}</div>`;
+}
+$('pidCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(String(USER.id)).catch(()=>{});haptic('light');toast('ID скопирован');};
+$('ptabs2').onclick=e=>{const b=e.target.closest('button');if(!b)return;pTab=+b.dataset.i;[...$('ptabs2').children].forEach(x=>x.classList.toggle('on',x===b));haptic('light');drawProfile();};
+$('promoGo').onclick=async()=>{const v=$('promoIn').value.trim().toUpperCase();if(!v){toast('Введи код');haptic('error');return;}
+ if(API.on()){const r=await API.call('promo',{code:v});if(!r){haptic('error');return;}applyState(r.state);haptic('success');toast('+'+fmt(r.amount)+' на баланс');$('promoIn').value='';return;}
+ const P={START25:25};if(!P[v]){toast(PROMOS[v]?'Этот промокод работает при пополнении':'Такого промокода нет');haptic('error');return;}
+ if(usedPromos.has(v)){toast('Ты уже использовал этот промокод');haptic('error');return;}
+ usedPromos.add(v);setBal(bal+P[v]);wAddNeed(P[v]*WAGER_BONUS,'промокод ×3');haptic('success');toast('+'+P[v]+' на баланс');$('promoIn').value='';};
+const usedPromos=new Set();
+$('pbody').onclick=async e=>{const b=e.target.closest('[data-sell]');if(!b)return;haptic('light');
+ if(API.on()){
+  const ids=b.dataset.sell==='all'?INV.map(x=>x.id):[+b.dataset.sell];
+  const r=await API.call('sell',{ids});if(!r)return;applyState(r.state);toast('+'+fmt(r.sold)+' на баланс');return;
+ }
+ if(b.dataset.sell==='all'){const s=INV.reduce((a,x)=>a+x.p,0);INV.length=0;setBal(bal+s);toast('+'+fmt(s)+' на баланс');}
+ else{const i=INV.findIndex(x=>x.id===+b.dataset.sell);const s=INV[i].p;INV.splice(i,1);setBal(bal+s);toast('+'+fmt(s)+' на баланс');}
+ drawProfile();};
+seg($('ptabs'),['Инвентарь','История'],0,i=>{pTab=i;drawProfile();});
+/* ---------- настройки ---------- */
+$('slinks').innerHTML=[['Язык','Русский'],['Частые вопросы',''],['Поддержка',''],['Документы и правила','']].map(([t,v],i,a)=>`
+ <button style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;background:none;border:0;${i<a.length-1?'border-bottom:1px solid #2E241E;':''}font-weight:700;font-size:15px;text-align:left">
+  ${t}<span style="display:flex;align-items:center;gap:6px" class="muted">${v}${ic(I.chev,'#6B5D52',18)}</span></button>`).join('');
+
+// огонь в апгрейде переливается (цвета ползут вверх, как пламя)
+(function(){const g=document.getElementById('fireG'),l=document.getElementById('logoG');(function f(t){g.setAttribute('gradientTransform',`translate(0 ${-(t/100)%18})`);l.setAttribute('gradientTransform',`translate(0 ${-(t/130)%22})`);requestAnimationFrame(f);})(0);})();
+/* ---------- пополнение ---------- */
+document.addEventListener('click',e=>{if(!e.target.closest('.depBtn'))return;haptic('light');openDeposit();});
+
+/* ---------- пополнение ---------- */
+const DEP={
+ br:[['Garama and Madundung',51],['Cash or Card',53],['Sammyni Fattini',70],['Pizza and Ranch',80],['Popcuru and Fizzuru',87],['Quackini Snackini',88],
+     ['Frigo Camelo',60],['Trippi Troppi',90],['Chimpanzini Bananini',180],['Brr Brr Patapim',210],['Lirili Larila',260],['Cappuccino Assassino',520],
+     ['Tung Tung Sahur',640],['Bombardiro Crocodilo',1480],['Tralalero Tralala',2140],['Strawberry Elephant',4300]],
+ gr:[['Speed Coil',40],['Gravity Coil',55],['Trap',65],['Bee Launcher',95],['Taser Gun',120],['Boogie Bomb',140],['Web Slinger',180],['Invisibility Cloak',220],
+     ['Rage Table',260],['Body Swap Potion',340],['Quantum Cloner',600],['Laser Cape',900]]
+};
+for(const k in DEP)DEP[k]=DEP[k].map(([name,p],i)=>({key:k+i,name,p,r:RB(p),mono:mk(name)}));
+let depTab='br',depAsc=true;const depQty={};
+const BUFFS=[
+ {t:'Снижают',d:'цена ниже',c:'#F08A66',neg:1,open:1,l:[['Claws',-7.5],['Taco',-15]]},
+ {t:'Топ',d:'+30% и выше',c:'#E8BC72',l:[['Sleepy',125],['10B',100],['Lightning',80],['Strawberry',80],['Halo',75],['John Pork',50],['Meowl',50],['Rainbow Balloon',50],['Skibidi',45],['Lucky',40],['Rose',35],['Granny',30],["Jack O' Lantern Pet",30],['RIP Gravestone',30]]},
+ {t:'Высокие',d:'от +15%',c:'#F0A060',l:[['26',25],['Chocolate',25],['Extinct',25],['Witch Hat',25],['Reindeer Pet',22.5],['Santa Hat',22.5],['Blue Balloon',20],['Blue Egg',20],['Bunny Ears',20],['Green Balloon',20],['Green Egg',20],['Orange Balloon',20],['Orange Egg',20],['Pink Balloon',20],['Pink Egg',20],['Red Balloon',20],['Fireworks',15],['Zombie',15]]},
+ {t:'Средние',d:'от +5%',c:'#D9A55B',l:[['Aura Shades',10],['Ball',10],['Burger',10],['Sun',10],['1 Year',7.5],['Snowy',7.5],['Tie',7.5],['Wet',7.5],['Brazil',5],['Bubblegum',5],['Galactic',5],['Glitched',5],['Indonesian',5],['Nyan',5],['Sombrero',5]]},
+ {t:'Базовые',d:'до +5%',c:'#A8988A',l:[['Matteo Hat',4.5],['Paint',4.5],['Spider',4.5],['Job Application',4],['Shark Fin',4],['Concert',3.5],['Bombardiro',2.5],['Fire',2.5],['Mi Gatito',2.5],['Starfall',2.5],['UFO',2.5]]}];
+const pct=v=>(v>0?'+':'−')+String(Math.abs(v)).replace('.',',')+'%';
+let bTier=-1,buffFor=null;           // buffFor = ключ брейнрота, для которого выбираем бафы
+const depBuffs={};                     // ключ брейнрота → Set имён бафов
+const BUFF_V={};BUFFS.forEach(g=>g.l.forEach(([n,v])=>BUFF_V[n]=v));
+const buffPct=k=>[...(depBuffs[k]||[])].reduce((a,n)=>a+BUFF_V[n],0);
+const itemPrice=x=>Math.max(0,Math.round(x.p*(1+buffPct(x.key)/100)));
+const coin=(c,s=13)=>COIN(s);
+function drawBuffs(){
+ const q=($('buffQ').value||'').trim().toLowerCase();
+ const it=buffFor?DEP.br.find(x=>x.key===buffFor):null,sel=it?(depBuffs[it.key]||new Set()):new Set();
+ $('buffTitle').textContent=it?'Бафы брейнрота':'Бафы';
+ // верхняя плашка: в режиме выбора — предмет и пересчёт цены, иначе пример
+ if(it){const P=buffPct(it.key),np=itemPrice(it);
+  $('buffEx').innerHTML=`<div style="display:flex;align-items:center;gap:12px">
+   <div class="tile" style="width:52px;height:52px;flex:none;border-radius:12px;${tileBg(R[it.r])}"><span class="u" style="font-weight:800;font-size:16px;color:${R[it.r]}">${it.mono}</span></div>
+   <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px"><b style="font-size:14px">${it.name}</b>
+    <div class="num" style="display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;flex-wrap:wrap">
+     <span style="display:flex;align-items:center;gap:4px;${P?'color:#8C7D71;text-decoration:line-through':''}">${coin()}${fmt(it.p)}</span>
+     ${P?`<span class="muted">→</span><span style="display:flex;align-items:center;gap:4px;color:${P<0?'#F08A66':'#F2E9E1'}">${coin()}${fmt(np)}</span>
+     <span class="badge" style="background:${P<0?'#3A1A12':'#14301F'};color:${P<0?'#F08A66':'#7FD49A'}">${pct(+P.toFixed(1))}</span>`:''}
+    </div></div></div>`;
+ }else $('buffEx').innerHTML=`<span class="muted" style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Пример</span>
+  <div class="bex-row num"><span class="bex-chip">${coin()}100</span><span class="muted">+</span>
+  <span class="bex-chip" style="color:#E8BC72;border-color:#5A4320">Sleepy +125%</span><span class="muted">=</span>
+  <span class="bex-chip" style="background:#E07A3C;color:#1A0F09;border-color:#E07A3C">${coin('#1A0F09')}225</span></div>
+  <span class="muted" style="font-size:12px">Чтобы выбрать бафы — нажми «＋ Бафы» на плитке брейнрота.</span>`;
+ // вкладки уровней
+ const order=[1,2,3,4,0];
+ $('buffTiers').innerHTML=`<button class="${bTier<0?'on':''}" data-t="-1">Все<i>${BUFFS.reduce((a,g)=>a+g.l.length,0)}</i></button>`+
+  (it?`<button class="${bTier===-2?'on':''}" data-t="-2">Выбрано<i>${sel.size}</i></button>`:'')+
+  order.map(i=>{const g=BUFFS[i],n=g.l.filter(([x])=>sel.has(x)).length;return `<button class="${bTier===i?'on':''}" data-t="${i}" style="--c:${g.c}"><span class="dot"></span>${g.t}<i>${n?n+'/':''}${g.l.length}</i></button>`;}).join('');
+ // облако тегов
+ const show=(bTier<0?order:[bTier]).map(i=>i===-2?null:i).filter(i=>i!==null);
+ const groups=(bTier===-2?order:show).map(i=>({g:BUFFS[i],l:BUFFS[i].l.filter(([n])=>(!q||n.toLowerCase().includes(q))&&(bTier!==-2||sel.has(n)))})).filter(x=>x.l.length);
+ $('buffList').innerHTML=groups.length?groups.map(({g,l})=>{
+  const mx=Math.max(...g.l.map(([,v])=>Math.abs(v)));
+  return `<div style="display:flex;flex-direction:column;gap:10px">
+   <div style="display:flex;align-items:center;gap:8px">
+    <span style="width:8px;height:8px;border-radius:50%;background:${g.c};box-shadow:0 0 8px ${g.c}"></span>
+    <b style="font-size:14px">${g.t}</b><span class="muted" style="font-size:12px">${g.d}</span>
+    <span style="flex:1;height:1px;background:linear-gradient(90deg,#2E241E,transparent)"></span></div>
+   <div class="bcloud">${l.map(([n,v])=>{const on=sel.has(n);return `<${it?'button':'span'} class="btag${v<0?' neg':''}${it?' bpk':''}${on?' on':''}" ${it?`data-b="${n}" aria-pressed="${on}"`:''} style="--c:${g.c};--w:${(Math.abs(v)/mx*100).toFixed(0)}%">${it?`<span class="btag-ck">${on?ic('M5 12l5 5 9-10','#1A0F09',12,3.4):''}</span>`:''}<span class="btag-n">${n}</span><span class="btag-v num">${pct(v)}</span></${it?'button':'span'}>`;}).join('')}</div>
+  </div>`;}).join(''):`<p class="muted" style="text-align:center;font-size:14px;padding:24px 0">${bTier===-2?'Пока ничего не выбрано':'Такого бафа нет'}</p>`;
+ // нижняя панель
+ $('buffFoot').style.display=it?'':'none';
+ if(it)$('buffFoot').innerHTML=`<button class="ghost" style="height:50px;padding:0 16px;font-size:14px" id="buffReset" ${sel.size?'':'disabled'}>Сбросить</button>
+  <button class="fire" style="flex:1;height:50px;font-size:15px" data-close>${sel.size?`Готово · ${sel.size} ${sel.size===1?'баф':sel.size<5?'бафа':'бафов'}`:'Без бафов'}</button>`;
+}
+$('buffList').addEventListener('click',e=>{const b=e.target.closest('.btag.bpk');if(!b||!buffFor)return;
+ const S=depBuffs[buffFor]||(depBuffs[buffFor]=new Set()),n=b.dataset.b;S.has(n)?S.delete(n):S.add(n);if(!S.size)delete depBuffs[buffFor];
+ if(!depQty[buffFor])depQty[buffFor]=1;               // выбрал баф — брейнрот сразу добавляется
+ haptic('light');drawBuffs();drawDep();});
+$('buffFoot').addEventListener('click',e=>{if(e.target.closest('#buffReset')){delete depBuffs[buffFor];haptic('light');drawBuffs();drawDep();}});
+function openBuffs(key){buffFor=key||null;bTier=key&&depBuffs[key]?-2:-1;$('buffQ').value='';drawBuffs();openSheet('buffSheet');$('buffSheet').querySelector('.sheet-box').scrollTop=0;}
+$('buffTiers').onclick=e=>{const b=e.target.closest('button');if(!b)return;bTier=+b.dataset.t;haptic('light');drawBuffs();};
+$('buffQ').addEventListener('input',drawBuffs);
+function openDeposit(){$('depModal').classList.add('open');$('depModal').setAttribute('aria-hidden','false');$('phone').classList.remove('open');drawDep();if(tg&&tg.BackButton)tg.BackButton.show();}
+function closeDeposit(){$('depModal').classList.remove('open');$('depModal').setAttribute('aria-hidden','true');syncBack();}
+$('depModal').addEventListener('click',e=>{if(e.target.closest('[data-mclose]'))closeDeposit();});
+function openSheet(id){$(id).classList.add('open');$(id).setAttribute('aria-hidden','false');if(id==='depSheet'&&$('dqPill'))$('dqPill').hidden=true;}
+function closeSheet(id){$(id).classList.remove('open');$(id).setAttribute('aria-hidden','true');if(id==='depSheet')setTimeout(dqPill,50);}
+document.querySelectorAll('.sheet').forEach(sh=>sh.addEventListener('click',e=>{if(e.target.closest('[data-close]'))closeSheet(sh.id);}));
+$('buffOpen').onclick=()=>{haptic('light');openBuffs(null);};
+
+function depList(){
+ const q=$('depQ').value.trim().toLowerCase(),f=+$('depFrom').value||0,t=+$('depTo').value||Infinity;
+ return DEP[depTab].filter(x=>(!q||x.name.toLowerCase().includes(q))&&x.p>=f&&x.p<=t).sort((a,b)=>depAsc?a.p-b.p:b.p-a.p);
+}
+function drawDep(){
+ const L=depList();
+ $('depGrid').innerHTML=L.length?L.map(x=>{const q=depQty[x.key]||0,c=R[x.r];return `
+ <div class="dep${q?' sel':''}">
+  <div class="dep-art" style="${tileBg(c)}"><span class="u" style="color:${c}">${x.mono}</span></div>
+  <div class="dep-n">${x.name}</div>
+  ${(()=>{const P=depTab==='br'?buffPct(x.key):0;return P?`<div class="dep-p num"><s style="color:#6B5D52;font-size:11px">${fmt(x.p)}</s>${coin()}<span style="color:${P<0?'#F08A66':'#7FD49A'}">${fmt(itemPrice(x))}</span></div>`:`<div class="dep-p num">${coin()}${fmt(x.p)}</div>`;})()}
+  ${depTab==='br'?(()=>{const n=(depBuffs[x.key]||new Set()).size,P=buffPct(x.key);return `<button class="bbtn${n?' has':''}" data-bk="${x.key}">${n?`${n} ${n===1?'баф':n<5?'бафа':'бафов'} · <b style="color:${P<0?'#F08A66':'#7FD49A'}">${pct(+P.toFixed(1))}</b>`:'＋ Бафы'}</button>`;})():''}
+  <div class="step"><button data-k="${x.key}" data-d="-1" aria-label="Убрать" ${q?'':'disabled'}>−</button><span class="num">${q}</span><button data-k="${x.key}" data-d="1" aria-label="Добавить">+</button></div>
+ </div>`;}).join(''):`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:14px;padding:30px 0">Ничего не нашлось</p>`;
+ drawDepBar();
+}
+function depSel(){const all=[...DEP.br,...DEP.gr];return all.filter(x=>depQty[x.key]).map(x=>({...x,q:depQty[x.key]}));}
+function drawDepBar(){
+ const S=depSel(),n=S.reduce((a,x)=>a+x.q,0),base=S.reduce((a,x)=>a+x.p*x.q,0),sum=S.reduce((a,x)=>a+itemPrice(x)*x.q,0),bon=sum-base;
+ $('depCnt').textContent=n?`Выбрано ${n} шт.`:'Ничего не выбрано';
+ $('depSum').textContent=fmt(sum);
+ $('depBonus').textContent=bon?(bon>0?'+':'−')+fmt(Math.abs(bon))+' бафы':'';$('depBonus').style.color=bon<0?'#F08A66':'#7FD49A';
+ $('depGo').disabled=!n;
+}
+$('depGrid').onclick=e=>{const bb=e.target.closest('.bbtn');if(bb){haptic('light');openBuffs(bb.dataset.bk);return;}const b=e.target.closest('.step button');if(!b)return;const k=b.dataset.k;depQty[k]=Math.max(0,(depQty[k]||0)+ +b.dataset.d);if(!depQty[k])delete depQty[k];haptic('light');drawDep();};
+$('depTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;depTab=b.dataset.t;[...$('depTabs').children].forEach(x=>x.classList.toggle('on',x===b));
+ $('buffOpen').style.display=depTab==='br'?'':'none';haptic('light');drawDep();};
+['depQ','depFrom','depTo'].forEach(id=>$(id).addEventListener('input',drawDep));
+$('depSort').onclick=()=>{depAsc=!depAsc;$('depSort').classList.toggle('desc',!depAsc);haptic('light');drawDep();};
+/* ---------- заявка на пополнение: ник + промокод → очередь ---------- */
+const PROMOS={EMBER15:15,FIRE10:10,HALLOWEEN:9};          // демо-промокоды: код → +% к пополнению
+let DQ=null,dqNick='',dqTimer=null;                       // DQ — активная заявка
+const X_SVG='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDBFB2" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';const XBTN=`<button class="iconbtn card" data-close aria-label="Закрыть">${X_SVG}</button>`;
+const nickOk=v=>/^[A-Za-z0-9_]{3,20}$/.test(v);
+function dqItemsHTML(S){return `<div class="dq-items">${S.map(x=>x._srv?`<div class="dq-it">
+  <div class="tile" style="width:36px;height:36px;flex:none;border-radius:9px;${tileBg(R[x.r])}"><span class="u" style="font-weight:800;font-size:11px;color:${R[x.r]}">${x.mono}</span></div>
+  <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x.name}</span>${x.buffs&&x.buffs.length?`<span style="font-size:11px;color:#A8988A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x.buffs.join(', ')}</span>`:''}</span>
+  <span class="muted num" style="font-size:12px">×${x.q}</span><b class="num" style="font-size:13px;min-width:46px;text-align:right">${fmt(x._tot)}</b></div>`:`<div class="dq-it">
+  <div class="tile" style="width:36px;height:36px;flex:none;border-radius:9px;${tileBg(R[x.r])}"><span class="u" style="font-weight:800;font-size:11px;color:${R[x.r]}">${x.mono}</span></div>
+  <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x.name}</span>${depBuffs[x.key]?`<span style="font-size:11px;color:#A8988A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${[...depBuffs[x.key]].join(', ')}</span>`:''}</span>
+  <span class="muted num" style="font-size:12px">×${x.q}</span><b class="num" style="font-size:13px;min-width:46px;text-align:right">${fmt(itemPrice(x)*x.q)}</b></div>`).join('')}</div>`;}
+
+function dqForm(){
+ const S=depSel(),sum=S.reduce((a,x)=>a+itemPrice(x)*x.q,0);
+ const f={nick:dqNick,promo:'',pct:0};
+ const draw=()=>{
+  const bonus=Math.round(sum*f.pct/100),ok=nickOk(f.nick);
+  $('depSheetBox').innerHTML=`<div class="sheet-grab"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;flex-direction:column;gap:2px"><span class="dq-step">Шаг 1 из 2</span><h2 class="u" style="font-weight:700;font-size:20px">Заявка на пополнение</h2></div>${XBTN}</div>
+  ${dqItemsHTML(S)}
+  <div class="dq-field">
+   <label for="dqNick">Твой ник в Roblox <span style="color:#F08A66">*</span></label>
+   <div class="srch${f.nick&&!ok?' err':''}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8C7D71" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg>
+    <input id="dqNick" value="${f.nick}" placeholder="Например, Fortik2213" autocomplete="off" spellcheck="false" maxlength="20"></div>
+   <span class="dq-hint" id="dqNickHint">${f.nick&&!ok?'<span style="color:#F08A66">Только латиница, цифры и _ — от 3 до 20 символов</span>':'С этого аккаунта ты отправишь трейд'}</span>
+  </div>
+  <div class="dq-field">
+   <label for="dqPromo">Промокод <span class="muted" style="font-weight:600">— необязательно</span></label>
+   <div style="display:flex;gap:8px">
+    <div class="srch${f.pct?' okk':''}" style="flex:1;min-width:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${f.pct?'#7FD49A':'#8C7D71'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4L13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01"/></svg>
+     <input id="dqPromo" value="${f.promo}" placeholder="EMBER15" autocomplete="off" spellcheck="false" style="text-transform:uppercase;letter-spacing:.06em" ${f.pct?'disabled':''}></div>
+    <button class="${f.pct?'ghost':'fire'}" id="dqPromoGo" style="height:48px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none">${f.pct?'Убрать':'Применить'}</button>
+   </div>
+   <span class="dq-hint" id="dqPromoHint">${f.pct?`<span style="color:#7FD49A">Промокод ${f.promo}: +${f.pct}% к пополнению</span>`:'Например, промокод дня с главной'}</span>
+  </div>
+  <div class="dq-sum">
+   <div class="wkv"><span class="muted">Предметы</span><b class="num">${fmt(sum)}</b></div>
+   ${f.pct?`<div class="wkv"><span class="muted">Промокод +${f.pct}%</span><b class="num" style="color:#7FD49A">+${fmt(bonus)}</b></div>`:''}
+   <div class="wkv"><span class="muted">Отыгрыш перед выводом</span><b class="num" style="color:#E9A06A">${fmt(Math.round(sum*WAGER_DEP+bonus*WAGER_BONUS))} <span class="muted" style="font-size:11px">${bonus?'×1.5 + бонус ×3':'×1.5'}</span></b></div>
+   <div class="wkv" style="padding-top:8px;border-top:1px solid #2E241E"><span style="font-weight:800">Получишь</span><b class="u num" style="display:flex;align-items:center;gap:6px;font-size:20px">${COIN(18)}${fmt(sum+bonus)}</b></div>
+  </div>
+  <button class="fire" id="dqSend" style="height:54px;font-size:15px" ${ok?'':'disabled'}>Отправить заявку</button>`;
+  $('dqNick').oninput=e=>{f.nick=e.target.value.trim();const o=nickOk(f.nick);$('dqSend').disabled=!o;
+   $('dqNick').parentElement.classList.toggle('err',!!f.nick&&!o);
+   $('dqNickHint').innerHTML=f.nick&&!o?'<span style="color:#F08A66">Только латиница, цифры и _ — от 3 до 20 символов</span>':'С этого аккаунта ты отправишь трейд';};
+  $('dqPromo').oninput=e=>{f.promo=e.target.value.trim().toUpperCase();};
+  $('dqPromo').onkeydown=e=>{if(e.key==='Enter')$('dqPromoGo').click();};
+  $('dqPromoGo').onclick=()=>{
+   if(f.pct){f.pct=0;f.promo='';haptic('light');draw();return;}
+   const code=f.promo.toUpperCase();if(!code){$('dqPromoHint').innerHTML='<span style="color:#F08A66">Введи промокод</span>';haptic('error');return;}
+   const bad=t=>{$('dqPromoHint').innerHTML='<span style="color:#F08A66">'+t+'</span>';$('dqPromo').parentElement.classList.add('err');haptic('error');};
+   if(API.on()){
+    $('dqPromoGo').disabled=true;
+    API.call('promo_check',{code},true).then(r=>{if($('dqPromoGo'))$('dqPromoGo').disabled=false;
+     if(!r)return bad(ERR[API.lastError]||'Такого промокода нет или он закончился');
+     if(r.kind!=='deposit')return bad('Этот промокод вводится в профиле');
+     f.promo=code;f.pct=r.value;haptic('success');draw();});
+    return;
+   }
+   if(PROMOS[code]){f.promo=code;f.pct=PROMOS[code];haptic('success');draw();}
+   else bad('Такого промокода нет или он закончился');
+  };
+  $('dqSend').onclick=async()=>{
+   if(!nickOk(f.nick))return;dqNick=f.nick;haptic('medium');
+   if(API.on()){
+    $('dqSend').disabled=true;
+    const r=await API.call('deposit_request',{nick:f.nick,promo:f.pct?f.promo:'',
+      items:S.map(x=>({name:x.name,q:x.q,buffs:[...(depBuffs[x.key]||[])]}))});
+    if(!r){if($('dqSend'))$('dqSend').disabled=false;return;}
+    Object.keys(depQty).forEach(k=>delete depQty[k]);Object.keys(depBuffs).forEach(k=>delete depBuffs[k]);drawDep();
+    applyState(r.state);dqQueue();return;
+   }
+   DQ={items:S,sum,bonus,promo:f.pct?f.promo:'',nick:f.nick,pos:1+(Math.random()*3|0),id:Math.random().toString(36).slice(2,7).toUpperCase(),status:'wait'};
+   Object.keys(depQty).forEach(k=>delete depQty[k]);drawDep();
+   dqQueue();dqTick();
+  };
+ };
+ draw();
+}
+
+function dqQueue(){
+ if(!DQ)return;const me=DQ.pos===1;
+ $('depSheetBox').innerHTML=`<div class="sheet-grab"></div>
+ <div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;flex-direction:column;gap:2px"><span class="dq-step">Шаг 2 из 2 · заявка #${DQ.id}</span><h2 class="u" style="font-weight:700;font-size:20px">${me?'Принимаем заявку':'Ты в очереди'}</h2></div>${XBTN}</div>
+ <div class="dq-q${me?' me':''}">
+  <div class="dq-pos"><span class="dq-pulse"></span><span class="dq-pulse d2"></span><b class="u num">${DQ.pos}</b><small>в очереди</small></div>
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+   <b style="font-size:15px">${me?'Твоя очередь!':`Перед тобой ${DQ.pos-1} ${(DQ.pos-1)%10===1&&(DQ.pos-1)%100!==11?'человек':[2,3,4].includes((DQ.pos-1)%10)&&![12,13,14].includes((DQ.pos-1)%100)?'человека':'человек'}`}</b>
+   <span class="muted" style="font-size:13px;line-height:1.4">${me?'Бот ждёт трейд от <b style="color:#F2E9E1">'+DQ.nick+'</b>. Отправь его сейчас.':'Примерно ~'+(DQ.pos-1)*1+' мин. Можно закрыть окно — место сохранится.'}</span>
+  </div>
+ </div>
+ <div class="dq-bot">
+  <span class="muted" style="font-size:12px;font-weight:700">Ник бота в Roblox</span>
+  <b class="u" style="font-size:18px;letter-spacing:.02em">${CONFIG.BOT_NICK}</b>
+   <button class="fire" id="dqCopy" style="height:48px;border-radius:12px;font-size:14px;box-shadow:none;display:flex;align-items:center;justify-content:center;gap:8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>Скопировать ник бота</button>
+ </div>
+ <ol class="steps" style="margin:0;padding:0">
+  <li><span>Скопируй ник бота и добавь его в друзья в Roblox.</span></li>
+  <li><span>${me?'Отправь трейд':'Когда подойдёт очередь — отправь трейд'} с аккаунта <b style="color:#F2E9E1">${DQ.nick}</b> с выбранными предметами.</span></li>
+  <li><span>Бафы проверим при трейде. <b style="color:#F2E9E1">${fmt(DQ.sum+DQ.bonus)}</b> монет придут на баланс автоматически.</span></li>
+ </ol>
+ <details class="dq-more"><summary>Что в заявке · ${DQ.items.reduce((a,x)=>a+x.q,0)} шт.${DQ.promo?' · '+DQ.promo:''}</summary>${dqItemsHTML(DQ.items)}</details>
+ <button class="ghost" id="dqCancel" style="height:46px;font-size:14px;color:#F08A66">Отменить заявку</button>`;
+ $('dqCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(CONFIG.BOT_NICK).catch(()=>{});haptic('success');toast('Ник бота скопирован');$('dqCopy').lastChild.textContent='Скопировано';};
+ $('dqCancel').onclick=async()=>{
+  if(API.on()){const r=await API.call('deposit_cancel',{id:DQ.id});if(!r)return;}
+  clearInterval(dqTimer);DQ=null;dqPill();closeSheet('depSheet');haptic('warning');toast('Заявка отменена');};
+ if(DQ.status==='processing')$('dqCancel').hidden=true;
+ dqPill();
+}
+// демо: очередь двигается сама (в реальном боте — обновления с сервера)
+function dqTick(){clearInterval(dqTimer);
+ if(API.on()){dqTimer=setInterval(dqPoll,4000);return;}
+ dqTimer=setInterval(()=>{if(!DQ){clearInterval(dqTimer);return;}
+ if(DQ.pos>1){DQ.pos--;haptic(DQ.pos===1?'success':'light');if(DQ.pos===1)toast('Твоя очередь — отправь трейд!');
+  if($('depSheet').classList.contains('open'))dqQueue();else dqPill();}
+ else if(!DQ._t){DQ._t=Date.now();}
+ else if(Date.now()-DQ._t>5000){   // демо: «бот принял трейд» и зачислил монеты
+  const got=DQ.sum+DQ.bonus;setBal(bal+got);wAddNeed(DQ.sum*WAGER_DEP+DQ.bonus*WAGER_BONUS,'пополнение ×1.5');
+  DQ=null;clearInterval(dqTimer);dqPill();if($('depSheet').classList.contains('open'))closeSheet('depSheet');
+  haptic('success');toast('Трейд принят — +'+fmt(got)+' на баланс');}
+ },6000);}
+// боевой режим: спрашиваем сервер, что с заявкой
+async function dqPoll(){
+ if(!DQ){clearInterval(dqTimer);return;}
+ const r=await API.call('deposit_status',{id:DQ.id},true);if(!r)return;
+ if(r.status==='queued'||r.status==='processing'){
+  const ch=r.pos!==DQ.pos||r.status!==DQ.status;DQ.pos=r.pos;DQ.status=r.status;
+  if(ch){if(r.pos===1){haptic('success');toast('Твоя очередь — отправь трейд!');}
+   if($('depSheet').classList.contains('open'))dqQueue();else dqPill();}
+  return;}
+ clearInterval(dqTimer);const done=r.status==='done';DQ=null;dqPill();
+ if($('depSheet').classList.contains('open'))closeSheet('depSheet');
+ if(done){haptic('success');toast('Трейд принят — +'+fmt(r.credited)+' на баланс');}
+ else{haptic('warning');toast(r.status==='rejected'?'Заявку отклонили — напиши в поддержку':'Заявка отменена');}
+ loadMe();
+}
+function dqPill(){
+ let p=$('dqPill');
+ if(!DQ){if(p)p.remove();return;}
+ if(!p){p=document.createElement('button');p.id='dqPill';p.className='dq-pill';$('phone').appendChild(p);p.onclick=()=>{haptic('light');openDeposit();dqQueue();openSheet('depSheet');};}
+ p.classList.toggle('me',DQ.pos===1);
+ p.innerHTML=`<span class="dq-dot"></span>${DQ.pos===1?'Твоя очередь — отправь трейд':'Заявка в очереди · '+DQ.pos}`;
+ p.hidden=$('depSheet').classList.contains('open');
+}
+$('depGo').onclick=()=>{haptic('medium');if(DQ){dqQueue();openSheet('depSheet');return;}dqForm();openSheet('depSheet');};
+let DAILY_NEXT=null;
+function drawDaily(){const b=$('dailyClaim');if(!b)return;const left=DAILY_NEXT?DAILY_NEXT-Date.now():0;
+ if(left>0){const h=Math.floor(left/36e5),m=Math.floor(left%36e5/6e4);b.disabled=true;b.textContent=`Следующий через ${h} ч ${m} м`;}
+ else{b.disabled=false;b.textContent='Забрать '+DAILY_AMOUNT;}}
+let DAILY_AMOUNT=30;
+$('dailyClaim').onclick=async()=>{
+ if(API.on()){const r=await API.call('daily',{});if(!r){haptic('error');return;}applyState(r.state);haptic('success');toast('+'+fmt(r.amount)+' на баланс');return;}
+ haptic('success');setBal(bal+DAILY_AMOUNT);toast('+'+DAILY_AMOUNT+' на баланс');wAddNeed(DAILY_AMOUNT*WAGER_BONUS,'бонус ×3');DAILY_NEXT=Date.now()+864e5;drawDaily();};
+setInterval(drawDaily,30000);
+/* ---------- рефералка ---------- */
+const refUrl=`https://t.me/${CONFIG.BOT_USERNAME}?start=${USER.ref}`;
+$('refLink').textContent=refUrl.replace('https://','');
+$('refCopy').onclick=()=>{haptic('light');
+ if(tg&&tg.openTelegramLink)tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(refUrl)+'&text='+encodeURIComponent('Залетай в BRAINFIRE 🔥'));
+ else{navigator.clipboard&&navigator.clipboard.writeText(refUrl).catch(()=>{});toast('Ссылка скопирована');}};
+/* ---------- партнёрка: только для тех, кому выдали доступ ----------
+   Пока флаг ставится вручную. Позже — поле is_partner у пользователя в Supabase.
+   Для просмотра дизайна можно открыть файл с ?partner=1 в адресе. */
+USER.partner=!LIVE&&/[?&]partner=1/.test(location.search);
+$('partnerRow').hidden=!USER.partner;
+/* ---------- данные пользователя ---------- */
+function paintUser(){
+ document.querySelectorAll('.uname').forEach(e=>e.textContent=USER.name);
+ document.querySelectorAll('.uava').forEach(e=>e.innerHTML=USER.ava);
+ document.querySelectorAll('.uid').forEach(e=>e.textContent='ID '+USER.id);
+}
+/* ---------- состояние игрока с сервера ---------- */
+function applyState(st,quiet){
+ if(!st)return;
+ bal=st.balance;document.querySelectorAll('.bal').forEach(e=>e.textContent=fmt(bal));
+ INV.length=0;(st.inventory||[]).forEach(o=>INV.push(mkItem(o)));
+ WG.left=st.wager_left;WG.total=st.wager_total;
+ STATS=st.stats||STATS;BEST=st.best?{...mkItem(st.best),src:st.best.src}:null;
+ USER.partner=!!st.is_partner;$('partnerRow').hidden=!USER.partner;
+ DAILY_NEXT=st.daily_next?Date.parse(st.daily_next):null;drawDaily();
+ // активная заявка на пополнение
+ if(st.deposit){const d=st.deposit;
+  const items=(d.items||[]).map(o=>({_srv:1,name:o.name,q:o.q,r:RB(o.price),mono:mk(o.name),buffs:o.buffs||[],_tot:Math.round(o.price*(1+(o.pct||0)/100))*o.q}));
+  const was=DQ;DQ={id:d.id,status:d.status,pos:d.pos,nick:d.nick,sum:d.sum,bonus:d.bonus,promo:d.promo||'',items};
+  if(!was)dqTick();dqPill();
+ }else if(DQ&&LIVE){DQ=null;clearInterval(dqTimer);dqPill();}
+ // незаконченная игра в мины
+ if(st.mines&&mState!=='play'){const g=st.mines;mGame=g.id;mines=g.mines;$('bet').value=g.bet;resetGrid();
+  (g.opened||[]).forEach(i=>$('mgrid').dataset['o'+i]='g');opened=(g.opened||[]).length;bombs=new Set();mState='play';
+  [...$('mcount').children].forEach((x,i)=>x.classList.toggle('on',MC[i]===mines));drawMines();}
+ wDraw();
+ if(!quiet){if(cur==='profile')drawProfile();if(cur==='upgrade')drawUp();}
+}
+async function loadMe(){
+ if(!LIVE)return;
+ if(!tg){toast('Открой приложение через Telegram');return;}
+ const st=await API.call('me',{});if(st)applyState(st);
+}
+/* ---------- каталог с сервера: кейсы, шансы, предметы, бафы ---------- */
+async function loadCatalog(){
+ if(!LIVE)return;
+ const c=await API.call('catalog',{},true);if(!c)return;
+ CASES.length=0;c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,items:k.items.map(mkItem)}));drawCases();
+ UP_TARGETS=c.upgrade.map(mkItem);
+ DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,mono:mk(o.name)}));
+ DEP.gr=c.deposit.gr.map((o,i)=>({key:'gr'+i,name:o.name,p:o.price,r:o.rarity,mono:mk(o.name)}));
+ const T={down:['Снижают','цена ниже','#F08A66'],top:['Топ','+30% и выше','#E8BC72'],high:['Высокие','от +15%','#F0A060'],mid:['Средние','от +5%','#D9A55B'],base:['Базовые','до +5%','#A8988A']};
+ BUFFS.length=0;Object.keys(BUFF_V).forEach(k=>delete BUFF_V[k]);
+ for(const t of ['down','top','high','mid','base']){const l=c.buffs.filter(b=>b.tier===t).map(b=>[b.name,+b.pct]);
+  if(l.length)BUFFS.push({t:T[t][0],d:T[t][1],c:T[t][2],neg:t==='down'?1:0,l});l.forEach(([n,v])=>BUFF_V[n]=v);}
+ if(c.settings){if(c.settings.daily_amount)DAILY_AMOUNT=+c.settings.daily_amount;}
+ const mx=Math.max(0,...c.buffs.map(b=>+b.pct));const bb=document.querySelector('.buffbar .badge');if(bb)bb.textContent='до +'+String(mx).replace('.',',')+'%';
+ drawDaily();if($('depModal').classList.contains('open'))drawDep();
+}
+/* ---------- вывод предметов ---------- */
+function wdOpen(){
+ if(WG.left>0){wSheet();return;}
+ if(!INV.length){toast('Инвентарь пуст');return;}
+ const sel=new Set(INV.map(x=>x.id));let nick=dqNick;
+ const draw=()=>{const S=INV.filter(x=>sel.has(x.id)),tot=S.reduce((a,x)=>a+x.p,0),ok=nickOk(nick)&&S.length;
+  $('wdBox').innerHTML=`<div class="sheet-grab"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between"><h2 class="u" style="font-weight:700;font-size:20px">Вывод в Roblox</h2>
+   <button class="iconbtn card" data-close aria-label="Закрыть"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDBFB2" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="dq-items" style="max-height:220px">${INV.map(x=>`<label class="wd-it${sel.has(x.id)?' on':''}"><input type="checkbox" data-id="${x.id}" ${sel.has(x.id)?'checked':''}>
+   <div class="tile" style="width:36px;height:36px;flex:none;border-radius:9px;${tileBg(R[x.r])}"><span class="u" style="font-weight:800;font-size:11px;color:${R[x.r]}">${x.mono}</span></div>
+   <span style="flex:1;min-width:0;font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x.name}</span><b class="num" style="font-size:13px">${fmt(x.p)}</b></label>`).join('')}</div>
+  <div class="dq-field"><label for="wdNick">Твой ник в Roblox <span style="color:#F08A66">*</span></label>
+   <div class="srch"><input id="wdNick" value="${nick}" placeholder="Например, Fortik2213" autocomplete="off" spellcheck="false" maxlength="20"></div>
+   <span class="dq-hint">Бот отправит трейд на этот аккаунт</span></div>
+  <button class="fire" id="wdGo" style="height:54px;font-size:15px" ${ok?'':'disabled'}>Вывести ${S.length} ${S.length===1?'предмет':S.length>1&&S.length<5?'предмета':'предметов'} · ${fmt(tot)}</button>`;
+  $('wdBox').querySelectorAll('input[data-id]').forEach(c=>c.onchange=()=>{const id=+c.dataset.id;c.checked?sel.add(id):sel.delete(id);draw();});
+  $('wdNick').oninput=e=>{nick=e.target.value.trim();$('wdGo').disabled=!(nickOk(nick)&&sel.size);};
+  $('wdGo').onclick=async()=>{const ids=[...sel];if(!nickOk(nick)||!ids.length)return;dqNick=nick;$('wdGo').disabled=true;
+   if(LIVE){const r=await API.call('withdraw',{nick,ids});if(!r){$('wdGo').disabled=false;return;}applyState(r.state);}
+   else{let t=0;for(const id of ids){const i=INV.findIndex(x=>x.id===id);if(i>=0){t+=INV[i].p;INV.splice(i,1);}}STATS.withdrawn+=t;drawProfile();}
+   closeSheet('wdSheet');haptic('success');toast('Заявка на вывод создана — жди трейд от '+CONFIG.BOT_NICK);};
+ };
+ draw();openSheet('wdSheet');
+}
+/* ---------- экран 18+ ---------- */
+(function(){let ok=false;try{ok=localStorage.getItem('bf18')==='1';}catch(e){}
+ if(ok)return;$('ageGate').hidden=false;
+ $('ageCk').onchange=()=>{$('ageGo').disabled=!$('ageCk').checked;};
+ $('ageGo').onclick=()=>{try{localStorage.setItem('bf18','1');}catch(e){}$('ageGate').hidden=true;haptic('light');};})();
+paintUser();loadCatalog();loadMe();initFeed();drawDaily();
+go('home');
+</script>
+</body>
+</html>
