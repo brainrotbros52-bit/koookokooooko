@@ -656,6 +656,8 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .pc-empty-ic{width:56px;height:56px;border-radius:16px;background:#1B1511;border:1px solid #413229;display:flex;align-items:center;justify-content:center}
 .pe-tgs{display:flex;flex-direction:column;gap:6px}
 .adm-card .srch{min-width:0}
+img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,.45));pointer-events:none;-webkit-user-drag:none}
+.adm-case-h{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:0;color:inherit;font:inherit;font-size:14px}
 .pe-tg{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:#17120F;border:1px solid #413229;cursor:pointer}
 .pe-tg span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.pe-tg b{font-size:13px}.pe-tg small{font-size:11px;color:#A49485;line-height:1.35}
 </style>
@@ -1055,7 +1057,7 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
       </div>
       <button class="adm-entry" id="admEntry" data-go="admin" hidden>
         <span class="prow-ic" style="background:#38241A;border-color:#955A35"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFB088" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z M9 12l2 2 4-4"/></svg></span>
-        <span class="prow-t"><b>Админ-панель</b><span class="muted">Пополнения, выводы, игроки, партнёры, промо</span></span><span class="adm-badge" id="admEntryBadge"></span>
+        <span class="prow-t"><b>Админ-панель</b><span class="muted">Заявки, игроки, партнёры, кейсы, брейнроты</span></span><span class="adm-badge" id="admEntryBadge"></span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#827265" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
       </button>
       <div class="card" style="border-radius:16px;overflow:hidden" id="slinks"></div>
@@ -1214,7 +1216,8 @@ const ERR={
   unauthorized:'Открой приложение через Telegram',bad_nick:'Неверный ник Roblox',game_active:'Сначала закончи текущую игру',
   target_cheap:'Цель должна быть дороже ставки',banned:'Аккаунт заблокирован',bad_items:'Предметы не найдены — обнови страницу',
   cannot_cancel:'Заявку уже взяли в работу',not_admin:'Нет прав администратора',bad_input:'Проверь поля',bad_case_id:'id кейса: латиница, цифры, - или _',item_owned:'Этот предмет есть у игроков — удалить нельзя',no_user:'Игрок не найден',quest_not_done:'Квест ещё не выполнен',quest_claimed:'Награда уже получена',no_quest:'Квест не найден',open_first:'Сначала открой клетку',no_game:'Игра не найдена',server_error:'Ошибка сервера, попробуй ещё раз',
-  own_code:'Это твой собственный код',already_bound:'Ты уже закреплён за другим партнёром',not_partner:'Партнёрка не активна',bad_code:'Код: латиница и цифры',code_taken:'Такой код уже занят',no_partner_money:'Не хватает партнёрского баланса',promos_off:'Создание промокодов выключено',pwd_active:'Заявка на вывод уже ждёт',pwd_closed:'Окно вывода сейчас закрыто',pwd_min:'Недостаточно для вывода',bad_parent:'Партнёр-пригласитель не найден',already_partner:'Ты уже партнёр',not_found:'Не найдено',case_not_found:'Кейс не найден'
+  own_code:'Это твой собственный код',already_bound:'Ты уже закреплён за другим партнёром',not_partner:'Партнёрка не активна',bad_code:'Код: латиница и цифры',code_taken:'Такой код уже занят',no_partner_money:'Не хватает партнёрского баланса',promos_off:'Создание промокодов выключено',pwd_active:'Заявка на вывод уже ждёт',pwd_closed:'Окно вывода сейчас закрыто',pwd_min:'Недостаточно для вывода',bad_parent:'Партнёр-пригласитель не найден',already_partner:'Ты уже партнёр',not_found:'Не найдено',case_not_found:'Кейс не найден',
+  case_balance:'Шансы не посчитать: средний дроп должен быть между самым дешёвым и самым дорогим брейнротом кейса',item_exists:'Брейнрот с таким названием уже есть',bad_image:'Картинка слишком большая или не PNG/JPG/WEBP',upload_failed:'Не удалось загрузить фото — проверь Storage в Supabase'
 };
 const API={
   on:()=>LIVE,lastError:null,
@@ -1255,9 +1258,12 @@ const ITEMS=[
 const fmt=n=>Math.round(n).toLocaleString('ru-RU');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const RB=p=>p>=1000?'myth':p>=400?'legend':p>=150?'epic':p>=70?'rare':'common';
-const mk=n=>n.split(/\s+/).filter(w=>!/^(and|or|of|the|di)$/i.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const mkT=n=>String(n).split(/\s+/).filter(w=>!/^(and|or|of|the|di)$/i.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase().replace(/[^A-Z0-9А-ЯЁ]/g,'');
+const IMG={};   // картинки брейнротов: имя → ссылка (приходят с сервера в каталоге)
+// буквы или PNG-картинка брейнрота (если картинка не загрузилась — снова буквы)
+const mk=n=>IMG[n]?`<img class="bri" src="${esc(IMG[n])}" alt="" loading="lazy" draggable="false" onerror="this.replaceWith('${mkT(n)}')">`:mkT(n);
 // предмет с сервера → объект сайта
-const mkItem=o=>({name:o.name,p:o.price,r:o.rarity||RB(o.price),mono:mk(o.name),id:o.id,src:o.src,cn:o.chance,ch:o.chance!=null?String(o.chance).replace('.',',')+'%':''});
+const mkItem=o=>({name:o.name,p:o.price,r:o.rarity||RB(o.price),get mono(){return mk(o.name);},id:o.id,src:o.src,cn:o.chance,ch:o.chance!=null?String(o.chance).replace('.',',')+'%':''});
 let uidSeed=1;const INV=[];   // инвентарь игрока (с сервера или пустой в демо)
 
 /* ---------- навигация ---------- */
@@ -1501,7 +1507,7 @@ function fakeSrc(it){const r=Math.random();
  return {src:'draw',from:'',cost:0};}
 const fakeDrop=(ts)=>{const it=roll();return {...it,...fakeSrc(it),user:NICKS[Math.random()*NICKS.length|0],ts:ts||Date.now()};};
 let feedReady=false,feedLast=0;
-const srvDrop=o=>({name:esc(o.name),p:o.price,r:o.rarity,mono:mk(o.name),user:esc(o.user),src:o.src,from:o.from||(o.src==='upgrade'?'':''),cost:o.cost,ts:Date.parse(o.ts),id:'f'+o.id});
+const srvDrop=o=>({name:esc(o.name),p:o.price,r:o.rarity,get mono(){return mk(o.name);},user:esc(o.user),src:o.src,from:o.from||(o.src==='upgrade'?'':''),cost:o.cost,ts:Date.parse(o.ts),id:'f'+o.id});
 async function liveFeed(){
  const top=await API.call('top',{},true);TOP=top?srvDrop(top):null;drawTop();
  const first=await API.call('feed',{after:0},true)||[];
@@ -1655,7 +1661,7 @@ function renderWin(){
   <span class="badge" style="padding:6px 12px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:${c}22;color:${c}">${RN[best.r]}</span>
   <div style="position:relative;width:${ws.length>1?170:210}px;height:${ws.length>1?170:210}px;border-radius:32px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,${c}4D 0%,#261D18 72%);border:1px solid ${c}73;box-shadow:0 0 0 8px ${c}0D,0 30px 80px ${c}40;animation:pop .5s cubic-bezier(.2,1.4,.4,1)">
    <span class="u" style="font-weight:800;font-size:${ws.length>1?56:70}px;color:${c}">${best.mono}</span>
-   <span class="muted" style="position:absolute;bottom:12px;font-size:11px">[арт брейнрота]</span>
+   ${IMG[best.name]?'':'<span class="muted" style="position:absolute;bottom:12px;font-size:11px">[арт брейнрота]</span>'}
   </div>
   <div style="display:flex;flex-direction:column;gap:8px">
    <h1 class="u" style="font-weight:700;font-size:${ws.length>1?20:25}px;line-height:1.15">${best.name}</h1>
@@ -2263,7 +2269,7 @@ setInterval(drawDaily,30000);
    АДМИН-ПАНЕЛЬ. Все действия идут на сервер (action 'admin'),
    сервер сам проверяет, что ты в таблице admins.
    ===================================================================== */
-const ADM_TABS=[['dep','Пополнения'],['wd','Выводы'],['users','Игроки'],['partners','Партнёры'],['promo','Промо']];
+const ADM_TABS=[['dep','Пополнения'],['wd','Выводы'],['users','Игроки'],['partners','Партнёры'],['cases','Кейсы'],['items','Брейнроты'],['promo','Промо']];
 const AS={tab:'dep',mode:{dep:'active',wd:'active',partners:'list'},page:{dep:1,wd:1,users:1,partners:1,pwd:1,apps:1},q:{users:'',partners:''},card:null,cardPage:1,pcard:null,pcPage:1,pcode:'',pwdHist:false,cnt:{},last:{dep:-1,wd:-1,pwd:-1,apps:-1}};
 const RCOL=r=>R[r]||'#BEAD9E';
 async function adm(op,args,quiet){const r=await API.call('admin',{op,args:args||{}});if(r&&r.msg&&!quiet){toast(r.msg);haptic('success');}return r;}
@@ -2319,6 +2325,8 @@ async function admLoad(){
   B.innerHTML=seg+(r.rows.length?r.rows.map(card).join(''):admEmpty(mode==='active'?(T==='dep'?'Заявок на пополнение нет 👌':'Заявок на вывод нет 👌'):'История пуста'))+pager(r.total,r.page,r.size,T);
  }
  else if(T==='partners')await admPartners(B);
+ else if(T==='cases')await admCases(B);
+ else if(T==='items')await admItems(B);
  else if(T==='users'){
   const r=await adm(T==='users'?'user_find':'partners',{q:AS.q[T],page:AS.page[T]},true);if(!r)return;
   B.innerHTML=`${T==='partners'?`<div class="adm-card"><b>Выдать партнёрку</b><div style="display:flex;gap:8px"><label class="srch" style="flex:1;height:44px"><input id="apId" inputmode="numeric" placeholder="Telegram ID игрока"></label>
@@ -2443,6 +2451,104 @@ async function admPartnerCard(){
   <span class="muted" style="font-size:12px">Цифра справа — сколько партнёр заработал с игрока. ✕ — отвязать игрока.</span></div>`:''}`;
 }
 
+
+// ---------- кейсы: цена, % отдачи, содержимое ----------
+const RNAME={common:'обычный',rare:'редкий',epic:'эпик',legend:'легендарный',myth:'мифик'};
+const art=(x,s)=>`<div class="tile" style="width:${s}px;height:${s}px;flex:none;border-radius:${Math.round(s/4)}px;${tileBg(R[x.rarity||RB(x.price)])}"><span class="u" style="font-weight:800;font-size:${Math.round(s/3.2)}px;color:${R[x.rarity||RB(x.price)]}">${mk(x.name)}</span></div>`;
+async function admCases(B){
+ const[L,I]=await Promise.all([adm('cases',{},true),AS.itemsL?Promise.resolve(AS.itemsL):adm('items',{},true)]);if(!L)return;
+ AS.casesL=L;if(I)AS.itemsL=I;admCasesDraw();}
+function admCasesDraw(){
+ const B=$('admBody'),L=AS.casesL||[];
+ B.innerHTML=(L.length?L.map(c=>{const open=AS.cedit===c.id;return `<div class="adm-card${open?' hot':''}">
+  <button class="adm-case-h" data-cedit="${esc(c.id)}"><span class="dot" style="width:10px;height:10px;border-radius:50%;flex:none;background:${esc(c.color)}"></span>
+   <span style="flex:1;min-width:0;text-align:left"><b>${esc(c.name)}</b><small class="muted" style="display:block">${c.items.length} предм. · отдаёт ${c.rtp_now!=null?String(c.rtp_now).replace('.',','):'—'}%${c.active?'':' · скрыт'}</small></span>
+   ${c.hot?'<span class="badge" style="background:#4C2517;color:#FFB088">ХИТ</span>':''}<b class="num" style="display:flex;align-items:center;gap:4px">${COIN(13)}${fmt(c.price)}</b>
+   ${ic(open?'M6 15l6-6 6 6':'M6 9l6 6 6-6','#827265',16,2.4)}</button>
+  ${open?admCaseEditor(c):''}</div>`;}).join(''):admEmpty('Кейсов пока нет'))
+ +`<p class="muted" style="font-size:12px;margin:0;line-height:1.45">Шансы считаются сами: кейс в среднем отдаёт столько %, сколько указано (дешёвое выпадает часто, дорогое — редко). Поменял цену кейса или брейнрота — шансы пересчитаются.</p>`;
+ if(AS.cedit)admCaseBind();
+}
+function admCaseEditor(c){
+ const F=AS.cform,sel=AS.csel,items=(AS.itemsL||[]).filter(x=>sel.has(x.name)).sort((a,b)=>a.price-b.price);
+ const chance=Object.fromEntries(c.items.map(x=>[x.name,x.chance]));
+ const q=(AS.cq||'').toLowerCase(),pool=(AS.itemsL||[]).filter(x=>x.kind==='br'&&!sel.has(x.name)&&(!q||x.name.toLowerCase().includes(q))).slice(0,q?40:12);
+ const avg=items.length?items.reduce((s,x)=>s+x.price,0)/items.length:0,mn=items.length?items[0].price:0,mx=items.length?items[items.length-1].price:0,tgt=F.price*F.rtp/100;
+ const warn=items.length&&!(tgt>mn&&tgt<mx)?`<p class="pc-hint" style="color:#FF946E">Средний дроп (${fmt(tgt)}) должен быть между самым дешёвым (${fmt(mn)}) и самым дорогим (${fmt(mx)}) брейнротом — иначе шансы не посчитать. Добавь дешевле/дороже или поменяй цену.</p>`:'';
+ return `<div class="pc-f c2" style="margin-top:4px">
+   <label class="w">Название<input id="ceName" value="${esc(F.name)}" maxlength="40"></label>
+   <label>Цена кейса<input id="cePrice" type="number" inputmode="numeric" min="1" value="${F.price}"></label>
+   <label>Отдаёт в среднем, %<input id="ceRtp" type="number" inputmode="decimal" min="10" max="120" step="0.5" value="${F.rtp}"></label></div>
+  <div class="pe-tgs">${tgl('ceHot',F.hot,'Метка «ХИТ»','Показывается на карточке кейса')}${tgl('ceAct',F.active,'Показывать игрокам','Выключи, чтобы спрятать кейс')}</div>
+  <div class="adm-row"><b>Что внутри</b><span class="muted num" style="margin-left:auto;font-size:12px">${items.length} шт.</span></div>
+  ${items.length?`<div class="adm-its">${items.map(x=>`<div class="adm-li">${art(x,34)}<span style="flex:1;min-width:0"><b>${esc(x.name)}</b><small class="muted num">${fmt(x.price)}${chance[x.name]!=null?' · шанс '+String(chance[x.name]).replace('.',',')+'%':' · новый'}</small></span>
+    <button class="adm-x" data-crm="${esc(x.name)}" aria-label="Убрать">${ic(I.x,'#FF946E',14,2.4)}</button></div>`).join('')}</div>`:admEmpty('Пусто — добавь брейнротов ниже')}
+  ${warn}
+  <label class="srch" style="height:44px"><input id="ceQ" value="${esc(AS.cq||'')}" placeholder="Найти брейнрота, чтобы добавить" autocomplete="off"></label>
+  ${pool.length?`<div class="adm-its">${pool.map(x=>`<button class="adm-li" data-cadd="${esc(x.name)}" style="border:0;color:inherit;font:inherit;text-align:left;width:100%">${art(x,30)}<span style="flex:1;min-width:0"><b>${esc(x.name)}</b><small class="muted num">${fmt(x.price)}</small></span>${ic('M12 5v14M5 12h14','#F28743',18,2.4)}</button>`).join('')}</div>`
+   :`<p class="muted" style="font-size:12px;margin:0">${q?'Ничего не нашли':'Все брейнроты уже в кейсе'}</p>`}
+  <div class="adm-acts"><button class="fire" data-a="case_save" ${items.length?'':'disabled'}>Сохранить</button><button class="ghost" data-a="case_cancel">Отмена</button></div>`;
+}
+function admCaseBind(){
+ const keep=()=>{const F=AS.cform;F.name=$('ceName').value;F.price=+$('cePrice').value||0;F.rtp=+$('ceRtp').value||0;F.hot=$('ceHot').checked;F.active=$('ceAct').checked;};
+ ['ceName','cePrice','ceRtp','ceHot','ceAct'].forEach(id=>$(id).addEventListener('change',keep));
+ $('ceQ').oninput=e=>{keep();AS.cq=e.target.value;const pos=e.target.selectionStart;admCasesDraw();const q=$('ceQ');q.focus();q.setSelectionRange(pos,pos);};
+ AS.ckeep=keep;
+}
+
+// ---------- брейнроты и гиры: цена, пополнение, фото ----------
+const IFIL=[['all','Все'],['br','Брейнроты'],['gr','Гиры'],['dep','В пополнении'],['nodep','Не в пополнении'],['nophoto','Без фото']];
+async function admItems(B){const L=await adm('items',{},true);if(!L)return;AS.itemsL=L;admItemsDraw();}
+function admItemsDraw(){
+ const B=$('admBody'),L=AS.itemsL||[],q=(AS.iq||'').toLowerCase(),f=AS.ifil||'all';
+ const list=L.filter(x=>(!q||x.name.toLowerCase().includes(q))&&(f==='all'||(f==='br'&&x.kind==='br')||(f==='gr'&&x.kind==='gr')||(f==='dep'&&x.depositable)||(f==='nodep'&&!x.depositable)||(f==='nophoto'&&!x.img)));
+ const n=k=>L.filter(x=>k==='dep'?x.depositable:k==='nophoto'?!x.img:x.kind===k).length;
+ B.innerHTML=`<div class="adm-card"><div class="adm-row"><b>Брейнроты и гиры</b><span class="muted num" style="margin-left:auto;font-size:12px">${L.length} всего · ${n('dep')} в пополнении</span></div>
+  <div style="display:flex;gap:8px"><label class="srch" style="flex:1;min-width:0;height:44px"><input id="aiQ" value="${esc(AS.iq||'')}" placeholder="Поиск по названию" autocomplete="off"></label>
+   <button class="fire" data-a="item_new" style="height:44px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none">+ Добавить</button></div>
+  <div class="pc-pers sm" style="flex-wrap:wrap">${IFIL.map(([k,t])=>`<button class="${k===f?'on':''}" data-ifil="${k}">${t}</button>`).join('')}</div></div>
+ ${AS.iedit==='__new'?`<div class="adm-card hot">${admItemForm({name:'',price:'',kind:'br',rarity:'',depositable:true,img:null})}</div>`:''}
+ ${list.length?list.map(x=>{const open=AS.iedit===x.name;return `<div class="adm-card${open?' hot':''}" style="gap:8px;padding:10px 12px">
+  <div class="adm-row" style="flex-wrap:nowrap">
+   <button data-iedit="${esc(x.name)}" style="flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left">${art(x,42)}
+    <span style="flex:1;min-width:0"><b style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(x.name)}</b>
+     <small class="muted" style="font-size:11px">${x.kind==='gr'?'гир':RNAME[x.rarity]||x.rarity}${x.cases?' · в кейсах: '+x.cases:''}${x.owned?' · у игроков: '+x.owned:''}${x.img?'':' · без фото'}</small></span>
+    <b class="num" style="display:flex;align-items:center;gap:4px;font-size:14px">${COIN(12)}${fmt(x.price)}</b></button>
+   <label title="Можно пополнять" style="display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:800;color:#A49485;text-transform:uppercase;letter-spacing:.04em"><input type="checkbox" class="toggle" data-idep="${esc(x.name)}" ${x.depositable?'checked':''}>пополн.</label></div>
+  ${open?admItemForm(x):''}</div>`;}).join(''):admEmpty('Ничего не нашли')}
+ <p class="muted" style="font-size:12px;margin:0;line-height:1.45">Переключатель справа — можно ли пополнять этим брейнротом. Цена одна на весь сайт: пополнение, кейсы, апгрейд, инвентарь.</p>`;
+ $('aiQ').oninput=e=>{AS.iq=e.target.value;const pos=e.target.selectionStart;admItemsDraw();const i=$('aiQ');i.focus();i.setSelectionRange(pos,pos);};
+}
+function admItemForm(x){const nw=!x.name;return `<div class="pc-f c2">
+  <label class="w">Название<input id="ieName" value="${esc(x.name)}" maxlength="60" placeholder="Например, Tung Tung Sahur" autocomplete="off"></label>
+  <label>Цена<input id="iePrice" type="number" inputmode="numeric" min="1" value="${x.price}" placeholder="100"></label>
+  <label>Тип<select id="ieKind"><option value="br" ${x.kind!=='gr'?'selected':''}>Брейнрот</option><option value="gr" ${x.kind==='gr'?'selected':''}>Гир</option></select></label>
+  <label class="w">Редкость (цвет)<select id="ieRar"><option value="">По цене — автоматически</option>${Object.entries(RNAME).map(([k,t])=>`<option value="${k}" ${!nw&&x.rarity===k&&x.rarity!==RB(x.price)?'selected':''}>${t}</option>`).join('')}</select></label></div>
+ ${nw?tgl('ieDep',true,'Можно пополнять','Появится в окне пополнения'):''}
+ <div class="adm-row" style="flex-wrap:nowrap;gap:10px">
+  <div class="tile" style="width:64px;height:64px;flex:none;border-radius:14px;${tileBg(R[x.rarity||'common'])}">${x.img?`<img src="${esc(x.img)}" alt="" style="width:80%;height:80%;object-fit:contain">`:'<span class="muted" style="font-size:10px;text-align:center;line-height:1.2">нет<br>фото</span>'}</div>
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+   ${nw?'<span class="muted" style="font-size:12px">Фото можно загрузить после сохранения</span>':`<label class="ghost" style="height:40px;border-radius:10px;font-size:13px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer">${ic('M12 16V4M7 9l5-5 5 5M4 20h16','#DED0C3',15,2.2)}Загрузить фото<input type="file" accept="image/png,image/webp,image/jpeg" id="ieFile" hidden></label>
+   ${x.img?'<button class="ghost danger" data-a="item_noimg" style="height:34px;border-radius:10px;font-size:12px">Убрать фото</button>':''}`}</div></div>
+ <div class="adm-acts"><button class="fire" data-a="item_save">${nw?'Добавить':'Сохранить'}</button><button class="ghost" data-a="item_cancel">Отмена</button>
+  ${!nw?`<button class="ghost danger" data-a="item_delete" ${x.owned?'disabled title="Есть у игроков"':''}>Удалить</button>`:''}</div>
+ ${!nw&&x.owned?'<span class="muted" style="font-size:11px">Удалить нельзя — этот предмет есть у игроков. Можно выключить пополнение.</span>':''}`;}
+// фото → квадрат до 320px (прозрачность сохраняется) → на сервер
+async function imgData(file){const url=URL.createObjectURL(file),im=new Image();
+ await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src=url;});
+ const s=Math.min(1,320/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));
+ c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
+ let d=c.toDataURL('image/webp',0.9);if(!d.startsWith('data:image/webp'))d=c.toDataURL('image/png');return d;}
+$('admBody').addEventListener('change',async e=>{
+ const dp=e.target.closest('[data-idep]');
+ if(dp){const name=dp.dataset.idep,on=dp.checked;dp.disabled=true;const r=await adm('item_save',{name,depositable:on},true);dp.disabled=false;
+  if(!r){dp.checked=!on;return;}const it=(AS.itemsL||[]).find(x=>x.name===name);if(it)it.depositable=on;haptic('light');toast(on?`${name} — можно пополнять`:`${name} — пополнение выключено`);loadCatalog();return;}
+ if(e.target.id==='ieFile'&&e.target.files[0]){const name=AS.iedit;toast('Загружаем фото…');
+  try{const data=await imgData(e.target.files[0]);const r=await API.call('admin_img',{name,data});
+   if(r){haptic('success');toast('Фото обновлено');const it=(AS.itemsL||[]).find(x=>x.name===name);if(it)it.img=r.img;IMG[name]=r.img;admItemsDraw();}}
+  catch(err){toast('Не получилось прочитать картинку');}}
+});
+
 // ---------- карточка игрока ----------
 const GNA={admin:'Админ',quest:'Квест',case:'Кейс',upgrade:'Апгрейд',mines:'Мины',sell:'Продажа',deposit:'Пополнение',withdraw:'Вывод',bonus:'Бонус',promo:'Промокод'};
 function histRows(h){return h.rows.length?`<div style="display:flex;flex-direction:column;gap:6px">${h.rows.map(e=>{const x=e.item?mkItem(e.item):null;
@@ -2493,15 +2599,26 @@ $('admBody').addEventListener('click',async e=>{
  const pg=e.target.closest('[data-pg]');if(pg){if(pg.disabled)return;const[k,n]=pg.dataset.pg.split(':');
   if(k==='card')AS.cardPage=+n;else if(k==='pcard')AS.pcPage=+n;else AS.page[k]=+n;haptic('light');await admLoad();$('body').scrollTop=0;return;}
  const md=e.target.closest('[data-mode]');if(md){AS.mode[AS.tab]=md.dataset.mode;AS.page[AS.tab]=1;haptic('light');admLoad();return;}
+ const ce=e.target.closest('[data-cedit],[data-crm],[data-cadd],[data-ifil],[data-iedit]');
+ if(ce){const d=ce.dataset;haptic('light');
+  if(d.cedit!=null){if(AS.cedit===d.cedit)AS.cedit=null;else{const c=AS.casesL.find(x=>x.id===d.cedit);AS.cedit=c.id;AS.cform={name:c.name,price:c.price,rtp:+c.rtp,hot:c.hot,active:c.active};AS.csel=new Set(c.items.map(x=>x.name));AS.cq='';}admCasesDraw();return;}
+  if(d.crm!=null){AS.ckeep();AS.csel.delete(d.crm);admCasesDraw();return;}
+  if(d.cadd!=null){AS.ckeep();AS.csel.add(d.cadd);AS.cq='';admCasesDraw();return;}
+  if(d.ifil){AS.ifil=d.ifil;admItemsDraw();return;}
+  if(d.iedit!=null){AS.iedit=AS.iedit===d.iedit?null:d.iedit;admItemsDraw();return;}
+ }
  const pcd=e.target.closest('[data-pcard]');if(pcd&&!e.target.closest('[data-a]')){AS.pcard=+pcd.dataset.pcard;AS.card=null;AS.pcPage=1;haptic('light');await admLoad();$('body').scrollTop=0;return;}
  const pwm=e.target.closest('[data-pwdm]');if(pwm){AS.pwdHist=pwm.dataset.pwdm==='1';AS.page.pwd=1;haptic('light');admLoad();return;}
  const us=e.target.closest('[data-user]');if(us&&!e.target.closest('[data-a]')){AS.card=+us.dataset.user;AS.cardPage=1;haptic('light');await admLoad();$('body').scrollTop=0;return;}
  const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a,id=b.dataset.id,uid=AS.card;
  if(a==='back'){AS.card=null;admLoad();return;}
  if(a==='pback'){AS.pcard=null;admLoad();return;}
+ if(a==='case_cancel'){AS.cedit=null;admCasesDraw();return;}
+ if(a==='item_new'){AS.iedit='__new';admItemsDraw();setTimeout(()=>$('ieName')&&$('ieName').focus(),50);return;}
+ if(a==='item_cancel'){AS.iedit=null;admItemsDraw();return;}
  if(a==='pe_new'){const v=$('apId').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');return;}AS.pcard=+v;AS.pcPage=1;haptic('light');await admLoad();return;}
  if(a==='find'){AS.q[AS.tab]=$('auQ').value.trim();AS.page[AS.tab]=1;admLoad();return;}
- const danger=['deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind'];
+ const danger=['deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg'];
  if(danger.includes(a)&&!sure(b))return;
  let r=null;b.disabled=true;
  try{
@@ -2528,8 +2645,16 @@ $('admBody').addEventListener('click',async e=>{
   else if(a==='pe_unbind')r=await adm('ref_set',{id:b.dataset.pid,code:''});
   else if(a==='ref_bind'){const v=$('cRef').value.trim().toUpperCase();if(!v){toast('Введи код партнёра');b.disabled=false;return;}r=await adm('ref_set',{id:uid,code:v});}
   else if(a==='ref_unbind')r=await adm('ref_set',{id:uid,code:''});
+  else if(a==='case_save'){AS.ckeep();const F=AS.cform;if(!(F.price>0)||!(F.rtp>=10&&F.rtp<=120)){toast('Проверь цену и %');b.disabled=false;return;}
+   r=await adm('case_save',{id:AS.cedit,name:F.name.trim(),price:F.price,rtp:F.rtp,hot:F.hot,active:F.active,items:[...AS.csel]});if(r){AS.cedit=null;loadCatalog();}}
+  else if(a==='item_save'){const nw=AS.iedit==='__new',nn=$('ieName').value.trim(),pr=Math.round(+$('iePrice').value);
+   if(!nn||!(pr>0)){toast('Укажи название и цену');b.disabled=false;return;}
+   const args={name:nw?'':AS.iedit,new_name:nn,price:pr,kind:$('ieKind').value,rarity:$('ieRar').value};if(nw)args.depositable=$('ieDep').checked;
+   r=await adm('item_save',args);if(r){AS.iedit=nw?nn:null;loadCatalog();}}
+  else if(a==='item_noimg'){r=await adm('item_save',{name:AS.iedit,img:''});if(r){delete IMG[AS.iedit];loadCatalog();}}
+  else if(a==='item_delete'){r=await adm('item_delete',{name:AS.iedit});if(r){AS.iedit=null;loadCatalog();}}
  }finally{if(b.isConnected)b.disabled=false;}
- if(r){admStats();await admLoad();if((uid&&+uid===+USER.id)||(AS.pcard&&+AS.pcard===+USER.id))loadMe();}
+ if(r){if(['item_save','item_noimg','item_delete','case_save'].includes(a))AS.itemsL=null;admStats();await admLoad();if((uid&&+uid===+USER.id)||(AS.pcard&&+AS.pcard===+USER.id))loadMe();}
 });
 
 // ---------- новые заявки: панель и уведомление (проверяем каждые 12 секунд) ----------
@@ -2857,7 +2982,7 @@ function applyState(st,quiet){
  DEP_PROMO=st.deposit_promo||null;drawDaily();
  // активная заявка на пополнение
  if(st.deposit){const d=st.deposit;
-  const items=(d.items||[]).map(o=>({_srv:1,name:o.name,q:o.q,r:RB(o.price),mono:mk(o.name),buffs:o.buffs||[],_tot:Math.round(o.price*(1+(o.pct||0)/100))*o.q}));
+  const items=(d.items||[]).map(o=>({_srv:1,name:o.name,q:o.q,r:RB(o.price),get mono(){return mk(o.name);},buffs:o.buffs||[],_tot:Math.round(o.price*(1+(o.pct||0)/100))*o.q}));
   const was=DQ;DQ={id:d.id,status:d.status,pos:d.pos,nick:d.nick,sum:d.sum,bonus:d.bonus,promo:d.promo||'',items};
   if(!was)dqTick();dqPill();
  }else if(DQ&&LIVE){DQ=null;clearInterval(dqTimer);dqPill();}
@@ -2878,10 +3003,11 @@ async function loadCatalog(){
  if(!LIVE)return;
  const c=await API.call('catalog',{},true);if(!c)return;
 catalogLoaded=true;
+ Object.keys(IMG).forEach(k=>delete IMG[k]);Object.assign(IMG,c.imgs||{});
  CASES.length=0;c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,items:(k.items||[]).map(mkItem)}));drawCases();
  UP_TARGETS=c.upgrade.map(mkItem);
- DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,mono:mk(o.name)}));
- DEP.gr=c.deposit.gr.map((o,i)=>({key:'gr'+i,name:o.name,p:o.price,r:o.rarity,mono:mk(o.name)}));
+ DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
+ DEP.gr=c.deposit.gr.map((o,i)=>({key:'gr'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
  const T={down:['Снижают','цена ниже','#FF946E'],top:['Топ','+30% и выше','#F7CA7C'],high:['Высокие','от +15%','#FCAD68'],mid:['Средние','от +5%','#E8B365'],base:['Базовые','до +5%','#BEAD9E']};
  BUFFS.length=0;Object.keys(BUFF_V).forEach(k=>delete BUFF_V[k]);
  for(const t of ['down','top','high','mid','base']){const l=c.buffs.filter(b=>b.tier===t).map(b=>[b.name,+b.pct]);
@@ -2889,6 +3015,8 @@ catalogLoaded=true;
  if(c.settings){if(c.settings.daily_amount)DAILY_AMOUNT=+c.settings.daily_amount;}
  const mx=Math.max(0,...c.buffs.map(b=>+b.pct));const bb=document.querySelector('.buffbar .badge');if(bb)bb.textContent='до +'+String(mx).replace('.',',')+'%';
  drawDaily();if($('depModal').classList.contains('open'))drawDep();
+ // картинки пришли — перерисовать ленту и открытый экран
+ try{drawTop();drawFeed();if(cur==='profile')drawProfile();if(cur==='upgrade')drawUp();if(cur==='admin'&&AS.tab==='items'&&!AS.iedit)admItemsDraw();}catch(e){}
 }
 /* ---------- вывод предметов ---------- */
 function wdOpen(){

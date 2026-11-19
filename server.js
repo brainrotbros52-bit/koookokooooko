@@ -1,4 +1,5 @@
-// BRAINFIRE — простой сервер для Railway: отдаёт index.html
+// BRAINFIRE — простой сервер для Railway: отдаёт index.html,
+// картинки брейнротов из папки img (адрес /img/имя.png)
 // и обрабатывает ссылки партнёров вида  /r/КОД?src=tg&sub=shorts25
 // (засчитывает переход и сразу открывает бота).
 // Ничего устанавливать не нужно, только Node.js 18+ (Railway ставит его сам).
@@ -13,6 +14,8 @@ const crypto = require("crypto");
 
 const PORT = process.env.PORT || 3000;
 const FILE = path.join(__dirname, "index.html");
+const IMG_DIR = path.join(__dirname, "img");
+const TYPES = { ".png": "image/png", ".webp": "image/webp", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".svg": "image/svg+xml" };
 
 // настройки из index.html (CONFIG = { SUPABASE_URL: '...', ... })
 function fromHtml(key) {
@@ -45,6 +48,18 @@ async function countClick(code, src, sub, req) {
 http.createServer(async (req, res) => {
   const u = new URL(req.url, "http://x");
   if (u.pathname === "/health") { res.writeHead(200); return res.end("ok"); }
+
+  // картинки брейнротов: /img/tung-tung-sahur.png → папка img рядом с server.js
+  if (u.pathname.startsWith("/img/")) {
+    const name = decodeURIComponent(u.pathname.slice(5));
+    const type = TYPES[path.extname(name).toLowerCase()];
+    if (!type || name.includes("/") || name.includes("\\") || name.startsWith(".")) { res.writeHead(404); return res.end(); }
+    return fs.readFile(path.join(IMG_DIR, name), (err, data) => {
+      if (err) { res.writeHead(404); return res.end(); }
+      res.writeHead(200, { "Content-Type": type, "Cache-Control": "public, max-age=86400" });
+      res.end(data);
+    });
+  }
 
   // ссылка партнёра: /r/FORTIK?src=tg&sub=shorts25
   const m = /^\/r\/([A-Za-z0-9]{3,16})\/?$/.exec(u.pathname);
