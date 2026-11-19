@@ -241,9 +241,37 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .case-secs{display:flex;flex-direction:column;gap:24px}
 .case-sec{display:flex;flex-direction:column;gap:14px}
 .case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.case-ctl{display:flex;flex-direction:column;gap:12px}
 .case-art{height:118%;max-width:112%;object-fit:contain;filter:drop-shadow(0 8px 16px rgba(0,0,0,.5));transition:transform .25s;pointer-events:none}
 [data-case]:hover .case-art{transform:scale(1.05) rotate(-1.5deg)}
-.case-hd-img{width:52px;height:52px;object-fit:contain;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
+.cc-art{width:100%;height:150px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.cc-art svg{width:56%;height:auto}
+.back-link{align-self:flex-start;display:flex;align-items:center;gap:8px;height:36px;padding:0 4px;background:none;border:0;color:#BEAD9E;font:800 14px Manrope,sans-serif}
+.back-link:hover{color:#FBF2EA}
+.case-stage{position:relative;display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:300px;margin:-6px -16px 0;padding:0 16px}
+.stage-cap{display:flex;align-items:center;justify-content:center;gap:8px;min-height:30px;font-weight:800;font-size:15px;opacity:0;transition:opacity .3s}
+.stage-cap img{width:30px;height:30px;object-fit:contain}
+.case-stage.run .stage-cap{opacity:1}
+.case-stage .reels{transition:opacity .35s,filter .35s}
+.case-stage:not(.run) .reels{opacity:.32;filter:saturate(.6)}
+.case-stage:not(.run) .reel .mk{display:none}
+.stage-hero{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;pointer-events:none;transition:opacity .3s,transform .35s cubic-bezier(.2,.8,.2,1)}
+.case-stage.run .stage-hero{opacity:0;transform:scale(1.18)}
+.hero-art{position:relative;height:210px;display:flex;align-items:center;justify-content:center}
+.hero-art::before{content:"";position:absolute;left:50%;bottom:6%;width:70%;height:22%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(242,120,55,.45),transparent 70%);filter:blur(6px)}
+.hero-art img{position:relative;height:100%;max-width:90vw;object-fit:contain;filter:drop-shadow(0 14px 28px rgba(0,0,0,.6));animation:heroBob 3.2s ease-in-out infinite}
+.hero-chest{position:relative;width:150px;height:auto;filter:drop-shadow(0 10px 24px rgba(0,0,0,.5));animation:heroBob 3.2s ease-in-out infinite}
+.hero-chest[hidden]{display:none}
+@keyframes heroBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.stage-hero h1{font-size:24px;font-weight:700;margin:2px 0 0;text-shadow:0 2px 12px rgba(0,0,0,.8)}
+.stage-hero .muted{font-size:13px;text-shadow:0 1px 8px rgba(0,0,0,.8)}
+.mult-seg button{height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:14px}
+.mult-seg small{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:800;color:#E8B365}
+.mult-seg button.on small{color:#F7CA7C}
+.open-row{display:flex;gap:8px}
+#openBtn{flex:1;height:56px;font-size:16px}
+.fast-btn{width:64px;height:56px;flex:none;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:#221A15;border:1px solid #413229;color:#A49485;font:800 10px Manrope,sans-serif;text-transform:lowercase}
+.fast-btn.on{border-color:#F28743;color:#FFB088;background:#2C1F17;box-shadow:inset 0 0 0 1px #714A31,0 0 18px rgba(242,135,67,.25)}
 /* после прокрутки: «Продать» прямо под лентой, без отдельного окна */
 .case-res{display:flex;justify-content:center;animation:pop .35s cubic-bezier(.2,1.3,.4,1)}
 .case-res[hidden]{display:none}
@@ -753,7 +781,8 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
  .screen[data-s="case"],.screen[data-s="upgrade"],.screen[data-s="profile"]{max-width:760px}
  .screen[data-s="partner"],.screen[data-s="admin"]{max-width:980px}
  .mgrid{width:100%;max-width:460px;margin-inline:auto}
- .case-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+ .case-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+ .cc-art{height:180px}
  #items{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))!important}
  .up-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
  /* шторки снизу — по центру, а не на всю ширину */
@@ -771,8 +800,10 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
  .feed{margin-right:0}
  /* кейс: лента шире, выбор ×, кнопка и «быстро» — в одну строку */
  .screen[data-s="case"]{max-width:1180px}
- .case-ctl{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(240px,320px) auto;align-items:center;gap:16px!important}
- .case-ctl>label{white-space:nowrap;min-height:56px!important}
+ .case-ctl{display:grid;grid-template-columns:minmax(0,440px) minmax(300px,400px);justify-content:center;align-items:center;gap:16px}
+ .case-stage{min-height:360px;margin:0}
+ .hero-art{height:270px}
+ .stage-hero h1{font-size:28px}
  #caseSell{width:min(440px,100%)}
  /* апгрейд как на больших сайтах: «Ставлю» | колесо | «Цель», ниже — склад и цели рядом */
  .screen[data-s="upgrade"]{max-width:1240px}
@@ -839,7 +870,8 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
 }
 @media (min-width:1500px){
  .phone{grid-template-columns:340px minmax(0,1fr)}
- .case-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+ .case-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+ .cc-art{height:200px}
 }
 </style>
 </head>
@@ -917,21 +949,24 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
 
     <!-- ===== ОТКРЫТИЕ КЕЙСА ===== -->
     <section class="screen" data-s="case">
-      <div style="display:flex;align-items:center;gap:12px">
-        <button data-go="home" class="iconbtn card" aria-label="Назад к кейсам">
-          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
-        </button>
-        <img id="caseImg" class="case-hd-img" alt="" hidden>
-        <div class="ptitle"><h1 id="caseName">Жаровня</h1><span class="muted" style="font-size:13px" id="caseSub">9 брейнротов</span></div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:center">
-        <div class="reels" id="reels" style="width:100%"></div>
+      <button data-go="home" class="back-link" aria-label="Назад к кейсам"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Назад к кейсам</button>
+      <!-- лента: пока не крутим — поверх неё большая картинка кейса; при открытии картинка уходит -->
+      <div class="case-stage" id="caseStage">
+        <div class="stage-cap" id="caseCap" aria-hidden="true"></div>
+        <div class="reels" id="reels"></div>
+        <div class="stage-hero" id="caseHero">
+          <div class="hero-art"><img id="caseImg" alt="" hidden><svg id="caseChest" class="hero-chest" viewBox="0 0 96 84" fill="none" stroke="#E07A3C" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M48 4c2 5 9 8 9 15a9 9 0 0 1-18 0c0-3.5 2-5.5 3.4-7 .5 2.4 1.5 3.6 2.8 4.2C45 12 46.2 8 48 4z"/><path d="M14 46c0-9 5-14 14-14h40c9 0 14 5 14 14v2H14z"/><rect x="14" y="48" width="68" height="30" rx="3"/><path d="M30 34v44M66 34v44"/><rect x="42" y="42" width="12" height="15" rx="2.5"/></svg></div>
+          <h1 class="u" id="caseName">Жаровня</h1><span class="muted" id="caseSub">9 брейнротов</span>
+        </div>
       </div>
       <div class="case-res" id="caseRes" hidden><button class="gold" id="caseSell"></button></div>
-      <div class="case-ctl" style="display:flex;flex-direction:column;gap:12px">
-        <div id="mult" class="seg" role="group" aria-label="Сколько кейсов" style="grid-template-columns:repeat(4,minmax(0,1fr))"></div>
-        <button id="openBtn" class="fire" style="height:56px;font-size:16px">Открыть за <span class="num" id="total">199</span></button>
-        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;font-size:14px;color:#DED0C3">Быстрое открытие<input type="checkbox" class="toggle" id="fast"></label>
+      <div class="case-ctl">
+        <div id="mult" class="seg mult-seg" role="group" aria-label="Сколько кейсов" style="grid-template-columns:repeat(4,minmax(0,1fr))"></div>
+        <div class="open-row">
+          <button id="openBtn" class="fire">Открыть за <span class="num" id="total">199</span></button>
+          <button class="fast-btn" id="fastBtn" aria-pressed="false" aria-label="Быстрое открытие"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>быстро</button>
+          <input type="checkbox" id="fast" hidden>
+        </div>
       </div>
       <div class="case-items" style="display:flex;flex-direction:column;gap:12px">
         <h2 class="u" style="font-weight:700;font-size:17px">Что внутри</h2>
@@ -1891,18 +1926,22 @@ function drawCases(){
 function caseCard(x){return `
  <button class="card" data-case="${x.name}" data-price="${x.p}" style="text-align:left;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:16px">
   ${x.hot?'<span class="badge" style="position:absolute;top:10px;left:10px;background:#4C2517;color:#FFB088">ХИТ</span>':''}
-  <div style="width:100%;height:108px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 85%,${x.c}33 0%,rgba(31,24,20,0) 70%),#261D18">
+  <div class="cc-art" style="background:radial-gradient(ellipse at 50% 85%,${x.c}33 0%,rgba(31,24,20,0) 70%),#261D18">
    ${x.img?`<img class="case-art" src="${esc(imgSrc(x.img))}" alt="" onerror="this.nextElementSibling.style.display='';this.remove()">`:''}<svg aria-hidden="true" ${x.img?'style="display:none" ':''}width="88" height="77" viewBox="0 0 96 84" fill="none" stroke="${x.c}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
     <path d="M48 4c2 5 9 8 9 15a9 9 0 0 1-18 0c0-3.5 2-5.5 3.4-7 .5 2.4 1.5 3.6 2.8 4.2C45 12 46.2 8 48 4z"/>
     <path d="M14 46c0-9 5-14 14-14h40c9 0 14 5 14 14v2H14z"/><rect x="14" y="48" width="68" height="30" rx="3"/>
     <path d="M30 34v44M66 34v44"/><rect x="42" y="42" width="12" height="15" rx="2.5"/></svg></div>
-  <span style="font-weight:800;font-size:14px">${x.name}</span>
+  <span style="font-weight:800;font-size:15px">${x.name}</span>
   <span class="num" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:10px;background:#31251E;border:1px solid #503C2F;font-weight:800;font-size:14px">
    ${COIN(14)}${fmt(x.p)}</span>
  </button>`;}
 $('cases').onclick=e=>{const b=e.target.closest('[data-case]');if(!b)return;$('caseName').textContent=b.dataset.case;casePrice=+b.dataset.price;
  CUR_CASE=CASES.find(x=>x.name===b.dataset.case)||null;CASE_ITEMS=CUR_CASE&&CUR_CASE.items?CUR_CASE.items:ITEMS;
- const ci=$('caseImg');ci.onerror=()=>{ci.hidden=true;};if(CUR_CASE&&CUR_CASE.img){ci.src=imgSrc(CUR_CASE.img);ci.hidden=false;}else{ci.hidden=true;ci.removeAttribute('src');}
+ const ci=$('caseImg'),ch=$('caseChest'),src=CUR_CASE&&CUR_CASE.img?imgSrc(CUR_CASE.img):'';
+ ch.setAttribute('stroke',CUR_CASE&&CUR_CASE.c||'#E07A3C');
+ ci.onerror=()=>{ci.hidden=true;ch.style.display='';$('caseCap').querySelector('img')?.remove();};   // у SVG нет .hidden — прячем через style
+ if(src){ci.src=src;ci.hidden=false;ch.style.display='none';}else{ci.hidden=true;ci.removeAttribute('src');ch.style.display='';}
+ $('caseCap').innerHTML=`${src?`<img src="${esc(src)}" alt="">`:''}<span>${esc(b.dataset.case)}</span><span class="num" style="display:flex;align-items:center;gap:4px;color:#E8B365">${COIN(14)}${fmt(casePrice)}</span>`;
  caseReset();drawCaseItems();drawTotal();go('case');};
 drawCases();
 
@@ -1922,7 +1961,7 @@ function drawCaseItems(){
  $('caseSub').textContent=`${CASE_ITEMS.length} брейнротов`;
 }
 const MS=[1,2,3,5];let mIdx=0,spinning=false,lastWin=[],uid=100;
-const drawTotal=()=>{$('total').textContent=fmt(casePrice*MS[mIdx]);};
+const drawTotal=()=>{$('total').textContent=fmt(casePrice*MS[mIdx]);document.querySelectorAll('#mult [data-mp]').forEach(e=>e.innerHTML=COIN(11)+fmt(casePrice*+e.dataset.mp));};
 const LEN=90,STOP=80;
 function reelDims(n){return n===1?{h:132,tw:92,th:108,f:22}:n===2?{h:112,tw:80,th:92,f:19}:n===3?{h:96,tw:70,th:80,f:17}:{h:72,tw:56,th:60,f:14};}
 // Лента — только картинка: что выпало, решает сервер (или roll() в демо).
@@ -1941,7 +1980,7 @@ function reelList(P,win,many){
  if(win)list[STOP]=win;
  return list;}
 function buildReels(n,winners){
- if(!winners)caseReset();
+ if(!winners){caseReset();$('caseStage').classList.remove('run');}
  const d=reelDims(n),P=showPool();
  $('reels').innerHTML=Array.from({length:n},(_,r)=>{
   const list=reelList(P,winners?winners[r]:null,n>1);
@@ -1955,7 +1994,7 @@ function buildReels(n,winners){
 async function spin(){
  if(spinning)return;const n=MS[mIdx],cost=casePrice*n;
  if(cost>bal){toast('Недостаточно средств');haptic('error');return;}
- spinning=true;$('openBtn').disabled=true;haptic('medium');SFX.play('caseStart');caseReset();
+ spinning=true;$('openBtn').disabled=true;haptic('medium');SFX.play('caseStart');caseReset();$('caseStage').classList.add('run');
  let winners;
  if(API.on()){
   // сервер сам списывает баланс и решает, что выпало
@@ -2024,7 +2063,9 @@ async function spin(){
  });
 }
 $('openBtn').onclick=spin;
-seg($('mult'),MS.map(n=>'×'+n),0,i=>{if(spinning)return;mIdx=i;drawTotal();buildReels(MS[i]);});
+seg($('mult'),MS.map(n=>`×${n}<small class="num" data-mp="${n}"></small>`),0,i=>{if(spinning){drawTotal();return;}mIdx=i;drawTotal();buildReels(MS[i]);});
+// «быстро» — квадратная кнопка рядом с «Открыть» (флажок #fast остался для логики)
+$('fastBtn').onclick=()=>{const f=$('fast');f.checked=!f.checked;$('fastBtn').classList.toggle('on',f.checked);$('fastBtn').setAttribute('aria-pressed',f.checked);};
 drawCaseItems();
 
 /* ---------- выигрыш ---------- */
