@@ -663,7 +663,40 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
 .pe-tg span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.pe-tg b{font-size:13px}.pe-tg small{font-size:11px;color:#A49485;line-height:1.35}
 
 /* обёртки колонок: на телефоне — обычный столбик */
-.up-main,.pf-side,.pf-main,.m-ctl{display:flex;flex-direction:column;gap:20px;min-width:0}
+.pf-side,.pf-main,.m-ctl{display:flex;flex-direction:column;gap:20px;min-width:0}
+/* апгрейд: «Ставлю» — колесо — «Цель», под колесом кнопка и множители, внизу склад и цели */
+.up-stage{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 8px}
+.up-center{display:contents}
+.up-stage .wheel{grid-column:1/-1;grid-row:1}
+.up-slot{display:flex;flex-direction:column;gap:8px;min-width:0;padding:10px;border-radius:16px;background:#221A15;border:1px solid #413229}
+.up-slot.from{grid-column:1;grid-row:2}
+.up-slot.to{grid-column:2;grid-row:2;border-color:#714A31;background:radial-gradient(ellipse at 50% 0%,rgba(242,135,67,.12),transparent 70%),#221A15}
+.up-sh{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:16px}
+.up-sh .sec{font-size:11px}
+.up-sv{font-size:12px;font-weight:800;color:#F8AE74}
+.up-sb{flex:1;display:flex;flex-direction:column;gap:6px;min-height:0}
+.up-empty{flex:1;min-height:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:12px;border:1px dashed #503C2F;background:transparent;color:#BEAD9E;font:700 12px Manrope,sans-serif;text-align:center;padding:8px}
+.up-empty:hover{border-color:#955A35;color:#FBF2EA}
+.up-eic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#2B2119;border:1px solid #503C2F;color:#FFB088}
+.up-one{position:relative;flex:1;min-height:92px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.up-many{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;align-content:start}
+.up-many>div{position:relative;aspect-ratio:1;border-radius:9px;display:flex;align-items:center;justify-content:center;min-width:0}
+.up-many .more{background:#2B2119;border:1px solid #503C2F;color:#DED0C3;font-weight:800;font-size:12px}
+.up-clr{position:absolute;top:6px;right:6px;z-index:1;width:26px;height:26px;border-radius:8px;border:1px solid #503C2F;background:rgba(23,18,15,.85);color:#DED0C3;display:flex;align-items:center;justify-content:center;padding:0}
+.up-clr:hover{color:#FBF2EA;border-color:#955A35}
+.up-nm{font-size:12px;font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.up-pr{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:800}
+#upBtn{grid-column:1/-1;grid-row:3;height:56px;font-size:16px;margin-top:4px}
+.up-q{grid-column:1/-1;grid-row:4;grid-template-columns:repeat(6,minmax(0,1fr))}
+.up-q button{padding:0 2px}
+.up-fast{grid-column:1/-1;grid-row:5;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;font-size:14px;color:#DED0C3}
+.up-lists{display:flex;flex-direction:column;gap:12px;margin-top:-8px}
+.up-lists[data-tab="0"] .up-panel.tgt,.up-lists[data-tab="1"] .up-panel.inv{display:none}
+.up-panel{display:flex;flex-direction:column;gap:12px;min-width:0}
+.up-ph{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:20px}
+.up-pt{font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding-left:8px;border-left:3px solid #F28743;white-space:nowrap}
+.up-srch{flex:1;min-width:0;max-width:340px;height:40px}
+.up-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start}
 /* закрытые шторки не видны совсем (раньше снизу просвечивала их тень) */
 .sheet:not(.open) .sheet-box{visibility:hidden;transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s .32s}
 /* ---------- большой экран: Telegram Desktop, планшет, браузер ---------- */
@@ -678,7 +711,8 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
  .screen[data-s="partner"],.screen[data-s="admin"]{max-width:980px}
  .mgrid{width:100%;max-width:460px;margin-inline:auto}
  #cases{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))!important}
- #items,#upList{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))!important}
+ #items{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))!important}
+ .up-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
  /* шторки снизу — по центру, а не на всю ширину */
  .sheet-box{left:50%;right:auto;width:min(560px,100%);transform:translate(-50%,100%);border-left:1px solid #4A372B;border-right:1px solid #4A372B}
  .sheet.open .sheet-box{transform:translate(-50%,0)}
@@ -696,11 +730,30 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
  .screen[data-s="case"]{max-width:1180px}
  .case-ctl{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(240px,320px) auto;align-items:center;gap:16px!important}
  .case-ctl>label{white-space:nowrap;min-height:56px!important}
- /* апгрейд: колесо слева (не уезжает при прокрутке), склад и цели справа */
- .screen.on[data-s="upgrade"]{display:grid;grid-template-columns:minmax(340px,420px) minmax(0,1fr);gap:20px 32px;align-items:start;max-width:1180px}
- .screen[data-s="upgrade"]>.ptitle{grid-column:1/-1}
- .up-main{position:sticky;top:4px;gap:16px}
- .up-side{min-height:420px}
+ /* апгрейд как на больших сайтах: «Ставлю» | колесо | «Цель», ниже — склад и цели рядом */
+ .screen[data-s="upgrade"]{max-width:1240px}
+ .screen[data-s="upgrade"]>.ptitle{text-align:center;align-items:center}
+ .up-stage{grid-template-columns:minmax(0,1fr) 330px minmax(0,1fr);gap:0 28px;align-items:start}
+ .up-center{display:flex;flex-direction:column;align-items:center;gap:14px;grid-column:2;grid-row:1}
+ .up-stage .wheel{grid-column:auto;grid-row:auto}
+ .up-slot{grid-row:1!important;height:300px;padding:14px;border-radius:20px}
+ .up-slot.from{grid-column:1}.up-slot.to{grid-column:3}
+ .up-sh{justify-content:center;position:relative}.up-sh .sec{font-size:12px;letter-spacing:.12em}
+ .up-sv{position:absolute;right:0}
+ .up-empty{min-height:0;border-style:solid;border-color:transparent;background:radial-gradient(ellipse at 50% 45%,rgba(242,135,67,.1),transparent 65%)}
+ .up-eic{width:56px;height:56px;border-radius:14px}
+ .up-one .u{font-size:44px!important}
+ .up-many{min-height:0;grid-auto-rows:minmax(0,1fr)}
+ .up-many>div{aspect-ratio:auto}
+ .up-many .u{font-size:17px!important}
+ .up-nm{font-size:14px;text-align:center}.up-pr{justify-content:center;font-size:15px}
+ #upBtn{width:270px;margin-top:6px}
+ .up-q{width:100%}
+ .up-fast{width:100%;min-height:36px}
+ .up-tabs{display:none!important}
+ .up-lists{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:4px}
+ .up-lists .up-panel{display:flex!important;padding:16px;border-radius:20px;background:#1B1511;border:1px solid #413229}
+ .up-grid{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));max-height:520px;min-height:200px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#503C2F transparent;padding-right:2px}
  /* мины: поле слева, управление справа */
  .screen.on[data-s="mines"]{display:grid;grid-template-columns:minmax(320px,500px) minmax(280px,360px);gap:16px 32px;justify-content:center;align-items:start;max-width:none}
  .screen[data-s="mines"]>:first-child{grid-column:1/-1}
@@ -847,7 +900,12 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
     <section class="screen" data-s="upgrade">
       <div class="ptitle"><h1>Апгрейд</h1><span class="muted" style="font-size:13px">Поставь предметы — крути колесо — забирай дороже</span></div>
 
-      <div class="up-main">
+      <div class="up-stage">
+        <div class="up-slot from" id="upFromBox">
+          <div class="up-sh"><span class="sec">Ставлю</span><span class="up-sv num" id="upFromSum"></span></div>
+          <div class="up-sb" id="upFrom"></div>
+        </div>
+        <div class="up-center">
       <div class="wheel" id="wheel">
         <svg viewBox="0 0 270 270" aria-hidden="true" style="overflow:visible">
           <defs>
@@ -982,18 +1040,27 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
-        <div class="slot"><span class="sec" style="font-size:11px">Ставлю</span><div id="upFrom"></div></div>
-        <div class="slot" style="border-color:#714A31"><span class="sec" style="font-size:11px;color:#FFB088">Получу</span><div id="upTo"></div></div>
-      </div>
-      <div id="upQuick" class="seg" style="grid-template-columns:repeat(5,minmax(0,1fr))"></div>
-      <button class="fire" id="upBtn" style="height:56px;font-size:16px" disabled>Улучшить</button>
-      <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;margin-top:-8px;font-size:14px;color:#DED0C3">Быстрая прокрутка<input type="checkbox" class="toggle" id="upFast"></label>
+          <button class="fire" id="upBtn" disabled>Улучшить</button>
+          <div id="upQuick" class="seg up-q"></div>
+          <label class="up-fast">Быстрая прокрутка<input type="checkbox" class="toggle" id="upFast"></label>
+        </div>
+        <div class="up-slot to" id="upToBox">
+          <div class="up-sh"><span class="sec" style="color:#FFB088">Цель</span><span class="up-sv num" id="upToX"></span></div>
+          <div class="up-sb" id="upTo"></div>
+        </div>
       </div>
 
-      <div class="up-side" style="display:flex;flex-direction:column;gap:12px">
-        <div id="upTabs" class="seg" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
-        <div id="upList" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"></div>
+      <div id="upTabs" class="seg up-tabs" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
+      <div class="up-lists" id="upLists" data-tab="0">
+        <div class="up-panel inv">
+          <div class="up-ph"><span class="up-pt">Мой склад</span><span class="muted num" style="font-size:12px;font-weight:700" id="upInvInfo"></span></div>
+          <div class="up-grid" id="upInv"></div>
+        </div>
+        <div class="up-panel tgt">
+          <div class="up-ph"><span class="up-pt">Цель</span>
+            <label class="srch up-srch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A49485" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="upQ" type="search" placeholder="Поиск брейнрота…" aria-label="Поиск брейнрота"></label></div>
+          <div class="up-grid" id="upTgt"></div>
+        </div>
       </div>
     </section>
     <!-- ===== МИНЫ ===== -->
@@ -1912,17 +1979,22 @@ function renderWin(){
 
 /* ---------- апгрейдер ---------- */
 let upSel=new Set(),upTarget=null,upTab=0,upBusy=false,needleDeg=0;
-const UPQ=[1.5,2,3,5,10];
+const UPQ=[{x:2},{x:5},{x:10},{c:30},{c:50},{c:75}];   // быстрый выбор цели: во сколько раз дороже или какой шанс
 let UP_TARGETS=LIVE?[]:ITEMS;                         // во что можно апгрейдить (с сервера — весь каталог)
 const ARC=2*Math.PI*122;
 const stakeSum=()=>INV.filter(x=>upSel.has(x.id)).reduce((s,x)=>s+x.p,0);
 const upChance=()=>{const s=stakeSum();if(!s||!upTarget)return 0;return Math.min(75,s/upTarget.p*95);};
-function slotHTML(list,empty){
- if(!list.length)return `<div style="height:92px;border:1px dashed #503C2F;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;text-align:center;padding:8px" class="muted">${empty}</div>`;
- const x=list[0];
- return `<div class="tile" style="height:92px;position:relative;${tileBg(R[x.r])}">${mono(x,26)}${list.length>1?`<span class="badge" style="position:absolute;top:6px;right:6px;background:#17120F;color:#FBF2EA">+${list.length-1}</span>`:''}</div>
-  <span style="font-size:12px;font-weight:700;line-height:1.25;min-height:30px;display:block;margin-top:6px">${list.length>1?list.length+' предмета':x.name}</span>
-  <b class="num" style="font-size:13px;color:${R[x.r]}">${fmt(list.reduce((s,y)=>s+y.p,0))}</b>`;
+// содержимое окошек «Ставлю» (k=0) и «Цель» (k=1)
+const UP_IC=['M12 4v14M6 12l6 6 6-6','M12 5v14M5 12h14'];
+const X_IC='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+function upSlot(list,k){
+ if(!list.length)return `<button class="up-empty" data-uppick="${k}"><span class="up-eic">${ic(UP_IC[k],'currentColor',22,2.4)}</span><span>${k?'Выбрать цель':'Выбрать<br>со склада'}</span></button>`;
+ const sum=list.reduce((a,y)=>a+y.p,0),clr=`<button class="up-clr" data-upclr="${k}" aria-label="Убрать">${X_IC}</button>`;
+ if(list.length===1){const x=list[0];
+  return `<div class="up-one" style="${tileBg(R[x.r])}">${clr}${mono(x,30)}</div><div class="up-nm">${x.name}</div><div class="up-pr num" style="color:${R[x.r]}">${coin()}${fmt(x.p)}</div>`;}
+ const sh=list.slice(0,list.length>6?5:6);
+ return `<div class="up-many" style="position:relative">${sh.map(x=>`<div style="${tileBg(R[x.r])}">${mono(x,12)}</div>`).join('')}${list.length>6?`<div class="more">+${list.length-5}</div>`:''}</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:6px"><span class="up-pr num" style="font-size:13px">${list.length} шт. · ${coin()}${fmt(sum)}</span>${clr.replace('up-clr','up-clr" style="position:static')}</div>`;
 }
 function setArc(ch){ // дуга по центру снизу, в обе стороны
  shownCh=ch;
@@ -1933,34 +2005,51 @@ function setArc(ch){ // дуга по центру снизу, в обе сто�
 let shownCh=0;
 function drawUp(){
  const sel=INV.filter(x=>upSel.has(x.id)),s=stakeSum();
- if(upTarget&&upTarget.p<=s)upTarget=null;
- $('upFrom').innerHTML=slotHTML(sel,'Выбери предметы<br>со склада');
- $('upTo').innerHTML=slotHTML(upTarget?[upTarget]:[],'Выбери цель<br>или множитель');
+ if(upTarget&&upTarget.p<=s){upTarget=null;upQuickInit();}
+ $('upFrom').innerHTML=upSlot(sel,0);
+ $('upTo').innerHTML=upSlot(upTarget?[upTarget]:[],1);
+ $('upFromSum').textContent=s?fmt(s):'';
+ $('upToX').textContent=upTarget&&s?'×'+(upTarget.p/s).toFixed(2):'';
  const ch=upChance();
  $('chance').textContent=ch?ch.toFixed(1).replace('.',',')+'%':'0%';
  $('upX').textContent=upTarget&&s?'×'+(upTarget.p/s).toFixed(2):'—';
  setArc(ch);
  $('upBtn').disabled=!ch||upBusy;
  $('upBtn').textContent=ch?`Улучшить · ${ch.toFixed(1).replace('.',',')}%`:'Улучшить';
- if(upTab===0)$('upList').innerHTML=INV.length?INV.map(x=>`<button data-id="${x.id}" class="pick${upSel.has(x.id)?' sel':''}">
+ $('upInvInfo').textContent=INV.length?(sel.length?`выбрано ${sel.length} из ${INV.length}`:`${INV.length} шт.`):'';
+ $('upInv').innerHTML=INV.length?INV.map(x=>`<button data-id="${x.id}" class="pick${upSel.has(x.id)?' sel':''}">
    <div class="tile" style="width:100%;height:56px;${tileBg(R[x.r])}">${mono(x,16)}</div>
    <span style="font-size:11px;font-weight:700;line-height:1.25;min-height:28px">${x.name}</span><b class="num" style="font-size:12px">${fmt(x.p)}</b></button>`).join('')
-   :`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:13px">Склад пуст — открой кейс</p>`;
- else{const tl=UP_TARGETS.filter(x=>x.p>s).sort((a,b)=>a.p-b.p);
-  $('upList').innerHTML=tl.length?tl.map(x=>`<button data-t="${x.name}" class="pick${upTarget&&upTarget.name===x.name?' sel':''}">
+   :`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:13px;margin:0;padding:24px 0">Склад пуст — открой кейс</p>`;
+ {const q=($('upQ').value||'').trim().toLowerCase();
+  const tl=UP_TARGETS.filter(x=>x.p>s&&(!q||x.name.toLowerCase().includes(q))).sort((a,b)=>a.p-b.p);
+  $('upTgt').innerHTML=tl.length?tl.map(x=>`<button data-t="${x.name}" class="pick${upTarget&&upTarget.name===x.name?' sel':''}">
    <div class="tile" style="width:100%;height:56px;${tileBg(R[x.r])}">${mono(x,16)}</div>
    <span style="font-size:11px;font-weight:700;line-height:1.25;min-height:28px">${x.name}</span>
    <div class="num" style="display:flex;justify-content:space-between;font-size:12px"><b>${fmt(x.p)}</b>${s?`<span style="color:#F8AE74;font-weight:800">×${(x.p/s).toFixed(1)}</span>`:''}</div></button>`).join('')
-   :`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:13px">Нет предметов дороже ставки</p>`;}
+   :`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:13px;margin:0;padding:24px 0">${q?'Ничего не нашлось':'Нет предметов дороже ставки'}</p>`;}
 }
-$('upList').onclick=e=>{if(upBusy)return;const b=e.target.closest('.pick');if(!b)return;
+const upReset=()=>{$('wheel').classList.remove('win','lose');$('chanceSub').textContent='шанс';};
+$('upLists').onclick=e=>{if(upBusy)return;const b=e.target.closest('.pick');if(!b)return;
  if(b.dataset.id){const id=+b.dataset.id;upSel.has(id)?upSel.delete(id):upSel.add(id);}
- else{const x=UP_TARGETS.find(i=>i.name===b.dataset.t);upTarget=upTarget&&upTarget.name===x.name?null:x;}
- $('wheel').classList.remove('win','lose');$('chanceSub').textContent='шанс';drawUp();};
-seg($('upTabs'),['Мой склад','Выбрать цель'],0,i=>{upTab=i;drawUp();});
-seg($('upQuick'),UPQ.map(n=>'×'+n),-1,i=>{if(i<0||upBusy)return;const s=stakeSum();if(!s){toast('Сначала выбери предметы');return;}
- const want=s*UPQ[i];upTarget=UP_TARGETS.filter(x=>x.p>s).sort((a,b)=>Math.abs(a.p-want)-Math.abs(b.p-want))[0]||null;
- if(!upTarget)toast('Нет цели дороже');$('wheel').classList.remove('win','lose');$('chanceSub').textContent='шанс';drawUp();});
+ else{const x=UP_TARGETS.find(i=>i.name===b.dataset.t);upTarget=upTarget&&upTarget.name===x.name?null:x;upQuickInit();}
+ upReset();drawUp();};
+$('upQ').addEventListener('input',()=>drawUp());
+// вкладки «склад / цель» — только на телефоне; на большом экране оба списка видны сразу
+function upTabSet(i){upTab=i;$('upLists').dataset.tab=i;seg($('upTabs'),['Мой склад','Выбрать цель'],i,k=>{upTab=k;$('upLists').dataset.tab=k;});}
+upTabSet(0);
+// клик по пустому окошку → нужный список; крестик → убрать
+['upFromBox','upToBox'].forEach(id=>$(id).addEventListener('click',e=>{if(upBusy)return;
+ const c=e.target.closest('[data-upclr]');if(c){if(c.dataset.upclr==='0')upSel=new Set();else{upTarget=null;upQuickInit();}upReset();drawUp();return;}
+ const pk=e.target.closest('[data-uppick]');if(!pk)return;const k=+pk.dataset.uppick;upTabSet(k);
+ const pn=document.querySelector('.up-panel.'+(k?'tgt':'inv'));if(pn)pn.scrollIntoView({behavior:'smooth',block:'nearest'});
+ if(k&&matchMedia('(min-width:900px)').matches)setTimeout(()=>$('upQ').focus({preventScroll:true}),250);}));
+function upQuickInit(){seg($('upQuick'),UPQ.map(o=>o.x?'×'+o.x:o.c+'%'),-1,upQuickPick);}
+function upQuickPick(i){if(i<0||upBusy)return;const s=stakeSum();if(!s){toast('Сначала выбери предметы со склада');upTabSet(0);upQuickInit();return;}
+ const o=UPQ[i],want=o.x?s*o.x:s*95/o.c;   // шанс = ставка / цель × 95
+ upTarget=UP_TARGETS.filter(x=>x.p>s).sort((a,b)=>Math.abs(a.p-want)-Math.abs(b.p-want))[0]||null;
+ if(!upTarget)toast('Нет цели дороже');upReset();drawUp();}
+upQuickInit();
 $('upBtn').onclick=async()=>{
  const ch=upChance();if(!ch||upBusy)return;upBusy=true;drawUp();haptic('medium');
  let r,res=null;
