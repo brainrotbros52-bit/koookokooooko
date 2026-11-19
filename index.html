@@ -1645,7 +1645,7 @@ const imgSrc=u=>BUILTIN_IMG[u]||u;
 // буквы или PNG-картинка брейнрота (если картинка не загрузилась — снова буквы)
 const mk=n=>IMG[n]?`<img class="bri" src="${esc(imgSrc(IMG[n]))}" alt="" loading="lazy" draggable="false" onerror="this.replaceWith('${mkT(n)}')">`:mkT(n);
 // предмет с сервера → объект сайта
-const mkItem=o=>({name:o.name,p:o.price,r:o.rarity||RB(o.price),get mono(){return mk(o.name);},id:o.id,src:o.src,nowd:!!o.nowd,cn:o.chance,ch:o.chance!=null?String(o.chance).replace('.',',')+'%':''});
+const mkItem=o=>({name:o.name,p:o.price,r:o.rarity||RB(o.price),get mono(){return mk(o.name);},id:o.id,src:o.src,nowd:!!o.nowd,coin:!!o.coin,cn:o.chance,ch:o.chance!=null?String(o.chance).replace('.',',')+'%':''});
 let uidSeed=1;const INV=[];   // инвентарь игрока (с сервера или пустой в демо)
 
 /* ---------- навигация ---------- */
@@ -2021,6 +2021,7 @@ async function spin(){
   if(!res||!res.items){spinning=false;$('openBtn').disabled=false;return;}
   addWager(cost,'Кейс «'+$('caseName').textContent+'»');
   winners=res.items.map(it=>({...mkItem(it),sid:it.id}));applyState(res.state,true);
+  {const cs=winners.filter(x=>x.coin).reduce((a,x)=>a+x.p,0);if(cs)setBal(bal-cs);}   // монеты покажем на балансе, когда лента остановится
  }else{addWager(cost,'Кейс «'+$('caseName').textContent+'»');setBal(bal-cost);winners=Array.from({length:n},()=>roll());
   QD.cases+=n;QD.spend+=cost;QD.legend+=winners.filter(x=>x.r==='legend'||x.r==='myth').length;}
  lastWin=winners.map(x=>({...x,id:x.sid||uid++}));
@@ -2094,9 +2095,13 @@ drawCaseItems();
 var caseWon=[];   // var: функцию зовут ещё при запуске, до этой строки
 function caseReset(){caseWon=[];const r=$('caseRes');if(r)r.hidden=true;}
 function caseDone(){
- const ws=lastWin;if(!ws.length)return;
- if(API.on())loadMe();else INV.unshift(...ws);
- caseWon=ws;const sum=ws.reduce((a,x)=>a+x.p,0);
+ const all=lastWin;if(!all.length)return;
+ // монеты (токены) — сразу на баланс, в инвентарь не идут; продавать можно только брейнротов
+ const coins=all.filter(x=>x.coin),cs=coins.reduce((a,x)=>a+x.p,0),ws=all.filter(x=>!x.coin);
+ if(API.on())loadMe();else{INV.unshift(...ws);if(cs)setBal(bal+cs);}
+ if(cs){if(API.on())setBal(bal+cs);SFX.play('coin');toast('+'+fmt(cs)+' на баланс');}
+ caseWon=ws;if(!ws.length){$('caseRes').hidden=true;return;}
+ const sum=ws.reduce((a,x)=>a+x.p,0);
  $('caseSell').disabled=false;
  $('caseSell').innerHTML=`Продать ${ws.length>1?'всё ':''}за ${COIN(18)}<span class="num">${fmt(sum)}</span>`;
  $('caseRes').hidden=false;
@@ -2406,7 +2411,7 @@ $('pidCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(Str
 $('ptabs2').onclick=e=>{const b=e.target.closest('button');if(!b)return;pTab=+b.dataset.i;histPage=1;[...$('ptabs2').children].forEach(x=>x.classList.toggle('on',x===b));haptic('light');drawProfile();};
 $('promoGo').onclick=async()=>{const v=$('promoIn').value.trim().toUpperCase();if(!v){toast('Введи код');haptic('error');return;}
  if(API.on()){const r=await API.call('promo',{code:v});if(!r){haptic('error');return;}applyState(r.state);SFX.play('bonus');haptic('success');
-  toast(r.kind==='deposit'?`Промокод ${r.code}: +${r.value}% к следующему пополнению`:r.kind==='ref'?(r.value?`Код ${r.code}: +${r.value}% к следующему пополнению`:`Готово — ты с партнёром ${r.code}`):r.kind==='case'?`${r.case}: выпал ${r.item.name} · ${fmt(r.item.price)}`:'+'+fmt(r.amount)+' на баланс');$('promoIn').value='';return;}
+  toast(r.kind==='deposit'?`Промокод ${r.code}: +${r.value}% к следующему пополнению`:r.kind==='ref'?(r.value?`Код ${r.code}: +${r.value}% к следующему пополнению`:`Готово — ты с партнёром ${r.code}`):r.kind==='case'?(r.item.coin?`${r.case}: +${fmt(r.item.price)} на баланс`:`${r.case}: выпал ${r.item.name} · ${fmt(r.item.price)}`):'+'+fmt(r.amount)+' на баланс');$('promoIn').value='';return;}
  const P={};if(!P[v]){toast('Такого промокода нет');haptic('error');return;}
  if(usedPromos.has(v)){toast('Ты уже использовал этот промокод');haptic('error');return;}
  usedPromos.add(v);setBal(bal+P[v]);wAddNeed(P[v]*WAGER_BONUS,'промокод ×3');SFX.play('bonus');haptic('success');toast('+'+P[v]+' на баланс');$('promoIn').value='';};
