@@ -3024,12 +3024,14 @@ async function admCard(){
     <span>Баланс<b class="num">${fmt(u.balance)}</b></span><span>Отыгрыш<b class="num">${fmt(u.wager_left)}</b></span><span>Пополнил<b class="num">${fmt(u.deposited)}</b></span><span>Вывел<b class="num">${fmt(u.withdrawn)}</b></span>
     <span>Поставил<b class="num">${fmt(u.bets)}</b></span><span>Выиграл<b class="num">${fmt(u.wins)}</b></span><span>Кейсов<b class="num">${u.stats.cases}</b></span><span>Казино ${prof>=0?'в плюсе':'в минусе'}<b class="num" style="color:${prof>=0?'#88E4A5':'#FF946E'}">${prof>=0?'+':'−'}${fmt(Math.abs(prof))}</b></span>
    </div>
+   ${u.stats_reset_at?`<span class="muted" style="font-size:11px">Статистика считается с ${new Date(u.stats_reset_at).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})} (обнулял админ)</span>`:''}
   </div>
   <div class="adm-card"><b>Баланс</b>
    <div class="adm-acts"><label class="adm-in"><span>Сумма</span><input type="number" inputmode="numeric" placeholder="100" id="cBal"></label>
     <button class="fire" data-a="user_add">Начислить</button><button class="ghost" data-a="user_sub">Списать</button></div>
    <div class="adm-acts"><button class="ghost" data-pcard="${u.id}">${u.partner_code?'Партнёрка '+esc(u.partner_code)+' ›':'Выдать партнёрку ›'}</button>
     <button class="ghost" data-a="user_wager_reset">Обнулить отыгрыш</button>
+    <button class="ghost" data-a="user_stats_reset" title="Кейсы, апгрейды, мины, прибыль и топ дроп — с нуля. Баланс и склад останутся">Обнулить статистику</button>
     <button class="ghost danger" data-a="user_ban" data-on="${!u.is_banned}">${u.is_banned?'Разбанить':'Забанить'}</button></div></div>
   <div class="adm-card"><b>Закреплён за партнёром</b>
    <div class="adm-row">${u.ref_code?`<b class="u" style="color:#FFB088">${esc(u.ref_code)}</b><span class="muted" style="font-size:12px">${esc(srcName(u.ref_src||'',u.ref_sub))}${u.ref_at?' · с '+new Date(u.ref_at).toLocaleDateString('ru-RU'):''} · партнёру <b class="${pcls(u.ref_income)}">${pn(u.ref_income)}</b></span>`:'<span class="muted" style="font-size:13px">Ни за кем — закрепится за первым партнёром, чей код или ссылку использует</span>'}</div>
@@ -3073,7 +3075,7 @@ $('admBody').addEventListener('click',async e=>{
  if(a==='pe_new'){const v=$('apId').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');return;}AS.pcard=+v;AS.pcPage=1;haptic('light');await admLoad();return;}
  if(a==='find'){AS.q[AS.tab]=$('auQ').value.trim();AS.page[AS.tab]=1;admLoad();return;}
  if(a==='acc_save'&&AS.accSel>0&&AS.accSel!==(+(AS.acc||{}).mode||0)&&!sure(b))return;   // закрыть — по второму нажатию
- const danger=['sec_del','deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg'];
+ const danger=['user_stats_reset','sec_del','deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg'];
  if(danger.includes(a)&&!sure(b))return;
  let r=null;b.disabled=true;
  try{
@@ -3082,7 +3084,7 @@ $('admBody').addEventListener('click',async e=>{
   else if(a==='partner_add'){const v=$('apId').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');b.disabled=false;return;}r=await adm(a,{id:v});}
   else if(a==='user_add'||a==='user_sub'){const v=Math.floor(+$('cBal').value);if(!(v>0)){toast('Введи сумму');b.disabled=false;return;}r=await adm('user_balance',{id:uid,delta:a==='user_add'?v:-v});}
   else if(a==='user_partner'||a==='user_ban')r=await adm(a,{id:uid,on:b.dataset.on==='true'});
-  else if(a==='user_wager_reset')r=await adm(a,{id:uid});
+  else if(a==='user_wager_reset'||a==='user_stats_reset')r=await adm(a,{id:uid});
   else if(a==='inv_remove')r=await adm(a,{id:uid,inv:+b.dataset.inv,name:b.dataset.name});
   else if(a==='inv_give')r=await adm(a,{id:uid,name:$('cGive').value});
   else if(a==='promo_add'){const code=$('apCode').value.trim().toUpperCase(),value=+$('apVal').value,uses=$('apUses').value.trim();
