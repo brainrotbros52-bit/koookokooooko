@@ -21,7 +21,7 @@ h1,h2,h3{margin:0}
 .card{background:#171210;border:1px solid #2E241E}
 
 /* телефон */
-.phone{width:390px;height:844px;max-height:calc(100vh - 48px);position:relative;overflow:hidden;background:#0E0B0A;border-radius:28px;border:1px solid #2E241E;display:flex;flex-direction:column}
+.phone{width:390px;height:844px;max-height:calc(100vh - 48px);position:relative;overflow:hidden;overflow:clip;background:#0E0B0A;border-radius:28px;border:1px solid #2E241E;display:flex;flex-direction:column}
 @media (max-width:440px){body{padding:0}.phone{width:100%;height:100vh;max-height:none;border-radius:0;border:0}}
 .glow{position:absolute;left:-120px;right:-120px;bottom:-280px;height:620px;background:radial-gradient(ellipse at 50% 100%,rgba(224,110,50,.20) 0%,rgba(150,50,20,.08) 45%,rgba(14,11,10,0) 70%);pointer-events:none}
 .top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 10px;background:linear-gradient(#0E0B0A 70%,rgba(14,11,10,0))}
@@ -434,6 +434,23 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .adm-pick em,.adm-ch em{margin-left:auto;font-style:normal;color:#A8988A;font-size:12px}
 .adm-ch{display:flex;flex-direction:column;gap:3px;padding:8px 10px;border-radius:10px;background:#0E0B0A}.adm-ch span{display:flex;gap:8px;font-size:12px}
 .adm-kv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.adm-kv span{display:flex;flex-direction:column;gap:2px;padding:8px;border-radius:10px;background:#0E0B0A;font-size:10px;color:#8C7D71;font-weight:700}.adm-kv b{font-size:14px;color:#F2E9E1}
+.pager{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:6px 0 2px}
+.pager button{min-width:36px;height:36px;padding:0 8px;border-radius:10px;background:#171210;border:1px solid #2E241E;color:#CDBFB2;font-weight:800;font-size:13px}
+.pager button.on{background:#E07A3C;border-color:#E07A3C;color:#1A0F09}
+.pager button:disabled{opacity:.35;cursor:default}
+.pg-gap{color:#6B5D52;font-weight:800}.pg-info{width:100%;text-align:center;font-size:11px;color:#8C7D71}
+.hrow{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:12px;background:#171210;border:1px solid #2E241E}
+.adm-mode{margin-bottom:2px}
+.adm-link{background:none;border:0;padding:0;text-align:left;color:#A8988A;font-size:12px}.adm-link:hover{color:#F0A27A}
+.adm-user{width:100%;text-align:left;cursor:pointer}.adm-user:hover{border-color:#5A4334}
+.adm-ava{width:40px;height:40px;flex:none;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#2A1C14;border:1px solid #7A4A2C;color:#F0A27A;font-weight:800;font-size:15px}
+.adm-back{align-self:flex-start;display:flex;align-items:center;gap:6px;height:36px;padding:0 12px 0 8px;border-radius:10px;background:#171210;border:1px solid #2E241E;color:#CDBFB2;font-weight:700;font-size:13px}
+.adm-inv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.adm-ii{display:flex;flex-direction:column;gap:4px;padding:6px;border-radius:10px;background:#120E0C;border:1px solid #241B16}
+.adm-sel{height:44px;padding:0 10px;border-radius:12px;background:#0E0B0A;border:1px solid #2E241E;color:#F2E9E1;font:600 13px Manrope,sans-serif}
+.adm-badge{min-width:22px;height:22px;padding:0 7px;border-radius:11px;background:#E07A3C;color:#1A0F09;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.adm-badge:empty{display:none}
+#burger{position:relative}#burger.dot::after{content:"";position:absolute;top:8px;right:8px;width:9px;height:9px;border-radius:50%;background:#E07A3C;box-shadow:0 0 0 2px #171210}
 /* меню */
 .m2{display:flex;flex-direction:column;gap:14px;padding:12px 14px 20px;min-height:100%}
 .m2>.sec{margin:6px 2px -4px}
@@ -968,7 +985,7 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
       </div>
       <button class="adm-entry" id="admEntry" data-go="admin" hidden>
         <span class="prow-ic" style="background:#2A1C14;border-color:#7A4A2C"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F0A27A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z M9 12l2 2 4-4"/></svg></span>
-        <span class="prow-t"><b>Админ-панель</b><span class="muted">Заявки, выводы, кейсы, промокоды, игроки</span></span>
+        <span class="prow-t"><b>Админ-панель</b><span class="muted">Пополнения, выводы, игроки, партнёры, промо</span></span><span class="adm-badge" id="admEntryBadge"></span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
       </button>
       <div class="card" style="border-radius:16px;overflow:hidden" id="slinks"></div>
@@ -1817,7 +1834,7 @@ $('dwin').innerHTML=WIN.map(([u,x,w])=>`<div class="card" style="display:flex;al
 
 /* ---------- профиль ---------- */
 const HIST=[['Жаровня',ITEMS[0],'+1 480','#DDA650'],['Апгрейд',ITEMS[2],'+640','#A57DCB'],['Мины · 5 мин','×2.47','+147','#E9A06A'],['Угольный',ITEMS[7],'+90','#A8988A'],['Мины · 3 мины','бум','−100','#E2643A']];
-let pTab=0,pBannerDone=false;
+let pTab=0,pBannerDone=false,histPage=1;
 function drawProfile(){
  if(!pBannerDone){pBannerDone=true;$('pBanner').innerHTML=`<div class="dfire" style="height:100%"><div class="base"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div>${EMBERS}</div>`;}
  // статистика и рекорд
@@ -1851,15 +1868,8 @@ function drawProfile(){
   </div>`;
  }else if(LIVE){
   $('pbody').innerHTML='<p class="muted" style="text-align:center;font-size:13px;padding:20px 0">Загружаем историю…</p>';
-  API.call('history',{}).then(h=>{if(pTab!==1||!h)return;
-   const GN={admin:'Начисление',quest:'Квест',case:'Кейс',upgrade:'Апгрейд',mines:'Мины',sell:'Продажа',deposit:'Пополнение',withdraw:'Вывод',bonus:'Бонус',promo:'Промокод'};
-   $('pbody').innerHTML=h.length?`<div style="display:flex;flex-direction:column;gap:8px">${h.map(e=>{const x=e.item?mkItem(e.item):null;
-    const v=e.game==='withdraw'?-e.bet:e.payout-e.bet;const c=v>0?'#7FD49A':v<0?'#F08A66':'#CDBFB2';
-    return `<div class="card" style="display:flex;align-items:center;gap:12px;padding:8px 14px 8px 8px;border-radius:14px">
-     <div class="tile" style="width:44px;height:44px;border-radius:10px;${x?tileBg(R[x.r]):'background:#1F1814;border:1px solid #3A2B22'}">${x?mono(x,13):ic(e.game==='mines'?I.mines:e.game==='deposit'?'M12 5v14M5 12h14':e.game==='withdraw'?'M7 17L17 7M8 7h9v9':I.bonus,'#A8988A',20)}</div>
-     <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x?x.name:GN[e.game]||e.game}</div><div class="muted" style="font-size:12px">${GN[e.game]||e.game}${e.src&&!['deposit','mines','upgrade'].includes(e.game)&&e.src!==GN[e.game]?' · '+e.src:''} · ${ago(Date.parse(e.ts))}</div></div>
-     <b class="num" style="font-size:14px;color:${c}">${v>0?'+':v<0?'−':''}${fmt(Math.abs(v))}</b></div>`;}).join('')}</div>`
-    :'<p class="muted" style="text-align:center;font-size:14px;padding:24px 0">Пока ничего не было</p>';});
+  API.call('history',{page:histPage}).then(h=>{if(pTab!==1||!h)return;
+   $('pbody').innerHTML=h.rows.length?histRows(h)+pager(h.total,h.page,h.size,'hist'):'<p class="muted" style="text-align:center;font-size:14px;padding:24px 0">Пока ничего не было</p>';});
  }else $('pbody').innerHTML=!WG.log.length?'<p class="muted" style="text-align:center;font-size:14px;padding:24px 0">Пока ничего не было</p>':`<div style="display:flex;flex-direction:column;gap:8px">${WG.log.map(l=>`
   <div class="card" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px">
    <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px">${l.t}</div><div class="muted" style="font-size:12px">${ago(l.ts)}</div></div>
@@ -1871,7 +1881,7 @@ function drawProfile(){
    <b class="num" style="font-size:14px;color:${c}">${v}</b></div>`).join('')}</div>`;
 }
 $('pidCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(String(USER.id)).catch(()=>{});haptic('light');toast('ID скопирован');};
-$('ptabs2').onclick=e=>{const b=e.target.closest('button');if(!b)return;pTab=+b.dataset.i;[...$('ptabs2').children].forEach(x=>x.classList.toggle('on',x===b));haptic('light');drawProfile();};
+$('ptabs2').onclick=e=>{const b=e.target.closest('button');if(!b)return;pTab=+b.dataset.i;histPage=1;[...$('ptabs2').children].forEach(x=>x.classList.toggle('on',x===b));haptic('light');drawProfile();};
 $('promoGo').onclick=async()=>{const v=$('promoIn').value.trim().toUpperCase();if(!v){toast('Введи код');haptic('error');return;}
  if(API.on()){const r=await API.call('promo',{code:v});if(!r){haptic('error');return;}applyState(r.state);haptic('success');
   toast(r.kind==='deposit'?`Промокод ${r.code}: +${r.value}% к следующему пополнению`:'+'+fmt(r.amount)+' на баланс');$('promoIn').value='';return;}
@@ -1879,7 +1889,8 @@ $('promoGo').onclick=async()=>{const v=$('promoIn').value.trim().toUpperCase();i
  if(usedPromos.has(v)){toast('Ты уже использовал этот промокод');haptic('error');return;}
  usedPromos.add(v);setBal(bal+P[v]);wAddNeed(P[v]*WAGER_BONUS,'промокод ×3');haptic('success');toast('+'+P[v]+' на баланс');$('promoIn').value='';};
 const usedPromos=new Set();
-$('pbody').onclick=async e=>{const b=e.target.closest('[data-sell]');if(!b)return;haptic('light');
+$('pbody').onclick=async e=>{const pg=e.target.closest('[data-pg]');if(pg){if(pg.disabled)return;histPage=+pg.dataset.pg.split(':')[1];haptic('light');drawProfile();return;}
+ const b=e.target.closest('[data-sell]');if(!b)return;haptic('light');
  if(API.on()){
   const ids=b.dataset.sell==='all'?INV.map(x=>x.id):[+b.dataset.sell];
   const r=await API.call('sell',{ids});if(!r)return;applyState(r.state);toast('+'+fmt(r.sold)+' на баланс');return;
@@ -2179,80 +2190,77 @@ setInterval(drawDaily,30000);
    АДМИН-ПАНЕЛЬ. Все действия идут на сервер (action 'admin'),
    сервер сам проверяет, что ты в таблице admins.
    ===================================================================== */
-const ADM_TABS=[['dep','Заявки'],['wd','Выводы'],['cases','Кейсы'],['items','Предметы'],['promo','Промо'],['users','Игроки']];
-let admTab='dep',admData={},admUserQ='';
+const ADM_TABS=[['dep','Пополнения'],['wd','Выводы'],['users','Игроки'],['partners','Партнёры'],['promo','Промо']];
+const AS={tab:'dep',mode:{dep:'active',wd:'active'},page:{dep:1,wd:1,users:1,partners:1},q:{users:'',partners:''},card:null,cardPage:1,last:{dep:-1,wd:-1}};
 const RCOL=r=>R[r]||'#A8988A';
 async function adm(op,args,quiet){const r=await API.call('admin',{op,args:args||{}});if(r&&r.msg&&!quiet){toast(r.msg);haptic('success');}return r;}
-// двойное нажатие для опасных действий
-function sure(btn){if(btn.dataset.sure==='1')return true;const t=btn.textContent;btn.dataset.sure='1';btn.textContent='Точно?';btn.classList.add('warn');
- setTimeout(()=>{if(btn.isConnected){btn.dataset.sure='';btn.textContent=t;btn.classList.remove('warn');}},2500);return false;}
-async function admOpen(){if(!USER.admin){go('settings');return;}admTabsDraw();admStats();admLoad();}
-async function admStats(){const o=await adm('overview',{},true);if(!o)return;const prof=o.bets_today-o.wins_today;
- $('admStats').innerHTML=[['Игроков',fmt(o.players),o.players_today?'+'+o.players_today+' сегодня':''],['Заявок в очереди',o.dep_queue,'выводов: '+o.wd_queue],
-  ['Пополнено сегодня',fmt(o.dep_today),'монет'],['Профит сегодня',(prof>=0?'+':'−')+fmt(Math.abs(prof)),'ставки '+fmt(o.bets_today)]]
-  .map(([t,v,d],i)=>`<div class="adm-st"><span>${t}</span><b class="u num" style="${i===3?`color:${prof>=0?'#7FD49A':'#F08A66'}`:''}">${v}</b><small>${d}</small></div>`).join('');
- const dq=ADM_TABS.findIndex(t=>t[0]==='dep'),wq=ADM_TABS.findIndex(t=>t[0]==='wd');
- const tb=$('admTabs').children;if(tb[dq])tb[dq].querySelector('i').textContent=o.dep_queue||'';if(tb[wq])tb[wq].querySelector('i').textContent=o.wd_queue||'';}
-function admTabsDraw(){$('admTabs').innerHTML=ADM_TABS.map(([k,t])=>`<button class="${k===admTab?'on':''}" data-t="${k}">${t}<i></i></button>`).join('');}
-$('admTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;admTab=b.dataset.t;admTabsDraw();admStats();admLoad();haptic('light');};
-$('admRefresh').onclick=()=>{haptic('light');admStats();admLoad();};
+function sure(btn){if(btn.dataset.sure==='1')return true;const t=btn.innerHTML;btn.dataset.sure='1';btn.textContent='Точно?';btn.classList.add('warn');
+ setTimeout(()=>{if(btn.isConnected){btn.dataset.sure='';btn.innerHTML=t;btn.classList.remove('warn');}},2500);return false;}
 const admEmpty=t=>`<p class="muted" style="text-align:center;font-size:14px;padding:26px 0;margin:0">${t}</p>`;
-const admItemsList=L=>`<div class="adm-its">${L.map(x=>`<span class="adm-it" style="--c:${RCOL(x.r||x.rarity||RB(x.price))}"><b>${esc(x.name)}</b>${x.q?` ×${x.q}`:''}${x.buffs&&x.buffs.length?`<small>${x.buffs.map(esc).join(', ')}</small>`:''}<em class="num">${fmt(x.price*(1+(x.pct||0)/100)*(x.q||1))}</em></span>`).join('')}</div>`;
-const who=x=>`${x.username?'@'+esc(x.username):'без ника'} · <span class="num">${x.tg_id}</span>`;
+const CPY=ic('M9 9h11v11H9zM5 15V6a2 2 0 0 1 2-2h8','#A8988A',13,2.2);
+const who=x=>`${x.username?'@'+esc(x.username):esc(x.first_name||'без ника')} · <span class="num">${x.tg_id??x.id}</span>`;
+const admItemsList=L=>`<div class="adm-its">${(L||[]).map(x=>`<span class="adm-it" style="--c:${RCOL(x.rarity||RB(x.price))}"><b>${esc(x.name)}</b>${x.q>1?` ×${x.q}`:''}${x.buffs&&x.buffs.length?`<small>${x.buffs.map(esc).join(', ')}</small>`:''}<em class="num">${fmt(Math.round(x.price*(1+(x.pct||0)/100))*(x.q||1))}</em></span>`).join('')}</div>`;
+// страницы 1 2 3 … по 15
+function pager(total,page,size,key){const pages=Math.max(1,Math.ceil(total/size));if(pages<=1)return '';
+ const set=new Set([1,pages,page-1,page,page+1].filter(p=>p>=1&&p<=pages));const L=[...set].sort((x,y)=>x-y);let h='',prev=0;
+ for(const p of L){if(p-prev>1)h+='<span class="pg-gap">…</span>';h+=`<button class="${p===page?'on':''}" data-pg="${key}:${p}">${p}</button>`;prev=p;}
+ return `<div class="pager"><button data-pg="${key}:${page-1}" ${page<=1?'disabled':''} aria-label="Назад">‹</button>${h}<button data-pg="${key}:${page+1}" ${page>=pages?'disabled':''} aria-label="Вперёд">›</button><span class="pg-info">${fmt(total)} всего</span></div>`;}
+async function admOpen(){if(!USER.admin){go('settings');return;}admTabsDraw();admStats();admLoad();}
+async function admStats(){const o=await API.call('admin',{op:'overview'},true);if(!o)return;const prof=o.bets_today-o.wins_today;
+ $('admStats').innerHTML=[['Игроков',fmt(o.players),o.players_today?'+'+o.players_today+' сегодня':'сегодня новых нет'],['Пополнений ждут',o.dep_queue,'выводов ждут: '+o.wd_queue],
+  ['Пополнено сегодня',fmt(o.dep_today),'монет'],['Профит сегодня',(prof>=0?'+':'−')+fmt(Math.abs(prof)),'ставки '+fmt(o.bets_today)]]
+  .map(([t,v,d],i)=>`<div class="adm-st"><span>${t}</span><b class="u num" style="${i===3?`color:${prof>=0?'#7FD49A':'#F08A66'}`:i===1&&v?'color:#F0A27A':''}">${v}</b><small>${d}</small></div>`).join('');
+ admBadges(o);}
+function admBadges(o){
+ const set=(k,n)=>{const b=$('admTabs').querySelector(`[data-t="${k}"] i`);if(b)b.textContent=n||'';};set('dep',o.dep_queue);set('wd',o.wd_queue);
+ const n=(o.dep_queue||0)+(o.wd_queue||0);$('admEntryBadge').textContent=n||'';$('burger').classList.toggle('dot',!!n);}
+function admTabsDraw(){$('admTabs').innerHTML=ADM_TABS.map(([k,t])=>`<button class="${k===AS.tab?'on':''}" data-t="${k}">${t}<i></i></button>`).join('');}
+$('admTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;AS.tab=b.dataset.t;AS.card=null;admTabsDraw();admStats();admLoad();haptic('light');};
+$('admRefresh').onclick=()=>{haptic('light');admStats();admLoad();};
+
 async function admLoad(){
- const B=$('admBody');B.innerHTML=admEmpty('Загружаем…');
- if(admTab==='dep'){const L=await adm('deposits',{},true)||[];admData.dep=L;
-  B.innerHTML=L.length?L.map(d=>`<div class="adm-card${d.status==='processing'?' hot':''}">
-   <div class="adm-row"><b class="u">#${d.id}</b><span class="badge" style="background:${d.status==='processing'?'#14301F':'#2A1C14'};color:${d.status==='processing'?'#7FD49A':'#F0A27A'}">${d.status==='processing'?'в работе':d.pos+' в очереди'}</span><span class="muted" style="margin-left:auto;font-size:12px">${ago(Date.parse(d.ts))}</span></div>
-   <div class="adm-sub">${who(d)}</div>
-   <button class="adm-nick" data-copy="${esc(d.nick)}">Roblox: <b>${esc(d.nick)}</b> ${ic('M9 9h11v11H9zM5 15V6a2 2 0 0 1 2-2h8','#A8988A',13,2.2)}</button>
-   ${admItemsList(d.items)}
-   <div class="adm-row"><span class="muted">Сумма</span><b class="num">${fmt(d.sum)}</b>${d.bonus?`<span class="muted">+ промо ${esc(d.promo)}</span><b class="num" style="color:#7FD49A">+${fmt(d.bonus)}</b>`:''}</div>
-   <div class="adm-acts">
-    ${d.status==='queued'?`<button class="ghost" data-a="deposit_take" data-id="${d.id}">В работу</button>`:''}
-    <label class="adm-in"><span>Начислить</span><input type="number" inputmode="numeric" value="${d.sum}" id="ds${d.id}"></label>
-    <button class="fire" data-a="deposit_confirm" data-id="${d.id}">Принять</button>
-    <button class="ghost danger" data-a="deposit_reject" data-id="${d.id}">Отклонить</button>
-   </div></div>`).join(''):admEmpty('Очередь пуста 👌');}
- else if(admTab==='wd'){const L=await adm('withdrawals',{},true)||[];
-  B.innerHTML=L.length?L.map(w=>`<div class="adm-card">
-   <div class="adm-row"><b class="u">#${w.id}</b><b class="num" style="margin-left:auto">${COIN(13)} ${fmt(w.total)}</b></div>
-   <div class="adm-sub">${who(w)} · ${ago(Date.parse(w.ts))}</div>
-   <button class="adm-nick" data-copy="${esc(w.nick)}">Отправить на: <b>${esc(w.nick)}</b> ${ic('M9 9h11v11H9zM5 15V6a2 2 0 0 1 2-2h8','#A8988A',13,2.2)}</button>
-   ${admItemsList(w.items)}
-   <div class="adm-acts"><button class="fire" data-a="withdraw_done" data-id="${w.id}">Отправлено</button>
-    <button class="ghost danger" data-a="withdraw_cancel" data-id="${w.id}">Отменить (вернуть)</button></div></div>`).join(''):admEmpty('Выводов нет');}
- else if(admTab==='items'){const L=await adm('items',{},true)||[];admData.items=L;
-  B.innerHTML=`<div class="adm-card"><b>Добавить предмет</b>
-    <div class="adm-form"><input id="aiName" placeholder="Название, например Tralalero Tralala" maxlength="60">
-     <div style="display:flex;gap:8px"><input id="aiPrice" type="number" inputmode="numeric" placeholder="Цена" style="flex:1">
-      <select id="aiKind"><option value="br">Брейнрот</option><option value="gr">Гир</option></select></div>
-     <button class="fire" data-a="item_add">Добавить</button></div>
-    <span class="muted" style="font-size:12px">Редкость ставится по цене: до 70 обычный · 70+ редкий · 150+ эпик · 400+ легенда · 1000+ мифик. Та же кнопка с тем же названием меняет цену.</span></div>
-   ${L.length?`<div class="adm-card" style="gap:6px">${L.map(x=>`<div class="adm-li"><span class="dot" style="background:${RCOL(x.rarity)}"></span><span style="flex:1;min-width:0"><b>${esc(x.name)}</b><small class="muted">${x.kind==='gr'?'гир':'брейнрот'}${x.cases?` · в кейсах: ${x.cases}`:''}${x.owned?` · у игроков: ${x.owned}`:''}</small></span><b class="num">${fmt(x.price)}</b>
-     <button class="adm-x" data-a="item_delete" data-name="${esc(x.name)}" aria-label="Удалить">${ic('M6 6l12 12M18 6L6 18','#8C7D71',14,2.4)}</button></div>`).join('')}</div>`:admEmpty('Предметов пока нет')}`;}
- else if(admTab==='cases'){const[L,IT]=await Promise.all([adm('cases',{},true),adm('items',{},true)]);admData.cases=L||[];admData.items=IT||[];
-  const BR=(IT||[]).filter(x=>x.kind==='br');
-  const COLS=['#E07A3C','#A8988A','#6E9CC4','#A57DCB','#DDA650','#E2643A','#7FD49A'];
-  B.innerHTML=`<div class="adm-card"><b>Новый кейс</b>
-    <div class="adm-form"><div style="display:flex;gap:8px"><input id="acId" placeholder="id латиницей: fire" maxlength="30" style="flex:1"><input id="acPrice" type="number" inputmode="numeric" placeholder="Цена" style="width:100px"></div>
-     <input id="acName" placeholder="Название: Огненный" maxlength="40">
-     <div class="adm-cols" id="acCols">${COLS.map((c,i)=>`<button data-c="${c}" class="${i?'':'on'}" style="background:${c}" aria-label="Цвет ${c}"></button>`).join('')}</div>
-     <label class="adm-ck"><input type="checkbox" id="acHot"> метка «ХИТ»</label>
-     <button class="fire" data-a="case_add">Создать кейс</button></div></div>
-   ${(L||[]).length?(L||[]).map(c=>{const inC=new Set(c.items.map(i=>i.name));return `<details class="adm-card adm-case" data-id="${esc(c.id)}">
-    <summary><span class="dot" style="background:${esc(c.color)}"></span><b style="flex:1">${esc(c.name)}${c.hot?' <span class="badge" style="background:#3A1D12;color:#F0A27A">ХИТ</span>':''}${c.active?'':' <span class="badge" style="background:#241B16;color:#8C7D71">спрятан</span>'}</b>
-     <span class="num">${COIN(12)} ${fmt(c.price)}</span><span class="badge num" style="background:${c.rtp>100?'#3A1A12':'#14301F'};color:${c.rtp>100?'#F08A66':'#7FD49A'}">${c.rtp!=null?c.rtp+'%':'—'}</span></summary>
-    <span class="muted" style="font-size:12px">Отметь брейнротов в кейсе — шансы посчитаются сами (кейс отдаёт в среднем указанный %).</span>
-    <div class="adm-pick">${BR.map(x=>`<label class="${inC.has(x.name)?'on':''}"><input type="checkbox" value="${esc(x.name)}" ${inC.has(x.name)?'checked':''}><span style="color:${RCOL(x.rarity)}">${esc(x.name)}</span><em class="num">${fmt(x.price)}</em></label>`).join('')||'<span class="muted">Сначала добавь брейнротов во вкладке «Предметы»</span>'}</div>
-    <div class="adm-acts"><label class="adm-in"><span>Отдача %</span><input type="number" value="90" min="50" max="99" class="acRtp"></label>
-     <button class="fire" data-a="case_set_items" data-id="${esc(c.id)}">Сохранить и посчитать шансы</button></div>
-    ${c.items.length?`<div class="adm-ch">${c.items.map(i=>`<span><b style="color:${RCOL(i.rarity)}">${esc(i.name)}</b><em class="num">${fmt(i.price)} · ${String(i.chance).replace('.',',')}%</em></span>`).join('')}</div>`:''}
-    <div class="adm-acts"><button class="ghost" data-a="case_toggle" data-id="${esc(c.id)}">${c.active?'Спрятать':'Показать'}</button><button class="ghost danger" data-a="case_delete" data-id="${esc(c.id)}">Удалить кейс</button></div>
-   </details>`;}).join(''):admEmpty('Кейсов пока нет')}`;
-  $('acCols').onclick=e=>{const b=e.target.closest('button');if(!b)return;[...$('acCols').children].forEach(x=>x.classList.toggle('on',x===b));};
-  B.querySelectorAll('.adm-pick input').forEach(i=>i.onchange=()=>i.parentElement.classList.toggle('on',i.checked));}
- else if(admTab==='promo'){const L=await adm('promos',{},true)||[];
+ const B=$('admBody');if(AS.card)return admCard();B.innerHTML=admEmpty('Загружаем…');const T=AS.tab;
+ if(T==='dep'||T==='wd'){
+  const mode=AS.mode[T],pg=AS.page[T];const r=await adm(T==='dep'?'deposits':'withdrawals',{mode,page:pg},true);if(!r)return;
+  const seg=`<div class="seg adm-mode" style="grid-template-columns:1fr 1fr"><button class="${mode==='active'?'on':''}" data-mode="active">В очереди</button><button class="${mode==='history'?'on':''}" data-mode="history">История</button></div>`;
+  const ST={queued:['в очереди','#2A1C14','#F0A27A'],processing:['в работе','#14301F','#7FD49A'],done:[T==='dep'?'зачислено':'отправлено','#14301F','#7FD49A'],rejected:['отклонено','#3A1A12','#F08A66'],cancelled:['отменено','#241B16','#A8988A']};
+  const badge=x=>{const s=ST[x.status]||[x.status,'#241B16','#A8988A'];return `<span class="badge" style="background:${s[1]};color:${s[2]}">${T==='dep'&&x.status==='queued'&&x.pos?x.pos+' в очереди':s[0]}</span>`;};
+  const card=x=>T==='dep'?`<div class="adm-card${x.status==='processing'?' hot':''}">
+    <div class="adm-row"><b class="u">#${x.id}</b>${badge(x)}<span class="muted" style="margin-left:auto;font-size:12px">${ago(Date.parse(x.ts))}</span></div>
+    <button class="adm-sub adm-link" data-user="${x.tg_id}">${who(x)} ›</button>
+    <button class="adm-nick" data-copy="${esc(x.nick)}">Roblox: <b>${esc(x.nick)}</b> ${CPY}</button>
+    ${admItemsList(x.items)}
+    <div class="adm-row"><span class="muted">Заявлено</span><b class="num">${fmt(x.sum)}</b>${x.bonus?`<span class="muted">+ промо ${esc(x.promo)}</span><b class="num" style="color:#7FD49A">+${fmt(x.bonus)}</b>`:''}${x.credited!=null?`<span class="muted" style="margin-left:auto">начислено</span><b class="num" style="color:#7FD49A">${fmt(x.credited)}</b>`:''}</div>
+    ${mode==='active'?`<div class="adm-acts">
+     ${x.status==='queued'?`<button class="ghost" data-a="deposit_take" data-id="${x.id}">В работу</button>`:''}
+     <label class="adm-in"><span>Начислить</span><input type="number" inputmode="numeric" value="${x.sum}" id="ds${x.id}"></label>
+     <button class="fire" data-a="deposit_confirm" data-id="${x.id}">Принять</button>
+     <button class="ghost danger" data-a="deposit_reject" data-id="${x.id}">Отклонить</button></div>`:''}</div>`
+   :`<div class="adm-card">
+    <div class="adm-row"><b class="u">#${x.id}</b>${badge(x)}<b class="num" style="margin-left:auto">${COIN(13)} ${fmt(x.total)}</b></div>
+    <button class="adm-sub adm-link" data-user="${x.tg_id}">${who(x)} · ${ago(Date.parse(x.ts))} ›</button>
+    <button class="adm-nick" data-copy="${esc(x.nick)}">Отправить на: <b>${esc(x.nick)}</b> ${CPY}</button>
+    ${admItemsList(x.items)}
+    ${mode==='active'?`<div class="adm-acts"><button class="fire" data-a="withdraw_done" data-id="${x.id}">Отправлено</button>
+     <button class="ghost danger" data-a="withdraw_cancel" data-id="${x.id}">Отменить (вернуть)</button></div>`:''}</div>`;
+  B.innerHTML=seg+(r.rows.length?r.rows.map(card).join(''):admEmpty(mode==='active'?(T==='dep'?'Заявок на пополнение нет 👌':'Заявок на вывод нет 👌'):'История пуста'))+pager(r.total,r.page,r.size,T);
+ }
+ else if(T==='users'||T==='partners'){
+  const r=await adm(T==='users'?'user_find':'partners',{q:AS.q[T],page:AS.page[T]},true);if(!r)return;
+  B.innerHTML=`${T==='partners'?`<div class="adm-card"><b>Выдать партнёрку</b><div style="display:flex;gap:8px"><label class="srch" style="flex:1;height:44px"><input id="apId" inputmode="numeric" placeholder="Telegram ID игрока"></label>
+    <button class="fire" data-a="partner_add" style="height:44px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none">Выдать</button></div>
+    <span class="muted" style="font-size:12px">Игрок должен хотя бы раз открыть приложение.</span></div>`:''}
+   <div class="adm-card"><div style="display:flex;gap:8px"><label class="srch" style="flex:1;height:44px"><input id="auQ" value="${esc(AS.q[T])}" placeholder="Telegram ID или @ник"></label>
+    <button class="fire" data-a="find" style="height:44px;padding:0 16px;border-radius:12px;font-size:13px;box-shadow:none">Найти</button></div></div>
+   ${r.rows.length?r.rows.map(u=>`<button class="adm-card adm-user" data-user="${u.id}">
+     <div class="adm-row"><span class="adm-ava u">${esc(((u.username||u.first_name||'?')[0]||'?').toUpperCase())}</span>
+      <span style="flex:1;min-width:0;text-align:left"><b>${u.username?'@'+esc(u.username):esc(u.first_name||'без имени')}</b><small class="muted num" style="display:block">ID ${u.id}${u.last_seen?' · был '+ago(Date.parse(u.last_seen)):''}</small></span>
+      ${u.is_partner?'<span class="badge" style="background:#2B2010;color:#E8BC72">партнёр</span>':''}${u.is_banned?'<span class="badge" style="background:#3A1A12;color:#F08A66">бан</span>':''}${ic('M9 6l6 6-6 6','#6B5D52',16,2.4)}</div>
+     <div class="adm-kv"><span>Баланс<b class="num">${fmt(u.balance)}</b></span><span>Пополнил<b class="num">${fmt(u.deposited)}</b></span><span>Вывел<b class="num">${fmt(u.withdrawn)}</b></span><span>Инвентарь<b class="num">${u.inv} · ${fmt(u.inv_value)}</b></span></div>
+    </button>`).join(''):admEmpty(T==='partners'?'Партнёров пока нет':'Никого не нашли')}${pager(r.total,r.page,r.size,T)}`;
+  $('auQ').onkeydown=e=>{if(e.key==='Enter')B.querySelector('[data-a="find"]').click();};
+ }
+ else if(T==='promo'){const L=await adm('promos',{},true)||[];
   B.innerHTML=`<div class="adm-card"><b>Новый промокод</b>
     <div class="adm-form"><input id="apCode" placeholder="КОД, например GIFT50" maxlength="30" style="text-transform:uppercase">
      <select id="apKind"><option value="coins">Монеты на баланс сразу</option><option value="deposit">+% к следующему пополнению</option></select>
@@ -2262,58 +2270,84 @@ async function admLoad(){
    ${L.length?`<div class="adm-card" style="gap:6px">${L.map(p=>`<div class="adm-li" style="${p.active?'':'opacity:.5'}"><span style="flex:1;min-width:0"><b class="u" style="letter-spacing:.04em">${esc(p.code)}</b>
      <small class="muted">${p.kind==='coins'?fmt(p.value)+' монет':'+'+p.value+'% к пополнению'} · использовано ${p.used}${p.uses_left!=null?` · осталось ${p.uses_left}`:' · без лимита'}${p.active?'':' · выключен'}</small></span>
      ${p.active?`<button class="ghost" style="height:34px;padding:0 10px;font-size:12px" data-a="promo_off" data-code="${esc(p.code)}">Выключить</button>`:''}</div>`).join('')}</div>`:admEmpty('Промокодов пока нет')}`;}
- else if(admTab==='users'){
-  B.innerHTML=`<div class="adm-card"><div style="display:flex;gap:8px"><label class="srch" style="flex:1;height:44px"><input id="auQ" value="${esc(admUserQ)}" placeholder="Telegram ID или @ник"></label>
-   <button class="fire" data-a="user_find" style="height:44px;padding:0 16px;border-radius:12px;font-size:13px;box-shadow:none">Найти</button></div></div><div id="auRes"></div>`;
-  $('auQ').onkeydown=e=>{if(e.key==='Enter')B.querySelector('[data-a="user_find"]').click();};
-  admUsers();}
 }
-async function admUsers(){const L=await adm('user_find',{q:admUserQ},true)||[];const R2=$('auRes');if(!R2)return;
- R2.innerHTML=L.length?L.map(u=>`<div class="adm-card" style="margin-top:10px">
-  <div class="adm-row"><b>${u.username?'@'+esc(u.username):esc(u.first_name||'без имени')}</b>${u.is_partner?'<span class="badge" style="background:#2B2010;color:#E8BC72">партнёр</span>':''}${u.is_banned?'<span class="badge" style="background:#3A1A12;color:#F08A66">бан</span>':''}
-   <button class="adm-nick" style="margin-left:auto" data-copy="${u.id}">ID ${u.id}</button></div>
-  <div class="adm-kv"><span>Баланс<b class="num">${fmt(u.balance)}</b></span><span>Отыгрыш<b class="num">${fmt(u.wager_left)}</b></span><span>Пополнил<b class="num">${fmt(u.deposited)}</b></span><span>Предметов<b class="num">${u.inv}</b></span></div>
-  <div class="adm-acts"><label class="adm-in"><span>Сумма</span><input type="number" inputmode="numeric" placeholder="100" id="ub${u.id}"></label>
-   <button class="fire" data-a="user_add" data-id="${u.id}">Начислить</button><button class="ghost" data-a="user_sub" data-id="${u.id}">Списать</button></div>
-  <div class="adm-acts"><button class="ghost" data-a="user_partner" data-id="${u.id}" data-on="${!u.is_partner}">${u.is_partner?'Забрать партнёрку':'Выдать партнёрку'}</button>
-   <button class="ghost" data-a="user_wager_reset" data-id="${u.id}">Обнулить отыгрыш</button>
-   <button class="ghost danger" data-a="user_ban" data-id="${u.id}" data-on="${!u.is_banned}">${u.is_banned?'Разбанить':'Забанить'}</button></div>
- </div>`).join(''):admEmpty('Никого не нашли');}
+
+// ---------- карточка игрока ----------
+const GNA={admin:'Админ',quest:'Квест',case:'Кейс',upgrade:'Апгрейд',mines:'Мины',sell:'Продажа',deposit:'Пополнение',withdraw:'Вывод',bonus:'Бонус',promo:'Промокод'};
+function histRows(h){return h.rows.length?`<div style="display:flex;flex-direction:column;gap:6px">${h.rows.map(e=>{const x=e.item?mkItem(e.item):null;
+  const v=e.game==='withdraw'?-e.bet:e.payout-e.bet;const c=v>0?'#7FD49A':v<0?'#F08A66':'#CDBFB2';
+  return `<div class="hrow"><div class="tile" style="width:38px;height:38px;flex:none;border-radius:9px;${x?tileBg(R[x.r]):'background:#1F1814;border:1px solid #3A2B22'}">${x?mono(x,12):ic(e.game==='mines'?I.mines:e.game==='deposit'?'M12 5v14M5 12h14':e.game==='withdraw'?'M7 17L17 7M8 7h9v9':I.bonus,'#A8988A',18)}</div>
+   <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x?esc(x.name):GNA[e.game]||e.game}</div>
+    <div class="muted" style="font-size:11px">${GNA[e.game]||e.game}${e.src&&e.src!==GNA[e.game]?' · '+esc(e.src):''} · ${ago(Date.parse(e.ts))}</div></div>
+   <b class="num" style="font-size:13px;color:${c}">${v>0?'+':v<0?'−':''}${fmt(Math.abs(v))}</b></div>`;}).join('')}</div>`:admEmpty('Пока ничего не было');}
+async function admCard(){
+ const B=$('admBody'),id=AS.card;B.innerHTML=admEmpty('Загружаем игрока…');
+ const[u,h]=await Promise.all([adm('user',{id},true),adm('user_history',{id,page:AS.cardPage},true)]);if(!u){AS.card=null;return;}
+ const inv=u.inventory.map(mkItem),invSum=inv.reduce((a,x)=>a+x.p,0),prof=u.bets-u.wins;
+ B.innerHTML=`<button class="adm-back" data-a="back">${ic('M15 6l-6 6 6 6','#CDBFB2',16,2.4)} Назад к списку</button>
+  <div class="adm-card">
+   <div class="adm-row"><span class="adm-ava u" style="width:52px;height:52px;font-size:20px">${u.photo_url?`<img src="${esc(u.photo_url)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`:esc(((u.username||u.first_name||'?')[0]||'?').toUpperCase())}</span>
+    <span style="flex:1;min-width:0"><b style="font-size:16px">${u.username?'@'+esc(u.username):esc(u.first_name||'без имени')}</b>
+     <small class="muted" style="display:block">с нами с ${new Date(u.created_at).toLocaleDateString('ru-RU')}</small></span>
+    <button class="adm-nick" data-copy="${u.id}">ID ${u.id} ${CPY}</button></div>
+   <div class="adm-row" style="gap:6px">${u.is_admin?'<span class="badge" style="background:#2A1C14;color:#F0A27A">админ</span>':''}${u.is_partner?'<span class="badge" style="background:#2B2010;color:#E8BC72">партнёр</span>':''}${u.is_banned?'<span class="badge" style="background:#3A1A12;color:#F08A66">бан</span>':''}</div>
+   <div class="adm-kv">
+    <span>Баланс<b class="num">${fmt(u.balance)}</b></span><span>Отыгрыш<b class="num">${fmt(u.wager_left)}</b></span><span>Пополнил<b class="num">${fmt(u.deposited)}</b></span><span>Вывел<b class="num">${fmt(u.withdrawn)}</b></span>
+    <span>Поставил<b class="num">${fmt(u.bets)}</b></span><span>Выиграл<b class="num">${fmt(u.wins)}</b></span><span>Кейсов<b class="num">${u.stats.cases}</b></span><span>Казино ${prof>=0?'в плюсе':'в минусе'}<b class="num" style="color:${prof>=0?'#7FD49A':'#F08A66'}">${prof>=0?'+':'−'}${fmt(Math.abs(prof))}</b></span>
+   </div>
+  </div>
+  <div class="adm-card"><b>Баланс</b>
+   <div class="adm-acts"><label class="adm-in"><span>Сумма</span><input type="number" inputmode="numeric" placeholder="100" id="cBal"></label>
+    <button class="fire" data-a="user_add">Начислить</button><button class="ghost" data-a="user_sub">Списать</button></div>
+   <div class="adm-acts"><button class="ghost" data-a="user_partner" data-on="${!u.is_partner}">${u.is_partner?'Забрать партнёрку':'Выдать партнёрку'}</button>
+    <button class="ghost" data-a="user_wager_reset">Обнулить отыгрыш</button>
+    <button class="ghost danger" data-a="user_ban" data-on="${!u.is_banned}">${u.is_banned?'Разбанить':'Забанить'}</button></div></div>
+  <div class="adm-card"><div class="adm-row"><b>Инвентарь</b><span class="muted num" style="margin-left:auto">${inv.length} шт. · ${COIN(12)} ${fmt(invSum)}</span></div>
+   ${inv.length?`<div class="adm-inv">${inv.map(x=>`<div class="adm-ii"><div class="tile" style="height:52px;${tileBg(R[x.r])}">${mono(x,15)}</div>
+     <span style="font-size:11px;font-weight:700;line-height:1.2;min-height:26px">${esc(x.name)}</span><b class="num" style="font-size:12px">${fmt(x.p)}</b>
+     <button class="ghost danger" data-a="inv_remove" data-inv="${x.id}" data-name="${esc(x.name)}" style="height:30px;font-size:11px;border-radius:8px">Забрать</button></div>`).join('')}</div>`:admEmpty('Пусто')}
+   <div style="display:flex;gap:8px"><select id="cGive" class="adm-sel" style="flex:1;min-width:0">${u.catalog.map(c=>`<option value="${esc(c.name)}">${esc(c.name)} · ${fmt(c.price)}</option>`).join('')}</select>
+    <button class="fire" data-a="inv_give" style="height:44px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none" ${u.catalog.length?'':'disabled'}>Выдать</button></div></div>
+  <div class="adm-card"><div class="adm-row"><b>История</b><span class="muted" style="margin-left:auto;font-size:12px">${fmt(h?h.total:0)} записей</span></div>
+   ${h?histRows(h)+pager(h.total,h.page,h.size,'card'):''}</div>`;
+}
+
 $('admBody').addEventListener('click',async e=>{
- const cp=e.target.closest('[data-copy]');if(cp){navigator.clipboard&&navigator.clipboard.writeText(cp.dataset.copy).catch(()=>{});toast('Скопировано: '+cp.dataset.copy);haptic('light');return;}
- const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a,id=b.dataset.id;
- const danger=['deposit_reject','withdraw_cancel','case_delete','item_delete','user_ban','promo_off'];
+ const cp=e.target.closest('[data-copy]');if(cp){e.stopPropagation();navigator.clipboard&&navigator.clipboard.writeText(cp.dataset.copy).catch(()=>{});toast('Скопировано: '+cp.dataset.copy);haptic('light');return;}
+ const pg=e.target.closest('[data-pg]');if(pg){if(pg.disabled)return;const[k,n]=pg.dataset.pg.split(':');
+  if(k==='card')AS.cardPage=+n;else AS.page[k]=+n;haptic('light');await admLoad();$('body').scrollTop=0;return;}
+ const md=e.target.closest('[data-mode]');if(md){AS.mode[AS.tab]=md.dataset.mode;AS.page[AS.tab]=1;haptic('light');admLoad();return;}
+ const us=e.target.closest('[data-user]');if(us&&!e.target.closest('[data-a]')){AS.card=+us.dataset.user;AS.cardPage=1;haptic('light');await admLoad();$('body').scrollTop=0;return;}
+ const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a,id=b.dataset.id,uid=AS.card;
+ if(a==='back'){AS.card=null;admLoad();return;}
+ if(a==='find'){AS.q[AS.tab]=$('auQ').value.trim();AS.page[AS.tab]=1;admLoad();return;}
+ const danger=['deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub'];
  if(danger.includes(a)&&!sure(b))return;
  let r=null;b.disabled=true;
  try{
-  if(a==='deposit_take'||a==='deposit_reject'||a==='withdraw_done'||a==='withdraw_cancel')r=await adm(a,{id});
-  else if(a==='deposit_confirm'){const v=$('ds'+id).value;r=await adm(a,{id,sum:v});}
-  else if(a==='item_add'){const name=$('aiName').value.trim(),price=+$('aiPrice').value;if(!name||!(price>0)){toast('Введи название и цену');b.disabled=false;return;}
-   r=await adm(a,{name,price,kind:$('aiKind').value});if(r){$('aiName').value='';$('aiPrice').value='';}}
-  else if(a==='item_delete')r=await adm(a,{name:b.dataset.name});
-  else if(a==='case_add'){const cid=$('acId').value.trim().toLowerCase(),name=$('acName').value.trim(),price=+$('acPrice').value;
-   if(!/^[a-z0-9_-]{2,30}$/.test(cid)){toast('id: латиница, цифры, - или _');b.disabled=false;return;}
-   if(!name||!(price>0)){toast('Введи название и цену');b.disabled=false;return;}
-   const col=($('acCols').querySelector('.on')||{}).dataset;r=await adm(a,{id:cid,name,price,color:col?col.c:'#E07A3C',hot:$('acHot').checked});}
-  else if(a==='case_set_items'){const box=b.closest('.adm-case');const items=[...box.querySelectorAll('.adm-pick input:checked')].map(i=>i.value);
-   if(items.length<2){toast('Выбери хотя бы 2 брейнрота');b.disabled=false;return;}
-   const rtp=Math.min(99,Math.max(50,+box.querySelector('.acRtp').value||90))/100;r=await adm(a,{id,items,rtp});}
-  else if(a==='case_toggle'||a==='case_delete')r=await adm(a,{id});
+  if(['deposit_take','deposit_reject','withdraw_done','withdraw_cancel'].includes(a))r=await adm(a,{id});
+  else if(a==='deposit_confirm')r=await adm(a,{id,sum:$('ds'+id).value});
+  else if(a==='partner_add'){const v=$('apId').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');b.disabled=false;return;}r=await adm(a,{id:v});}
+  else if(a==='user_add'||a==='user_sub'){const v=Math.floor(+$('cBal').value);if(!(v>0)){toast('Введи сумму');b.disabled=false;return;}r=await adm('user_balance',{id:uid,delta:a==='user_add'?v:-v});}
+  else if(a==='user_partner'||a==='user_ban')r=await adm(a,{id:uid,on:b.dataset.on==='true'});
+  else if(a==='user_wager_reset')r=await adm(a,{id:uid});
+  else if(a==='inv_remove')r=await adm(a,{id:uid,inv:+b.dataset.inv,name:b.dataset.name});
+  else if(a==='inv_give')r=await adm(a,{id:uid,name:$('cGive').value});
   else if(a==='promo_add'){const code=$('apCode').value.trim().toUpperCase(),value=+$('apVal').value,uses=$('apUses').value.trim();
    if(!/^[A-Z0-9_-]{2,30}$/.test(code)||!(value>0)){toast('Код: латиница/цифры, и сколько дать');b.disabled=false;return;}
    r=await adm(a,{code,kind:$('apKind').value,value,uses});}
   else if(a==='promo_off')r=await adm(a,{code:b.dataset.code});
-  else if(a==='user_find'){admUserQ=$('auQ').value.trim();b.disabled=false;admUsers();return;}
-  else if(a==='user_add'||a==='user_sub'){const v=Math.floor(+$('ub'+id).value);if(!(v>0)){toast('Введи сумму');b.disabled=false;return;}
-   r=await adm('user_balance',{id,delta:a==='user_add'?v:-v});}
-  else if(a==='user_partner'||a==='user_ban')r=await adm(a,{id,on:b.dataset.on==='true'});
-  else if(a==='user_wager_reset')r=await adm(a,{id});
  }finally{if(b.isConnected)b.disabled=false;}
- if(r){admStats();if(admTab==='users')admUsers();else{const open=[...document.querySelectorAll('.adm-case[open]')].map(d=>d.dataset.id);await admLoad();
-  open.forEach(o=>{const d=document.querySelector(`.adm-case[data-id="${CSS.escape(o)}"]`);if(d)d.open=true;});}
-  if(a.startsWith('case_')||a.startsWith('item_'))loadCatalog();
-  if(a.startsWith('user_')&&+id===+USER.id)loadMe();}
+ if(r){admStats();await admLoad();if(uid&&+uid===+USER.id)loadMe();}
 });
+
+// ---------- новые заявки: панель и уведомление (проверяем каждые 12 секунд) ----------
+async function admPoll(){if(!LIVE||!USER.admin)return;const o=await API.call('admin',{op:'overview'},true);if(!o)return;
+ if(AS.last.dep>=0&&o.dep_queue>AS.last.dep){toast('🔔 Новая заявка на пополнение');haptic('warning');}
+ else if(AS.last.wd>=0&&o.wd_queue>AS.last.wd){toast('🔔 Новая заявка на вывод');haptic('warning');}
+ const changed=o.dep_queue!==AS.last.dep||o.wd_queue!==AS.last.wd;AS.last.dep=o.dep_queue;AS.last.wd=o.wd_queue;admBadges(o);
+ if(changed&&cur==='admin'&&!AS.card&&(AS.tab==='dep'||AS.tab==='wd')&&AS.mode[AS.tab]==='active'){admStats();admLoad();}}
+setInterval(admPoll,12000);
 
 /* ---------- рефералка ---------- */
 const refUrl=`https://t.me/${CONFIG.BOT_USERNAME}?start=${USER.ref}`;
@@ -2340,7 +2374,7 @@ function applyState(st,quiet){
  WG.left=st.wager_left;WG.total=st.wager_total;
  STATS=st.stats||STATS;BEST=st.best?{...mkItem(st.best),src:st.best.src}:null;
  USER.partner=!!st.is_partner;$('partnerRow').hidden=!USER.partner;
- USER.admin=!!st.is_admin;$('admEntry').hidden=!USER.admin;
+ const wasAdm=USER.admin;USER.admin=!!st.is_admin;$('admEntry').hidden=!USER.admin;if(USER.admin&&!wasAdm)setTimeout(admPoll,500);
  DAILY_NEXT=st.daily_next?Date.parse(st.daily_next):null;DAILY_DAY=st.daily_day||1;DAILY_STREAK=st.daily_streak||0;
  if(Array.isArray(st.daily_rewards)&&st.daily_rewards.length===7)DAYS=st.daily_rewards.map(Number);
  if(st.daily_amount!=null)DAILY_AMOUNT=+st.daily_amount;
