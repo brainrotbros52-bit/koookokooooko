@@ -253,7 +253,7 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .stage-cap img{width:30px;height:30px;object-fit:contain}
 .case-stage.run .stage-cap{opacity:1}
 .case-stage .reels{transition:opacity .35s,filter .35s}
-.case-stage:not(.run) .reels{opacity:.32;filter:saturate(.6)}
+.case-stage:not(.run) .reels{opacity:.5;filter:saturate(.75)}
 .case-stage:not(.run) .reel .mk{display:none}
 .stage-hero{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;pointer-events:none;transition:opacity .3s,transform .35s cubic-bezier(.2,.8,.2,1)}
 .case-stage.run .stage-hero{opacity:0;transform:scale(1.18)}
@@ -1962,8 +1962,13 @@ function drawCaseItems(){
 }
 const MS=[1,2,3,5];let mIdx=0,spinning=false,lastWin=[],uid=100;
 const drawTotal=()=>{$('total').textContent=fmt(casePrice*MS[mIdx]);document.querySelectorAll('#mult [data-mp]').forEach(e=>e.innerHTML=COIN(11)+fmt(casePrice*+e.dataset.mp));};
-const LEN=90,STOP=80;
-function reelDims(n){return n===1?{h:132,tw:92,th:108,f:22}:n===2?{h:112,tw:80,th:92,f:19}:n===3?{h:96,tw:70,th:80,f:17}:{h:72,tw:56,th:60,f:14};}
+let LEN=90;const STOP=80;
+// размер плиток зависит от ширины ленты: на телефоне как раньше, на большом экране — крупнее (до ×1.6)
+function reelDims(n,rw){const b=n===1?{h:132,tw:92,th:108,f:22}:n===2?{h:112,tw:80,th:92,f:19}:n===3?{h:96,tw:70,th:80,f:17}:{h:72,tw:56,th:60,f:14};
+ const cap=n===1?1.6:n===2?1.5:n===3?1.4:1.3,k=Math.max(1,Math.min(cap,(rw||358)/330));
+ return {h:Math.round(b.h*k),tw:Math.round(b.tw*k),th:Math.round(b.th*k),f:Math.round(b.f*k),nf:Math.round(11+(k-1)*5)};}
+// откуда лента начинается: левый край всегда закрыт плитками (раньше на широком экране слева было пусто)
+function reelStartX(d,rw){const step=d.tw+8,S=Math.max(5,Math.ceil((rw/2-d.tw/2)/step)+1);return -(S*step+d.tw/2-rw/2);}
 // Лента — только картинка: что выпало, решает сервер (или roll() в демо).
 // Поэтому в ленте редкие брейнроты показываются чаще настоящих шансов,
 // дорогие проезжают перед остановкой, а иногда самый дорогой стоит совсем рядом с указателем.
@@ -1985,22 +1990,23 @@ function idleList(P){const base=Array.from({length:IDLE_K},()=>rollShow(P));if(P
  return Array.from({length:LEN},(_,i)=>base[i%IDLE_K]);}
 function idleStop(){if(idleRAF)cancelAnimationFrame(idleRAF);idleRAF=null;}
 function idleStart(d){
- idleStop();if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
- const tracks=[...document.querySelectorAll('#reels .track')],step=d.tw+8,period=IDLE_K*step,rw=$('reels').clientWidth||358,x0=-(5*step+d.tw/2-rw/2),t0=performance.now();
- const sp=tracks.map((_,i)=>22+i*4);   // пикселей в секунду: медленно, ряды чуть по-разному
+ idleStop();
+ const tracks=[...document.querySelectorAll('#reels .track')],step=d.tw+8,period=IDLE_K*step,rw=$('reels').clientWidth||358,x0=reelStartX(d,rw),t0=performance.now();
+ const sp=tracks.map((_,i)=>(40+i*7)*Math.max(1,d.tw/92));   // пикселей в секунду: спокойно, но заметно; ряды чуть по-разному
  const fr=now=>{if(spinning||cur!=='case'||$('caseStage').classList.contains('run')){idleRAF=null;return;}
   tracks.forEach((t,i)=>{t.style.transform=`translate3d(${x0-((now-t0)/1000*sp[i])%period}px,0,0)`;});idleRAF=requestAnimationFrame(fr);};
  idleRAF=requestAnimationFrame(fr);}
 function buildReels(n,winners){
  if(!winners){caseReset();$('caseStage').classList.remove('run');}else idleStop();
- const d=reelDims(n),P=showPool();
+ const rw0=$('reels').clientWidth||358,d=reelDims(n,rw0),P=showPool();
+ LEN=Math.max(90,STOP+Math.ceil((rw0/2+d.tw)/(d.tw+8))+2);   // справа от остановки тоже хватает плиток
  $('reels').innerHTML=Array.from({length:n},(_,r)=>{
   const list=winners?reelList(P,winners[r],n>1):idleList(P);
   return `<div class="reel" style="height:${d.h}px"><div class="track" style="top:${(d.h-d.th)/2}px">${list.map((x,i)=>`
    <div class="rt${winners&&i===STOP?' win':''}" style="--c:${R[x.r]}88;width:${d.tw}px;height:${d.th}px;${tileBg(R[x.r])}">
-    ${mono(x,d.f)}${n<=2?`<span class="n">${x.name}</span>`:''}</div>`).join('')}</div><div class="fade"></div><div class="mk"><svg class="cap t" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg><svg class="cap b" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg></div></div>`;}).join('');
+    ${mono(x,d.f)}${d.tw>=80?`<span class="n" style="font-size:${d.nf}px">${x.name}</span>`:''}</div>`).join('')}</div><div class="fade"></div><div class="mk"><svg class="cap t" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg><svg class="cap b" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg></div></div>`;}).join('');
  const rw=$('reels').clientWidth||358;
- document.querySelectorAll('#reels .track').forEach(t=>{t.style.transition='none';t.style.transform=`translate3d(${-(5*(d.tw+8)+d.tw/2-rw/2)}px,0,0)`;});
+ document.querySelectorAll('#reels .track').forEach(t=>{t.style.transition='none';t.style.transform=`translate3d(${reelStartX(d,rw)}px,0,0)`;});
  if(!winners)idleStart(d);
  return d;
 }
@@ -2078,6 +2084,8 @@ async function spin(){
 $('openBtn').onclick=spin;
 seg($('mult'),MS.map(n=>`×${n}<small class="num" data-mp="${n}"></small>`),0,i=>{if(spinning){drawTotal();return;}mIdx=i;drawTotal();buildReels(MS[i]);});
 // «быстро» — квадратная кнопка рядом с «Открыть» (флажок #fast остался для логики)
+// окно поменяло размер (поворот телефона, Telegram Desktop) — перестроить ленту под новую ширину
+let _rzT=0;addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{if(cur==='case'&&!spinning&&!$('caseStage').classList.contains('run'))buildReels(MS[mIdx]);},200);});
 $('fastBtn').onclick=()=>{const f=$('fast');f.checked=!f.checked;$('fastBtn').classList.toggle('on',f.checked);$('fastBtn').setAttribute('aria-pressed',f.checked);};
 drawCaseItems();
 
