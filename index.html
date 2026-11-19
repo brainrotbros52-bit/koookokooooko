@@ -585,6 +585,79 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .pick.sel::after{content:"";position:absolute;top:6px;right:6px;width:16px;height:16px;border-radius:50%;background:#E07A3C url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231A0F09' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/11px no-repeat}
 .toast{position:absolute;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;transition:all .25s;z-index:9;padding:10px 16px;border-radius:12px;background:#F2E9E1;color:#1A0F09;font-weight:800;font-size:13px;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- кабинет партнёра ---------- */
+.pc-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.pc-chips{display:flex;gap:6px;flex:none}
+.pc-chip{display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:7px 10px;border-radius:12px;background:#171210;border:1px solid #2E241E}
+.pc-chip span{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8C7D71}
+.pc-chip b{font-size:15px;font-weight:700;display:flex;align-items:center;gap:4px}
+.pc-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;border-radius:16px;background:#120E0C;border:1px solid #2E241E}
+.pc-nav button{display:flex;align-items:center;justify-content:center;gap:5px;height:40px;padding:0 4px;border:0;border-radius:11px;background:transparent;color:#A8988A;font-weight:800;font-size:12px;min-width:0}
+.pc-nav button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pc-nav button svg{flex:none}
+.pc-nav button.on{background:#2A1C14;color:#F0A27A;box-shadow:inset 0 0 0 1px #5A3A26}
+#pcBody{display:flex;flex-direction:column;gap:10px}
+.pc-card{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:16px;background:#171210;border:1px solid #2E241E}
+.pc-card h3{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#A8988A;line-height:1.4}
+.pc-pers{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px;flex:none}.pc-pers::-webkit-scrollbar{display:none}
+.pc-pers button{flex:none;height:34px;padding:0 12px;border-radius:10px;background:#171210;border:1px solid #2E241E;color:#CDBFB2;font-weight:800;font-size:12.5px}
+.pc-pers button.on{background:#F2E9E1;color:#1A0F09;border-color:#F2E9E1}
+.pc-pers.sm{margin:0;padding:0}.pc-pers.sm button{height:30px;padding:0 10px;font-size:12px;background:#120E0C}.pc-pers.sm button.on{background:#F2E9E1}
+.pc-hero{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:18px;background:#171210;border:1px solid #5A3A26}
+.pc-hero-fire{position:absolute;right:-60px;top:-70px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(224,122,60,.24),rgba(224,122,60,0) 65%);pointer-events:none}
+.pc-hero .big{position:relative;font-size:34px;font-weight:700;display:flex;align-items:center;gap:10px;line-height:1.1}
+.pc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pc-t{display:flex;flex-direction:column;justify-content:space-between;gap:8px;padding:12px;border-radius:14px;background:#171210;border:1px solid #2E241E;min-height:78px;min-width:0}
+.pc-card .pc-t{background:#120E0C}
+.pc-t span{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8C7D71;line-height:1.3}
+.pc-t b{font-size:20px;font-weight:700;display:flex;align-items:center;gap:6px}
+.pos{color:#7FD49A!important}.neg{color:#F08A66!important}
+.pc-leg{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.pc-leg button{display:flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:9px;background:#120E0C;border:1px solid #2E241E;color:#CDBFB2;font-weight:700;font-size:12px}
+.pc-leg button i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.pc-leg button.off{color:#6B5D52}.pc-leg button.off i{background:transparent;box-shadow:inset 0 0 0 2px var(--c)}
+.pc-chart{position:relative;user-select:none;-webkit-user-select:none;touch-action:pan-y}
+.pc-chart svg{display:block;max-width:100%;height:auto}
+.pc-tip{position:absolute;top:2px;pointer-events:none;min-width:140px;padding:8px 10px;border-radius:10px;background:#0E0B0A;border:1px solid #3A2B22;box-shadow:0 8px 24px rgba(0,0,0,.5);font-size:12px;display:flex;flex-direction:column;gap:4px;z-index:2}
+.pc-tip div{display:flex;align-items:center;gap:6px;color:#CDBFB2}.pc-tip i{width:8px;height:8px;border-radius:2px;flex:none}.pc-tip b{margin-left:auto;padding-left:12px;color:#F2E9E1}
+.pc-tip[hidden]{display:none}
+.pc-tbl{overflow-x:auto;border-radius:14px;border:1px solid #2E241E;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.pc-tbl table{border-collapse:separate;border-spacing:0;min-width:100%;font-size:13px}
+.pc-tbl th{background:#120E0C;color:#8C7D71;font-size:11px;font-weight:800;text-align:right;padding:10px;white-space:nowrap;border-bottom:1px solid #2E241E}
+.pc-tbl td{padding:10px;text-align:right;white-space:nowrap;border-bottom:1px solid #221A16;background:#171210;font-weight:700}
+.pc-tbl tr:last-child td{border-bottom:0}
+.pc-tbl th:first-child,.pc-tbl td:first-child{position:sticky;left:0;z-index:1;text-align:left;border-right:1px solid #2E241E}
+.pc-tbl .l{text-align:left}
+.pc-tbl tr.tot td{background:#1F1611;font-weight:800}
+.pc-tbl td.z{color:#5A4C42}
+.pc-lbl{font-size:12px;font-weight:700;color:#A8988A;margin-bottom:-4px}
+.pc-link{display:flex;gap:8px;align-items:flex-start}
+.pc-link .v{flex:1;min-width:0;display:flex;align-items:center;min-height:46px;padding:10px 12px;border-radius:12px;background:#0E0B0A;border:1px dashed #5A4334;font-size:13px;font-weight:700;line-height:1.35;word-break:break-all;color:#F0C29A}
+.pc-link button{width:46px;height:46px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:none;padding:0}
+.pc-src{display:flex;flex-wrap:wrap;gap:6px}
+.pc-src button{height:36px;padding:0 12px;border-radius:10px;background:#120E0C;border:1px solid #2E241E;color:#CDBFB2;font-weight:800;font-size:13px}
+.pc-src button.on{border-color:#E07A3C;color:#F0A27A;background:#2A1C14}
+.pc-hint{font-size:12px;color:#8C7D71;line-height:1.5;margin:0}
+.pc-code{font-size:24px;font-weight:700;letter-spacing:.06em;color:#F0A27A}
+.pc-f{display:grid;gap:8px}.pc-f.c2{grid-template-columns:repeat(2,minmax(0,1fr))}.pc-f .w{grid-column:1/-1}
+.pc-f label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;color:#A8988A;min-width:0}
+.pc-f input,.pc-f select{height:46px;padding:0 12px;border-radius:12px;background:#0E0B0A;border:1px solid #2E241E;color:#F2E9E1;font:700 14px Manrope,sans-serif;outline:none;min-width:0;width:100%}
+.pc-f input::placeholder{color:#5A4C42}
+.pc-f input:focus,.pc-f select:focus{border-color:#7A4A2C}
+.pc-cost{display:flex;align-items:center;gap:10px}.pc-cost>span{flex:1;font-size:13px;color:#A8988A}.pc-cost b{color:#F2E9E1}
+.pc-cost .fire{height:44px;padding:0 18px;border-radius:12px;font-size:14px;box-shadow:none}
+.pc-kv{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;padding:12px 0;border-bottom:1px solid #2E241E}
+.pc-kv:first-child{padding-top:0}.pc-kv:last-child{border-bottom:0;padding-bottom:0}
+.pc-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#120E0C;min-width:0}
+.pc-row.col{flex-direction:column;align-items:stretch;gap:8px}
+.pc-bar{height:6px;border-radius:3px;background:#2E241E;overflow:hidden}.pc-bar i{display:block;height:100%;background:#E07A3C;border-radius:3px}
+.pc-empty{align-items:center;text-align:center;padding:26px 16px}
+.pc-empty-ic{width:56px;height:56px;border-radius:16px;background:#120E0C;border:1px solid #2E241E;display:flex;align-items:center;justify-content:center}
+.pe-tgs{display:flex;flex-direction:column;gap:6px}
+.adm-card .srch{min-width:0}
+.pe-tg{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:#0E0B0A;border:1px solid #2E241E;cursor:pointer}
+.pe-tg span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.pe-tg b{font-size:13px}.pe-tg small{font-size:11px;color:#8C7D71;line-height:1.35}
 </style>
 </head>
 <body>
@@ -865,27 +938,13 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 
     <!-- ===== БОНУСЫ ===== -->
     <section class="screen" data-s="bonus">
-      <div class="ptitle"><h1>Бонусы</h1><span class="muted" style="font-size:13px">Заходи каждый день и зови друзей</span></div>
+      <div class="ptitle"><h1>Бонусы</h1><span class="muted" style="font-size:13px">Заходи каждый день — награда растёт</span></div>
       <div class="card" style="border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px">
         <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-weight:800;font-size:16px">Ежедневная награда</h2><span class="muted" style="font-size:13px" id="streakTxt">серия: <b style="color:#F2E9E1">0 дней</b></span></div>
         <div id="days" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px"></div>
         <button class="fire" style="height:50px;font-size:15px" id="dailyClaim">Забрать</button>
       </div>
-      <div style="position:relative;overflow:hidden;border-radius:18px;background:#171210;border:1px solid #3A2B22;padding:16px;display:flex;flex-direction:column;gap:12px">
-        <div aria-hidden="true" style="position:absolute;right:-70px;top:-70px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(224,122,60,.22),rgba(224,122,60,0) 65%)"></div>
-        <h2 style="position:relative;font-weight:800;font-size:16px">Реферальная программа</h2>
-        <p class="muted" style="position:relative;margin:0;font-size:14px;line-height:1.45">Получай <b style="color:#E9A06A">10%</b> с каждого пополнения друга. Друг получает +5% к первому депозиту.</p>
-        <div style="position:relative;display:flex;gap:8px">
-          <div style="flex:1;min-width:0;display:flex;align-items:center;height:44px;padding:0 12px;border-radius:12px;background:#0E0B0A;border:1px dashed #5A4334;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="refLink">t.me/brainfire_bot?start=fortik</div>
-          <button class="fire" style="height:44px;padding:0 16px;border-radius:12px;font-size:14px;box-shadow:none" id="refCopy">Копировать</button>
-        </div>
-        <div style="position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
-          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px">0</div><div class="muted" style="font-size:12px">друзей</div></div>
-          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px">0</div><div class="muted" style="font-size:12px">заработано</div></div>
-          <div style="padding:10px;border-radius:12px;background:#0E0B0A"><div class="u num" style="font-weight:700;font-size:18px;color:#E9A06A">0</div><div class="muted" style="font-size:12px">к выводу</div></div>
-        </div>
-      </div>
-    </section>
+      </section>
 
     <!-- ===== КВЕСТЫ ===== -->
     <section class="screen" data-s="quests">
@@ -958,7 +1017,8 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
             <button class="fire" id="promoGo" style="height:44px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none">Активировать</button>
           </div>
         </details>
-        <button class="prow" id="partnerRow" data-go="bonus" hidden><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E9A06A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="prow-t"><b>Партнёрка</b><span class="muted">10% с депозитов друзей</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        <button class="prow" id="partnerRow" data-go="partner" hidden><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E9A06A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="prow-t"><b>Кабинет партнёра</b><span class="muted">Доход, ссылки, промокоды, выводы</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        <button class="prow" id="applyRow" hidden><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E9A06A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5"/></svg></span><span class="prow-t"><b>Стать партнёром</b><span class="muted">Заполни анкету — рассмотрим быстро</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
         <button class="prow" data-go="settings"><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDBFB2" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 4v4M9 10v4M17 16v4"/></svg></span><span class="prow-t"><b>Настройки</b><span class="muted">Звук, уведомления, язык</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B5D52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       </div>
     </section>
@@ -972,6 +1032,16 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
       <div class="adm-stats" id="admStats"></div>
       <div class="adm-tabs" id="admTabs"></div>
       <div id="admBody" style="display:flex;flex-direction:column;gap:10px"></div>
+    </section>
+
+    <!-- ===== КАБИНЕТ ПАРТНЁРА (только для партнёров; сервер проверяет сам) ===== -->
+    <section class="screen" data-s="partner">
+      <div class="pc-head">
+        <div class="ptitle" style="min-width:0"><h1>Партнёрка</h1><span class="muted" style="font-size:13px" id="pcSub">Кабинет партнёра</span></div>
+        <div class="pc-chips" id="pcChips"></div>
+      </div>
+      <nav class="pc-nav" id="pcNav" aria-label="Разделы кабинета"></nav>
+      <div id="pcBody"></div>
     </section>
 
     <!-- ===== НАСТРОЙКИ ===== -->
@@ -1084,6 +1154,11 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
     <div class="sheet-bg" data-close></div>
     <div class="sheet-box" role="dialog" aria-label="Вывод" id="wdBox"></div>
   </div>
+  <!-- шторка: анкета партнёра -->
+  <div class="sheet" id="paSheet" aria-hidden="true">
+    <div class="sheet-bg" data-close></div>
+    <div class="sheet-box" role="dialog" aria-label="Анкета партнёра" id="paBox"></div>
+  </div>
   <!-- шторка подтверждения депозита -->
   <div class="sheet" id="depSheet" aria-hidden="true">
     <div class="sheet-bg" data-close></div>
@@ -1138,7 +1213,8 @@ const ERR={
   deposit_active:'У тебя уже есть заявка в очереди',wager_left:'Сначала отыграй баланс',daily_wait:'Бонус ещё не доступен',
   unauthorized:'Открой приложение через Telegram',bad_nick:'Неверный ник Roblox',game_active:'Сначала закончи текущую игру',
   target_cheap:'Цель должна быть дороже ставки',banned:'Аккаунт заблокирован',bad_items:'Предметы не найдены — обнови страницу',
-  cannot_cancel:'Заявку уже взяли в работу',not_admin:'Нет прав администратора',bad_input:'Проверь поля',bad_case_id:'id кейса: латиница, цифры, - или _',item_owned:'Этот предмет есть у игроков — удалить нельзя',no_user:'Игрок не найден',quest_not_done:'Квест ещё не выполнен',quest_claimed:'Награда уже получена',no_quest:'Квест не найден',open_first:'Сначала открой клетку',no_game:'Игра не найдена',server_error:'Ошибка сервера, попробуй ещё раз'
+  cannot_cancel:'Заявку уже взяли в работу',not_admin:'Нет прав администратора',bad_input:'Проверь поля',bad_case_id:'id кейса: латиница, цифры, - или _',item_owned:'Этот предмет есть у игроков — удалить нельзя',no_user:'Игрок не найден',quest_not_done:'Квест ещё не выполнен',quest_claimed:'Награда уже получена',no_quest:'Квест не найден',open_first:'Сначала открой клетку',no_game:'Игра не найдена',server_error:'Ошибка сервера, попробуй ещё раз',
+  own_code:'Это твой собственный код',already_bound:'Ты уже закреплён за другим партнёром',not_partner:'Партнёрка не активна',bad_code:'Код: латиница и цифры',code_taken:'Такой код уже занят',no_partner_money:'Не хватает партнёрского баланса',promos_off:'Создание промокодов выключено',pwd_active:'Заявка на вывод уже ждёт',pwd_closed:'Окно вывода сейчас закрыто',pwd_min:'Недостаточно для вывода',bad_parent:'Партнёр-пригласитель не найден',already_partner:'Ты уже партнёр',not_found:'Не найдено',case_not_found:'Кейс не найден'
 };
 const API={
   on:()=>LIVE,lastError:null,
@@ -1197,7 +1273,7 @@ const I={
  x:'M6 6l12 12M18 6L6 18',chev:'M9 6l6 6-6 6',gem:'M6 3h12l3 6-9 12L3 9zM3 9h18M9 3l3 6 3-6M12 21V9'};
 const MENU={
  games:[{s:'home',k:'cases',t:'Кейсы',d:'Все кейсы'},{s:'upgrade',k:'upgrade',t:'Апгрейд',d:'Улучши предмет'},{s:'mines',k:'mines',t:'Мины',d:'Найди и не взорвись',wide:1,badge:'NEW'}],
- rewards:[{s:'bonus',k:'bonus',t:'Бонусы',d:'Ежедневный, рефералы'},{s:'quests',k:'quests',t:'Квесты',d:'Задания и награды',meta:'<span class="badge" style="background:#3A1D12;color:#F0A27A">2 новых</span>'},{s:'draws',k:'draws',t:'Розыгрыши',d:'День, неделя, месяц',meta:'<span class="badge num" style="background:#2B2010;color:#E8BC72">6 ч</span>'}],
+ rewards:[{s:'bonus',k:'bonus',t:'Бонусы',d:'Ежедневная награда'},{s:'quests',k:'quests',t:'Квесты',d:'Задания и награды',meta:'<span class="badge" style="background:#3A1D12;color:#F0A27A">2 новых</span>'},{s:'draws',k:'draws',t:'Розыгрыши',d:'День, неделя, месяц',meta:'<span class="badge num" style="background:#2B2010;color:#E8BC72">6 ч</span>'}],
  account:[{s:'settings',k:'settings',t:'Настройки',d:'Звук, уведомления',c:'#CDBFB2'}]};
 let cur='home';
 const EMBERS=Array.from({length:16},()=>`<i class="em" style="left:${(Math.random()*100).toFixed(1)}%;--dx:${(Math.random()*60-30).toFixed(0)}px;animation-duration:${(3+Math.random()*4).toFixed(2)}s;animation-delay:-${(Math.random()*6).toFixed(2)}s;${Math.random()<.4?'width:2px;height:2px;':''}"></i>`).join('');
@@ -1237,6 +1313,11 @@ function drawMenu(){
     <span style="flex:1;text-align:left;font-weight:700;font-size:14px">Настройки</span>
     ${ic(I.chev,'#6B5D52',16,2.2)}
    </button>
+   ${USER.partner?`<button data-go="partner" class="me-set${act==='partner'?' on':''}">
+    <span class="me-set-ic">${ic('M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75','currentColor',17,2)}</span>
+    <span style="flex:1;text-align:left;font-weight:700;font-size:14px">Кабинет партнёра</span>
+    ${ic(I.chev,'#6B5D52',16,2.2)}
+   </button>`:''}
   </div>
 
   <div class="sec">Игры</div>
@@ -1261,7 +1342,7 @@ function drawMenu(){
   </div>
  </div></div>`;
 }
-const BACK={case:'home',win:'case',admin:'settings'};
+const BACK={case:'home',win:'case',admin:'settings',partner:'profile'};
 function syncBack(){if(!tg||!tg.BackButton)return;(cur==='home')?tg.BackButton.hide():tg.BackButton.show();}
 if(tg&&tg.BackButton)tg.BackButton.onClick(()=>{const os=document.querySelector('.sheet.open');if(os){closeSheet(os.id);return;}if($('depModal').classList.contains('open')){closeDeposit();return;}if($('phone').classList.contains('open')){$('phone').classList.remove('open');return;}if(!spinning&&!upBusy)go(BACK[cur]||'home');});
 function go(s){
@@ -1270,6 +1351,7 @@ function go(s){
  if(s==='upgrade')drawUp();
  if(s==='quests')loadQuests();
  if(s==='admin')admOpen();
+ if(s==='partner')pcOpen();
  if(s==='bonus')drawDaily();
  if(s==='profile'){drawProfile();wDraw();}
 
@@ -1875,7 +1957,7 @@ $('pidCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(Str
 $('ptabs2').onclick=e=>{const b=e.target.closest('button');if(!b)return;pTab=+b.dataset.i;histPage=1;[...$('ptabs2').children].forEach(x=>x.classList.toggle('on',x===b));haptic('light');drawProfile();};
 $('promoGo').onclick=async()=>{const v=$('promoIn').value.trim().toUpperCase();if(!v){toast('Введи код');haptic('error');return;}
  if(API.on()){const r=await API.call('promo',{code:v});if(!r){haptic('error');return;}applyState(r.state);haptic('success');
-  toast(r.kind==='deposit'?`Промокод ${r.code}: +${r.value}% к следующему пополнению`:'+'+fmt(r.amount)+' на баланс');$('promoIn').value='';return;}
+  toast(r.kind==='deposit'?`Промокод ${r.code}: +${r.value}% к следующему пополнению`:r.kind==='ref'?(r.value?`Код ${r.code}: +${r.value}% к следующему пополнению`:`Готово — ты с партнёром ${r.code}`):r.kind==='case'?`${r.case}: выпал ${r.item.name} · ${fmt(r.item.price)}`:'+'+fmt(r.amount)+' на баланс');$('promoIn').value='';return;}
  const P={};if(!P[v]){toast('Такого промокода нет');haptic('error');return;}
  if(usedPromos.has(v)){toast('Ты уже использовал этот промокод');haptic('error');return;}
  usedPromos.add(v);setBal(bal+P[v]);wAddNeed(P[v]*WAGER_BONUS,'промокод ×3');haptic('success');toast('+'+P[v]+' на баланс');$('promoIn').value='';};
@@ -2025,7 +2107,7 @@ function dqItemsHTML(S){return `<div class="dq-items">${S.map(x=>x._srv?`<div cl
 
 function dqForm(){
  const S=depSel(),sum=S.reduce((a,x)=>a+itemPrice(x)*x.q,0);
- const f={nick:dqNick,promo:DEP_PROMO?DEP_PROMO.code:'',pct:DEP_PROMO?+DEP_PROMO.value:0};
+ const f={nick:dqNick,promo:DEP_PROMO?DEP_PROMO.code:'',pct:DEP_PROMO?+DEP_PROMO.value:0,on:!!DEP_PROMO,ref:!!(DEP_PROMO&&DEP_PROMO.ref)};
  const draw=()=>{
   const bonus=Math.round(sum*f.pct/100),ok=nickOk(f.nick);
   $('depSheetBox').innerHTML=`<div class="sheet-grab"></div>
@@ -2040,11 +2122,11 @@ function dqForm(){
   <div class="dq-field">
    <label for="dqPromo">Промокод <span class="muted" style="font-weight:600">— необязательно</span></label>
    <div style="display:flex;gap:8px">
-    <div class="srch${f.pct?' okk':''}" style="flex:1;min-width:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${f.pct?'#7FD49A':'#8C7D71'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4L13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01"/></svg>
-     <input id="dqPromo" value="${f.promo}" placeholder="EMBER15" autocomplete="off" spellcheck="false" style="text-transform:uppercase;letter-spacing:.06em" ${f.pct?'disabled':''}></div>
-    <button class="${f.pct?'ghost':'fire'}" id="dqPromoGo" style="height:48px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none">${f.pct?'Убрать':'Применить'}</button>
+    <div class="srch${f.on?' okk':''}" style="flex:1;min-width:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${f.on?'#7FD49A':'#8C7D71'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4L13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01"/></svg>
+     <input id="dqPromo" value="${f.promo}" placeholder="EMBER15" autocomplete="off" spellcheck="false" style="text-transform:uppercase;letter-spacing:.06em" ${f.on?'disabled':''}></div>
+    <button class="${f.on?'ghost':'fire'}" id="dqPromoGo" style="height:48px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none">${f.on?'Убрать':'Применить'}</button>
    </div>
-   <span class="dq-hint" id="dqPromoHint">${f.pct?`<span style="color:#7FD49A">Промокод ${f.promo}: +${f.pct}% к пополнению</span>`:'Например, промокод дня с главной'}</span>
+   <span class="dq-hint" id="dqPromoHint">${f.on?`<span style="color:#7FD49A">${f.ref?(f.pct?`Код партнёра ${f.promo}: +${f.pct}% к пополнению`:`Код партнёра ${f.promo} — бонуса к пополнению нет`):`Промокод ${f.promo}: +${f.pct}% к пополнению`}</span>`:'Промокод или код партнёра'}</span>
   </div>
   <div class="dq-sum">
    <div class="wkv"><span class="muted">Предметы</span><b class="num">${fmt(sum)}</b></div>
@@ -2059,7 +2141,7 @@ function dqForm(){
   $('dqPromo').oninput=e=>{f.promo=e.target.value.trim().toUpperCase();};
   $('dqPromo').onkeydown=e=>{if(e.key==='Enter')$('dqPromoGo').click();};
   $('dqPromoGo').onclick=()=>{
-   if(f.pct){f.pct=0;f.promo='';DEP_PROMO=null;haptic('light');draw();return;}
+   if(f.on){f.on=false;f.ref=false;f.pct=0;f.promo='';DEP_PROMO=null;haptic('light');draw();return;}
    const code=f.promo.toUpperCase();if(!code){$('dqPromoHint').innerHTML='<span style="color:#F08A66">Введи промокод</span>';haptic('error');return;}
    const bad=t=>{$('dqPromoHint').innerHTML='<span style="color:#F08A66">'+t+'</span>';$('dqPromo').parentElement.classList.add('err');haptic('error');};
    if(API.on()){
@@ -2067,17 +2149,17 @@ function dqForm(){
     API.call('promo_check',{code},true).then(r=>{if($('dqPromoGo'))$('dqPromoGo').disabled=false;
      if(!r)return bad(ERR[API.lastError]||'Такого промокода нет или он закончился');
      if(r.kind!=='deposit')return bad('Этот промокод вводится в профиле');
-     f.promo=code;f.pct=r.value;haptic('success');draw();});
+     f.promo=code;f.pct=+r.value||0;f.on=true;f.ref=!!r.ref;haptic('success');draw();});
     return;
    }
-   if(PROMOS[code]){f.promo=code;f.pct=PROMOS[code];haptic('success');draw();}
+   if(PROMOS[code]){f.promo=code;f.pct=PROMOS[code];f.on=true;haptic('success');draw();}
    else bad('Такого промокода нет или он закончился');
   };
   $('dqSend').onclick=async()=>{
    if(!nickOk(f.nick))return;dqNick=f.nick;haptic('medium');
    if(API.on()){
     $('dqSend').disabled=true;
-    const r=await API.call('deposit_request',{nick:f.nick,promo:f.pct?f.promo:'',
+    const r=await API.call('deposit_request',{nick:f.nick,promo:f.on?f.promo:'',
       items:S.map(x=>({name:x.name,q:x.q,buffs:[...(depBuffs[x.key]||[])]}))});
     if(!r){if($('dqSend'))$('dqSend').disabled=false;return;}
     Object.keys(depQty).forEach(k=>delete depQty[k]);Object.keys(depBuffs).forEach(k=>delete depBuffs[k]);drawDep();
@@ -2182,7 +2264,7 @@ setInterval(drawDaily,30000);
    сервер сам проверяет, что ты в таблице admins.
    ===================================================================== */
 const ADM_TABS=[['dep','Пополнения'],['wd','Выводы'],['users','Игроки'],['partners','Партнёры'],['promo','Промо']];
-const AS={tab:'dep',mode:{dep:'active',wd:'active'},page:{dep:1,wd:1,users:1,partners:1},q:{users:'',partners:''},card:null,cardPage:1,last:{dep:-1,wd:-1}};
+const AS={tab:'dep',mode:{dep:'active',wd:'active',partners:'list'},page:{dep:1,wd:1,users:1,partners:1,pwd:1,apps:1},q:{users:'',partners:''},card:null,cardPage:1,pcard:null,pcPage:1,pcode:'',pwdHist:false,cnt:{},last:{dep:-1,wd:-1,pwd:-1,apps:-1}};
 const RCOL=r=>R[r]||'#A8988A';
 async function adm(op,args,quiet){const r=await API.call('admin',{op,args:args||{}});if(r&&r.msg&&!quiet){toast(r.msg);haptic('success');}return r;}
 function sure(btn){if(btn.dataset.sure==='1')return true;const t=btn.innerHTML;btn.dataset.sure='1';btn.textContent='Точно?';btn.classList.add('warn');
@@ -2202,15 +2284,15 @@ async function admStats(){const o=await API.call('admin',{op:'overview'},true);i
   ['Пополнено сегодня',fmt(o.dep_today),'монет'],['Профит сегодня',(prof>=0?'+':'−')+fmt(Math.abs(prof)),'ставки '+fmt(o.bets_today)]]
   .map(([t,v,d],i)=>`<div class="adm-st"><span>${t}</span><b class="u num" style="${i===3?`color:${prof>=0?'#7FD49A':'#F08A66'}`:i===1&&v?'color:#F0A27A':''}">${v}</b><small>${d}</small></div>`).join('');
  admBadges(o);}
-function admBadges(o){
- const set=(k,n)=>{const b=$('admTabs').querySelector(`[data-t="${k}"] i`);if(b)b.textContent=n||'';};set('dep',o.dep_queue);set('wd',o.wd_queue);
- const n=(o.dep_queue||0)+(o.wd_queue||0);$('admEntryBadge').textContent=n||'';$('burger').classList.toggle('dot',!!n);}
+function admBadges(o){AS.cnt={pwd:o.pwd_queue||0,apps:o.papps_new||0};
+ const set=(k,n)=>{const b=$('admTabs').querySelector(`[data-t="${k}"] i`);if(b)b.textContent=n||'';};set('dep',o.dep_queue);set('wd',o.wd_queue);set('partners',AS.cnt.pwd+AS.cnt.apps);
+ const n=(o.dep_queue||0)+(o.wd_queue||0)+AS.cnt.pwd+AS.cnt.apps;$('admEntryBadge').textContent=n||'';$('burger').classList.toggle('dot',!!n);}
 function admTabsDraw(){$('admTabs').innerHTML=ADM_TABS.map(([k,t])=>`<button class="${k===AS.tab?'on':''}" data-t="${k}">${t}<i></i></button>`).join('');}
-$('admTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;AS.tab=b.dataset.t;AS.card=null;admTabsDraw();admStats();admLoad();haptic('light');};
+$('admTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;AS.tab=b.dataset.t;AS.card=null;AS.pcard=null;admTabsDraw();admStats();admLoad();haptic('light');};
 $('admRefresh').onclick=()=>{haptic('light');admStats();admLoad();};
 
 async function admLoad(){
- const B=$('admBody');if(AS.card)return admCard();B.innerHTML=admEmpty('Загружаем…');const T=AS.tab;
+ const B=$('admBody');if(AS.card)return admCard();if(AS.pcard)return admPartnerCard();B.innerHTML=admEmpty('Загружаем…');const T=AS.tab;
  if(T==='dep'||T==='wd'){
   const mode=AS.mode[T],pg=AS.page[T];const r=await adm(T==='dep'?'deposits':'withdrawals',{mode,page:pg},true);if(!r)return;
   const seg=`<div class="seg adm-mode" style="grid-template-columns:1fr 1fr"><button class="${mode==='active'?'on':''}" data-mode="active">В очереди</button><button class="${mode==='history'?'on':''}" data-mode="history">История</button></div>`;
@@ -2236,7 +2318,8 @@ async function admLoad(){
      <button class="ghost danger" data-a="withdraw_cancel" data-id="${x.id}">Отменить (вернуть)</button></div>`:''}</div>`;
   B.innerHTML=seg+(r.rows.length?r.rows.map(card).join(''):admEmpty(mode==='active'?(T==='dep'?'Заявок на пополнение нет 👌':'Заявок на вывод нет 👌'):'История пуста'))+pager(r.total,r.page,r.size,T);
  }
- else if(T==='users'||T==='partners'){
+ else if(T==='partners')await admPartners(B);
+ else if(T==='users'){
   const r=await adm(T==='users'?'user_find':'partners',{q:AS.q[T],page:AS.page[T]},true);if(!r)return;
   B.innerHTML=`${T==='partners'?`<div class="adm-card"><b>Выдать партнёрку</b><div style="display:flex;gap:8px"><label class="srch" style="flex:1;height:44px"><input id="apId" inputmode="numeric" placeholder="Telegram ID игрока"></label>
     <button class="fire" data-a="partner_add" style="height:44px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none">Выдать</button></div>
@@ -2261,6 +2344,103 @@ async function admLoad(){
    ${L.length?`<div class="adm-card" style="gap:6px">${L.map(p=>`<div class="adm-li" style="${p.active?'':'opacity:.5'}"><span style="flex:1;min-width:0"><b class="u" style="letter-spacing:.04em">${esc(p.code)}</b>
      <small class="muted">${p.kind==='coins'?fmt(p.value)+' монет':'+'+p.value+'% к пополнению'} · использовано ${p.used}${p.uses_left!=null?` · осталось ${p.uses_left}`:' · без лимита'}${p.active?'':' · выключен'}</small></span>
      ${p.active?`<button class="ghost" style="height:34px;padding:0 10px;font-size:12px" data-a="promo_off" data-code="${esc(p.code)}">Выключить</button>`:''}</div>`).join('')}</div>`:admEmpty('Промокодов пока нет')}`;}
+}
+
+
+// ---------- партнёры: список, выводы, анкеты ----------
+async function admPartners(B){
+ const mode=AS.mode.partners||'list',c=AS.cnt||{};
+ const seg=`<div class="seg adm-mode" style="grid-template-columns:repeat(3,1fr)"><button class="${mode==='list'?'on':''}" data-mode="list">Партнёры</button>
+  <button class="${mode==='pwd'?'on':''}" data-mode="pwd">Выводы${c.pwd?` · ${c.pwd}`:''}</button><button class="${mode==='apps'?'on':''}" data-mode="apps">Анкеты${c.apps?` · ${c.apps}`:''}</button></div>`;
+ const nm=x=>x.username?'@'+esc(x.username):esc(x.first_name||'без имени');
+ if(mode==='list'){
+  const r=await adm('partners',{q:AS.q.partners,page:AS.page.partners},true);if(!r)return;
+  B.innerHTML=seg+`<div class="adm-card"><b>Выдать партнёрку</b><div style="display:flex;gap:8px"><label class="srch" style="flex:1;height:44px"><input id="apId" inputmode="numeric" placeholder="Telegram ID игрока"></label>
+    <button class="fire" data-a="pe_new" style="height:44px;padding:0 14px;border-radius:12px;font-size:13px;box-shadow:none">Настроить</button></div>
+    <span class="muted" style="font-size:12px">Игрок должен хотя бы раз открыть приложение. Дальше выставишь процент, код и всё остальное.</span></div>
+   <div class="adm-card"><div style="display:flex;gap:8px"><label class="srch" style="flex:1;height:44px"><input id="auQ" value="${esc(AS.q.partners)}" placeholder="Код, Telegram ID или @ник"></label>
+    <button class="fire" data-a="find" style="height:44px;padding:0 16px;border-radius:12px;font-size:13px;box-shadow:none">Найти</button></div></div>
+   ${r.rows.length?r.rows.map(p=>`<button class="adm-card adm-user" data-pcard="${p.id}" style="${p.active?'':'opacity:.6'}">
+     <div class="adm-row"><span class="adm-ava u">${esc(((p.username||p.first_name||'?')[0]||'?').toUpperCase())}</span>
+      <span style="flex:1;min-width:0;text-align:left"><b>${nm(p)}</b><small class="muted num" style="display:block">ID ${p.id} · код <b style="color:#F0A27A">${esc(p.code)}</b></small></span>
+      ${p.active?`<span class="badge" style="background:#2B2010;color:#E8BC72">${String(+p.revshare).replace('.',',')}%</span>`:'<span class="badge" style="background:#241B16;color:#A8988A">выключен</span>'}${ic('M9 6l6 6-6 6','#6B5D52',16,2.4)}</div>
+     <div class="adm-kv"><span>Баланс<b class="num ${pcls(p.balance)}">${pn(p.balance)}</b></span><span>Заработал<b class="num ${pcls(p.earned)}">${pn(p.earned)}</b></span>
+      <span>Игроков<b class="num">${fmt(p.players)}</b></span><span>Депозиты игроков<b class="num">${fmt(p.dep_sum)}</b></span></div></button>`).join('')
+   :admEmpty('Партнёров пока нет')}${pager(r.total,r.page,r.size,'partners')}`;
+  $('auQ').onkeydown=e=>{if(e.key==='Enter')B.querySelector('[data-a="find"]').click();};
+  $('apId').onkeydown=e=>{if(e.key==='Enter')B.querySelector('[data-a="pe_new"]').click();};
+ }
+ else if(mode==='pwd'){
+  const hm=AS.pwdHist?'history':'active',r=await adm('pwd',{mode:hm,page:AS.page.pwd},true);if(!r)return;
+  const ST={queued:['ждёт','#2A1C14','#F0A27A'],done:['выплачено','#14301F','#7FD49A'],rejected:['отклонено','#3A1A12','#F08A66']};
+  B.innerHTML=seg+`<div class="seg" style="grid-template-columns:1fr 1fr"><button class="${hm==='active'?'on':''}" data-pwdm="0">Ждут</button><button class="${hm==='history'?'on':''}" data-pwdm="1">История</button></div>
+   ${r.rows.length?r.rows.map(x=>{const s=ST[x.status]||ST.queued;return `<div class="adm-card${x.status==='queued'?' hot':''}">
+    <div class="adm-row"><b class="u">#${x.id}</b><span class="badge" style="background:${s[1]};color:${s[2]}">${s[0]}</span><b class="num" style="margin-left:auto;display:flex;align-items:center;gap:5px">${COIN(13)}${fmt(x.amount)}</b></div>
+    <button class="adm-sub adm-link" data-pcard="${x.tg_id}">${nm(x)} · код ${esc(x.code)} · ${ago(Date.parse(x.ts))} ›</button>
+    <span class="muted" style="font-size:12px">Зачислится на игровой баланс партнёра. Партнёрский баланс сейчас: <b class="${pcls(x.balance)}">${pn(x.balance)}</b></span>
+    ${x.status==='queued'?`<div class="adm-acts"><button class="fire" data-a="pwd_done" data-id="${x.id}">Выплатить</button><button class="ghost danger" data-a="pwd_reject" data-id="${x.id}">Отклонить (вернуть)</button></div>`:''}</div>`;}).join('')
+   :admEmpty(hm==='active'?'Заявок от партнёров нет 👌':'История пуста')}${pager(r.total,r.page,r.size,'pwd')}`;
+ }
+ else{
+  const r=await adm('papps',{page:AS.page.apps},true);if(!r)return;
+  const ST={new:['новая','#2A1C14','#F0A27A'],approved:['одобрена','#14301F','#7FD49A'],rejected:['отклонена','#3A1A12','#F08A66']};
+  B.innerHTML=seg+(r.rows.length?r.rows.map(x=>{const s=ST[x.status]||ST.new;return `<div class="adm-card${x.status==='new'?' hot':''}">
+    <div class="adm-row"><b>${nm(x)}</b><span class="badge" style="background:${s[1]};color:${s[2]}">${s[0]}</span><span class="muted" style="margin-left:auto;font-size:12px">${ago(Date.parse(x.ts))}</span></div>
+    <div class="adm-ch"><span>Канал<em style="margin-left:0;color:#F2E9E1;word-break:break-all">${esc(x.link)}</em></span>${x.contact?`<span>Контакт<em style="margin-left:0;color:#F2E9E1">${esc(x.contact)}</em></span>`:''}
+     ${x.audience?`<span>Аудитория<em style="margin-left:0;color:#F2E9E1">${esc(x.audience)}</em></span>`:''}${x.parent?`<span>Пригласил<em style="margin-left:0;color:#F0A27A">${esc(x.parent)}</em></span>`:''}</div>
+    ${x.status==='new'?`<div class="adm-acts"><button class="fire" data-pcard="${x.id}">Выдать партнёрку ›</button><button class="ghost danger" data-a="papp_reject" data-id="${x.id}">Отклонить</button></div>`:''}</div>`;}).join('')
+   :admEmpty('Анкет пока нет'))+pager(r.total,r.page,r.size,'apps');
+ }
+}
+
+// ---------- карточка партнёра: настройки, баланс, игроки ----------
+const LOGN={admin:'Админ',promo:'Промокод',refund:'Возврат за промокод'};
+const tgl=(id,on,t,d)=>`<label class="pe-tg"><span><b>${t}</b><small>${d}</small></span><input type="checkbox" class="toggle" id="${id}" ${on?'checked':''}></label>`;
+async function admPartnerCard(){
+ const B=$('admBody'),id=AS.pcard;B.innerHTML=admEmpty('Загружаем партнёра…');
+ const[p,pl]=await Promise.all([adm('partner',{id},true),adm('partner_players',{id,page:AS.pcPage},true)]);if(!p){AS.pcard=null;return;}
+ AS.pcode=p.code;const t=p.tot||{},nm=p.username?'@'+esc(p.username):esc(p.first_name||'без имени');
+ B.innerHTML=`<button class="adm-back" data-a="pback">${ic('M15 6l-6 6 6 6','#CDBFB2',16,2.4)} Назад</button>
+ <div class="adm-card">
+  <div class="adm-row"><span class="adm-ava u" style="width:48px;height:48px;font-size:19px">${esc(((p.username||p.first_name||'?')[0]||'?').toUpperCase())}</span>
+   <span style="flex:1;min-width:0"><b style="font-size:16px">${nm}</b><small class="muted" style="display:block">${p.exists?(p.active?'партнёр с '+new Date(p.since).toLocaleDateString('ru-RU'):'партнёрка выключена'):'ещё не партнёр'}</small></span>
+   <button class="adm-nick" data-copy="${p.id}">ID ${p.id} ${CPY}</button></div>
+  <button class="adm-sub adm-link" data-user="${p.id}" style="align-self:flex-start">Открыть как игрока ›</button>
+  ${p.exists?`<div class="adm-kv">
+   <span>Баланс<b class="num ${pcls(p.balance)}">${pn(p.balance)}</b></span><span>Заработал всего<b class="num ${pcls(p.earned)}">${pn(p.earned)}</b></span>
+   <span>Субпартнёры<b class="num">${pn(p.sub_earned)}</b></span><span>Выведено<b class="num">${fmt(p.wd_sum)}</b></span>
+   <span>Игроков<b class="num">${fmt(p.players)}</b></span><span>Переходов<b class="num">${fmt(t.clicks||0)}</b></span>
+   <span>Первых депозитов<b class="num">${fmt(t.ftd||0)}</b></span><span>Сумма депозитов<b class="num">${fmt(t.dep_sum||0)}</b></span></div>`:''}
+  ${p.app?`<div class="adm-ch"><span>Анкета<em style="margin-left:0;color:#F2E9E1;word-break:break-all">${esc(p.app.link)}${p.app.audience?' · '+esc(p.app.audience):''}</em></span></div>`:''}</div>
+ <div class="adm-card"><b>${p.exists?'Настройки партнёрки':'Выдать партнёрку'}</b>
+  <div class="pc-f c2">
+   <label>Реф-код<input id="peCode" value="${esc(p.code)}" maxlength="16" autocomplete="off" style="text-transform:uppercase"></label>
+   <label>Ревшара, %<input id="peRs" type="number" inputmode="decimal" value="${+p.revshare}" min="0" max="100" step="0.5"></label>
+   <label>% с субпартнёров<input id="peSub" type="number" inputmode="decimal" value="${+p.sub_pct}" min="0" max="50" step="0.5"></label>
+   <label>Бонус игроку по коду, %<input id="peDep" type="number" inputmode="numeric" value="${+p.dep_bonus}" min="0" max="100"></label>
+   <label>Минимальный вывод<input id="peMin" type="number" inputmode="numeric" value="${+p.wd_min}" min="0"></label>
+   <label>Его пригласил (код)<input id="pePar" value="${esc(p.parent||'')}" maxlength="16" placeholder="—" autocomplete="off" style="text-transform:uppercase"></label>
+   <label class="w">Заметка для админов<input id="peNote" value="${esc(p.note||'')}" maxlength="200" placeholder="Например: ютуб, договорились на 50%"></label></div>
+  <div class="pe-tgs">
+   ${tgl('peNgr',p.ngr,'Вычитать бонусы игроков','Ежедневка, квесты, промо и бонус к пополнению уменьшают доход партнёра на его %')}
+   ${tgl('pePromo',p.promos_on,'Может создавать промокоды','Монеты и кейсы за свой партнёрский баланс')}
+   ${tgl('peAny',p.wd_any_day,'Вывод в любой день','Иначе только в окно: суббота, 12:00–20:00 по Киеву')}
+   ${tgl('peAuto',p.wd_auto,'Вывод без подтверждения','Монеты сразу падают на игровой баланс')}
+   ${tgl('peAct',p.active,'Партнёрка активна','Выключишь — доход перестанет начисляться, игроки останутся закреплены')}</div>
+  <button class="fire" data-a="pe_save" style="height:48px;font-size:14px;box-shadow:none">${p.exists?'Сохранить':'Выдать партнёрку'}</button></div>
+ ${p.exists?`<div class="adm-card"><b>Партнёрский баланс</b>
+   <div class="adm-acts"><label class="adm-in"><span>Сумма</span><input type="number" inputmode="decimal" id="peBal" placeholder="100"></label>
+    <button class="fire" data-a="pe_add">Начислить</button><button class="ghost" data-a="pe_sub">Списать</button></div>
+   <label class="adm-in" style="flex:none"><span>Причина</span><input id="peBalNote" placeholder="необязательно" maxlength="100"></label>
+   ${p.log.length?`<div class="adm-its">${p.log.map(l=>`<div class="adm-li"><span style="flex:1;min-width:0"><b>${LOGN[l.kind]||esc(l.kind)}</b><small class="muted">${l.note?esc(l.note)+' · ':''}${new Date(l.ts).toLocaleDateString('ru-RU')}</small></span><b class="num ${pcls(l.amount)}" style="padding-right:6px">${+l.amount>0?'+':''}${pn(l.amount)}</b></div>`).join('')}</div>`:''}</div>
+ <div class="adm-card"><div class="adm-row"><b>Игроки партнёра</b><span class="muted num" style="margin-left:auto;font-size:12px">${fmt(pl?pl.total:0)}</span></div>
+  <div style="display:flex;gap:8px"><label class="srch" style="flex:1;height:44px"><input id="peBind" inputmode="numeric" placeholder="Telegram ID — закрепить вручную"></label>
+   <button class="ghost" data-a="pe_bind" style="height:44px;padding:0 14px;border-radius:12px;font-size:13px">Закрепить</button></div>
+  ${pl&&pl.rows.length?`<div class="adm-its">${pl.rows.map(x=>`<div class="adm-li"><button data-user="${x.id}" style="flex:1;min-width:0;text-align:left;background:none;border:0;padding:0;color:inherit;font:inherit">
+    <b>${x.username?'@'+esc(x.username):esc(x.first_name||'игрок')}</b><small class="muted">ID ${x.id} · ${esc(srcName(x.src||'',x.sub))} · пополнил ${fmt(x.deposited)}</small></button>
+    <b class="num ${pcls(x.income)}" style="font-size:13px">${pn(x.income)}</b><button class="adm-x" data-a="pe_unbind" data-pid="${x.id}" aria-label="Отвязать">${ic(I.x,'#F08A66',14,2.4)}</button></div>`).join('')}</div>${pager(pl.total,pl.page,pl.size,'pcard')}`
+  :admEmpty('Пока никого')}
+  <span class="muted" style="font-size:12px">Цифра справа — сколько партнёр заработал с игрока. ✕ — отвязать игрока.</span></div>`:''}`;
 }
 
 // ---------- карточка игрока ----------
@@ -2290,9 +2470,14 @@ async function admCard(){
   <div class="adm-card"><b>Баланс</b>
    <div class="adm-acts"><label class="adm-in"><span>Сумма</span><input type="number" inputmode="numeric" placeholder="100" id="cBal"></label>
     <button class="fire" data-a="user_add">Начислить</button><button class="ghost" data-a="user_sub">Списать</button></div>
-   <div class="adm-acts"><button class="ghost" data-a="user_partner" data-on="${!u.is_partner}">${u.is_partner?'Забрать партнёрку':'Выдать партнёрку'}</button>
+   <div class="adm-acts"><button class="ghost" data-pcard="${u.id}">${u.partner_code?'Партнёрка '+esc(u.partner_code)+' ›':'Выдать партнёрку ›'}</button>
     <button class="ghost" data-a="user_wager_reset">Обнулить отыгрыш</button>
     <button class="ghost danger" data-a="user_ban" data-on="${!u.is_banned}">${u.is_banned?'Разбанить':'Забанить'}</button></div></div>
+  <div class="adm-card"><b>Закреплён за партнёром</b>
+   <div class="adm-row">${u.ref_code?`<b class="u" style="color:#F0A27A">${esc(u.ref_code)}</b><span class="muted" style="font-size:12px">${esc(srcName(u.ref_src||'',u.ref_sub))}${u.ref_at?' · с '+new Date(u.ref_at).toLocaleDateString('ru-RU'):''} · партнёру <b class="${pcls(u.ref_income)}">${pn(u.ref_income)}</b></span>`:'<span class="muted" style="font-size:13px">Ни за кем — закрепится за первым партнёром, чей код или ссылку использует</span>'}</div>
+   <div style="display:flex;gap:8px"><label class="srch" style="flex:1;min-width:0;height:44px"><input id="cRef" placeholder="Код партнёра" maxlength="16" style="text-transform:uppercase"></label>
+    <button class="ghost" data-a="ref_bind" style="height:44px;padding:0 12px;border-radius:12px;font-size:13px">${u.ref_code?'Перепривязать':'Закрепить'}</button>
+    ${u.ref_code?'<button class="ghost danger" data-a="ref_unbind" style="height:44px;padding:0 12px;border-radius:12px;font-size:13px">Отвязать</button>':''}</div></div>
   <div class="adm-card"><div class="adm-row"><b>Инвентарь</b><span class="muted num" style="margin-left:auto">${inv.length} шт. · ${COIN(12)} ${fmt(invSum)}</span></div>
    ${inv.length?`<div class="adm-inv">${inv.map(x=>`<div class="adm-ii"><div class="tile" style="height:52px;${tileBg(R[x.r])}">${mono(x,15)}</div>
      <span style="font-size:11px;font-weight:700;line-height:1.2;min-height:26px">${esc(x.name)}</span><b class="num" style="font-size:12px">${fmt(x.p)}</b>
@@ -2306,13 +2491,17 @@ async function admCard(){
 $('admBody').addEventListener('click',async e=>{
  const cp=e.target.closest('[data-copy]');if(cp){e.stopPropagation();navigator.clipboard&&navigator.clipboard.writeText(cp.dataset.copy).catch(()=>{});toast('Скопировано: '+cp.dataset.copy);haptic('light');return;}
  const pg=e.target.closest('[data-pg]');if(pg){if(pg.disabled)return;const[k,n]=pg.dataset.pg.split(':');
-  if(k==='card')AS.cardPage=+n;else AS.page[k]=+n;haptic('light');await admLoad();$('body').scrollTop=0;return;}
+  if(k==='card')AS.cardPage=+n;else if(k==='pcard')AS.pcPage=+n;else AS.page[k]=+n;haptic('light');await admLoad();$('body').scrollTop=0;return;}
  const md=e.target.closest('[data-mode]');if(md){AS.mode[AS.tab]=md.dataset.mode;AS.page[AS.tab]=1;haptic('light');admLoad();return;}
+ const pcd=e.target.closest('[data-pcard]');if(pcd&&!e.target.closest('[data-a]')){AS.pcard=+pcd.dataset.pcard;AS.card=null;AS.pcPage=1;haptic('light');await admLoad();$('body').scrollTop=0;return;}
+ const pwm=e.target.closest('[data-pwdm]');if(pwm){AS.pwdHist=pwm.dataset.pwdm==='1';AS.page.pwd=1;haptic('light');admLoad();return;}
  const us=e.target.closest('[data-user]');if(us&&!e.target.closest('[data-a]')){AS.card=+us.dataset.user;AS.cardPage=1;haptic('light');await admLoad();$('body').scrollTop=0;return;}
  const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a,id=b.dataset.id,uid=AS.card;
  if(a==='back'){AS.card=null;admLoad();return;}
+ if(a==='pback'){AS.pcard=null;admLoad();return;}
+ if(a==='pe_new'){const v=$('apId').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');return;}AS.pcard=+v;AS.pcPage=1;haptic('light');await admLoad();return;}
  if(a==='find'){AS.q[AS.tab]=$('auQ').value.trim();AS.page[AS.tab]=1;admLoad();return;}
- const danger=['deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub'];
+ const danger=['deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind'];
  if(danger.includes(a)&&!sure(b))return;
  let r=null;b.disabled=true;
  try{
@@ -2328,27 +2517,322 @@ $('admBody').addEventListener('click',async e=>{
    if(!/^[A-Z0-9_-]{2,30}$/.test(code)||!(value>0)){toast('Код: латиница/цифры, и сколько дать');b.disabled=false;return;}
    r=await adm(a,{code,kind:$('apKind').value,value,uses});}
   else if(a==='promo_off')r=await adm(a,{code:b.dataset.code});
+  else if(a==='pwd_done'||a==='pwd_reject'||a==='papp_reject')r=await adm(a,{id});
+  else if(a==='pe_save'){const v=k=>$(k).value.trim(),c=k=>$(k).checked,code=v('peCode').toUpperCase();
+   if(!/^[A-Z0-9]{3,16}$/.test(code)){toast('Код: латиница и цифры, 3–16 символов');b.disabled=false;return;}
+   r=await adm('partner_save',{id:AS.pcard,code,revshare:+v('peRs'),sub_pct:+v('peSub'),dep_bonus:+v('peDep'),wd_min:+v('peMin'),parent:v('pePar'),note:v('peNote'),
+    ngr:c('peNgr'),promos_on:c('pePromo'),wd_any_day:c('peAny'),wd_auto:c('peAuto'),active:c('peAct')});}
+  else if(a==='pe_add'||a==='pe_sub'){const v=Math.round(+$('peBal').value*100)/100;if(!(v>0)){toast('Введи сумму');b.disabled=false;return;}
+   r=await adm('partner_balance',{id:AS.pcard,delta:a==='pe_add'?v:-v,note:$('peBalNote').value.trim()});}
+  else if(a==='pe_bind'){const v=$('peBind').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');b.disabled=false;return;}r=await adm('ref_set',{id:v,code:AS.pcode});}
+  else if(a==='pe_unbind')r=await adm('ref_set',{id:b.dataset.pid,code:''});
+  else if(a==='ref_bind'){const v=$('cRef').value.trim().toUpperCase();if(!v){toast('Введи код партнёра');b.disabled=false;return;}r=await adm('ref_set',{id:uid,code:v});}
+  else if(a==='ref_unbind')r=await adm('ref_set',{id:uid,code:''});
  }finally{if(b.isConnected)b.disabled=false;}
- if(r){admStats();await admLoad();if(uid&&+uid===+USER.id)loadMe();}
+ if(r){admStats();await admLoad();if((uid&&+uid===+USER.id)||(AS.pcard&&+AS.pcard===+USER.id))loadMe();}
 });
 
 // ---------- новые заявки: панель и уведомление (проверяем каждые 12 секунд) ----------
 async function admPoll(){if(!LIVE||!USER.admin)return;const o=await API.call('admin',{op:'overview'},true);if(!o)return;
  if(AS.last.dep>=0&&o.dep_queue>AS.last.dep){toast('🔔 Новая заявка на пополнение');haptic('warning');}
  else if(AS.last.wd>=0&&o.wd_queue>AS.last.wd){toast('🔔 Новая заявка на вывод');haptic('warning');}
- const changed=o.dep_queue!==AS.last.dep||o.wd_queue!==AS.last.wd;AS.last.dep=o.dep_queue;AS.last.wd=o.wd_queue;admBadges(o);
+ else if(AS.last.pwd>=0&&o.pwd_queue>AS.last.pwd){toast('🔔 Партнёр просит вывод');haptic('warning');}
+ else if(AS.last.apps>=0&&o.papps_new>AS.last.apps){toast('🔔 Новая анкета партнёра');haptic('warning');}
+ const changed=o.dep_queue!==AS.last.dep||o.wd_queue!==AS.last.wd;AS.last.dep=o.dep_queue;AS.last.wd=o.wd_queue;AS.last.pwd=o.pwd_queue;AS.last.apps=o.papps_new;admBadges(o);
  if(changed&&cur==='admin'&&!AS.card&&(AS.tab==='dep'||AS.tab==='wd')&&AS.mode[AS.tab]==='active'){admStats();admLoad();}}
 setInterval(admPoll,12000);
 
-/* ---------- рефералка ---------- */
-const refUrl=`https://t.me/${CONFIG.BOT_USERNAME}?start=${USER.ref}`;
-$('refLink').textContent=refUrl.replace('https://','');
-$('refCopy').onclick=()=>{haptic('light');
- if(tg&&tg.openTelegramLink)tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(refUrl)+'&text='+encodeURIComponent('Залетай в BRAINFIRE 🔥'));
- else{navigator.clipboard&&navigator.clipboard.writeText(refUrl).catch(()=>{});toast('Ссылка скопирована');}};
-/* ---------- партнёрка: только для тех, кому выдали доступ ----------
-   Пока флаг ставится вручную. Позже — поле is_partner у пользователя в Supabase.
-   Для просмотра дизайна можно открыть файл с ?partner=1 в адресе. */
+/* =====================================================================
+   КАБИНЕТ ПАРТНЁРА — виден только тем, кому админ выдал партнёрку.
+   Все цифры считает база (action 'partner'), здесь только показываем.
+   ===================================================================== */
+const PC={tab:'dash',per:'today',days:30,stPer:'30',det:false,src:'tg',sub:'',off:{},wdPage:1,info:null,csv:''};
+const SRCN={tg:'Telegram',yt:'YouTube',tt:'TikTok',tw:'Twitch',vk:'VK',kick:'Kick',ds:'Discord',other:'Другое'};
+const srcName=(s,sub)=>s==='code'?'Код'+(sub?' '+sub:''):(SRCN[s]||'Без метки')+(sub?' · '+sub:'');
+const PC_TABS=[['dash','Дашборд','M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z'],['stats','Статистика','M5 20V10M12 20V4M19 20v-7'],
+ ['links','Ссылки','M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1'],
+ ['promos','Промокоды','M20.6 13.4L13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01'],
+ ['wd','Выводы','M3 7h18v12H3zM3 11h18M16 15h2'],['subs','Субпартнёры','M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75']];
+const PERS=[['today','Сегодня'],['yday','Вчера'],['7','7 дней'],['30','30 дней'],['all','Всё время']];
+const pn=v=>{v=Math.round((+v||0)*100)/100;const a=Math.abs(v);return (v<0?'−':'')+(Number.isInteger(a)?fmt(a):a.toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2}));};
+const pcls=v=>+v>0?'pos':+v<0?'neg':'';
+const pctS=v=>(v*100).toLocaleString('ru-RU',{minimumFractionDigits:1,maximumFractionDigits:1})+' %';
+const dAdd=(d,n)=>{const t=new Date(d+'T00:00:00Z');t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10);};
+const dRu=(d,y)=>{const[a,b,c]=String(d).slice(0,10).split('-');return c+'.'+b+(y?'.'+a:'');};
+const kyivDay=()=>new Date(Date.now()+2*36e5).toISOString().slice(0,10);
+const pcToday=()=>PC.info&&PC.info.today||kyivDay();
+function pcRange(p){const T=pcToday();return p==='today'?[T,T]:p==='yday'?[dAdd(T,-1),dAdd(T,-1)]:p==='all'?['',T]:[dAdd(T,1-(+p)),T];}
+const dur=ms=>{if(ms<=6e4)return 'меньше минуты';const m=Math.floor(ms/6e4),d=Math.floor(m/1440),h=Math.floor(m%1440/60),mm=m%60;return d?`${d} д ${h} ч`:h?`${h} ч ${mm} мин`:`${mm} мин`;};
+const CPYI=c=>ic('M9 9h11v11H9zM5 15V6a2 2 0 0 1 2-2h8',c,17,2.2);
+function copyTxt(t,msg){navigator.clipboard&&navigator.clipboard.writeText(t).catch(()=>{});haptic('light');toast(msg||'Скопировано');}
+async function pc(op,args){if(!LIVE)return pcDemo(op,args||{});return API.call('partner',{op,args:args||{}});}
+
+async function pcOpen(){if(!USER.partner){go('profile');return;}pcNavDraw();$('pcBody').innerHTML='<p class="pc-hint" style="text-align:center;padding:30px 0">Загружаем…</p>';
+ const i=await pc('info');if(!i)return;PC.info=i;pcHeadDraw();pcLoad();}
+function pcHeadDraw(){const i=PC.info;if(!i)return;
+ $('pcSub').textContent=`Код ${i.code} · игроков: ${fmt(i.players)}`;
+ $('pcChips').innerHTML=`<div class="pc-chip"><span>Ревшара</span><b class="u num">${String(+i.revshare).replace('.',',')}%</b></div>
+  <div class="pc-chip"><span>Баланс</span><b class="u num ${pcls(i.balance)}">${pn(i.balance)}${COIN(13)}</b></div>`;}
+function pcNavDraw(){$('pcNav').innerHTML=PC_TABS.map(([k,t,d])=>`<button class="${k===PC.tab?'on':''}" data-pt="${k}">${ic(d,'currentColor',15,2.1)}<span>${t}</span></button>`).join('');}
+async function pcLoad(){const B=$('pcBody');const T=PC.tab;
+ if(T==='dash')await pcDash(B);else if(T==='stats')await pcStats(B);else if(T==='links')await pcLinks(B);
+ else if(T==='promos')await pcPromos(B);else if(T==='wd')await pcWd(B);else if(T==='subs')await pcSubs(B);}
+$('pcNav').onclick=e=>{const b=e.target.closest('[data-pt]');if(!b)return;PC.tab=b.dataset.pt;pcNavDraw();haptic('light');$('body').scrollTop=0;pcLoad();};
+
+/* ---------- дашборд ---------- */
+async function pcDash(B){
+ const[f,t]=pcRange(PC.per),T=pcToday();
+ const[s,ch]=await Promise.all([pc('stats',{from:f,to:t}),pc('stats',{from:dAdd(T,1-PC.days),to:T})]);if(!s||!ch||PC.tab!=='dash')return;
+ const p=s.period,i=PC.info,avg=s.players_upto?p.income/s.players_upto:0;
+ const tiles=[['Переходы',fmt(p.clicks)],['Регистрации',fmt(p.regs)],['Первые депозиты',fmt(p.ftd)],['Средний доход с игрока',pn(avg),1,avg],
+  ['Кол-во депозитов',fmt(p.deps)],['Сумма депозитов',fmt(p.dep_sum),1],['Click2Reg',p.clicks?pctS(p.regs/p.clicks):'—'],['Reg2Dep',p.regs?pctS(p.ftd/p.regs):'—']];
+ B.innerHTML=`<div class="pc-pers">${PERS.map(([k,tt])=>`<button class="${k===PC.per?'on':''}" data-per="${k}">${tt}</button>`).join('')}</div>
+ <div class="pc-hero"><div class="pc-hero-fire" aria-hidden="true"></div><span class="sec" style="font-size:11px;position:relative">Доход</span>
+  <span class="big u num ${pcls(p.income)}">${pn(p.income)}${COIN(26)}</span>
+  <span class="muted" style="font-size:13px;position:relative">Ревшара <b style="color:#F2E9E1">${String(+i.revshare).replace('.',',')}%</b> от игры твоих игроков${+p.sub_income?` · <b class="pos">+${pn(p.sub_income)}</b> с субпартнёров`:''}</span></div>
+ <div class="pc-grid">${tiles.map(([n,v,c,cv])=>`<div class="pc-t"><span>${n}</span><b class="u num ${cv!=null?pcls(cv):''}">${v}${c?COIN(15):''}</b></div>`).join('')}</div>
+ <div class="pc-card"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h3>Аналитика</h3>
+   <div class="pc-pers sm">${[7,30,90].map(d=>`<button class="${d===PC.days?'on':''}" data-days="${d}">${d} дн</button>`).join('')}</div></div>
+  <span class="muted num" style="font-size:12px;margin-top:-6px">${dRu(dAdd(T,1-PC.days),1)} — ${dRu(T,1)}</span>
+  <div id="pcCh1"></div><div id="pcCh2"></div></div>`;
+ PC.chRows=ch.rows;pcCharts();
+}
+// два отдельных графика: монеты и количество (у каждого своя шкала)
+const CH1=[['income','Доход','#DE6B2C'],['dep_sum','Сумма депозитов','#3C8FD8']];
+const CH2=[['clicks','Переходы','#DE6B2C'],['regs','Регистрации','#3C8FD8'],['ftd','Первые депозиты','#3FA37A']];
+function pcCharts(){const T=pcToday(),f=dAdd(T,1-PC.days),m={};(PC.chRows||[]).forEach(r=>m[String(r.day).slice(0,10)]=r);
+ const days=[];for(let d=f;d<=T;d=dAdd(d,1))days.push(d);
+ pcChart('pcCh1','Монеты',days,CH1,m,true);pcChart('pcCh2','Количество',days,CH2,m,false);}
+function niceScale(lo,hi,n){const raw=(hi-lo)/n,mag=Math.pow(10,Math.floor(Math.log10(raw)));const st=[1,2,2.5,5,10].map(x=>x*mag).find(x=>x>=raw-1e-9)||10*mag;
+ return{min:Math.floor(lo/st+1e-9)*st,max:Math.ceil(hi/st-1e-9)*st,step:st};}
+const shortN=v=>{const a=Math.abs(v);return (v<0?'−':'')+(a>=1e6?(a/1e6).toLocaleString('ru-RU',{maximumFractionDigits:1})+'М':a>=1e3?(a/1e3).toLocaleString('ru-RU',{maximumFractionDigits:1})+'к':String(Math.round(a*10)/10).replace('.',','));};
+function pcChart(id,title,days,S,m,coin){
+ const box=$(id);if(!box)return;const W=Math.max(260,box.clientWidth||300),H=168,L=42,R=10,Tp=10,Bt=24,n=days.length;
+ const vis=S.filter(s=>!PC.off[s[0]]),val=(d,k)=>+(m[d]&&m[d][k]||0);
+ let lo=0,hi=0;vis.forEach(([k])=>days.forEach(d=>{const v=val(d,k);if(v<lo)lo=v;if(v>hi)hi=v;}));if(hi-lo<(coin?10:4))hi=lo+(coin?10:4);
+ const sc=niceScale(lo,hi,4),x=i=>L+(W-L-R)*i/Math.max(1,n-1),y=v=>Tp+(H-Tp-Bt)*(1-(v-sc.min)/(sc.max-sc.min));
+ let g='';const steps=Math.round((sc.max-sc.min)/sc.step);
+ for(let k=0;k<=steps;k++){const v=sc.min+k*sc.step,z=Math.abs(v)<1e-9;
+  g+=`<line x1="${L}" x2="${W-R}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="${z?'#5A4C42':'#2A211C'}" ${z?'':'stroke-dasharray="2 4"'}/><text x="${L-8}" y="${(y(v)+4).toFixed(1)}" text-anchor="end" fill="#8C7D71" font-size="11" font-weight="700">${shortN(v)}</text>`;}
+ const every=Math.max(1,Math.ceil(n/5));let xl='';
+ for(let i=0;i<n;i+=every)xl+=`<text x="${x(i).toFixed(1)}" y="${H-6}" text-anchor="${i===0?'start':'middle'}" fill="#8C7D71" font-size="11" font-weight="700">${dRu(days[i])}</text>`;
+ const lines=vis.map(([k,,c])=>`<path d="${days.map((d,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(val(d,k)).toFixed(1)).join('')}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`).join('');
+ box.innerHTML=`<span class="sec" style="font-size:11px;display:block;margin:6px 0">${title}</span>
+  <div class="pc-chart"><svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${title} по дням">${g}${xl}${lines}
+   <line class="xh" x1="0" x2="0" y1="${Tp}" y2="${H-Bt}" stroke="#A8988A" stroke-width="1" opacity="0"/><g class="dots"></g>
+   <rect x="${L-6}" y="0" width="${W-L-R+12}" height="${H}" fill="transparent"/></svg><div class="pc-tip" hidden></div></div>
+  <div class="pc-leg">${S.map(([k,t,c])=>`<button class="${PC.off[k]?'off':''}" data-ser="${k}" style="--c:${c}" aria-pressed="${!PC.off[k]}"><i></i>${t}</button>`).join('')}</div>`;
+ const sv=box.querySelector('svg'),tip=box.querySelector('.pc-tip'),xh=sv.querySelector('.xh'),dots=sv.querySelector('.dots');
+ const move=e=>{const r=sv.getBoundingClientRect();let i=Math.round(((e.clientX-r.left)*(W/r.width)-L)/((W-L-R)/Math.max(1,n-1)));i=Math.max(0,Math.min(n-1,i));
+  xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('opacity','.55');
+  dots.innerHTML=vis.map(([k,,c])=>`<circle cx="${x(i)}" cy="${y(val(days[i],k))}" r="4.5" fill="${c}" stroke="#171210" stroke-width="2"/>`).join('');
+  tip.hidden=false;tip.innerHTML=`<span style="font-weight:800;color:#CDBFB2">${dRu(days[i],1)}</span>${vis.map(([k,t,c])=>`<div><i style="background:${c}"></i>${t}<b class="num">${coin?pn(val(days[i],k)):fmt(val(days[i],k))}</b></div>`).join('')}`;
+  const tw=tip.offsetWidth,px=x(i)*(r.width/W);tip.style.left=Math.max(0,Math.min(r.width-tw,px>r.width/2?px-tw-12:px+12))+'px';};
+ const leave=()=>{tip.hidden=true;xh.setAttribute('opacity','0');dots.innerHTML='';};
+ sv.addEventListener('pointermove',move);sv.addEventListener('pointerdown',move);sv.addEventListener('pointerleave',leave);
+}
+
+/* ---------- статистика по дням ---------- */
+const STC=[['clicks','Переходы'],['regs','Регистрации'],['ftd','Первые деп.'],['deps','Депозиты'],['dep_sum','Сумма деп.'],['income','Доход']];
+async function pcStats(B){
+ const[f,t]=pcRange(PC.stPer);const s=await pc('stats',{from:f,to:t,detail:PC.det});if(!s||PC.tab!=='stats')return;
+ let rows=s.rows.map(r=>({...r,day:String(r.day).slice(0,10)}));
+ if(!PC.det&&PC.stPer!=='all'){const m={};rows.forEach(r=>m[r.day]=r);rows=[];for(let d=t;d>=f;d=dAdd(d,-1))rows.push(m[d]||{day:d});}
+ const cell=(r,k)=>{const v=+r[k]||0;return `<td class="num ${v?(k==='income'?pcls(v):''):'z'}">${k==='income'?pn(v):fmt(v)}</td>`;};
+ const D=PC.det;
+ PC.csv=[['Дата',...(D?['Источник']:[]),...STC.map(c=>c[1])].join(';'),...rows.map(r=>[r.day,...(D?[srcName(r.src||'')]:[]),...STC.map(([k])=>String(+r[k]||0).replace('.',','))].join(';'))].join('\n');
+ B.innerHTML=`<div class="pc-pers">${[['7','7 дней'],['30','30 дней'],['90','90 дней'],['all','Всё время']].map(([k,tt])=>`<button class="${k===PC.stPer?'on':''}" data-stp="${k}">${tt}</button>`).join('')}</div>
+ <div style="display:flex;align-items:center;gap:10px"><label style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;flex:1"><input type="checkbox" class="toggle" id="pcDet" ${D?'checked':''}>По источникам</label>
+  <button class="ghost" data-a="csv" style="height:38px;padding:0 12px;border-radius:10px;font-size:12px;display:flex;align-items:center;gap:6px">${CPYI('#CDBFB2')}CSV</button></div>
+ <div class="pc-tbl"><table><thead><tr><th>Дата</th>${D?'<th class="l">Источник</th>':''}${STC.map(c=>`<th>${c[1]}</th>`).join('')}</tr></thead><tbody>
+  <tr class="tot"><td>Всё время</td>${D?'<td></td>':''}${STC.map(([k])=>cell(s.all,k)).join('')}</tr>
+  <tr class="tot"><td>За период</td>${D?'<td></td>':''}${STC.map(([k])=>cell(s.period,k)).join('')}</tr>
+  ${rows.map(r=>`<tr><td class="num">${dRu(r.day,1)}</td>${D?`<td class="l">${esc(srcName(r.src||''))}</td>`:''}${STC.map(([k])=>cell(r,k)).join('')}</tr>`).join('')}
+ </tbody></table></div>${rows.length?'':'<p class="pc-hint" style="text-align:center">За этот период пока ничего нет</p>'}
+ <p class="pc-hint">Доход — твоя ревшара с игры игроков: плюс, когда они проигрывают, минус, когда выигрывают. Регистрация — игрок закрепился за тобой.</p>`;
+ $('pcDet').onchange=e=>{PC.det=e.target.checked;haptic('light');pcLoad();};
+}
+
+/* ---------- ссылки ---------- */
+const pcBase=()=>(LIVE&&/^https?:$/.test(location.protocol))?location.origin:'https://твой-сайт.up.railway.app';
+const pcLink=()=>{const sub=PC.sub.replace(/[^A-Za-z0-9_-]/g,'').slice(0,24);return `${pcBase()}/r/${PC.info.code}?src=${PC.src}${sub?'&sub='+sub:''}`;};
+const pcTable=(head,rows)=>`<div class="pc-tbl"><table><thead><tr>${head.map((h,i)=>`<th${i?'':' class="l"'}>${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
+async function pcLinks(B){
+ const L=await pc('links');if(!L||PC.tab!=='links')return;const i=PC.info;
+ const link=pcLink(),direct=`https://t.me/${CONFIG.BOT_USERNAME}?startapp=r_${i.code}`;
+ B.innerHTML=`<div class="pc-card"><h3>Собери ссылку</h3>
+  <span class="pc-lbl">Где разместишь</span>
+  <div class="pc-src">${Object.entries(SRCN).map(([k,t])=>`<button class="${k===PC.src?'on':''}" data-src="${k}">${t}</button>`).join('')}</div>
+  <div class="pc-f"><label>Метка ролика или поста (SubID) — можно пропустить<input id="pcSubIn" value="${esc(PC.sub)}" placeholder="например shorts_25" maxlength="24" autocomplete="off" spellcheck="false"></label></div>
+  <span class="pc-lbl">Готовая ссылка</span>
+  <div class="pc-link"><span class="v" id="pcLinkV">${esc(link.replace(/^https?:\/\//,''))}</span><button class="fire" id="pcLinkC" data-copy="${esc(link)}" aria-label="Скопировать ссылку">${CPYI('#1A0F09')}</button></div>
+  <p class="pc-hint">По ссылке человек сразу попадает в бота и закрепляется за тобой навсегда. Переходы, регистрации и доход запишутся на эту метку.</p></div>
+ <div class="pc-card"><h3>Твой код</h3>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span class="pc-code u">${esc(i.code)}</span>
+   <button class="ghost" data-copy="${esc(i.code)}" style="height:38px;padding:0 12px;border-radius:10px;font-size:13px;display:flex;align-items:center;gap:6px">${CPYI('#CDBFB2')}Копировать</button></div>
+  <p class="pc-hint">Игрок вводит код в профиле в поле «Промокод» или при пополнении.${+i.dep_bonus?` Он получит <b style="color:#F0A27A">+${i.dep_bonus}%</b> к пополнению (один раз).`:''} В статистике такие игроки попадут в источник «Код».</p></div>
+ <div class="pc-card"><h3>Прямая ссылка в бота</h3>
+  <div class="pc-link"><span class="v">${esc(direct.replace('https://',''))}</span><button class="ghost" data-copy="${esc(direct)}" aria-label="Скопировать">${CPYI('#CDBFB2')}</button></div>
+  <p class="pc-hint">Без учёта переходов. Игроки закрепятся за тобой с источником «Без метки».</p></div>
+ <div class="pc-card"><h3>Мои ссылки за 30 дней</h3>${L.length?pcTable(['Ссылка','Переходы','Регистрации','Первые деп.','Сумма деп.','Доход'],
+   L.map(r=>`<tr><td class="l"><b>${esc(srcName(r.src,r.sub))}</b></td><td class="num">${fmt(r.clicks)}</td><td class="num">${fmt(r.regs)}</td><td class="num">${fmt(r.ftd)}</td><td class="num">${fmt(r.dep_sum)}</td><td class="num ${pcls(r.income)}">${pn(r.income)}</td></tr>`).join(''))
+  :'<p class="pc-hint">Пока никто не переходил. Скопируй ссылку выше и размести её.</p>'}</div>`;
+ $('pcSubIn').oninput=e=>{PC.sub=e.target.value;const l=pcLink();$('pcLinkV').textContent=l.replace(/^https?:\/\//,'');$('pcLinkC').dataset.copy=l;};
+}
+
+/* ---------- промокоды партнёра ---------- */
+async function pcPromos(B){
+ const r=await pc('codes');if(!r||PC.tab!=='promos')return;PC.info.balance=r.balance;pcHeadDraw();
+ const codes=r.codes.slice();if(!codes.find(c=>c.code===r.code))codes.unshift({code:r.code});
+ const inp=(id,ph,extra)=>`<input id="${id}" placeholder="${ph}" ${extra||''}>`;
+ B.innerHTML=`${r.promos_on?`
+ <div class="pc-card"><h3>Промокод на монеты</h3>
+  <p class="pc-hint">Стоимость (монеты × активации) сразу списывается с партнёрского баланса. Каждый, кто введёт код, получит монеты (отыгрыш ×3) и закрепится за тобой, если он ещё ничей.</p>
+  <div class="pc-f c2"><label class="w">Название кода${inp('pcCc','MYCODE','maxlength="20" autocomplete="off" style="text-transform:uppercase"')}</label>
+   <label>Монет за активацию${inp('pcCv','10','type="number" inputmode="numeric" min="1"')}</label><label>Активаций${inp('pcCu','5','type="number" inputmode="numeric" min="1" max="1000"')}</label></div>
+  <div class="pc-cost"><span>Спишется: <b class="num" id="pcCcost">0</b> из <span class="num">${pn(r.balance)}</span></span><button class="fire" data-a="pc_coins">Создать</button></div></div>
+ <div class="pc-card"><h3>Промокод на кейс</h3>
+  <p class="pc-hint">Списывается цена кейса × активации. Игрок получит бесплатное открытие — предмет сразу упадёт в инвентарь.</p>
+  ${CASES.length?`<div class="pc-f c2"><label class="w">Название кода${inp('pcKc','MYCASE','maxlength="20" autocomplete="off" style="text-transform:uppercase"')}</label>
+   <label>Кейс<select id="pcKcase">${CASES.map(c=>`<option value="${esc(c.id)}" data-p="${c.p}">${esc(c.name)} — ${fmt(c.p)}</option>`).join('')}</select></label>
+   <label>Активаций${inp('pcKu','5','type="number" inputmode="numeric" min="1" max="1000"')}</label></div>
+  <div class="pc-cost"><span>Спишется: <b class="num" id="pcKcost">0</b> из <span class="num">${pn(r.balance)}</span></span><button class="fire" data-a="pc_case">Создать</button></div>`
+  :'<p class="pc-hint">Кейсов пока нет.</p>'}</div>`
+ :`<div class="pc-card"><p class="pc-hint" style="text-align:center">Создание своих промокодов выключено. Напиши админу, если нужно.</p></div>`}
+ <div class="pc-card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Мои промокоды</h3><span class="muted num" style="font-size:12px">${r.promos.length}</span></div>
+  ${r.promos.length?r.promos.map(p=>{const used=p.uses_total-p.uses_left;return `<div class="pc-row col" style="${p.active?'':'opacity:.55'}">
+   <div style="display:flex;align-items:center;gap:8px"><b class="u" style="letter-spacing:.05em;font-size:14px">${esc(p.code)}</b><span class="muted" style="font-size:12px;flex:1;min-width:0">${p.kind==='coins'?fmt(p.value)+' монет':'кейс '+esc(p.case||'удалён')}</span>
+    ${p.active?`<button class="ghost danger" data-a="pc_stop" data-code="${esc(p.code)}" style="height:32px;padding:0 10px;border-radius:9px;font-size:12px">Остановить</button>`:'<span class="badge" style="background:#241B16;color:#A8988A">закончен</span>'}</div>
+   <div class="pc-bar"><i style="width:${(used/Math.max(1,p.uses_total)*100).toFixed(1)}%"></i></div>
+   <span class="muted num" style="font-size:12px">Активировано ${used} из ${p.uses_total} · списано ${fmt(p.cost)}</span></div>`;}).join('')
+  :'<p class="pc-hint">Ты ещё не создавал промокоды.</p>'}
+  ${r.promos.some(p=>p.active)?'<p class="pc-hint">«Остановить» — неиспользованные активации вернутся на партнёрский баланс.</p>':''}</div>
+ <div class="pc-card"><h3>Как работают твои коды</h3>${pcTable(['Промокод','Регистрации','Первые деп.','Сумма деп.','Доход'],
+   codes.map(c=>`<tr><td class="l"><b>${esc(c.code)}</b></td><td class="num">${fmt(c.regs||0)}</td><td class="num">${fmt(c.ftd||0)}</td><td class="num">${fmt(c.dep_sum||0)}</td><td class="num ${pcls(c.income)}">${pn(c.income||0)}</td></tr>`).join(''))}
+  <p class="pc-hint">Учитываются игроки, которые закрепились за тобой через этот код.</p></div>`;
+ const upd=()=>{if($('pcCcost'))$('pcCcost').textContent=fmt((+$('pcCv').value||0)*(+$('pcCu').value||0));
+  if($('pcKcost')){const o=$('pcKcase').selectedOptions[0];$('pcKcost').textContent=fmt((o?+o.dataset.p:0)*(+$('pcKu').value||0));}};
+ B.querySelectorAll('.pc-f input,.pc-f select').forEach(x=>x.addEventListener('input',upd));
+}
+
+/* ---------- выводы ---------- */
+const DOW=['','понедельник','вторник','среду','четверг','пятницу','субботу','воскресенье'];
+async function pcWd(B){
+ const r=await pc('wd',{page:PC.wdPage});if(!r||PC.tab!=='wd')return;PC.info.balance=r.balance;pcHeadDraw();
+ const w=r.window||{},min=Math.max(1,+r.wd_min||0),amt=Math.floor(+r.balance);
+ const open=r.wd_any_day||w.open,can=!r.pending&&open&&amt>=min;
+ const when=r.wd_any_day?'Вывод доступен в любой день.':`Вывод раз в неделю: в ${DOW[w.dow]||'субботу'}, ${w.from}:00–${w.to}:00 по Киеву. `+
+  (w.open?`Окно открыто — закроется через ${dur(Date.parse(w.end)-Date.now())}.`:w.start?`Следующее окно через ${dur(Date.parse(w.start)-Date.now())}.`:'');
+ const reason=r.pending?`Заявка на ${fmt(r.pending.amount)} ждёт подтверждения админа`:!open?'Сейчас окно вывода закрыто':amt<min?(amt<=0?'Нечего выводить — баланс должен быть в плюсе':`Минимум для вывода — ${fmt(min)}`):'';
+ const ST={queued:['ждёт','#2A1C14','#F0A27A'],done:['выплачено','#14301F','#7FD49A'],rejected:['отклонено','#3A1A12','#F08A66']};
+ B.innerHTML=`<div class="pc-card"><span class="sec" style="font-size:11px">Баланс партнёра</span>
+  <span class="u num ${pcls(r.balance)}" style="font-size:34px;font-weight:700;display:flex;align-items:center;gap:10px;line-height:1.1">${pn(r.balance)}${COIN(26)}</span>
+  <div class="pc-row"><span class="muted" style="font-size:12px">Игровой аккаунт</span><b style="margin-left:auto;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(USER.name)} · <span class="num">ID ${USER.id}</span></b></div>
+  <button class="fire" data-a="pc_wd" style="height:52px;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px" ${can?'':'disabled'}>${ic('M3 7h18v12H3zM3 11h18M16 15h2','currentColor',18,2.2)}Вывести${can?' '+fmt(amt):''}</button>
+  ${reason?`<p class="pc-hint" style="color:#E9A06A;margin-top:-4px">${reason}</p>`:''}
+  <p class="pc-hint">${when} Выводится весь доступный баланс: монеты приходят на твой игровой баланс${r.wd_auto?' сразу':' после подтверждения админом'}, дальше выводишь брейнротами как обычно. Если баланс в минусе — его сначала нужно отбить.</p></div>
+ <div class="pc-card" style="gap:0"><div class="pc-kv"><span class="muted">Количество выводов</span><b class="num">${fmt(r.count)}</b></div>
+  <div class="pc-kv"><span class="muted">Общая сумма выводов</span><b class="num" style="display:flex;align-items:center;gap:5px">${fmt(r.sum)}${COIN(14)}</b></div></div>
+ <div class="pc-card"><h3>История выводов</h3>${r.rows.length?r.rows.map(x=>{const s=ST[x.status]||ST.queued;return `<div class="pc-row"><span class="num" style="font-weight:800">#${x.id}</span>
+   <span class="muted num" style="font-size:12px">${new Date(x.ts).toLocaleDateString('ru-RU')}</span><span class="badge" style="background:${s[1]};color:${s[2]}">${s[0]}</span>
+   <b class="num" style="margin-left:auto;display:flex;align-items:center;gap:5px">${fmt(x.amount)}${COIN(13)}</b></div>`;}).join('')+pager(r.total,r.page,r.size,'pcwd'):'<p class="pc-hint">Выводов ещё не было.</p>'}</div>`;
+}
+
+/* ---------- субпартнёры ---------- */
+async function pcSubs(B){
+ const r=await pc('subs');if(!r||PC.tab!=='subs')return;const link=`https://t.me/${CONFIG.BOT_USERNAME}?startapp=s_${r.code}`,sp=String(+r.sub_pct).replace('.',',');
+ B.innerHTML=`<div class="pc-card"><h3>Приводи партнёров — получай ${sp}% от их дохода</h3>
+  <p class="pc-hint">Отправь ссылку стримеру или блогеру. Он заполнит анкету в боте, после одобрения ты получаешь ${sp}% с его чистого дохода, пока партнёрство активно. Его минусы на тебя не переходят.</p>
+  <div class="pc-link"><span class="v">${esc(link.replace('https://',''))}</span><button class="fire" data-copy="${esc(link)}" aria-label="Скопировать">${CPYI('#1A0F09')}</button></div>
+  <div class="pc-grid"><div class="pc-t"><span>Субпартнёров</span><b class="u num">${r.rows.length}</b></div><div class="pc-t"><span>Заработано с них</span><b class="u num ${pcls(r.sub_earned)}">${pn(r.sub_earned)}${COIN(15)}</b></div></div>
+  ${r.apps?`<p class="pc-hint">Анкет на рассмотрении: <b style="color:#F0A27A">${r.apps}</b></p>`:''}</div>
+ ${r.rows.length?`<div class="pc-card"><h3>Мои субпартнёры</h3>${pcTable(['Партнёр','Игроков','Его доход','Тебе'],
+   r.rows.map(x=>`<tr style="${x.active?'':'opacity:.55'}"><td class="l"><b>${esc(x.name)}</b><small class="muted" style="display:block">${esc(x.code)}</small></td><td class="num">${fmt(x.players)}</td><td class="num ${pcls(x.earned)}">${pn(x.earned)}</td><td class="num pos">${pn(x.paid)}</td></tr>`).join(''))}</div>`
+ :`<div class="pc-card pc-empty"><span class="pc-empty-ic">${ic(PC_TABS[5][2],'#8C7D71',26,1.8)}</span><b style="font-size:16px">Субпартнёров пока нет</b>
+   <p class="pc-hint">Отправь ссылку выше знакомому стримеру. Как только его одобрят, он появится здесь со своей статистикой.</p></div>`}`;
+}
+
+/* ---------- клики внутри кабинета ---------- */
+$('pcBody').addEventListener('click',async e=>{
+ const cp=e.target.closest('[data-copy]');if(cp){copyTxt(cp.dataset.copy);return;}
+ const t=e.target.closest('[data-per],[data-days],[data-stp],[data-src],[data-ser],[data-pg]');
+ if(t){const d=t.dataset;haptic('light');
+  if(d.per){PC.per=d.per;return pcLoad();}
+  if(d.days){PC.days=+d.days;return pcLoad();}
+  if(d.stp){PC.stPer=d.stp;return pcLoad();}
+  if(d.src){PC.src=d.src;$('pcBody').querySelectorAll('[data-src]').forEach(b=>b.classList.toggle('on',b===t));const l=pcLink();$('pcLinkV').textContent=l.replace(/^https?:\/\//,'');$('pcLinkC').dataset.copy=l;return;}
+  if(d.ser){PC.off[d.ser]=!PC.off[d.ser];return pcCharts();}
+  if(d.pg){if(t.disabled)return;PC.wdPage=+d.pg.split(':')[1];return pcLoad();}
+ }
+ const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a;
+ if(a==='csv'){copyTxt(PC.csv,'Таблица скопирована — вставь в Excel или Google Таблицы');return;}
+ if(a==='pc_stop'&&!sure(b))return;
+ let r=null;b.disabled=true;
+ try{
+  if(a==='pc_coins'){const code=$('pcCc').value.trim().toUpperCase(),value=+$('pcCv').value,uses=+$('pcCu').value;
+   if(!/^[A-Z0-9_-]{3,20}$/.test(code)){toast('Код: латиница и цифры, от 3 символов');return;}if(!(value>0&&uses>0)){toast('Укажи монеты и активации');return;}
+   r=await pc('promo_create',{kind:'coins',code,value,uses});}
+  else if(a==='pc_case'){const code=$('pcKc').value.trim().toUpperCase(),uses=+$('pcKu').value;
+   if(!/^[A-Z0-9_-]{3,20}$/.test(code)){toast('Код: латиница и цифры, от 3 символов');return;}if(!(uses>0)){toast('Укажи активации');return;}
+   r=await pc('promo_create',{kind:'case',code,case:$('pcKcase').value,uses});}
+  else if(a==='pc_stop')r=await pc('promo_stop',{code:b.dataset.code});
+  else if(a==='pc_wd'){r=await pc('withdraw',{});if(r){haptic('success');toast(r.auto?`+${fmt(r.amount)} на игровой баланс`:`Заявка на ${fmt(r.amount)} отправлена — админ подтвердит`);if(r.state)applyState(r.state,true);}}
+ }finally{if(b.isConnected)b.disabled=false;}
+ if(r){if(r.msg){toast(r.msg);haptic('success');}const i=await pc('info');if(i){PC.info=i;pcHeadDraw();}pcLoad();}
+});
+
+/* ---------- анкета на партнёрство (для тех, кто пришёл по ссылке субпартнёрства) ---------- */
+function paOpen(){
+ $('paBox').innerHTML=`<div class="sheet-grab"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between"><h2 class="u" style="font-weight:700;font-size:20px">Анкета партнёра</h2>${XBTN}</div>
+  <p class="pc-hint" style="font-size:13px">Расскажи о себе — админы посмотрят и откроют кабинет партнёра: ссылки, статистика, процент с игры твоих игроков.</p>
+  <div class="pc-f"><label>Где ты ведёшь блог или стримишь <span style="color:#F08A66">*</span><input id="paLink" placeholder="Ссылка на канал или профиль" maxlength="200" autocomplete="off"></label>
+   <label>Как с тобой связаться<input id="paContact" value="${esc(TU&&TU.username?'@'+TU.username:'')}" placeholder="@ник в Telegram" maxlength="100" autocomplete="off"></label>
+   <label>Аудитория<input id="paAud" placeholder="Например: 12к подписчиков, стримы каждый день" maxlength="300" autocomplete="off"></label></div>
+  <button class="fire" id="paGo" style="height:52px;font-size:15px">Отправить анкету</button>`;
+ $('paGo').onclick=async()=>{const link=$('paLink').value.trim();if(link.length<3){toast('Укажи канал или профиль');haptic('error');return;}
+  $('paGo').disabled=true;
+  if(LIVE){const st=await API.call('partner_apply',{link,contact:$('paContact').value.trim(),audience:$('paAud').value.trim()});if(!st){$('paGo').disabled=false;return;}applyState(st,true);}
+  else{USER.app='new';paRow();}
+  closeSheet('paSheet');haptic('success');toast('Анкета отправлена — ответим в боте');};
+ openSheet('paSheet');
+}
+function paRow(){const r=$('applyRow');r.hidden=!(USER.canApply||USER.app);
+ r.querySelector('.muted').textContent=USER.app==='new'?'Анкета на рассмотрении':USER.app==='rejected'?'Анкету отклонили — можно отправить снова':'Заполни анкету — рассмотрим быстро';}
+$('applyRow').onclick=()=>{if(USER.app==='new'){toast('Анкета уже на рассмотрении');return;}paOpen();};
+
+/* ---------- демо-данные (когда файл открыт без Supabase) ---------- */
+let PCD=null;
+function pcDemo(op,a){
+ if(!PCD){const T=kyivDay();let seed=11;const rnd=()=>(seed=seed*16807%2147483647)/2147483647;const rows=[];
+  for(let i=0;i<60;i++){const d=dAdd(T,-i);if(i>42)continue;
+   for(const src of ['tg','yt','code']){if(rnd()<.35)continue;const cl=src==='code'?0:Math.floor(rnd()*(i<20?40:12));const rg=src==='code'?Math.floor(rnd()*3):Math.floor(cl*(.15+rnd()*.3));
+    const fd=Math.floor(rg*rnd()*.5),dp=fd+Math.floor(rnd()*2),ds=dp*Math.floor(150+rnd()*700),inc=Math.round((rnd()-.38)*(ds+200)*.3*100)/100;
+    rows.push({day:d,src,sub:src==='tg'?'shorts_25':src==='code'?'FORTIK':'',clicks:cl,regs:rg,ftd:fd,deps:dp,dep_sum:ds,income:inc,sub_income:0});}}
+  const st=new Date();st.setDate(st.getDate()+((6-st.getDay()+7)%7||7));st.setHours(12,0,0,0);
+  PCD={T,rows,promos:[{code:'GIFT10',kind:'coins',value:10,uses_total:20,uses_left:7,cost:200,active:true,ts:new Date().toISOString()}],
+   info:{code:'FORTIK',revshare:50,sub_pct:5,dep_bonus:10,promos_on:true,wd_min:100,wd_any_day:false,wd_auto:false,balance:-37,earned:441,sub_earned:0,players:106,today:T,
+    window:{open:false,dow:6,from:12,to:20,start:st.toISOString(),end:new Date(+st+8*36e5).toISOString()}},
+   wd:[{id:4,amount:120,status:'done',ts:new Date(Date.now()-6*864e5).toISOString()},{id:3,amount:96,status:'done',ts:new Date(Date.now()-13*864e5).toISOString()},{id:2,amount:150,status:'done',ts:new Date(Date.now()-20*864e5).toISOString()},{id:1,amount:75,status:'done',ts:new Date(Date.now()-27*864e5).toISOString()}]};}
+ const D=PCD,K=['clicks','regs','ftd','deps','dep_sum','income','sub_income'];
+ const sum=L=>{const o={};K.forEach(k=>o[k]=Math.round(L.reduce((s,r)=>s+(+r[k]||0),0)*100)/100);return o;};
+ const inR=(r,f,t)=>(!f||r.day>=f)&&r.day<=t;
+ if(op==='info')return {...D.info};
+ if(op==='stats'){const f=a.from||'',t=a.to||D.T,L=D.rows.filter(r=>inR(r,f,t)),g={};
+  L.forEach(r=>{const k=r.day+'|'+(a.detail?r.src:'');(g[k]=g[k]||[]).push(r);});
+  return {all:sum(D.rows),period:sum(L),players_upto:D.info.players,rows:Object.entries(g).map(([k,l])=>({day:k.split('|')[0],src:a.detail?k.split('|')[1]:null,...sum(l)})).sort((x,y)=>x.day<y.day?1:-1)};}
+ if(op==='links'){const g={};D.rows.filter(r=>r.src!=='code'&&r.day>dAdd(D.T,-30)).forEach(r=>{const k=r.src+'|'+r.sub;(g[k]=g[k]||[]).push(r);});
+  return Object.entries(g).map(([k,l])=>({src:k.split('|')[0],sub:k.split('|')[1],...sum(l)}));}
+ if(op==='codes')return {balance:D.info.balance,promos_on:true,code:'FORTIK',codes:[{code:'FORTIK',...sum(D.rows.filter(r=>r.src==='code'))}],promos:D.promos};
+ if(op==='promo_create'){toast('В демо промокоды не создаются');return null;}
+ if(op==='promo_stop'){toast('В демо ничего не меняется');return null;}
+ if(op==='wd')return {balance:D.info.balance,wd_min:100,wd_any_day:false,wd_auto:false,window:D.info.window,count:4,sum:441,pending:null,total:4,page:1,size:15,rows:D.wd};
+ if(op==='withdraw'){toast('В демо вывода нет');return null;}
+ if(op==='subs')return {code:'FORTIK',sub_pct:5,sub_earned:0,apps:0,rows:[]};
+ return null;
+}
+
+/* партнёрка видна только тем, кому её выдал админ (в демо — с ?partner=1 в адресе) */
 USER.partner=!LIVE&&/[?&]partner=1/.test(location.search);
 $('partnerRow').hidden=!USER.partner;
 /* ---------- данные пользователя ---------- */
@@ -2364,7 +2848,8 @@ function applyState(st,quiet){
  INV.length=0;(st.inventory||[]).forEach(o=>INV.push(mkItem(o)));
  WG.left=st.wager_left;WG.total=st.wager_total;
  STATS=st.stats||STATS;BEST=st.best?{...mkItem(st.best),src:st.best.src}:null;
- USER.partner=!!st.is_partner;$('partnerRow').hidden=!USER.partner;
+ const wasP=USER.partner;USER.partner=!!st.is_partner;$('partnerRow').hidden=!USER.partner;USER.canApply=!!st.can_apply;USER.app=st.partner_app||null;paRow();
+ if(wasP!==USER.partner){drawMenu();if(cur==='partner'&&!USER.partner)go('profile');}
  const wasAdm=USER.admin;USER.admin=!!st.is_admin;$('admEntry').hidden=!USER.admin;if(USER.admin&&!wasAdm)setTimeout(admPoll,500);
  DAILY_NEXT=st.daily_next?Date.parse(st.daily_next):null;DAILY_DAY=st.daily_day||1;DAILY_STREAK=st.daily_streak||0;
  if(Array.isArray(st.daily_rewards)&&st.daily_rewards.length===7)DAYS=st.daily_rewards.map(Number);
