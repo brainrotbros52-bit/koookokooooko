@@ -2020,8 +2020,10 @@ async function spin(){
   const res=await API.call('case_open',{case:CUR_CASE?CUR_CASE.id:$('caseName').textContent,count:n});
   if(!res||!res.items){spinning=false;$('openBtn').disabled=false;return;}
   addWager(cost,'Кейс «'+$('caseName').textContent+'»');
-  winners=res.items.map(it=>({...mkItem(it),sid:it.id}));applyState(res.state,true);
-  {const cs=winners.filter(x=>x.coin).reduce((a,x)=>a+x.p,0);if(cs)setBal(bal-cs);}   // монеты покажем на балансе, когда лента остановится
+  // монета: сервер сразу кладёт её на баланс и не даёт ей id в инвентаре
+  winners=res.items.map(it=>({...mkItem(it),coin:!!it.coin||it.id==null,sid:it.id}));
+  COIN_HOLD=winners.filter(x=>x.coin).reduce((a,x)=>a+x.p,0);   // до остановки ленты баланс их не показывает
+  applyState(res.state,true);
  }else{addWager(cost,'Кейс «'+$('caseName').textContent+'»');setBal(bal-cost);winners=Array.from({length:n},()=>roll());
   QD.cases+=n;QD.spend+=cost;QD.legend+=winners.filter(x=>x.r==='legend'||x.r==='myth').length;}
  lastWin=winners.map(x=>({...x,id:x.sid||uid++}));
@@ -2098,8 +2100,9 @@ function caseDone(){
  const all=lastWin;if(!all.length)return;
  // монеты (токены) — сразу на баланс, в инвентарь не идут; продавать можно только брейнротов
  const coins=all.filter(x=>x.coin),cs=coins.reduce((a,x)=>a+x.p,0),ws=all.filter(x=>!x.coin);
- if(API.on())loadMe();else{INV.unshift(...ws);if(cs)setBal(bal+cs);}
- if(cs){if(API.on())setBal(bal+cs);SFX.play('coin');toast('+'+fmt(cs)+' на баланс');}
+ COIN_HOLD=0;if(cs)setBal(bal+cs);   // лента остановилась — монеты появляются на балансе
+ if(API.on())loadMe();else INV.unshift(...ws);
+ if(cs){SFX.play('coin');toast('+'+fmt(cs)+' на баланс');}
  caseWon=ws;if(!ws.length){$('caseRes').hidden=true;return;}
  const sum=ws.reduce((a,x)=>a+x.p,0);
  $('caseSell').disabled=false;
@@ -3507,9 +3510,10 @@ function paintUser(){
  document.querySelectorAll('.uid').forEach(e=>e.textContent='ID '+USER.id);
 }
 /* ---------- состояние игрока с сервера ---------- */
+var COIN_HOLD=0;   // монеты из кейса, который ещё крутится: на балансе покажем их только после остановки
 function applyState(st,quiet){
  if(!st)return;
- bal=st.balance;document.querySelectorAll('.bal').forEach(e=>e.textContent=fmt(bal));
+ bal=st.balance-COIN_HOLD;document.querySelectorAll('.bal').forEach(e=>e.textContent=fmt(bal));
  INV.length=0;(st.inventory||[]).forEach(o=>INV.push(mkItem(o)));
  WG.left=st.wager_left;WG.total=st.wager_total;
  STATS=st.stats||STATS;BEST=st.best?{...mkItem(st.best),src:st.best.src}:null;
