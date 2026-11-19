@@ -1889,11 +1889,26 @@ const MS=[1,2,3,5];let mIdx=0,spinning=false,lastWin=[],uid=100;
 const drawTotal=()=>{$('total').textContent=fmt(casePrice*MS[mIdx]);};
 const LEN=90,STOP=80;
 function reelDims(n){return n===1?{h:132,tw:92,th:108,f:22}:n===2?{h:112,tw:80,th:92,f:19}:n===3?{h:96,tw:70,th:80,f:17}:{h:72,tw:56,th:60,f:14};}
+// Лента — только картинка: что выпало, решает сервер (или roll() в демо).
+// Поэтому в ленте редкие брейнроты показываются чаще настоящих шансов,
+// дорогие проезжают перед остановкой, а иногда самый дорогой стоит совсем рядом с указателем.
+function showPool(){const L=CASE_ITEMS,w=L.map(x=>Math.pow(Math.max(chOf(x),1e-6),.45)),mx=Math.max(...w);
+ return {L,w:w.map(v=>Math.max(v,mx*.05)),top:L.slice().sort((a,b)=>b.p-a.p)};}
+function rollShow(P){const sw=P.w.reduce((a,b)=>a+b,0);let r=Math.random()*sw;for(let i=0;i<P.L.length;i++){r-=P.w[i];if(r<=0)return P.L[i];}return P.L[P.L.length-1];}
+function reelList(P,win,many){
+ const list=Array.from({length:LEN},()=>rollShow(P)),pick=()=>P.top[Math.random()<.6?0:Math.min(1,P.top.length-1)];
+ if(P.L.length>1){
+  list[STOP-5-Math.floor(Math.random()*10)]=pick();                                  // редкий проезжает перед остановкой
+  if(Math.random()<.5)list[STOP+3+Math.floor(Math.random()*5)]=pick();               // иногда виден и справа
+  if(win&&P.top[0].name!==win.name&&Math.random()<(many?.12:.22))list[Math.random()<.6?STOP+1:STOP-1]=P.top[0];   // изредка «почти!»
+ }
+ if(win)list[STOP]=win;
+ return list;}
 function buildReels(n,winners){
  if(!winners)caseReset();
- const d=reelDims(n);
+ const d=reelDims(n),P=showPool();
  $('reels').innerHTML=Array.from({length:n},(_,r)=>{
-  const list=Array.from({length:LEN},()=>roll());if(winners)list[STOP]=winners[r];
+  const list=reelList(P,winners?winners[r]:null,n>1);
   return `<div class="reel" style="height:${d.h}px"><div class="track" style="top:${(d.h-d.th)/2}px">${list.map((x,i)=>`
    <div class="rt${winners&&i===STOP?' win':''}" style="--c:${R[x.r]}88;width:${d.tw}px;height:${d.th}px;${tileBg(R[x.r])}">
     ${mono(x,d.f)}${n<=2?`<span class="n">${x.name}</span>`:''}</div>`).join('')}</div><div class="fade"></div><div class="mk"><svg class="cap t" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg><svg class="cap b" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg></div></div>`;}).join('');
