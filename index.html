@@ -1080,8 +1080,8 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
     <section class="screen" data-s="settings">
       <div class="ptitle"><h1>Настройки</h1></div>
       <div class="card" style="border-radius:16px;overflow:hidden">
-        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #413229;font-weight:700;font-size:15px">Звук<input type="checkbox" class="toggle" checked></label>
-        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #413229;font-weight:700;font-size:15px">Вибрация<input type="checkbox" class="toggle" checked></label>
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #413229;font-weight:700;font-size:15px">Звук<input type="checkbox" class="toggle" id="setSound" checked></label>
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #413229;font-weight:700;font-size:15px">Вибрация<input type="checkbox" class="toggle" id="setVibro" checked></label>
         <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #413229;font-weight:700;font-size:15px">Уведомления от бота<input type="checkbox" class="toggle"></label>
         <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;font-weight:700;font-size:15px">Скрыть ник в ленте<input type="checkbox" class="toggle"></label>
       </div>
@@ -1230,7 +1230,111 @@ const USER={
 };
 /* вибрация телефона (работает только внутри Telegram) */
 let _hLast=0;
+/* =====================================================================
+   ЗВУКИ. Синтезируются в браузере (Web Audio), файлов нет.
+   Сейчас включены в апгрейде: старт, деревянные тики колеса, выигрыш, проигрыш.
+   ===================================================================== */
+const SFX=(()=>{
+ let ac=null,master,rev,noiseBuf,vol=0.7,on=true;
+ function init(){
+  if(ac){if(ac.state==='suspended')ac.resume();return true;}
+  const C=window.AudioContext||window.webkitAudioContext;if(!C)return false;
+  ac=new C();
+  master=ac.createGain();master.gain.value=vol;
+  const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=7500;lp.Q.value=.5;          // срезаем резкий верх
+  const comp=ac.createDynamicsCompressor();comp.threshold.value=-20;comp.knee.value=24;comp.ratio.value=3;comp.attack.value=.003;comp.release.value=.25;
+  master.connect(lp);lp.connect(comp);comp.connect(ac.destination);
+  rev=ac.createConvolver();rev.buffer=impulse(1.7,3.4);const rg=ac.createGain();rg.gain.value=.24;rev.connect(rg);rg.connect(master);  // лёгкое «пространство»
+  const n=ac.sampleRate;noiseBuf=ac.createBuffer(1,n,n);const d=noiseBuf.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+  return true;}
+ function impulse(sec,dec){const n=Math.floor(ac.sampleRate*sec),b=ac.createBuffer(2,n,ac.sampleRate);
+  for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,dec);}return b;}
+ function out(node,send){node.connect(master);if(send){const g=ac.createGain();g.gain.value=send;node.connect(g);g.connect(rev);}}
+ function env(g,t,a,peak,dec){g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(.0001,t+a+dec);}
+ // тон: частота, тип волны, огибающая, скольжение частоты, фильтр, отправка в реверб
+ function tone(f,o={}){const t=ac.currentTime+(o.at||0),a=o.a||.004,dec=o.dec||.2,osc=ac.createOscillator(),g=ac.createGain();
+  osc.type=o.type||'sine';osc.frequency.setValueAtTime(f,t);if(o.to)osc.frequency.exponentialRampToValueAtTime(o.to,t+(o.glide||dec));if(o.detune)osc.detune.value=o.detune;
+  env(g,t,a,o.v||.1,dec);osc.connect(g);let n=g;
+  if(o.lp){const fl=ac.createBiquadFilter();fl.type='lowpass';fl.frequency.value=o.lp;g.connect(fl);n=fl;}
+  out(n,o.send);osc.start(t);osc.stop(t+a+dec+.05);}
+ // шум через фильтр: щелчки, «вжух», хлопок
+ function noise(o={}){const t=ac.currentTime+(o.at||0),a=o.a||.002,dec=o.dec||.05,s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();
+  s.buffer=noiseBuf;f.type=o.ft||'bandpass';f.frequency.setValueAtTime(o.f||2000,t);if(o.to)f.frequency.exponentialRampToValueAtTime(o.to,t+a+dec);f.Q.value=o.q||1;
+  env(g,t,a,o.v||.05,dec);s.connect(f);f.connect(g);out(g,o.send);s.start(t,Math.random()*.5);s.stop(t+a+dec+.05);}
+ // мягкий «маримба»-тон: основной + тихие обертоны, быстро гаснут
+ function mallet(f,o={}){const v=o.v||.08,dec=o.dec||.5;
+  tone(f,{...o,v,dec,send:o.send??.28});tone(f*2,{...o,v:v*.12,dec:dec*.4,send:.1});tone(f*4,{...o,v:v*.16,dec:dec*.22,send:0});}
+ function sparkle(len,n,at=0){for(let i=0;i<n;i++)tone(3200+Math.random()*3200,{v:.01+Math.random()*.012,dec:.14,at:at+Math.random()*len,send:.6});}
+ function sub(f,d,at=0){tone(f,{v:.12,a:.02,dec:d,at,send:.1});}
+ function pad(notes,d,at=0){notes.forEach(n=>tone(N(n),{type:'sawtooth',v:.011,a:.28,dec:d,lp:1400,detune:(Math.random()-.5)*16,at,send:.45}));}
+ const N=n=>440*Math.pow(2,(n-69)/12);   // номер ноты → Гц
+
+ // ---------- тики колеса апгрейда: 4 варианта ----------
+ const TICK={
+  soft:(v=1,at=0)=>{noise({f:3800,q:1.2,v:.045*v,dec:.01,at});tone(2400,{v:.03*v,dec:.018,to:1900,at});},
+  wood:(v=1,at=0)=>{tone(900,{v:.075*v,dec:.03,to:620,at});tone(1820,{type:'triangle',v:.012*v,dec:.015,at});noise({f:1500,q:2,v:.02*v,dec:.01,at});},
+  glass:(v=1,at=0)=>{tone(3136,{v:.03*v,dec:.075,at,send:.25});tone(4700,{v:.009*v,dec:.04,at});},
+  ratchet:(v=1,at=0)=>{noise({ft:'highpass',f:2500,q:.7,v:.05*v,dec:.008,at});noise({ft:'highpass',f:3300,q:.7,v:.03*v,dec:.006,at:at+.007});tone(1600,{v:.014*v,dec:.012,to:1300,at});},
+ };
+ let tickKind='wood';
+
+ // ---------- все звуки ----------
+ const S={
+  // интерфейс
+  tap(){noise({f:3200,q:1.5,v:.05,dec:.025});tone(1500,{v:.032,dec:.03,to:1200});},
+  tab(){tone(2000,{v:.038,dec:.04,to:1700});noise({f:4500,q:2,v:.022,dec:.015});},
+  toggleOn(){mallet(N(84),{v:.055,dec:.15});mallet(N(91),{v:.055,dec:.25,at:.06});},
+  toggleOff(){mallet(N(91),{v:.045,dec:.15});mallet(N(84),{v:.045,dec:.25,at:.06});},
+  menuOpen(){noise({ft:'lowpass',f:300,to:2400,q:.7,v:.07,a:.08,dec:.2});},
+  menuClose(){noise({ft:'lowpass',f:2400,to:300,q:.7,v:.06,a:.03,dec:.18});},
+  notify(){mallet(N(88),{v:.065,dec:.5});mallet(N(95),{v:.055,dec:.7,at:.11});},
+  error(){tone(N(57),{type:'triangle',v:.085,dec:.16,lp:900,to:N(55)});tone(N(52),{type:'triangle',v:.085,dec:.26,lp:800,at:.14,to:N(50)});},
+  copy(){tone(900,{v:.055,dec:.07,to:1500,glide:.05});},
+  // монеты
+  coin(){mallet(N(96),{v:.055,dec:.35});mallet(N(100),{v:.055,dec:.5,at:.06});sparkle(.1,4);},
+  coins(){[91,93,96,98,100,103,105].forEach((n,i)=>mallet(N(n),{v:.042,dec:.35,at:i*.055}));sparkle(.35,7);},
+  sell(){noise({ft:'lowpass',f:2200,to:500,v:.05,a:.01,dec:.18});S.coin();},
+  depositSent(){noise({f:500,to:2600,q:.8,v:.06,a:.12,dec:.18});mallet(N(86),{v:.06,dec:.5,at:.22});},
+  depositOk(){[72,76,79,84].forEach((n,i)=>mallet(N(n),{v:.07,dec:.75,at:i*.09}));sparkle(.45,9,.2);},
+  bonus(){[79,84,88,91].forEach((n,i)=>mallet(N(n),{v:.062,dec:.6,at:i*.08}));sparkle(.35,8,.15);},
+  withdraw(){noise({f:2400,to:500,q:.8,v:.055,a:.05,dec:.25});mallet(N(81),{v:.05,dec:.4,at:.18});},
+  // кейсы
+  caseTick(v=1,at=0){const r=1+(Math.random()-.5)*.06;tone(1150*r,{v:.06*v,dec:.022,to:820*r,at});noise({f:2600,q:1.4,v:.028*v,dec:.012,at});},
+  caseStop(at=0){tone(170,{v:.075,dec:.16,to:105,at});noise({ft:'lowpass',f:900,v:.035,dec:.12,at});},
+  win_common(){mallet(N(79),{v:.08,dec:.5});},
+  win_rare(){mallet(N(76),{v:.08,dec:.4});mallet(N(83),{v:.08,dec:.65,at:.1});},
+  win_epic(){[74,78,81].forEach((n,i)=>mallet(N(n),{v:.08,dec:.65,at:i*.09}));sparkle(.25,5,.15);},
+  win_legend(){sub(N(45),.9);[69,73,76,81].forEach((n,i)=>mallet(N(n),{v:.08,dec:1,at:i*.06}));sparkle(.3,10,.2);},
+  win_myth(){sub(N(45),1.4);pad([57,64,69,73],1.8);[69,76,81,85,88].forEach((n,i)=>mallet(N(n),{v:.075,dec:1.2,at:.05+i*.07}));sparkle(.5,16,.25);},
+  // апгрейд
+  upStart(){noise({f:400,to:1800,q:.8,v:.055,a:.25,dec:.3});},
+  upTick(v=1,at=0){TICK[tickKind](v,at);},
+  upWin(){[72,76,79,84,88].forEach((n,i)=>mallet(N(n),{v:.075,dec:.9,at:i*.07}));pad([60,67,72,76],1.3);sparkle(.45,12,.2);},
+  upLose(){tone(N(67),{type:'triangle',v:.08,dec:.35,lp:1200});tone(N(62),{type:'triangle',v:.08,dec:.6,lp:900,at:.22});tone(90,{v:.07,dec:.3,at:.22,to:60});},
+  // мины
+  mineStart(){S.tap();noise({ft:'lowpass',f:400,to:1600,v:.06,a:.06,dec:.12});},
+  mineSafe(k=0){const sc=[72,74,76,79,81,84,86,88,91,93,96];mallet(N(sc[Math.min(k,sc.length-1)]),{v:.075,dec:.45});noise({f:5000,q:2,v:.018,dec:.02});},
+  mineBoom(){noise({ft:'lowpass',f:700,to:120,q:.6,v:.15,a:.006,dec:.7});tone(85,{v:.13,dec:.55,to:38});tone(N(57),{type:'triangle',v:.04,dec:.4,lp:600,at:.05,to:N(50)});},
+  mineCash(){S.coins();},
+ };
+ return {
+  play(name,...a){if(!on||!S[name])return;if(!init())return;try{S[name](...a);}catch(e){}},
+  tick(kind,v,at){if(!on)return;if(!init())return;TICK[kind](v,at);},
+  setTick(k){if(TICK[k])tickKind=k;},get tickKind(){return tickKind;},
+  setVolume(v){vol=v;if(master)master.gain.value=v;},
+  setOn(v){on=!!v;},
+  now(){return ac?ac.currentTime:0;},
+  ready(){return init();},
+  wake(){if(on)init();},
+ };
+})();
+// звук и вибрация из настроек (запоминаем на этом устройстве)
+const PREF={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:v==='1';}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,v?'1':'0');}catch(e){}}};
+let SOUND_ON=PREF.get('bf_sound',true),VIBRO_ON=PREF.get('bf_vibro',true);SFX.setOn(SOUND_ON);
+// браузер разрешает звук только после касания — будим его на любом нажатии
+document.addEventListener('pointerdown',()=>SFX.wake(),{passive:true});
 function haptic(kind){
+  if(!VIBRO_ON)return;
   if(!tg||!tg.HapticFeedback)return;
   try{
     if(kind==='tick'){const n=performance.now();if(n-_hLast<55)return;_hLast=n;tg.HapticFeedback.selectionChanged();}
@@ -1791,12 +1895,15 @@ $('upBtn').onclick=async()=>{
   const a=.06,p=3.4,A=p*a/(2*(1-a)+p*a);      // скорость на стыке совпадает — без рывка
   if(k<a){const u=k/a;return A*u*u;}
   const u=(k-a)/(1-a);return A+(1-A)*(1-Math.pow(1-u,p));};
- const t0=performance.now();let prev=start;
+ const t0=performance.now();let prev=start,lastMark=Math.floor(start/5),lastTick=0;
+ SFX.play('upStart');
  (function fr(now){
   let k=(now-t0)/DUR;if(k>1)k=1;
   const ang=start+(end-start)*ease(k);
   n.style.transform=`rotate(${ang}deg)`;
   const sp=Math.abs(ang-prev);prev=ang;           // скорость → длина/яркость хвоста
+  // деревянный тик, когда стрелка проходит риску шкалы (не чаще раза в 32 мс; на медленном ходу чуть громче)
+  const mark=Math.floor(ang/5);if(mark!==lastMark&&now-lastTick>=32){lastMark=mark;lastTick=now;SFX.play('upTick',Math.max(.55,Math.min(1,1.15-sp/20)));}
   tail.style.opacity=Math.min(1,.08+sp/7).toFixed(3);
   if(k<1){requestAnimationFrame(fr);return;}
   tail.style.transition='opacity .6s';tail.style.opacity='.08';setTimeout(()=>tail.style.transition='',700);
@@ -1807,8 +1914,8 @@ $('upBtn').onclick=async()=>{
   if(res&&res.state){applyState(res.state,true);upSel=new Set();if(res.item)upSel.add(res.item.id);}
   else{const sel=INV.filter(x=>upSel.has(x.id));for(const x of sel)INV.splice(INV.indexOf(x),1);upSel=new Set();}
   if(win){const got=res&&res.item?mkItem(res.item):{...upTarget,id:uid++};if(!res){INV.unshift(got);upSel.add(got.id);}
-   $('wheel').classList.add('win');$('chanceSub').textContent='успех!';$('chanceSub').style.color='#F7CA7C';toast(got.name+' — твой!');haptic('success');}
-  else{$('wheel').classList.add('lose');$('chanceSub').textContent='сгорело';$('chanceSub').style.color='#FF946E';toast('Не повезло');haptic('error');}
+   SFX.play('upWin');$('wheel').classList.add('win');$('chanceSub').textContent='успех!';$('chanceSub').style.color='#F7CA7C';toast(got.name+' — твой!');haptic('success');}
+  else{SFX.play('upLose');$('wheel').classList.add('lose');$('chanceSub').textContent='сгорело';$('chanceSub').style.color='#FF946E';toast('Не повезло');haptic('error');}
   const keepCh=shownCh,keep=$('chance').textContent;upTarget=null;upBusy=false;drawUp();$('chance').textContent=keep;setArc(keepCh);
   setTimeout(()=>{$('chanceSub').style.color='';},2500);
   }
@@ -3075,6 +3182,9 @@ function wdOpen(){
  };
  draw();openSheet('wdSheet');
 }
+$('setSound').checked=SOUND_ON;$('setVibro').checked=VIBRO_ON;
+$('setSound').onchange=e=>{SOUND_ON=e.target.checked;PREF.set('bf_sound',SOUND_ON);SFX.setOn(SOUND_ON);if(SOUND_ON)SFX.play('toggleOn');};
+$('setVibro').onchange=e=>{VIBRO_ON=e.target.checked;PREF.set('bf_vibro',VIBRO_ON);haptic('light');};
 paintUser();loadCatalog();loadMe();initFeed();drawDaily();
 go('home');
 </script>
