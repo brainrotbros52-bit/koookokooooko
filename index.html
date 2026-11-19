@@ -241,6 +241,16 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .case-secs{display:flex;flex-direction:column;gap:24px}
 .case-sec{display:flex;flex-direction:column;gap:14px}
 .case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.case-art{height:118%;max-width:112%;object-fit:contain;filter:drop-shadow(0 8px 16px rgba(0,0,0,.5));transition:transform .25s;pointer-events:none}
+[data-case]:hover .case-art{transform:scale(1.05) rotate(-1.5deg)}
+.case-hd-img{width:52px;height:52px;object-fit:contain;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
+/* после прокрутки: «Продать» прямо под лентой, без отдельного окна */
+.case-res{display:flex;justify-content:center;animation:pop .35s cubic-bezier(.2,1.3,.4,1)}
+.case-res[hidden]{display:none}
+.gold{width:100%;height:54px;border:0;border-radius:14px;background:linear-gradient(#FFD98E,#ECB45A);color:#1A0F09;font:800 16px Manrope,sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 4px 0 #A8742B,0 10px 26px rgba(236,180,90,.25)}
+.gold:active{transform:translateY(2px);box-shadow:0 2px 0 #A8742B}
+.gold:disabled{opacity:.6}
+.reel.sold .rt.win{opacity:.45;transform:none;box-shadow:none}
 .sec-title h2{font-weight:700;font-size:20px;flex:none}
 .sec-title span{flex:1;height:1px;background:linear-gradient(90deg,transparent,#714A31)}
 .sec-title span:last-child{background:linear-gradient(90deg,#714A31,transparent)}
@@ -744,6 +754,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
  .screen[data-s="case"]{max-width:1180px}
  .case-ctl{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(240px,320px) auto;align-items:center;gap:16px!important}
  .case-ctl>label{white-space:nowrap;min-height:56px!important}
+ #caseSell{width:min(440px,100%)}
  /* апгрейд как на больших сайтах: «Ставлю» | колесо | «Цель», ниже — склад и цели рядом */
  .screen[data-s="upgrade"]{max-width:1240px}
  .screen[data-s="upgrade"]>.ptitle{text-align:center;align-items:center}
@@ -890,11 +901,13 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
         <button data-go="home" class="iconbtn card" aria-label="Назад к кейсам">
           <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
         </button>
+        <img id="caseImg" class="case-hd-img" alt="" hidden>
         <div class="ptitle"><h1 id="caseName">Жаровня</h1><span class="muted" style="font-size:13px" id="caseSub">9 брейнротов</span></div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center">
         <div class="reels" id="reels" style="width:100%"></div>
       </div>
+      <div class="case-res" id="caseRes" hidden><button class="gold" id="caseSell"></button></div>
       <div class="case-ctl" style="display:flex;flex-direction:column;gap:12px">
         <div id="mult" class="seg" role="group" aria-label="Сколько кейсов" style="grid-template-columns:repeat(4,minmax(0,1fr))"></div>
         <button id="openBtn" class="fire" style="height:56px;font-size:16px">Открыть за <span class="num" id="total">199</span></button>
@@ -906,8 +919,6 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
       </div>
     </section>
 
-    <!-- ===== ВЫИГРЫШ ===== -->
-    <section class="screen" data-s="win" style="min-height:100%;justify-content:space-between" id="winBody"></section>
 
     <!-- ===== АПГРЕЙД ===== -->
     <section class="screen" data-s="upgrade">
@@ -1580,7 +1591,7 @@ const MENU={
  account:[{s:'settings',k:'settings',t:'Настройки',d:'Звук, уведомления',c:'#DED0C3'}]};
 let cur='home';
 const EMBERS=Array.from({length:16},()=>`<i class="em" style="left:${(Math.random()*100).toFixed(1)}%;--dx:${(Math.random()*60-30).toFixed(0)}px;animation-duration:${(3+Math.random()*4).toFixed(2)}s;animation-delay:-${(Math.random()*6).toFixed(2)}s;${Math.random()<.4?'width:2px;height:2px;':''}"></i>`).join('');
-const owner={home:'home',case:'home',win:'home',admin:'settings'};
+const owner={home:'home',case:'home',admin:'settings'};
 function drawMenu(){
  const act=owner[cur]||cur;
  const big={home:{t:'Кейсы',d:'24 кейса',k:'cases',c:'#F28743'},upgrade:{t:'Апгрейд',d:'до ×10',k:'upgrade',c:'#ECB45A'}};
@@ -1645,7 +1656,7 @@ function drawMenu(){
   </div>
  </div></div>`;
 }
-const BACK={case:'home',win:'case',admin:'settings',partner:'profile'};
+const BACK={case:'home',admin:'settings',partner:'profile'};
 function syncBack(){if(!tg||!tg.BackButton)return;(cur==='home')?tg.BackButton.hide():tg.BackButton.show();}
 if(tg&&tg.BackButton)tg.BackButton.onClick(()=>{const os=document.querySelector('.sheet.open');if(os){closeSheet(os.id);return;}if($('depModal').classList.contains('open')){closeDeposit();return;}if($('phone').classList.contains('open')){$('phone').classList.remove('open');return;}if(!spinning&&!upBusy)go(BACK[cur]||'home');});
 function go(s){
@@ -1842,16 +1853,18 @@ function caseCard(x){return `
  <button class="card" data-case="${x.name}" data-price="${x.p}" style="text-align:left;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:16px">
   ${x.hot?'<span class="badge" style="position:absolute;top:10px;left:10px;background:#4C2517;color:#FFB088">ХИТ</span>':''}
   <div style="width:100%;height:108px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 85%,${x.c}33 0%,rgba(31,24,20,0) 70%),#261D18">
-   <svg aria-hidden="true" width="88" height="77" viewBox="0 0 96 84" fill="none" stroke="${x.c}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+   ${x.img?`<img class="case-art" src="${esc(x.img)}" alt="" loading="lazy">`:`<svg aria-hidden="true" width="88" height="77" viewBox="0 0 96 84" fill="none" stroke="${x.c}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
     <path d="M48 4c2 5 9 8 9 15a9 9 0 0 1-18 0c0-3.5 2-5.5 3.4-7 .5 2.4 1.5 3.6 2.8 4.2C45 12 46.2 8 48 4z"/>
     <path d="M14 46c0-9 5-14 14-14h40c9 0 14 5 14 14v2H14z"/><rect x="14" y="48" width="68" height="30" rx="3"/>
-    <path d="M30 34v44M66 34v44"/><rect x="42" y="42" width="12" height="15" rx="2.5"/></svg></div>
+    <path d="M30 34v44M66 34v44"/><rect x="42" y="42" width="12" height="15" rx="2.5"/></svg>`}</div>
   <span style="font-weight:800;font-size:14px">${x.name}</span>
   <span class="num" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:10px;background:#31251E;border:1px solid #503C2F;font-weight:800;font-size:14px">
    ${COIN(14)}${fmt(x.p)}</span>
  </button>`;}
 $('cases').onclick=e=>{const b=e.target.closest('[data-case]');if(!b)return;$('caseName').textContent=b.dataset.case;casePrice=+b.dataset.price;
- CUR_CASE=CASES.find(x=>x.name===b.dataset.case)||null;CASE_ITEMS=CUR_CASE&&CUR_CASE.items?CUR_CASE.items:ITEMS;drawCaseItems();drawTotal();go('case');};
+ CUR_CASE=CASES.find(x=>x.name===b.dataset.case)||null;CASE_ITEMS=CUR_CASE&&CUR_CASE.items?CUR_CASE.items:ITEMS;
+ const ci=$('caseImg');if(CUR_CASE&&CUR_CASE.img){ci.src=CUR_CASE.img;ci.hidden=false;}else{ci.hidden=true;ci.removeAttribute('src');}
+ caseReset();drawCaseItems();drawTotal();go('case');};
 drawCases();
 
 const p2=n=>String(n).padStart(2,'0');
@@ -1866,15 +1879,15 @@ function drawCaseItems(){
  <div class="card" style="display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:12px">
   <div class="tile" style="height:64px;${tileBg(R[x.r])}">${mono(x,18)}</div>
   <span style="font-size:12px;font-weight:700;line-height:1.25;min-height:30px">${x.name}</span>
-  <div class="num" style="display:flex;justify-content:space-between;font-size:11px"><b>${fmt(x.p)}</b><span class="muted">${x.ch}</span></div></div>`).join('');
- const lg=CASE_ITEMS.filter(x=>x.r==='legend'||x.r==='myth').reduce((a,x)=>a+chOf(x),0),sw=CASE_ITEMS.reduce((a,x)=>a+chOf(x),0);
- $('caseSub').textContent=`${CASE_ITEMS.length} брейнротов · шанс легенды ${(lg/sw*100).toFixed(1).replace('.',',')}%`;
+  <div class="num" style="font-size:12px"><b>${fmt(x.p)}</b></div></div>`).join('');
+ $('caseSub').textContent=`${CASE_ITEMS.length} брейнротов`;
 }
 const MS=[1,2,3,5];let mIdx=0,spinning=false,lastWin=[],uid=100;
 const drawTotal=()=>{$('total').textContent=fmt(casePrice*MS[mIdx]);};
 const LEN=90,STOP=80;
 function reelDims(n){return n===1?{h:132,tw:92,th:108,f:22}:n===2?{h:112,tw:80,th:92,f:19}:n===3?{h:96,tw:70,th:80,f:17}:{h:72,tw:56,th:60,f:14};}
 function buildReels(n,winners){
+ if(!winners)caseReset();
  const d=reelDims(n);
  $('reels').innerHTML=Array.from({length:n},(_,r)=>{
   const list=Array.from({length:LEN},()=>roll());if(winners)list[STOP]=winners[r];
@@ -1888,7 +1901,7 @@ function buildReels(n,winners){
 async function spin(){
  if(spinning)return;const n=MS[mIdx],cost=casePrice*n;
  if(cost>bal){toast('Недостаточно средств');haptic('error');return;}
- spinning=true;$('openBtn').disabled=true;haptic('medium');SFX.play('caseStart');
+ spinning=true;$('openBtn').disabled=true;haptic('medium');SFX.play('caseStart');caseReset();
  let winners;
  if(API.on()){
   // сервер сам списывает баланс и решает, что выпало
@@ -1951,7 +1964,7 @@ async function spin(){
     const a2=t.animate([{transform:T(sg.to)},{transform:T(C)}],{duration:650,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});
     a2.onfinish=()=>{t.style.transform=T(C);a2.cancel();
      SFX.play('caseStop');
-     if(++finished===tracks.length){const bw=lastWin.slice().sort((a,b)=>b.p-a.p)[0];setTimeout(()=>SFX.play('win_'+(bw&&R[bw.r]?bw.r:'common')),120);haptic('success');}if(finished===tracks.length)setTimeout(()=>{spinning=false;$('openBtn').disabled=false;$('reels').classList.remove('spinning');renderWin();go('win');},1100);};
+     if(++finished===tracks.length){const bw=lastWin.slice().sort((a,b)=>b.p-a.p)[0];setTimeout(()=>SFX.play('win_'+(bw&&R[bw.r]?bw.r:'common')),120);haptic('success');}if(finished===tracks.length)setTimeout(()=>{spinning=false;$('openBtn').disabled=false;$('reels').classList.remove('spinning');caseDone();},350);};
    },fast?120:450);
   })(st);
  });
@@ -1961,42 +1974,23 @@ seg($('mult'),MS.map(n=>'×'+n),0,i=>{if(spinning)return;mIdx=i;drawTotal();buil
 drawCaseItems();
 
 /* ---------- выигрыш ---------- */
-function renderWin(){
- const ws=lastWin,sum=ws.reduce((s,x)=>s+x.p,0),best=ws.slice().sort((a,b)=>b.p-a.p)[0],c=R[best.r];
- const ratio=(sum/(casePrice*ws.length));
- $('winBody').innerHTML=`
- <div style="display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;padding-top:12px">
-  <span class="badge" style="padding:6px 12px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:${c}22;color:${c}">${RN[best.r]}</span>
-  <div style="position:relative;width:${ws.length>1?170:210}px;height:${ws.length>1?170:210}px;border-radius:32px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,${c}4D 0%,#261D18 72%);border:1px solid ${c}73;box-shadow:0 0 0 8px ${c}0D,0 30px 80px ${c}40;animation:pop .5s cubic-bezier(.2,1.4,.4,1)">
-   <span class="u" style="font-weight:800;font-size:${ws.length>1?56:70}px;color:${c}">${best.mono}</span>
-   ${IMG[best.name]?'':'<span class="muted" style="position:absolute;bottom:12px;font-size:11px">[арт брейнрота]</span>'}
-  </div>
-  <div style="display:flex;flex-direction:column;gap:8px">
-   <h1 class="u" style="font-weight:700;font-size:${ws.length>1?20:25}px;line-height:1.15">${best.name}</h1>
-   <span class="muted" style="font-size:14px">из кейса «${$('caseName').textContent}» · ${ratio>=1?`окупился в <b style="color:#F7CA7C">${ratio.toFixed(1).replace('.',',')}×</b>`:`вернулось <b style="color:#FBF2EA">${Math.round(ratio*100)}%</b>`}</span>
-  </div>
-  ${ws.length>1?`<div style="width:100%;display:grid;grid-template-columns:repeat(${Math.min(ws.length,5)},minmax(0,1fr));gap:6px">${ws.map(x=>`
-    <div class="card" style="padding:6px;border-radius:10px;display:flex;flex-direction:column;gap:4px">
-     <div class="tile" style="height:46px;${tileBg(R[x.r])}">${mono(x,13)}</div><b class="num" style="font-size:11px">${fmt(x.p)}</b></div>`).join('')}</div>`:''}
-  <div class="card" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 18px;border-radius:14px">
-   ${COIN(20)}<span class="num" style="font-weight:800;font-size:20px">${fmt(sum)}</span>
-  </div>
- </div>
- <div style="display:flex;flex-direction:column;gap:8px;padding-top:16px">
-  <button class="fire" id="winSell" style="height:56px;font-size:16px">Продать ${ws.length>1?'всё ':''}за ${fmt(sum)}</button>
-  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
-   <button class="ghost" style="height:50px;font-size:14px" id="winKeep">На склад</button>
-   <button class="ghost" style="height:50px;font-size:14px" id="winAgain">Крутить ещё</button>
-  </div>
- </div>`;
- // с сервером предметы уже лежат на складе — тут их только продаём или оставляем
- $('winSell').onclick=async()=>{haptic('light');
-  if(API.on()){const r=await API.call('sell',{ids:ws.map(x=>x.id)});if(!r)return;applyState(r.state);}
-  else setBal(bal+sum);
-  SFX.play('sell');toast('+'+fmt(sum)+' на баланс');go('case');};
- $('winKeep').onclick=()=>{if(API.on())loadMe();else INV.unshift(...ws);toast('Добавлено на склад');go('profile');};
- $('winAgain').onclick=()=>{if(API.on())loadMe();else INV.unshift(...ws);go('case');setTimeout(spin,250);};
+// выпавшие брейнроты уже на складе: под лентой — «Продать», а «Открыть» крутит ещё раз
+var caseWon=[];   // var: функцию зовут ещё при запуске, до этой строки
+function caseReset(){caseWon=[];const r=$('caseRes');if(r)r.hidden=true;}
+function caseDone(){
+ const ws=lastWin;if(!ws.length)return;
+ if(API.on())loadMe();else INV.unshift(...ws);
+ caseWon=ws;const sum=ws.reduce((a,x)=>a+x.p,0);
+ $('caseSell').disabled=false;
+ $('caseSell').innerHTML=`Продать ${ws.length>1?'всё ':''}за ${COIN(18)}<span class="num">${fmt(sum)}</span>`;
+ $('caseRes').hidden=false;
 }
+$('caseSell').onclick=async()=>{const ws=caseWon;if(!ws.length||spinning)return;const sum=ws.reduce((a,x)=>a+x.p,0);
+ $('caseSell').disabled=true;
+ if(API.on()){const r=await API.call('sell',{ids:ws.map(x=>x.id)});if(!r){$('caseSell').disabled=false;return;}applyState(r.state);}
+ else{for(const x of ws){const i=INV.findIndex(y=>y.id===x.id);if(i>=0)INV.splice(i,1);}setBal(bal+sum);}
+ SFX.play('sell');haptic('success');toast('+'+fmt(sum)+' на баланс');
+ caseReset();document.querySelectorAll('#reels .reel').forEach(r=>r.classList.add('sold'));};
 
 /* ---------- апгрейдер ---------- */
 let upSel=new Set(),upTarget=null,upTab=0,upBusy=false,needleDeg=0;
@@ -2843,6 +2837,11 @@ function admCaseEditor(c){
    <label>Раздел<select id="ceSec"><option value="">Без раздела («Кейсы»)</option>${(AS.secL||[]).map(x=>`<option value="${x.id}" ${+F.sec===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select></label>
    <label>Порядок<input id="ceSort" type="number" inputmode="numeric" value="${F.sort}" title="Меньше — левее/выше в разделе"></label>
    <div class="w" style="display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;color:#BEAD9E">Цвет<div class="ce-cols">${CCOL.map(col=>`<button type="button" class="ce-col${F.color===col?' on':''}" data-ccol="${col}" style="background:${col}" aria-label="Цвет ${col}"></button>`).join('')}</div></div></div>
+  <div class="adm-li" style="gap:12px;padding:10px">
+   ${c.img?`<img src="${esc(c.img)}" alt="" style="width:64px;height:64px;object-fit:contain;flex:none">`:`<div class="tile" style="width:64px;height:64px;flex:none;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#261D18">${ic(I.cases||'M4 8h16v12H4zM4 8l2-4h12l2 4M10 12h4','#827265',26,1.8)}</div>`}
+   <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px"><b style="font-size:13px">Фото кейса</b><small class="muted" style="font-size:11px">PNG с прозрачным фоном — смотрится лучше всего</small>
+    <span style="display:flex;gap:6px;flex-wrap:wrap"><label class="ghost" style="height:36px;padding:0 12px;border-radius:10px;font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer">${ic('M12 16V4M7 9l5-5 5 5M4 20h16','#DED0C3',14,2.2)}${c.img?'Заменить':'Загрузить'}<input type="file" accept="image/png,image/webp,image/jpeg" id="ceFile" hidden></label>
+    ${c.img?`<button class="ghost" data-a="case_noimg" style="height:36px;padding:0 12px;border-radius:10px;font-size:12px">Убрать</button>`:''}</span></span></div>
   <div class="pe-tgs">${tgl('ceHot',F.hot,'Метка «ХИТ»','Показывается на карточке кейса')}${tgl('ceAct',F.active,'Показывать игрокам','Выключи, чтобы спрятать кейс')}${tgl('ceMan',F.manual,'Свои шансы','Впиши % каждому брейнроту сам — база не пересчитывает')}</div>
   <div class="adm-row"><b>Что внутри</b><span class="muted num" style="margin-left:auto;font-size:12px">${items.length} шт.</span></div>
   ${items.length?`<div class="adm-its">${items.map(x=>`<div class="adm-li">${art(x,34)}<span style="flex:1;min-width:0"><b>${esc(x.name)}</b><small class="muted num">${fmt(x.price)}${F.manual?'':chance[x.name]!=null?' · шанс '+String(chance[x.name]).replace('.',',')+'%':' · новый'}</small></span>
@@ -2909,9 +2908,9 @@ function admItemForm(x){const nw=!x.name;return `<div class="pc-f c2">
   ${!nw?`<button class="ghost danger" data-a="item_delete" ${x.owned?'disabled title="Есть у игроков"':''}>Удалить</button>`:''}</div>
  ${!nw&&x.owned?'<span class="muted" style="font-size:11px">Удалить нельзя — этот предмет есть у игроков. Можно выключить пополнение.</span>':''}`;}
 // фото → квадрат до 320px (прозрачность сохраняется) → на сервер
-async function imgData(file){const url=URL.createObjectURL(file),im=new Image();
+async function imgData(file,max=320){const url=URL.createObjectURL(file),im=new Image();
  await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src=url;});
- const s=Math.min(1,320/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));
+ const s=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));
  c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
  let d=c.toDataURL('image/webp',0.9);if(!d.startsWith('data:image/webp'))d=c.toDataURL('image/png');return d;}
 $('admBody').addEventListener('change',async e=>{
@@ -2920,6 +2919,10 @@ $('admBody').addEventListener('change',async e=>{
  const dp=e.target.closest('[data-idep]');
  if(dp){const name=dp.dataset.idep,on=dp.checked;dp.disabled=true;const r=await adm('item_save',{name,depositable:on},true);dp.disabled=false;
   if(!r){dp.checked=!on;return;}const it=(AS.itemsL||[]).find(x=>x.name===name);if(it)it.depositable=on;haptic('light');toast(on?`${name} — можно пополнять`:`${name} — пополнение выключено`);loadCatalog();return;}
+ if(e.target.id==='ceFile'&&e.target.files[0]){const id=AS.cedit;toast('Загружаем фото кейса…');if(AS.ckeep)AS.ckeep();
+  try{const data=await imgData(e.target.files[0],512);const r=await API.call('admin_img',{kind:'case',name:id,data});
+   if(r){haptic('success');toast('Фото кейса обновлено');const c=(AS.casesL||[]).find(x=>x.id===id);if(c)c.img=r.img;admCasesDraw();loadCatalog();}}
+  catch(err){toast('Не получилось прочитать картинку');}return;}
  if(e.target.id==='ieFile'&&e.target.files[0]){const name=AS.iedit;toast('Загружаем фото…');
   try{const data=await imgData(e.target.files[0]);const r=await API.call('admin_img',{name,data});
    if(r){haptic('success');toast('Фото обновлено');const it=(AS.itemsL||[]).find(x=>x.name===name);if(it)it.img=r.img;IMG[name]=r.img;admItemsDraw();}}
@@ -3027,6 +3030,7 @@ $('admBody').addEventListener('click',async e=>{
    const args={id:AS.cedit,name:F.name.trim(),price:F.price,rtp:F.manual?'':F.rtp,hot:F.hot,active:F.active,items:[...AS.csel],section:F.sec===''?'':+F.sec,sort:F.sort,color:F.color,manual:F.manual};
    if(F.manual){const ch={};for(const n of AS.csel){const v=+F.ch[n];if(!(v>0&&v<=100)){toast('Впиши шанс для «'+n+'»: больше 0 и до 100');b.disabled=false;return;}ch[n]=v;}args.chances=ch;}
    r=await adm('case_save',args);if(r){AS.cedit=null;loadCatalog();}}
+  else if(a==='case_noimg'){AS.ckeep();r=await adm('case_img',{id:AS.cedit,img:''});if(r){const c=(AS.casesL||[]).find(x=>x.id===AS.cedit);if(c)c.img=null;admCasesDraw();loadCatalog();r=null;}}
   else if(a==='sec_add'){const v=$('secNew').value.trim();if(!v){toast('Впиши название раздела');b.disabled=false;return;}r=await adm('section_save',{name:v});if(r)loadCatalog();}
   else if(a==='sec_up'||a==='sec_down'){r=await adm('section_move',{id,dir:a==='sec_up'?-1:1},true);if(r)loadCatalog();}
   else if(a==='sec_del'){r=await adm('section_delete',{id});if(r)loadCatalog();}
@@ -3392,7 +3396,7 @@ async function loadCatalog(){
  const c=await API.call('catalog',{},true);if(!c)return;
 catalogLoaded=true;
  Object.keys(IMG).forEach(k=>delete IMG[k]);Object.assign(IMG,c.imgs||{});
- SECTIONS=c.sections||[];CASES.length=0;c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,sec:k.section??null,items:(k.items||[]).map(mkItem)}));drawCases();
+ SECTIONS=c.sections||[];CASES.length=0;c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,sec:k.section??null,img:k.img||null,items:(k.items||[]).map(mkItem)}));drawCases();
  UP_TARGETS=c.upgrade.map(mkItem);
  DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
  DEP.gr=c.deposit.gr.map((o,i)=>({key:'gr'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
