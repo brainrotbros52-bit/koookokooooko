@@ -662,6 +662,10 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
 .pe-tg{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:#17120F;border:1px solid #413229;cursor:pointer}
 .pe-tg span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.pe-tg b{font-size:13px}.pe-tg small{font-size:11px;color:#A49485;line-height:1.35}
 
+/* обёртки колонок: на телефоне — обычный столбик */
+.up-main,.pf-side,.pf-main,.m-ctl{display:flex;flex-direction:column;gap:20px;min-width:0}
+/* закрытые шторки не видны совсем (раньше снизу просвечивала их тень) */
+.sheet:not(.open) .sheet-box{visibility:hidden;transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s .32s}
 /* ---------- большой экран: Telegram Desktop, планшет, браузер ---------- */
 @media (min-width:600px){
  body{padding:0}
@@ -681,15 +685,64 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
  .toast{max-width:min(520px,90%)}
 }
 @media (min-width:900px){
+ .screen{padding-left:24px;padding-right:24px}
+ /* главная: топ-дроп и ежедневный бонус рядом, лента и кейсы — во всю ширину */
+ .screen.on[data-s="home"]{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px 16px}
+ .screen[data-s="home"]>*{grid-column:1/-1;min-width:0}
+ .screen[data-s="home"]>#topDrop{grid-column:1;grid-row:1}
+ .screen[data-s="home"]>#homeDaily{grid-column:2;grid-row:1;height:100%}
+ .feed{margin-right:0}
+ /* кейс: лента шире, выбор ×, кнопка и «быстро» — в одну строку */
+ .screen[data-s="case"]{max-width:1180px}
+ .case-ctl{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(240px,320px) auto;align-items:center;gap:16px!important}
+ .case-ctl>label{white-space:nowrap;min-height:56px!important}
+ /* апгрейд: колесо слева (не уезжает при прокрутке), склад и цели справа */
+ .screen.on[data-s="upgrade"]{display:grid;grid-template-columns:minmax(340px,420px) minmax(0,1fr);gap:20px 32px;align-items:start;max-width:1180px}
+ .screen[data-s="upgrade"]>.ptitle{grid-column:1/-1}
+ .up-main{position:sticky;top:4px;gap:16px}
+ .up-side{min-height:420px}
  /* мины: поле слева, управление справа */
- .screen.on[data-s="mines"]{display:grid;grid-template-columns:minmax(320px,460px) minmax(280px,340px);column-gap:28px;row-gap:16px;justify-content:center;align-content:start;max-width:none}
+ .screen.on[data-s="mines"]{display:grid;grid-template-columns:minmax(320px,500px) minmax(280px,360px);gap:16px 32px;justify-content:center;align-items:start;max-width:none}
  .screen[data-s="mines"]>:first-child{grid-column:1/-1}
- .screen[data-s="mines"]>#mgrid{grid-column:1;grid-row:2/span 5;align-self:start;max-width:none}
- .screen[data-s="mines"]>:not(:first-child):not(#mgrid){grid-column:2}
+ .screen[data-s="mines"]>#mgrid{grid-column:1;max-width:none}
+ .m-ctl{grid-column:2;gap:16px}
+ /* профиль: слева игрок и меню, справа склад и история */
+ .screen.on[data-s="profile"]{display:grid;grid-template-columns:minmax(320px,380px) minmax(0,1fr);grid-template-rows:auto 1fr;gap:20px 32px;align-items:start;max-width:1180px}
+ .pf-side{grid-column:1;grid-row:1}
+ .pf-main{grid-column:2;grid-row:1/span 2}
+ .screen[data-s="profile"]>.plist{grid-column:1;grid-row:2}
+ .pf-side .hero{margin:0;border-radius:20px;background:#1B1511;border:1px solid #413229}
+ .inv-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))!important}
+ /* награды и квесты */
+ .screen[data-s="bonus"],.screen[data-s="draws"],.screen[data-s="settings"]{max-width:760px}
+ .screen[data-s="quests"]{max-width:980px}
+ #qlist{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .screen[data-s="partner"],.screen[data-s="admin"]{max-width:1180px}
+ /* пополнение: окно шире, больше предметов в ряд */
+ .modal{padding:24px}
+ .modal-box{max-width:860px;max-height:900px}
+ #depGrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))!important}
+ .dep-flt{flex-direction:row!important;align-items:center}
+ .dep-flt>.srch{flex:1;min-width:0}
  .pc-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
  .pc-nav{grid-template-columns:repeat(6,minmax(0,1fr))}
  .adm-stats{grid-template-columns:repeat(4,minmax(0,1fr))}
  .wheel{width:300px;height:300px}
+}
+@media (min-width:1100px){
+ /* меню из «бургера» становится постоянной панелью слева, шапка — во всю ширину */
+ .phone{display:grid;grid-template-columns:310px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+ .top{grid-column:1/-1;grid-row:1;padding-left:24px;padding-right:24px;border-bottom:1px solid #2B2119;background:#17120F}
+ #burger{display:none}
+ .drawer{position:relative;top:auto;bottom:auto;left:auto;grid-column:1;grid-row:2;width:auto;max-width:none;transform:none!important;transition:none;box-shadow:none;z-index:1;border-right:1px solid #2B2119}
+ .drawer .m2>div:first-child{display:none!important}
+ .body{grid-column:2;grid-row:2}
+ .scrim{display:none}
+ .screen[data-s="home"]{max-width:1240px}
+}
+@media (min-width:1500px){
+ .phone{grid-template-columns:340px minmax(0,1fr)}
+ #cases{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important}
 }
 </style>
 </head>
@@ -738,7 +791,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
     <section class="screen" data-s="home">
       <div class="topdrop" id="topDrop"></div>
 
-      <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="home-feed" style="display:flex;flex-direction:column;gap:10px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
           <div style="display:flex;align-items:center;gap:10px">
             <span class="live"><i></i>LIVE</span>
@@ -776,12 +829,12 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
       <div style="display:flex;flex-direction:column;align-items:center">
         <div class="reels" id="reels" style="width:100%"></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="case-ctl" style="display:flex;flex-direction:column;gap:12px">
         <div id="mult" class="seg" role="group" aria-label="Сколько кейсов" style="grid-template-columns:repeat(4,minmax(0,1fr))"></div>
         <button id="openBtn" class="fire" style="height:56px;font-size:16px">Открыть за <span class="num" id="total">199</span></button>
         <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;font-size:14px;color:#DED0C3">Быстрое открытие<input type="checkbox" class="toggle" id="fast"></label>
       </div>
-      <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="case-items" style="display:flex;flex-direction:column;gap:12px">
         <h2 class="u" style="font-weight:700;font-size:17px">Что внутри</h2>
         <div id="items" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"></div>
       </div>
@@ -794,6 +847,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
     <section class="screen" data-s="upgrade">
       <div class="ptitle"><h1>Апгрейд</h1><span class="muted" style="font-size:13px">Поставь предметы — крути колесо — забирай дороже</span></div>
 
+      <div class="up-main">
       <div class="wheel" id="wheel">
         <svg viewBox="0 0 270 270" aria-hidden="true" style="overflow:visible">
           <defs>
@@ -935,8 +989,9 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
       <div id="upQuick" class="seg" style="grid-template-columns:repeat(5,minmax(0,1fr))"></div>
       <button class="fire" id="upBtn" style="height:56px;font-size:16px" disabled>Улучшить</button>
       <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;margin-top:-8px;font-size:14px;color:#DED0C3">Быстрая прокрутка<input type="checkbox" class="toggle" id="upFast"></label>
+      </div>
 
-      <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="up-side" style="display:flex;flex-direction:column;gap:12px">
         <div id="upTabs" class="seg" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
         <div id="upList" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"></div>
       </div>
@@ -948,6 +1003,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
         <div style="text-align:right"><div class="sec" style="font-size:11px">Множитель</div><div class="u num" id="mx" style="font-weight:800;font-size:22px;color:#F8AE74">×1.00</div></div>
       </div>
       <div class="mgrid" id="mgrid"></div>
+      <div class="m-ctl">
       <div class="card" style="display:flex;justify-content:space-between;padding:12px 14px;border-radius:14px;font-size:13px">
         <span class="muted">Следующая клетка</span><span class="num" style="font-weight:800" id="mnext">×1.13</span>
       </div>
@@ -967,6 +1023,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
         <div id="mcount" class="seg" style="grid-template-columns:repeat(4,minmax(0,1fr))"></div>
       </div>
       <button class="fire" id="mbtn" style="height:56px;font-size:16px">Начать игру</button>
+      </div>
     </section>
 
     <!-- ===== БОНУСЫ ===== -->
@@ -999,6 +1056,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
 
     <!-- ===== ПРОФИЛЬ ===== -->
     <section class="screen" data-s="profile">
+      <div class="pf-side">
       <div class="hero">
         <div class="hero-fire" id="pBanner"></div>
         <div class="pava-wrap">
@@ -1037,10 +1095,13 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
         </div>
         <div class="rec" id="pBest"></div>
       </div>
+      </div>
 
+      <div class="pf-main">
       <div class="utabs" id="ptabs2"><button class="on" data-i="0">Инвентарь <i id="invCnt">0</i></button><button data-i="1">История</button></div>
       <div id="ptabs" style="display:none"></div>
       <div id="pbody"></div>
+      </div>
 
       <div class="plist">
         <details class="prow-d">
@@ -1111,7 +1172,6 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
           </div>
           <button class="iconbtn card" data-mclose aria-label="Закрыть"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DED0C3" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
-        <button class="faq-link" data-toast="Откроются частые вопросы"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.5M12 17h.01"/></svg><span>Вопросы о пополнении</span></button>
       </div>
       <div class="modal-scroll">
       <div class="dtabs" id="depTabs">
@@ -1128,7 +1188,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#827265" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
       </button>
 
-      <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="dep-flt" style="display:flex;flex-direction:column;gap:8px">
         <label class="srch">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A49485" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
           <input id="depQ" type="search" placeholder="Поиск по названию" aria-label="Поиск по названию">
@@ -1234,10 +1294,10 @@ const USER={
 let _hLast=0;
 /* =====================================================================
    ЗВУКИ. Синтезируются в браузере (Web Audio), файлов нет.
-   Сейчас включены в апгрейде: старт, деревянные тики колеса, выигрыш, проигрыш.
+   Включены везде: нажатия, вкладки, шторки, кейсы, апгрейд, мины, монеты, пополнение, вывод.
    ===================================================================== */
 const SFX=(()=>{
- let ac=null,master,rev,noiseBuf,vol=0.7,on=true;
+ let ac=null,master,rev,noiseBuf,vol=0.7,on=true,last=-1e9;
  function init(){
   if(ac){if(ac.state!=='running')ac.resume().catch(()=>{});return true;}
   const C=window.AudioContext||window.webkitAudioContext;if(!C)return false;
@@ -1275,7 +1335,7 @@ const SFX=(()=>{
  // ---------- тики колеса апгрейда: 4 варианта ----------
  const TICK={
   soft:(v=1,at=0)=>{noise({f:3800,q:1.2,v:.045*v,dec:.01,at});tone(2400,{v:.03*v,dec:.018,to:1900,at});},
-  wood:(v=1,at=0)=>{tone(900,{v:.11*v,dec:.032,to:620,at});tone(1820,{type:'triangle',v:.018*v,dec:.015,at});noise({f:1500,q:2,v:.03*v,dec:.01,at});},
+  wood:(v=1,at=0)=>{tone(900,{v:.14*v,dec:.034,to:620,at});tone(1820,{type:'triangle',v:.024*v,dec:.015,at});noise({f:1500,q:2,v:.04*v,dec:.01,at});},
   glass:(v=1,at=0)=>{tone(3136,{v:.03*v,dec:.075,at,send:.25});tone(4700,{v:.009*v,dec:.04,at});},
   ratchet:(v=1,at=0)=>{noise({ft:'highpass',f:2500,q:.7,v:.05*v,dec:.008,at});noise({ft:'highpass',f:3300,q:.7,v:.03*v,dec:.006,at:at+.007});tone(1600,{v:.014*v,dec:.012,to:1300,at});},
  };
@@ -1284,12 +1344,12 @@ const SFX=(()=>{
  // ---------- все звуки ----------
  const S={
   // интерфейс
-  tap(){noise({f:3200,q:1.5,v:.05,dec:.025});tone(1500,{v:.032,dec:.03,to:1200});},
-  tab(){tone(2000,{v:.038,dec:.04,to:1700});noise({f:4500,q:2,v:.022,dec:.015});},
+  tap(){noise({f:3000,q:1.4,v:.09,dec:.026});tone(1350,{v:.065,dec:.034,to:1050});},
+  tab(){tone(1900,{v:.07,dec:.045,to:1600});noise({f:4200,q:2,v:.04,dec:.016});},
   toggleOn(){mallet(N(84),{v:.055,dec:.15});mallet(N(91),{v:.055,dec:.25,at:.06});},
   toggleOff(){mallet(N(91),{v:.045,dec:.15});mallet(N(84),{v:.045,dec:.25,at:.06});},
-  menuOpen(){noise({ft:'lowpass',f:300,to:2400,q:.7,v:.07,a:.08,dec:.2});},
-  menuClose(){noise({ft:'lowpass',f:2400,to:300,q:.7,v:.06,a:.03,dec:.18});},
+  menuOpen(){noise({ft:'lowpass',f:300,to:2600,q:.7,v:.16,a:.07,dec:.2});tone(N(79),{v:.03,dec:.12,at:.05});},
+  menuClose(){noise({ft:'lowpass',f:2400,to:300,q:.7,v:.12,a:.03,dec:.18});},
   notify(){mallet(N(88),{v:.065,dec:.5});mallet(N(95),{v:.055,dec:.7,at:.11});},
   error(){tone(N(57),{type:'triangle',v:.085,dec:.16,lp:900,to:N(55)});tone(N(52),{type:'triangle',v:.085,dec:.26,lp:800,at:.14,to:N(50)});},
   copy(){tone(900,{v:.055,dec:.07,to:1500,glide:.05});},
@@ -1302,6 +1362,7 @@ const SFX=(()=>{
   bonus(){[79,84,88,91].forEach((n,i)=>mallet(N(n),{v:.062,dec:.6,at:i*.08}));sparkle(.35,8,.15);},
   withdraw(){noise({f:2400,to:500,q:.8,v:.055,a:.05,dec:.25});mallet(N(81),{v:.05,dec:.4,at:.18});},
   // кейсы
+  caseStart(){noise({f:350,to:2200,q:.8,v:.11,a:.18,dec:.25});tone(N(64),{type:'triangle',v:.04,dec:.3,lp:1200,at:.05});},
   caseTick(v=1,at=0){const r=1+(Math.random()-.5)*.06;tone(1150*r,{v:.06*v,dec:.022,to:820*r,at});noise({f:2600,q:1.4,v:.028*v,dec:.012,at});},
   caseStop(at=0){tone(170,{v:.075,dec:.16,to:105,at});noise({ft:'lowpass',f:900,v:.035,dec:.12,at});},
   win_common(){mallet(N(79),{v:.08,dec:.5});},
@@ -1310,7 +1371,7 @@ const SFX=(()=>{
   win_legend(){sub(N(45),.9);[69,73,76,81].forEach((n,i)=>mallet(N(n),{v:.08,dec:1,at:i*.06}));sparkle(.3,10,.2);},
   win_myth(){sub(N(45),1.4);pad([57,64,69,73],1.8);[69,76,81,85,88].forEach((n,i)=>mallet(N(n),{v:.075,dec:1.2,at:.05+i*.07}));sparkle(.5,16,.25);},
   // апгрейд
-  upStart(){noise({f:400,to:1800,q:.8,v:.055,a:.25,dec:.3});},
+  upStart(){noise({f:400,to:1800,q:.8,v:.11,a:.25,dec:.3});},
   upTick(v=1,at=0){TICK[tickKind](v,at);},
   upWin(){[72,76,79,84,88].forEach((n,i)=>mallet(N(n),{v:.075,dec:.9,at:i*.07}));pad([60,67,72,76],1.3);sparkle(.45,12,.2);},
   upLose(){tone(N(67),{type:'triangle',v:.08,dec:.35,lp:1200});tone(N(62),{type:'triangle',v:.08,dec:.6,lp:900,at:.22});tone(90,{v:.07,dec:.3,at:.22,to:60});},
@@ -1321,7 +1382,8 @@ const SFX=(()=>{
   mineCash(){S.coins();},
  };
  return {
-  play(name,...a){if(!on||!S[name])return;if(!init())return;try{S[name](...a);}catch(e){}},
+  play(name,...a){if(!on||!S[name])return;if(!init())return;last=performance.now();try{S[name](...a);}catch(e){}},
+  get last(){return last;},
   tick(kind,v,at){if(!on)return;if(!init())return;TICK[kind](v,at);},
   setTick(k){if(TICK[k])tickKind=k;},get tickKind(){return tickKind;},
   setVolume(v){vol=v;if(master)master.gain.value=v;},
@@ -1339,7 +1401,22 @@ let SOUND_ON=PREF.get('bf_sound',true),VIBRO_ON=PREF.get('bf_vibro',true);SFX.se
 let SOUND_VOL=(()=>{try{const v=localStorage.getItem('bf_vol');return v==null?80:Math.max(0,Math.min(100,+v));}catch(e){return 80;}})();SFX.setVolume(SOUND_VOL/100);
 // браузер разрешает звук только после касания — будим его на любом нажатии
 ['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,()=>SFX.wake(),{capture:true,passive:true}));
+// любое нажатие даёт звук: если кнопка не включила свой звук сама — играет мягкий «тап» (вкладки — свой звук)
+const TAB_SEL='.seg button,.utabs button,.adm-tabs button,.pc-nav button,.fseg button,.dtabs button,.pc-src button,.btiers button,.ptabs button';
+document.addEventListener('click',e=>{
+ const t=e.target;if(!SOUND_ON||!(t instanceof Element))return;
+ const at=performance.now(),later=k=>setTimeout(()=>{if(SFX.last<at)SFX.play(k);},0);
+ const inp=t.closest('input,textarea,select');
+ if(inp){if(inp.type==='checkbox'&&inp.id!=='setSound')later(inp.checked?'toggleOn':'toggleOff');return;}
+ const lb=t.closest('label');if(lb&&lb.querySelector('input[type=checkbox]'))return;   // клик по подписи — звук даст сам переключатель
+ let el=t.closest('button,a,summary,[data-go],[data-toast],[data-close],[data-mclose],[role=button]');
+ if(!el)for(let n=t,k=0;n&&n!==document.body&&k<5;n=n.parentElement,k++){if(getComputedStyle(n).cursor==='pointer'){el=n;break;}}
+ if(!el||el.disabled)return;
+ later(el.matches(TAB_SEL)?'tab':'tap');
+},true);
+const HSND={success:'notify',error:'error',warning:'notify'};   // если своего звука не было — общий звук успеха/ошибки
 function haptic(kind){
+  if(HSND[kind]&&performance.now()-SFX.last>150)SFX.play(HSND[kind]);
   if(!VIBRO_ON)return;
   if(!tg||!tg.HapticFeedback)return;
   try{
@@ -1352,7 +1429,7 @@ function haptic(kind){
 const ERR={
   no_money:'Недостаточно средств',bad_promo:'Такого промокода нет или он закончился',promo_used:'Ты уже использовал этот промокод',
   promo_for_deposit:'Этот промокод работает при пополнении',promo_for_profile:'Этот промокод вводится в профиле',
-  deposit_active:'У тебя уже есть заявка в очереди',wager_left:'Сначала отыграй баланс',daily_wait:'Бонус ещё не доступен',
+  deposit_active:'У тебя уже есть заявка в очереди',dep_limit:'За один раз можно внести до 5 предметов',wager_left:'Сначала отыграй баланс',daily_wait:'Бонус ещё не доступен',
   unauthorized:'Открой приложение через Telegram',bad_nick:'Неверный ник Roblox',game_active:'Сначала закончи текущую игру',
   target_cheap:'Цель должна быть дороже ставки',banned:'Аккаунт заблокирован',bad_items:'Предметы не найдены — обнови страницу',
   cannot_cancel:'Заявку уже взяли в работу',not_admin:'Нет прав администратора',bad_input:'Проверь поля',bad_case_id:'id кейса: латиница, цифры, - или _',item_owned:'Этот предмет есть у игроков — удалить нельзя',no_user:'Игрок не найден',quest_not_done:'Квест ещё не выполнен',quest_claimed:'Награда уже получена',no_quest:'Квест не найден',open_first:'Сначала открой клетку',no_game:'Игра не найдена',server_error:'Ошибка сервера, попробуй ещё раз',
@@ -1369,7 +1446,7 @@ const API={
           ...(CONFIG.SUPABASE_ANON_KEY.startsWith('eyJ')?{'Authorization':'Bearer '+CONFIG.SUPABASE_ANON_KEY}:{})},
         body:JSON.stringify({action,initData:tg?tg.initData:'',...(body||{})})});
       const j=await r.json().catch(()=>({error:'server_error'}));
-      if(j.error){API.lastError=j.error;if(!silent)toast(ERR[j.error]||'Ошибка: '+j.error);return null;}
+      if(j.error){API.lastError=j.error;if(!silent){toast(ERR[j.error]||'Ошибка: '+j.error);haptic('error');}return null;}
       return j.data;
     }catch(e){API.lastError='network';if(!silent)toast('Нет связи с сервером');return null;}
   }
@@ -1507,9 +1584,9 @@ document.addEventListener('click',e=>{
  const g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return;}
  const t=e.target.closest('[data-toast]');if(t)toast(t.dataset.toast);
 });
-$('burger').onclick=()=>$('phone').classList.add('open');
-$('scrim').onclick=()=>$('phone').classList.remove('open');
-$('drawer').addEventListener('click',e=>{if(e.target.closest('.m-close'))$('phone').classList.remove('open');});
+$('burger').onclick=()=>{SFX.play('menuOpen');$('phone').classList.add('open');};
+$('scrim').onclick=()=>{SFX.play('menuClose');$('phone').classList.remove('open');};
+$('drawer').addEventListener('click',e=>{if(e.target.closest('.m-close')){SFX.play('menuClose');$('phone').classList.remove('open');}});
 let bal=0;
 const setBal=v=>{bal=v;document.querySelectorAll('.bal').forEach(e=>e.textContent=fmt(bal));wNorm();};
 /* ===== ОТЫГРЫШ =====
@@ -1723,7 +1800,7 @@ function buildReels(n,winners){
 async function spin(){
  if(spinning)return;const n=MS[mIdx],cost=casePrice*n;
  if(cost>bal){toast('Недостаточно средств');haptic('error');return;}
- spinning=true;$('openBtn').disabled=true;haptic('medium');
+ spinning=true;$('openBtn').disabled=true;haptic('medium');SFX.play('caseStart');
  let winners;
  if(API.on()){
   // сервер сам списывает баланс и решает, что выпало
@@ -1751,7 +1828,9 @@ async function spin(){
  }
  const io=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2, out=x=>1-Math.pow(1-x,3), lin=x=>x;
  const caps=tracks.map(t=>[...t.closest('.reel').querySelectorAll('.cap')]);
- let finished=0;
+ let finished=0,cT=0;
+ // щелчок на каждом предмете: на скорости тише, на медленном ходу — отчётливо
+ const cTick=()=>{const nw=performance.now(),gap=nw-cT;if(gap<34)return;cT=nw;SFX.play('caseTick',Math.max(.5,Math.min(1,.42+gap/300)));};
  tracks.forEach((t,i)=>{
   const x0=new DOMMatrixReadOnly(getComputedStyle(t).transform).m41;
   const reel=t.closest('.reel');
@@ -1775,7 +1854,7 @@ async function spin(){
    const x=from+(sg.to-from)*sg.f(k);
    t.style.transform=T(x);
    const idx=Math.floor((rw/2-x+4)/step);
-   if(idx!==lastIdx){lastIdx=idx;caps[i].forEach(c=>{c.classList.remove('tick');c.getBoundingClientRect();c.classList.add('tick');});if(i===0)haptic('tick');}
+   if(idx!==lastIdx){lastIdx=idx;caps[i].forEach(c=>{c.classList.remove('tick');c.getBoundingClientRect();c.classList.add('tick');});if(i===0){haptic('tick');cTick();}}
    if(k<1){requestAnimationFrame(frame);return;}
    if(si<segs.length-1){from=sg.to;si++;st=now;requestAnimationFrame(frame);return;}
    // остановка → пауза → плавно в центр
@@ -1783,7 +1862,8 @@ async function spin(){
     reel.classList.remove('tense');reel.classList.add('done');
     const a2=t.animate([{transform:T(sg.to)},{transform:T(C)}],{duration:650,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});
     a2.onfinish=()=>{t.style.transform=T(C);a2.cancel();
-     if(++finished===tracks.length){haptic('success');}if(finished===tracks.length)setTimeout(()=>{spinning=false;$('openBtn').disabled=false;$('reels').classList.remove('spinning');renderWin();go('win');},1100);};
+     SFX.play('caseStop');
+     if(++finished===tracks.length){const bw=lastWin.slice().sort((a,b)=>b.p-a.p)[0];setTimeout(()=>SFX.play('win_'+(bw&&R[bw.r]?bw.r:'common')),120);haptic('success');}if(finished===tracks.length)setTimeout(()=>{spinning=false;$('openBtn').disabled=false;$('reels').classList.remove('spinning');renderWin();go('win');},1100);};
    },fast?120:450);
   })(st);
  });
@@ -1825,7 +1905,7 @@ function renderWin(){
  $('winSell').onclick=async()=>{haptic('light');
   if(API.on()){const r=await API.call('sell',{ids:ws.map(x=>x.id)});if(!r)return;applyState(r.state);}
   else setBal(bal+sum);
-  toast('+'+fmt(sum)+' на баланс');go('case');};
+  SFX.play('sell');toast('+'+fmt(sum)+' на баланс');go('case');};
  $('winKeep').onclick=()=>{if(API.on())loadMe();else INV.unshift(...ws);toast('Добавлено на склад');go('profile');};
  $('winAgain').onclick=()=>{if(API.on())loadMe();else INV.unshift(...ws);go('case');setTimeout(spin,250);};
 }
@@ -1952,26 +2032,26 @@ let mGame=null,mBusy=false;                    // id игры на сервер�
 $('mgrid').onclick=async e=>{const c=e.target.closest('.cell');if(!c||mState!=='play'||mBusy)return;const i=+c.dataset.c;
  if(API.on()){
   mBusy=true;const res=await API.call('mines_open',{game:mGame,cell:i});mBusy=false;if(!res)return;
-  if(res.boom){$('mgrid').dataset['o'+i]='b';bombs=new Set(res.bombs);mState='lost';drawMines(true);toast('Бум! Ставка сгорела');haptic('error');}
-  else{$('mgrid').dataset['o'+i]='g';opened=res.opened.length;
-   if(res.won){bombs=new Set(res.bombs);mState='won';drawMines(true);toast('+'+fmt(res.payout)+' на баланс');haptic('success');}
+  if(res.boom){$('mgrid').dataset['o'+i]='b';bombs=new Set(res.bombs);mState='lost';drawMines(true);SFX.play('mineBoom');toast('Бум! Ставка сгорела');haptic('error');}
+  else{$('mgrid').dataset['o'+i]='g';opened=res.opened.length;SFX.play('mineSafe',opened-1);
+   if(res.won){bombs=new Set(res.bombs);mState='won';drawMines(true);setTimeout(()=>SFX.play('mineCash'),160);toast('+'+fmt(res.payout)+' на баланс');haptic('success');}
    else{haptic('light');drawMines();}}
   if(res.state)applyState(res.state);return;
  }
- if(bombs.has(i)){$('mgrid').dataset['o'+i]='b';mState='lost';drawMines(true);toast('Бум! Ставка сгорела');haptic('error');}
- else{$('mgrid').dataset['o'+i]='g';opened++;if(opened===25-mines){cashOut();return;}drawMines();}};
+ if(bombs.has(i)){$('mgrid').dataset['o'+i]='b';mState='lost';drawMines(true);SFX.play('mineBoom');toast('Бум! Ставка сгорела');haptic('error');}
+ else{$('mgrid').dataset['o'+i]='g';opened++;SFX.play('mineSafe',opened-1);haptic('light');if(opened===25-mines){cashOut();return;}drawMines();}};
 async function cashOut(){
  if(API.on()){if(mBusy)return;mBusy=true;const res=await API.call('mines_cashout',{game:mGame});mBusy=false;if(!res)return;
-  bombs=new Set(res.bombs);mState='won';drawMines(true);toast('+'+fmt(res.payout)+' на баланс');haptic('success');applyState(res.state);return;}
- haptic('success');const win=Math.floor((+$('bet').value||0)*coef(opened));setBal(bal+win);mState='won';drawMines(true);toast('+'+fmt(win)+' на баланс');}
+  bombs=new Set(res.bombs);mState='won';drawMines(true);SFX.play('mineCash');toast('+'+fmt(res.payout)+' на баланс');haptic('success');applyState(res.state);return;}
+ SFX.play('mineCash');haptic('success');const win=Math.floor((+$('bet').value||0)*coef(opened));setBal(bal+win);mState='won';drawMines(true);toast('+'+fmt(win)+' на баланс');}
 $('mbtn').onclick=async()=>{
  if(mState==='play'){if(opened)cashOut();return;}
  const bet=Math.floor(+$('bet').value||0);if(bet<=0||bet>bal){toast('Недостаточно средств');haptic('error');return;}
  if(API.on()){
   if(mBusy)return;mBusy=true;const res=await API.call('mines_start',{bet,mines});mBusy=false;if(!res)return;
-  mGame=res.game.id;addWager(bet,'Мины');applyState(res.state);resetGrid();bombs=new Set();mState='play';drawMines();haptic('medium');return;
+  mGame=res.game.id;addWager(bet,'Мины');applyState(res.state);resetGrid();bombs=new Set();mState='play';drawMines();SFX.play('mineStart');haptic('medium');return;
  }
- addWager(bet,'Мины');QD.mines++;QD.spend+=bet;setBal(bal-bet);resetGrid();bombs=new Set();while(bombs.size<mines)bombs.add(Math.random()*25|0);mState='play';drawMines();};
+ addWager(bet,'Мины');QD.mines++;QD.spend+=bet;setBal(bal-bet);resetGrid();bombs=new Set();while(bombs.size<mines)bombs.add(Math.random()*25|0);mState='play';drawMines();SFX.play('mineStart');haptic('medium');};
 document.querySelectorAll('[data-bet]').forEach(b=>b.onclick=()=>{if(mState==='play')return;const v=Math.max(1,Math.floor((+$('bet').value||1)*+b.dataset.bet));$('bet').value=v;drawMines();});
 $('bet').oninput=()=>drawMines();
 seg($('mcount'),MC.map(n=>n+' мин'),0,i=>{mines=MC[i];if(mState!=='play'){resetGrid();mState='idle';}drawMines();});
@@ -2027,9 +2107,9 @@ function drawQReset(){const t=qTab===0?Q_DAY_RESET:Q_WEEK_RESET;if(!t){$('qReset
 setInterval(()=>{if(cur==='quests')drawQReset();},1000);
 $('qlist').addEventListener('click',async e=>{const b=e.target.closest('.qclaim');if(!b||qBusy)return;qBusy=true;b.disabled=true;
  if(LIVE){const r=await API.call('quest_claim',{id:b.dataset.q});qBusy=false;if(!r){b.disabled=false;return;}
-  applyState(r.state);QLIST=r.quests.list;drawQ();haptic('success');toast('+'+fmt(r.reward)+' на баланс');return;}
+  applyState(r.state);QLIST=r.quests.list;drawQ();SFX.play('coins');haptic('success');toast('+'+fmt(r.reward)+' на баланс');return;}
  const q=QDEMO.find(x=>x.id===b.dataset.q);QCLAIM.add(q.id);setBal(bal+q.reward);wAddNeed(q.reward*WAGER_BONUS,'квест ×3');qBusy=false;
- haptic('success');toast('+'+fmt(q.reward)+' на баланс');loadQuests();});
+ SFX.play('coins');haptic('success');toast('+'+fmt(q.reward)+' на баланс');loadQuests();});
 seg($('qtabs'),['Ежедневные','Недельные'],0,i=>{qTab=i;drawQ();});
 
 /* ---------- розыгрыши ---------- */
@@ -2079,7 +2159,7 @@ function drawProfile(){
     <div style="display:flex;gap:6px"><button class="ghost" style="height:38px;padding:0 12px;border-radius:10px;font-size:13px" data-sell="all" ${INV.length?'':'disabled'}>Продать всё</button>
     <button class="fire wdBtn" style="height:38px;padding:0 14px;border-radius:10px;font-size:13px;box-shadow:none" ${INV.length?'':'disabled'}>Вывод</button></div>
    </div>
-   ${INV.length?`<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">${INV.map(x=>`
+   ${INV.length?`<div class="inv-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">${INV.map(x=>`
     <div class="pitem" style="--c:${R[x.r]}">
      <div class="tile" style="height:64px;${tileBg(R[x.r])}">${mono(x,18)}</div>
      <span style="font-size:11px;font-weight:700;line-height:1.25;min-height:28px">${x.name}</span>
@@ -2102,21 +2182,22 @@ function drawProfile(){
    <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px">${typeof x==='object'?x.name:x}</div><div class="muted" style="font-size:12px">${src}</div></div>
    <b class="num" style="font-size:14px;color:${c}">${v}</b></div>`).join('')}</div>`;
 }
-$('pidCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(String(USER.id)).catch(()=>{});haptic('light');toast('ID скопирован');};
+$('pidCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(String(USER.id)).catch(()=>{});SFX.play('copy');haptic('light');toast('ID скопирован');};
 $('ptabs2').onclick=e=>{const b=e.target.closest('button');if(!b)return;pTab=+b.dataset.i;histPage=1;[...$('ptabs2').children].forEach(x=>x.classList.toggle('on',x===b));haptic('light');drawProfile();};
 $('promoGo').onclick=async()=>{const v=$('promoIn').value.trim().toUpperCase();if(!v){toast('Введи код');haptic('error');return;}
- if(API.on()){const r=await API.call('promo',{code:v});if(!r){haptic('error');return;}applyState(r.state);haptic('success');
+ if(API.on()){const r=await API.call('promo',{code:v});if(!r){haptic('error');return;}applyState(r.state);SFX.play('bonus');haptic('success');
   toast(r.kind==='deposit'?`Промокод ${r.code}: +${r.value}% к следующему пополнению`:r.kind==='ref'?(r.value?`Код ${r.code}: +${r.value}% к следующему пополнению`:`Готово — ты с партнёром ${r.code}`):r.kind==='case'?`${r.case}: выпал ${r.item.name} · ${fmt(r.item.price)}`:'+'+fmt(r.amount)+' на баланс');$('promoIn').value='';return;}
  const P={};if(!P[v]){toast('Такого промокода нет');haptic('error');return;}
  if(usedPromos.has(v)){toast('Ты уже использовал этот промокод');haptic('error');return;}
- usedPromos.add(v);setBal(bal+P[v]);wAddNeed(P[v]*WAGER_BONUS,'промокод ×3');haptic('success');toast('+'+P[v]+' на баланс');$('promoIn').value='';};
+ usedPromos.add(v);setBal(bal+P[v]);wAddNeed(P[v]*WAGER_BONUS,'промокод ×3');SFX.play('bonus');haptic('success');toast('+'+P[v]+' на баланс');$('promoIn').value='';};
 const usedPromos=new Set();
 $('pbody').onclick=async e=>{const pg=e.target.closest('[data-pg]');if(pg){if(pg.disabled)return;histPage=+pg.dataset.pg.split(':')[1];haptic('light');drawProfile();return;}
  const b=e.target.closest('[data-sell]');if(!b)return;haptic('light');
  if(API.on()){
   const ids=b.dataset.sell==='all'?INV.map(x=>x.id):[+b.dataset.sell];
-  const r=await API.call('sell',{ids});if(!r)return;applyState(r.state);toast('+'+fmt(r.sold)+' на баланс');return;
+  const r=await API.call('sell',{ids});if(!r)return;applyState(r.state);SFX.play('sell');toast('+'+fmt(r.sold)+' на баланс');return;
  }
+ SFX.play('sell');
  if(b.dataset.sell==='all'){const s=INV.reduce((a,x)=>a+x.p,0);INV.length=0;setBal(bal+s);toast('+'+fmt(s)+' на баланс');}
  else{const i=INV.findIndex(x=>x.id===+b.dataset.sell);const s=INV[i].p;INV.splice(i,1);setBal(bal+s);toast('+'+fmt(s)+' на баланс');}
  drawProfile();};
@@ -2203,39 +2284,43 @@ $('buffFoot').addEventListener('click',e=>{if(e.target.closest('#buffReset')){de
 function openBuffs(key){buffFor=key||null;bTier=key&&depBuffs[key]?-2:-1;$('buffQ').value='';drawBuffs();openSheet('buffSheet');$('buffSheet').querySelector('.sheet-box').scrollTop=0;}
 $('buffTiers').onclick=e=>{const b=e.target.closest('button');if(!b)return;bTier=+b.dataset.t;haptic('light');drawBuffs();};
 $('buffQ').addEventListener('input',drawBuffs);
-function openDeposit(){$('depModal').classList.add('open');$('depModal').setAttribute('aria-hidden','false');$('phone').classList.remove('open');drawDep();if(tg&&tg.BackButton)tg.BackButton.show();}
-function closeDeposit(){$('depModal').classList.remove('open');$('depModal').setAttribute('aria-hidden','true');syncBack();}
+function openDeposit(){if(!$('depModal').classList.contains('open'))SFX.play('menuOpen');$('depModal').classList.add('open');$('depModal').setAttribute('aria-hidden','false');$('phone').classList.remove('open');drawDep();if(tg&&tg.BackButton)tg.BackButton.show();}
+function closeDeposit(){if($('depModal').classList.contains('open'))SFX.play('menuClose');$('depModal').classList.remove('open');$('depModal').setAttribute('aria-hidden','true');syncBack();}
 $('depModal').addEventListener('click',e=>{if(e.target.closest('[data-mclose]'))closeDeposit();});
-function openSheet(id){$(id).classList.add('open');$(id).setAttribute('aria-hidden','false');if(id==='depSheet'&&$('dqPill'))$('dqPill').hidden=true;}
-function closeSheet(id){$(id).classList.remove('open');$(id).setAttribute('aria-hidden','true');if(id==='depSheet')setTimeout(dqPill,50);}
+function openSheet(id){if(!$(id).classList.contains('open'))SFX.play('menuOpen');$(id).classList.add('open');$(id).setAttribute('aria-hidden','false');if(id==='depSheet'&&$('dqPill'))$('dqPill').hidden=true;}
+function closeSheet(id){if($(id).classList.contains('open'))SFX.play('menuClose');$(id).classList.remove('open');$(id).setAttribute('aria-hidden','true');if(id==='depSheet')setTimeout(dqPill,50);}
 document.querySelectorAll('.sheet').forEach(sh=>sh.addEventListener('click',e=>{if(e.target.closest('[data-close]'))closeSheet(sh.id);}));
 $('buffOpen').onclick=()=>{haptic('light');openBuffs(null);};
 
+const DEP_MAX=5;                                  // сколько предметов можно внести за один раз (на сервере — dep_max_items)
+const depTotal=()=>Object.values(depQty).reduce((a,b)=>a+b,0);
 function depList(){
  const q=$('depQ').value.trim().toLowerCase(),f=+$('depFrom').value||0,t=+$('depTo').value||Infinity;
  return DEP[depTab].filter(x=>(!q||x.name.toLowerCase().includes(q))&&x.p>=f&&x.p<=t).sort((a,b)=>depAsc?a.p-b.p:b.p-a.p);
 }
 function drawDep(){
- const L=depList();
+ const L=depList(),full=depTotal()>=DEP_MAX;
  $('depGrid').innerHTML=L.length?L.map(x=>{const q=depQty[x.key]||0,c=R[x.r];return `
  <div class="dep${q?' sel':''}">
   <div class="dep-art" style="${tileBg(c)}"><span class="u" style="color:${c}">${x.mono}</span></div>
   <div class="dep-n">${x.name}</div>
   ${(()=>{const P=depTab==='br'?buffPct(x.key):0;return P?`<div class="dep-p num"><s style="color:#827265;font-size:11px">${fmt(x.p)}</s>${coin()}<span style="color:${P<0?'#FF946E':'#88E4A5'}">${fmt(itemPrice(x))}</span></div>`:`<div class="dep-p num">${coin()}${fmt(x.p)}</div>`;})()}
   ${depTab==='br'?(()=>{const n=(depBuffs[x.key]||new Set()).size,P=buffPct(x.key);return `<button class="bbtn${n?' has':''}" data-bk="${x.key}">${n?`${n} ${n===1?'баф':n<5?'бафа':'бафов'} · <b style="color:${P<0?'#FF946E':'#88E4A5'}">${pct(+P.toFixed(1))}</b>`:'＋ Бафы'}</button>`;})():''}
-  <div class="step"><button data-k="${x.key}" data-d="-1" aria-label="Убрать" ${q?'':'disabled'}>−</button><span class="num">${q}</span><button data-k="${x.key}" data-d="1" aria-label="Добавить">+</button></div>
+  <div class="step"><button data-k="${x.key}" data-d="-1" aria-label="Убрать" ${q?'':'disabled'}>−</button><span class="num">${q}</span><button data-k="${x.key}" data-d="1" aria-label="Добавить" ${full?'disabled':''}>+</button></div>
  </div>`;}).join(''):`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:14px;padding:30px 0">${DEP[depTab].length?'Ничего не нашлось':'Список пока пуст — скоро добавим'}</p>`;
  drawDepBar();
 }
 function depSel(){const all=[...DEP.br,...DEP.gr];return all.filter(x=>depQty[x.key]).map(x=>({...x,q:depQty[x.key]}));}
 function drawDepBar(){
  const S=depSel(),n=S.reduce((a,x)=>a+x.q,0),base=S.reduce((a,x)=>a+x.p*x.q,0),sum=S.reduce((a,x)=>a+itemPrice(x)*x.q,0),bon=sum-base;
- $('depCnt').textContent=n?`Выбрано ${n} шт.`:'Ничего не выбрано';
+ $('depCnt').textContent=n?(n>=DEP_MAX?`Выбрано ${n} из ${DEP_MAX} — максимум за раз`:`Выбрано ${n} из ${DEP_MAX}`):`Можно до ${DEP_MAX} предметов за раз`;
  $('depSum').textContent=fmt(sum);
  $('depBonus').textContent=bon?(bon>0?'+':'−')+fmt(Math.abs(bon))+' бафы':'';$('depBonus').style.color=bon<0?'#FF946E':'#88E4A5';
  $('depGo').disabled=!n;
 }
-$('depGrid').onclick=e=>{const bb=e.target.closest('.bbtn');if(bb){haptic('light');openBuffs(bb.dataset.bk);return;}const b=e.target.closest('.step button');if(!b)return;const k=b.dataset.k;depQty[k]=Math.max(0,(depQty[k]||0)+ +b.dataset.d);if(!depQty[k])delete depQty[k];haptic('light');drawDep();};
+$('depGrid').onclick=e=>{const bb=e.target.closest('.bbtn');if(bb){haptic('light');openBuffs(bb.dataset.bk);return;}const b=e.target.closest('.step button');if(!b)return;const k=b.dataset.k;
+ if(+b.dataset.d>0&&depTotal()>=DEP_MAX){toast(`За один раз — до ${DEP_MAX} предметов`);haptic('error');return;}
+ depQty[k]=Math.max(0,(depQty[k]||0)+ +b.dataset.d);if(!depQty[k])delete depQty[k];haptic('light');drawDep();};
 $('depTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;depTab=b.dataset.t;[...$('depTabs').children].forEach(x=>x.classList.toggle('on',x===b));
  $('buffOpen').style.display=depTab==='br'?'':'none';haptic('light');drawDep();};
 ['depQ','depFrom','depTo'].forEach(id=>$(id).addEventListener('input',drawDep));
@@ -2312,11 +2397,11 @@ function dqForm(){
       items:S.map(x=>({name:x.name,q:x.q,buffs:[...(depBuffs[x.key]||[])]}))});
     if(!r){if($('dqSend'))$('dqSend').disabled=false;return;}
     Object.keys(depQty).forEach(k=>delete depQty[k]);Object.keys(depBuffs).forEach(k=>delete depBuffs[k]);drawDep();
-    applyState(r.state);dqQueue();return;
+    applyState(r.state);SFX.play('depositSent');dqQueue();return;
    }
    DQ={items:S,sum,bonus,promo:f.pct?f.promo:'',nick:f.nick,pos:1+(Math.random()*3|0),id:Math.random().toString(36).slice(2,7).toUpperCase(),status:'wait'};
    Object.keys(depQty).forEach(k=>delete depQty[k]);drawDep();
-   dqQueue();dqTick();
+   SFX.play('depositSent');dqQueue();dqTick();
   };
  };
  draw();
@@ -2345,7 +2430,7 @@ function dqQueue(){
  </ol>
  <details class="dq-more"><summary>Что в заявке · ${DQ.items.reduce((a,x)=>a+x.q,0)} шт.${DQ.promo?' · '+DQ.promo:''}</summary>${dqItemsHTML(DQ.items)}</details>
  <button class="ghost" id="dqCancel" style="height:46px;font-size:14px;color:#FF946E">Отменить заявку</button>`;
- $('dqCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(CONFIG.BOT_NICK).catch(()=>{});haptic('success');toast('Ник бота скопирован');$('dqCopy').lastChild.textContent='Скопировано';};
+ $('dqCopy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(CONFIG.BOT_NICK).catch(()=>{});SFX.play('copy');haptic('success');toast('Ник бота скопирован');$('dqCopy').lastChild.textContent='Скопировано';};
  $('dqCancel').onclick=async()=>{
   if(API.on()){const r=await API.call('deposit_cancel',{id:DQ.id});if(!r)return;}
   clearInterval(dqTimer);DQ=null;dqPill();closeSheet('depSheet');haptic('warning');toast('Заявка отменена');};
@@ -2362,7 +2447,7 @@ function dqTick(){clearInterval(dqTimer);
  else if(Date.now()-DQ._t>5000){   // демо: «бот принял трейд» и зачислил монеты
   const got=DQ.sum+DQ.bonus;QD.deposit+=got;setBal(bal+got);wAddNeed(DQ.sum*WAGER_DEP+DQ.bonus*WAGER_BONUS,'пополнение ×1.5');
   DQ=null;clearInterval(dqTimer);dqPill();if($('depSheet').classList.contains('open'))closeSheet('depSheet');
-  haptic('success');toast('Трейд принят — +'+fmt(got)+' на баланс');}
+  SFX.play('depositOk');haptic('success');toast('Трейд принят — +'+fmt(got)+' на баланс');}
  },6000);}
 // боевой режим: спрашиваем сервер, что с заявкой
 async function dqPoll(){
@@ -2375,7 +2460,7 @@ async function dqPoll(){
   return;}
  clearInterval(dqTimer);const done=r.status==='done';DQ=null;dqPill();
  if($('depSheet').classList.contains('open'))closeSheet('depSheet');
- if(done){haptic('success');toast('Трейд принят — +'+fmt(r.credited)+' на баланс');}
+ if(done){SFX.play('depositOk');haptic('success');toast('Трейд принят — +'+fmt(r.credited)+' на баланс');}
  else{haptic('warning');toast(r.status==='rejected'?'Заявку отклонили — напиши в поддержку':'Заявка отменена');}
  loadMe();
 }
@@ -2398,10 +2483,10 @@ function drawDaily(){const b=$('dailyClaim');if(!b)return;const left=DAILY_NEXT?
  if(typeof drawDays==='function')drawDays();}
 let DAILY_AMOUNT=30;
 $('dailyClaim').onclick=async()=>{
- if(API.on()){const r=await API.call('daily',{});if(!r){haptic('error');return;}applyState(r.state);haptic('success');toast('День '+r.day+': +'+fmt(r.amount)+' на баланс');return;}
+ if(API.on()){const r=await API.call('daily',{});if(!r){haptic('error');return;}applyState(r.state);SFX.play('bonus');haptic('success');toast('День '+r.day+': +'+fmt(r.amount)+' на баланс');return;}
  // демо: та же логика серии, что и на сервере
  if(DAILY_NEXT&&DAILY_NEXT>Date.now())return;
- const amt=DAYS[DAILY_DAY-1];haptic('success');setBal(bal+amt);toast('День '+DAILY_DAY+': +'+amt+' на баланс');wAddNeed(amt*WAGER_BONUS,'бонус ×3');
+ const amt=DAYS[DAILY_DAY-1];SFX.play('bonus');haptic('success');setBal(bal+amt);toast('День '+DAILY_DAY+': +'+amt+' на баланс');wAddNeed(amt*WAGER_BONUS,'бонус ×3');
  DAILY_STREAK=DAILY_DAY;DAILY_LAST=Date.now();DAILY_NEXT=DAILY_LAST+864e5;DAILY_DAY=DAILY_STREAK%7+1;QD.bonus++;drawDaily();};
 let DAILY_LAST=null;
 // демо: если пропустил больше суток после доступности — серия с 1 дня
@@ -2738,7 +2823,7 @@ async function admCard(){
 }
 
 $('admBody').addEventListener('click',async e=>{
- const cp=e.target.closest('[data-copy]');if(cp){e.stopPropagation();navigator.clipboard&&navigator.clipboard.writeText(cp.dataset.copy).catch(()=>{});toast('Скопировано: '+cp.dataset.copy);haptic('light');return;}
+ const cp=e.target.closest('[data-copy]');if(cp){e.stopPropagation();navigator.clipboard&&navigator.clipboard.writeText(cp.dataset.copy).catch(()=>{});SFX.play('copy');toast('Скопировано: '+cp.dataset.copy);haptic('light');return;}
  const pg=e.target.closest('[data-pg]');if(pg){if(pg.disabled)return;const[k,n]=pg.dataset.pg.split(':');
   if(k==='card')AS.cardPage=+n;else if(k==='pcard')AS.pcPage=+n;else AS.page[k]=+n;haptic('light');await admLoad();$('body').scrollTop=0;return;}
  const md=e.target.closest('[data-mode]');if(md){AS.mode[AS.tab]=md.dataset.mode;AS.page[AS.tab]=1;haptic('light');admLoad();return;}
@@ -2832,7 +2917,7 @@ const pcToday=()=>PC.info&&PC.info.today||kyivDay();
 function pcRange(p){const T=pcToday();return p==='today'?[T,T]:p==='yday'?[dAdd(T,-1),dAdd(T,-1)]:p==='all'?['',T]:[dAdd(T,1-(+p)),T];}
 const dur=ms=>{if(ms<=6e4)return 'меньше минуты';const m=Math.floor(ms/6e4),d=Math.floor(m/1440),h=Math.floor(m%1440/60),mm=m%60;return d?`${d} д ${h} ч`:h?`${h} ч ${mm} мин`:`${mm} мин`;};
 const CPYI=c=>ic('M9 9h11v11H9zM5 15V6a2 2 0 0 1 2-2h8',c,17,2.2);
-function copyTxt(t,msg){navigator.clipboard&&navigator.clipboard.writeText(t).catch(()=>{});haptic('light');toast(msg||'Скопировано');}
+function copyTxt(t,msg){navigator.clipboard&&navigator.clipboard.writeText(t).catch(()=>{});SFX.play('copy');haptic('light');toast(msg||'Скопировано');}
 async function pc(op,args){if(!LIVE)return pcDemo(op,args||{});return API.call('partner',{op,args:args||{}});}
 
 async function pcOpen(){if(!USER.partner){go('profile');return;}pcNavDraw();$('pcBody').innerHTML='<p class="pc-hint" style="text-align:center;padding:30px 0">Загружаем…</p>';
@@ -3046,7 +3131,7 @@ $('pcBody').addEventListener('click',async e=>{
    if(!/^[A-Z0-9_-]{3,20}$/.test(code)){toast('Код: латиница и цифры, от 3 символов');return;}if(!(uses>0)){toast('Укажи активации');return;}
    r=await pc('promo_create',{kind:'case',code,case:$('pcKcase').value,uses});}
   else if(a==='pc_stop')r=await pc('promo_stop',{code:b.dataset.code});
-  else if(a==='pc_wd'){r=await pc('withdraw',{});if(r){haptic('success');toast(r.auto?`+${fmt(r.amount)} на игровой баланс`:`Заявка на ${fmt(r.amount)} отправлена — админ подтвердит`);if(r.state)applyState(r.state,true);}}
+  else if(a==='pc_wd'){r=await pc('withdraw',{});if(r){SFX.play('withdraw');haptic('success');toast(r.auto?`+${fmt(r.amount)} на игровой баланс`:`Заявка на ${fmt(r.amount)} отправлена — админ подтвердит`);if(r.state)applyState(r.state,true);}}
  }finally{if(b.isConnected)b.disabled=false;}
  if(r){if(r.msg){toast(r.msg);haptic('success');}const i=await pc('info');if(i){PC.info=i;pcHeadDraw();}pcLoad();}
 });
@@ -3184,7 +3269,7 @@ function wdOpen(){
   $('wdGo').onclick=async()=>{const ids=[...sel];if(!nickOk(nick)||!ids.length)return;dqNick=nick;$('wdGo').disabled=true;
    if(LIVE){const r=await API.call('withdraw',{nick,ids});if(!r){$('wdGo').disabled=false;return;}applyState(r.state);}
    else{let t=0;for(const id of ids){const i=INV.findIndex(x=>x.id===id);if(i>=0){t+=INV[i].p;INV.splice(i,1);}}STATS.withdrawn+=t;drawProfile();}
-   closeSheet('wdSheet');haptic('success');toast('Заявка на вывод создана — жди трейд от '+CONFIG.BOT_NICK);};
+   closeSheet('wdSheet');SFX.play('withdraw');haptic('success');toast('Заявка на вывод создана — жди трейд от '+CONFIG.BOT_NICK);};
  };
  draw();openSheet('wdSheet');
 }
