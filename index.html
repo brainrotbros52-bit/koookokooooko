@@ -678,10 +678,26 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .wheel.win #arcGlow{filter:brightness(1.25)}
 .wheel.lose #arcGlow{filter:grayscale(.7) brightness(.6)}
 
-.wheel{position:relative;width:270px;height:270px;margin:0 auto}
+.wheel{position:relative;width:270px;height:270px;margin:22px auto 0}   /* сверху место под пламя стрелки */
 .wheel svg{position:absolute;inset:0}
 .needle{position:absolute;inset:0;transform:rotate(0deg)}
 #ntail{opacity:.08}
+/* пламенная стрелка апгрейда: огонь дрожит, на ходу (--heat от 0 до 1) клонится назад и разгорается */
+@property --heat{syntax:'<number>';inherits:true;initial-value:0}
+#nflame .nf-lean{transform-origin:135px 21px;transform:rotate(calc(var(--heat) * -58deg)) scale(calc(1 + var(--heat) * .4),calc(1 + var(--heat) * .62))}
+#nflame .nf-o{transform-origin:135px 22px;animation:nfo .9s ease-in-out infinite alternate}
+#nflame .nf-m{transform-origin:135px 20px;animation:nfm .62s ease-in-out infinite alternate}
+#nflame .nf-i{transform-origin:135px 19px;animation:nfi .48s ease-in-out infinite alternate}
+#nflame .nf-glow{opacity:calc(.45 + var(--heat) * .5);transform-origin:135px 12px;animation:nfg 1.6s ease-in-out infinite alternate}
+#nflame .nf-em{opacity:0;animation:nfe 1.4s ease-out infinite}
+#nflame .nf-em.e2{animation-delay:.5s}#nflame .nf-em.e3{animation-delay:.95s}
+@keyframes nfo{0%{transform:scale(1,1) skewX(0)}45%{transform:scale(.93,1.09) skewX(-4deg)}100%{transform:scale(1.05,.94) skewX(3deg)}}
+@keyframes nfm{0%{transform:scale(1,1) skewX(2deg)}50%{transform:scale(.9,1.13) skewX(-3deg)}100%{transform:scale(1.06,.92) skewX(1deg)}}
+@keyframes nfi{0%{transform:scale(1,1)}100%{transform:scale(.86,1.16)}}
+@keyframes nfg{0%{transform:scale(.92)}100%{transform:scale(1.1)}}
+@keyframes nfe{0%{opacity:0;transform:translate(0,6px)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx,0px),-16px)}}
+#nflame .nf-em.e1{--dx:-4px}#nflame .nf-em.e2{--dx:5px}
+.wheel.win #nflame .nf-o{fill:#F7CA7C}.wheel.lose #nflame .nf-glow{opacity:.2}
 .wheel-c{position:absolute;inset:58px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2B2119,#1B1511 70%);border:1px solid #413229;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center}
 .wheel-c{overflow:hidden}
 .wheel-c>span{position:relative;z-index:1;text-shadow:0 2px 12px rgba(23,18,15,.9)}
@@ -718,6 +734,23 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .acc-opt b{display:block;font-size:14px}.acc-opt small{display:block;font-size:12px;color:#A49485;margin-top:2px}
 .acc-prev{border-radius:16px;border:1px dashed #503C2F;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:radial-gradient(ellipse at 50% 120%,rgba(242,120,55,.16),transparent 70%),#17120F}
 .acc-prev b{font-size:16px}.acc-prev p{margin:0;font-size:13px;color:#DED0C3;line-height:1.45;white-space:pre-line}
+.pc-f.dr-f{grid-template-columns:minmax(0,1fr)}@media (min-width:600px){.pc-f.dr-f{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.dr-card{position:relative;overflow:hidden;border-radius:20px;background:#221A15;border:1px solid #503C2F;padding:16px;display:flex;flex-direction:column;gap:14px}
+.dr-glow{position:absolute;left:50%;top:-40px;width:320px;height:230px;transform:translateX(-50%);background:radial-gradient(ellipse,color-mix(in srgb,var(--c) 22%,transparent),rgba(0,0,0,0) 65%);pointer-events:none}
+.dr-top{position:relative;display:flex;gap:14px;align-items:center}
+.dr-art{width:104px;height:104px;flex:none;border-radius:18px}
+.dr-name{font-weight:800;font-size:18px;line-height:1.25}
+.dr-stats{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.dr-stats>div{padding:10px 12px;border-radius:12px;background:#17120F}
+.dr-cond{position:relative;display:flex;align-items:center;gap:10px;padding:12px;border-radius:14px;background:#17120F;border:1px solid #413229}
+.dr-cond b{display:block;font-size:14px}.dr-cond small{display:block;font-size:12px;color:#A49485;margin-top:4px;line-height:1.4}
+.dr-cond.ok{border-color:#2F6B45;background:#13201A}
+.dr-bar{display:block;height:6px;border-radius:4px;background:#2B2119;margin-top:8px;overflow:hidden}
+.dr-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#F26C3E,#FFB05A)}
+.dr-cond.ok .dr-bar i{background:#47AF70}
+.dr-go{position:relative;height:52px;font-size:15px}
+.dwin-pop .lp-box{background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--c) 30%,transparent),transparent 60%),#1B1511}
+@media (min-width:900px){.dr-art{width:128px;height:128px}.dr-name{font-size:20px}}
 .lang-pick{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(10,8,7,.86);backdrop-filter:blur(6px);animation:in .25s ease}
 .lp-box{width:min(360px,100%);display:flex;flex-direction:column;align-items:center;gap:14px;padding:22px 18px;border-radius:24px;background:radial-gradient(ellipse at 50% 0%,rgba(242,135,67,.2),transparent 60%),#1B1511;border:1px solid #503C2F;box-shadow:0 30px 80px rgba(0,0,0,.6)}
 .lp-box h2{margin:2px 0 4px;text-align:center;font-size:20px;font-weight:700;line-height:1.3}
@@ -1177,10 +1210,27 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
               <path d="M116.22 14.45A122 122 0 0 1 126.85 13.27" stroke="#FCAD68" stroke-width="11.4" stroke-linecap="round" opacity="0.744" fill="none"/>
               <path d="M125.58 13.36A122 122 0 0 1 136.28 13.01" stroke="#FCAD68" stroke-width="12.0" stroke-linecap="round" opacity="0.850" fill="none"/>
             </g>
-            <circle cx="135" cy="13" r="17" fill="url(#cmG)" opacity=".55"/>
-            <path d="M126 13c0-5 3.5-9 9-9 4 0 6.5 2 9 4.5L152 13l-7.9 4.5C141.5 20 139 22 135 22c-5.5 0-9-4-9-9z" fill="#FCAD68" stroke="#17120F" stroke-width="1.6" stroke-linejoin="round" transform="rotate(180 135 13)" style="filter:drop-shadow(0 0 6px rgba(240,160,96,.9))"/>
-            <circle cx="135" cy="13" r="4.2" fill="#FFF4E2"/>
-            <path d="M135 31l-5.5 9h11z" fill="#FBF2EA" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/>
+            <!-- пламенная стрелка: наконечник смотрит в центр, сзади горит огонь (на ходу клонится назад) -->
+            <g id="nflame">
+              <defs>
+                <linearGradient id="nfO" gradientUnits="userSpaceOnUse" x1="0" y1="22" x2="0" y2="-18"><stop offset="0" stop-color="#FF8A3A"/><stop offset=".55" stop-color="#F2552E"/><stop offset="1" stop-color="#B8261A" stop-opacity=".85"/></linearGradient>
+                <linearGradient id="nfM" gradientUnits="userSpaceOnUse" x1="0" y1="21" x2="0" y2="-6"><stop offset="0" stop-color="#FFD27A"/><stop offset="1" stop-color="#FF9A3D"/></linearGradient>
+                <linearGradient id="nfA" gradientUnits="userSpaceOnUse" x1="0" y1="47" x2="0" y2="16"><stop offset="0" stop-color="#FFD27A"/><stop offset=".5" stop-color="#FF8A3A"/><stop offset="1" stop-color="#D9431F"/></linearGradient>
+              </defs>
+              <circle class="nf-glow" cx="135" cy="12" r="26" fill="url(#cmG)"/>
+              <g class="nf-lean">
+                <circle class="nf-em e1" cx="131" cy="2" r="1.6" fill="#FFC27A"/>
+                <circle class="nf-em e2" cx="139" cy="0" r="1.3" fill="#FFD9A0"/>
+                <circle class="nf-em e3" cx="135" cy="-4" r="1.1" fill="#FF9A3D"/>
+                <g transform="translate(135 22) scale(1.12 1.22) translate(-135 -22)">
+                <path class="nf-o" d="M135 -17C141 -6 150 0 150 10C150 18 143 22 135 22C127 22 120 18 120 10C120 3 125 -2 127 -8C128 -3 130 0 132 1C131 -6 132 -11 135 -17Z" fill="url(#nfO)"/>
+                <path class="nf-m" d="M135 -6C139 1 145 5 145 11C145 17 140 20 135 20C130 20 125 17 125 11C125 6 129 2 131 -2C131.5 1 133 3 134 3C133.5 0 134 -3 135 -6Z" fill="url(#nfM)"/>
+                <path class="nf-i" d="M135 4C137.5 8 141 10 141 13.5C141 17 138.5 19 135 19C131.5 19 129 17 129 13.5C129 10 132.5 8 135 4Z" fill="#FFF1C9"/>
+                </g>
+              </g>
+              <path d="M135 47L124 16.5L135 22L146 16.5Z" fill="url(#nfA)" stroke="#17120F" stroke-width="1.7" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px rgba(255,140,60,.9))"/>
+              <path d="M135 41L135 24.5" stroke="#FFF4E2" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+            </g>
           </svg>
         </div>
         <div class="wheel-c" id="wheelC">
@@ -1274,7 +1324,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
 
     <!-- ===== РОЗЫГРЫШИ ===== -->
     <section class="screen" data-s="draws">
-      <div class="ptitle"><h1>Розыгрыши</h1><span class="muted" style="font-size:13px">Участвуй бесплатно — нужен депозит от 100</span></div>
+      <div class="ptitle"><h1>Розыгрыши</h1><span class="muted" style="font-size:13px">Участие бесплатное — нужно пополнение за период розыгрыша</span></div>
       <div id="dtabs" class="seg" style="grid-template-columns:repeat(3,minmax(0,1fr))"></div>
       <div id="dcard"></div>
       <div style="display:flex;flex-direction:column;gap:10px">
@@ -1618,6 +1668,12 @@ const EN={
  // редкость и названия
  'Обычный':'Common','Редкий':'Rare','Эпический':'Epic','Легендарный':'Legendary','Мифический':'Mythic','Токен':'Token',
  'Жаровня':'Brazier','Тлеющий':'Smoldering','Угольный':'Coal','Пепел Сахура':'Sahur Ash','Вулкан':'Volcano','Сердце пламени':'Heart of Flame','Драгон':'Dragon','До 100':'Under 100','Легенды':'Legends','Ивент':'Event',
+ 'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
+ 'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
+ 'Победителя выберем случайно, когда время выйдет. Приз сразу придёт на склад.':'The winner is picked at random when time runs out. The prize goes straight to the inventory.',
+ 'подводим итог…':'picking the winner…','Загружаем розыгрыши…':'Loading giveaways…','Этот розыгрыш скоро начнётся':'This giveaway starts soon',
+ 'Победителей пока нет — первые итоги уже скоро':'No winners yet — the first results are coming soon','Ты выиграл!':'You won!','уже на складе':'already in your inventory',
+ 'На склад':'To inventory','Ты 🎉':'You 🎉','Сначала пополни баланс на нужную сумму':'Top up the required amount first','Розыгрыш уже закончился — подводим итог':'This giveaway has ended — picking the winner',
  'Нубини':'Noobini','Гирсы':'Gears','Пчелиный':'Bee','Пламя':'Flame','Школа':'School','База':'Base','Цунами':'Tsunami','Алл-ин Драгон 500':'All-in Dragon 500','Хэллоуин':'Halloween','Топовые':'Top','Дешёвые':'Cheap',
  'Выбор языка':'Language','Выбери язык':'Choose language',
  'Вперёд':'Next','Назад':'Back','Апгрейд — по стоимости предметов':'Upgrade — by item value','Бесплатный кейс':'Free case','Бонусные монеты':'Bonus coins',
@@ -1630,6 +1686,8 @@ const EN={
 };
 const _N='([\\d\\s.,]+)';
 const EN_RX=[
+ [/^Условие: пополни баланс на ([\d\s.,]+) (сегодня|за эту неделю|за этот месяц)$/,(m,n,w)=>`Condition: top up ${n} ${w==='сегодня'?'today':w==='за эту неделю'?'this week':'this month'}`],
+ [/^Пополнено: ([\d\s.,]+) из ([\d\s.,]+)$/,'Deposited: $1 of $2'],
  [/^(\d+) (кейс|кейса|кейсов)$/,(m,n)=>`${n} ${n==='1'?'case':'cases'}`],
  [/^(\d+) (предмет|предмета|предметов)$/,(m,n)=>`${n} ${n==='1'?'item':'items'}`],
  [/^(\d+) (брейнрот|брейнрота|брейнротов)$/,(m,n)=>`${n} ${n==='1'?'brainrot':'brainrots'}`],
@@ -1867,7 +1925,7 @@ function haptic(kind){
   }catch(e){}
 }
 /* запросы к серверу (Supabase Edge Function «api»). initData проверяется на сервере */
-const ERR={
+const ERR={draw_need_deposit:'Сначала пополни баланс на нужную сумму',draw_closed:'Розыгрыш уже закончился — подводим итог',
   no_money:'Недостаточно средств',bad_promo:'Такого промокода нет или он закончился',promo_used:'Ты уже использовал этот промокод',
   promo_for_deposit:'Этот промокод работает при пополнении',promo_for_profile:'Этот промокод вводится в профиле',
   deposit_active:'У тебя уже есть заявка в очереди',dep_limit:'За один раз можно внести до 5 предметов',wager_left:'Сначала отыграй баланс',daily_wait:'Бонус ещё не доступен',
@@ -1946,12 +2004,14 @@ const MENU={
 let cur='home';
 const EMBERS=Array.from({length:16},()=>`<i class="em" style="left:${(Math.random()*100).toFixed(1)}%;--dx:${(Math.random()*60-30).toFixed(0)}px;animation-duration:${(3+Math.random()*4).toFixed(2)}s;animation-delay:-${(Math.random()*6).toFixed(2)}s;${Math.random()<.4?'width:2px;height:2px;':''}"></i>`).join('');
 const owner={home:'home',case:'home',admin:'settings'};
+function dBadge(){const d=DRW&&DRW.list&&DRW.list.find(x=>x.period==='day');if(!d)return '';if(d.joined)return '✓';
+ const h=Math.ceil(Math.max(0,dMs(d))/36e5);return h+' ч';}
 function drawMenu(){
  const act=owner[cur]||cur,cn=CASES.length,pl=(n,a,b,c)=>{const m=n%10,h=n%100;return m===1&&h!==11?a:m>=2&&m<=4&&(h<12||h>14)?b:c;};
  const nv=(s,icon,t,d,tag,c)=>`<button data-go="${s}" class="nv-it${act===s?' on':''}" style="--c:${c}"${act===s?' aria-current="page"':''}>
    <span class="nv-ic">${icon}</span><span class="nv-t"><b>${t}</b><small>${d}</small></span>${tag||ic(I.chev,'currentColor',16,2.4).replace('<svg','<svg class="nv-chev"')}</button>`;
  const minesIc=`<span class="nv-mg" aria-hidden="true">${Array.from({length:9},(_,i)=>`<i class="${i===4?'b':i===1||i===6?'g':''}"></i>`).join('')}</span>`;
- const rw=[{s:'bonus',k:'bonus',t:'Бонусы',b:'+30'},{s:'quests',k:'quests',t:'Квесты',b:'2'},{s:'draws',k:'draws',t:'Розыгрыши',b:'6 ч'}];
+ const rw=[{s:'bonus',k:'bonus',t:'Бонусы',b:'+30'},{s:'quests',k:'quests',t:'Квесты',b:'2'},{s:'draws',k:'draws',t:'Розыгрыши',b:dBadge()}];
  const row=(s,ic,t,extra)=>`<button data-go="${s}" class="nv-row${act===s?' on':''}"${act===s?' aria-current="page"':''}><span class="nv-row-ic">${ic}</span><span>${t}</span>${extra||''}</button>`;
  $('drawer').innerHTML=`<div class="dfire" aria-hidden="true"><div class="base"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div>${EMBERS}</div><div class="dscroll"><div class="nv">
   <div class="nv-head">
@@ -1992,6 +2052,7 @@ function go(s){
  if(s==='case'&&!spinning)buildReels(MS[mIdx]);
  if(s==='upgrade')drawUp();
  if(s==='quests')loadQuests();
+ if(s==='draws')loadDraws();
  if(s==='admin')admOpen();
  if(s==='partner')pcOpen();
  if(s==='bonus')drawDaily();
@@ -2473,8 +2534,10 @@ $('upBtn').onclick=async()=>{
   // деревянный тик, когда стрелка проходит риску шкалы (не чаще раза в 32 мс; на медленном ходу чуть громче)
   const mark=Math.floor(ang/5);if(mark!==lastMark&&now-lastTick>=32){lastMark=mark;lastTick=now;SFX.play('upTick',Math.max(.55,Math.min(1,1.15-sp/20)));}
   tail.style.opacity=Math.min(1,.08+sp/7).toFixed(3);
+  n.style.setProperty('--heat',Math.min(1,sp/9).toFixed(3));   // пламя клонится назад и разгорается
   if(k<1){requestAnimationFrame(fr);return;}
   tail.style.transition='opacity .6s';tail.style.opacity='.08';setTimeout(()=>tail.style.transition='',700);
+  n.style.transition='--heat .7s ease-out';n.style.setProperty('--heat','0');setTimeout(()=>n.style.transition='',800);
   upDone();
  })(t0);
  function upDone(){setTimeout(wNorm,50);
@@ -2660,27 +2723,75 @@ $('qlist').addEventListener('click',async e=>{const b=e.target.closest('.qclaim'
  SFX.play('coins');haptic('success');toast('+'+fmt(q.reward)+' на баланс');loadQuests();});
 seg($('qtabs'),['Ежедневные','Недельные'],0,i=>{qTab=i;drawQ();});
 
-/* ---------- розыгрыши ---------- */
-const DR=[{prize:ITEMS[3],time:'05:59:12',ppl:318},{prize:ITEMS[0],time:'3 д 14 ч',ppl:1204},{prize:ITEMS[1],time:'21 д 09 ч',ppl:4870}];
-const WIN=[['ka***a',ITEMS[3],'вчера'],['ro***z',ITEMS[2],'2 дня назад'],['ne***o',ITEMS[0],'неделю назад']];
-seg($('dtabs'),['День','Неделя','Месяц'],0,i=>{const d=DR[i],x=d.prize,c=R[x.r];
- $('dcard').innerHTML=`<div style="position:relative;overflow:hidden;border-radius:20px;background:#221A15;border:1px solid #503C2F;padding:16px;display:flex;flex-direction:column;gap:14px">
-  <div aria-hidden="true" style="position:absolute;left:50%;top:-40px;width:300px;height:220px;transform:translateX(-50%);background:radial-gradient(ellipse,${c}30,rgba(0,0,0,0) 65%)"></div>
-  <div style="position:relative;display:flex;gap:14px;align-items:center">
-   <div class="tile" style="width:96px;height:96px;flex:none;border-radius:16px;${tileBg(c)}">${mono(x,30)}</div>
-   <div style="display:flex;flex-direction:column;gap:4px"><span class="badge" style="align-self:flex-start;background:${c}22;color:${c}">${RN[x.r]}</span>
-    <span style="font-weight:800;font-size:16px">${x.name}</span><span class="num muted" style="font-size:13px">стоимость <b style="color:#FBF2EA">${fmt(x.p)}</b></span></div>
-  </div>
-  <div style="position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
-   <div style="padding:10px;border-radius:12px;background:#17120F"><div class="muted" style="font-size:12px">До итогов</div><div class="u num" style="font-weight:700;font-size:16px">${d.time}</div></div>
-   <div style="padding:10px;border-radius:12px;background:#17120F"><div class="muted" style="font-size:12px">Участников</div><div class="u num" style="font-weight:700;font-size:16px">${fmt(d.ppl)}</div></div>
-  </div>
-  <button class="fire" style="position:relative;height:52px;font-size:15px" data-toast="Ты участвуешь!">Участвовать</button>
- </div>`;});
-$('dwin').innerHTML=WIN.map(([u,x,w])=>`<div class="card" style="display:flex;align-items:center;gap:12px;padding:8px 14px 8px 8px;border-radius:14px">
- <div class="tile" style="width:44px;height:44px;border-radius:10px;${tileBg(R[x.r])}">${mono(x,13)}</div>
- <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px">${u}</div><div class="muted" style="font-size:12px">${x.name}</div></div>
- <span class="muted" style="font-size:12px">${w}</span></div>`).join('');
+/* ---------- розыгрыши: день / неделя / месяц ----------
+   Участвовать может тот, кто за период розыгрыша пополнил баланс на min_dep (обычно 100).
+   Итоги подводит сервер: случайный участник получает приз на склад. */
+const DPER=['day','week','month'],DTITLE={day:'Розыгрыш дня',week:'Розыгрыш недели',month:'Розыгрыш месяца'};
+const DWHEN={day:'сегодня',week:'за эту неделю',month:'за этот месяц'};
+var DRW=null,dTab=0,dBusy=false,dOff=0;const DJOIN=new Set();   // dOff — разница часов сервера и телефона
+function dEnd(p){const d=new Date();if(p==='day'){d.setHours(24,0,0,0);}else if(p==='week'){d.setHours(0,0,0,0);d.setDate(d.getDate()+((8-d.getDay())%7||7));}else{d.setHours(0,0,0,0);d.setMonth(d.getMonth()+1,1);}return d.toISOString();}
+function demoDraws(){const P=[ITEMS[3],ITEMS[0],ITEMS[1]],N=[318,1204,4870],dep=QD.deposit||0;
+ return {now:new Date().toISOString(),list:DPER.map((p,i)=>({id:i+1,period:p,prize:{name:P[i].name,price:P[i].p,rarity:P[i].r},min_dep:100,ends:dEnd(p),
+  entries:N[i]+(DJOIN.has(p)?1:0),joined:DJOIN.has(p),my_dep:dep})),
+  winners:[['ka***a',ITEMS[3],'day',1],['ro***z',ITEMS[2],'day',2],['ne***o',ITEMS[0],'week',7]].map(([u,x,p,d],k)=>({id:k,period:p,user:u,me:false,prize:{name:x.name,price:x.p,rarity:x.r},entries:200,ts:new Date(Date.now()-d*864e5).toISOString()}))};}
+function dLeft(ms){if(ms<=0)return 'подводим итог…';const t=Math.floor(ms/1000),d=Math.floor(t/86400),h=Math.floor(t%86400/3600),m=Math.floor(t%3600/60);
+ return d?`${d} д ${h} ч`:`${p2(h)}:${p2(m)}:${p2(t%60)}`;}
+const dMs=d=>Date.parse(d.ends)-(Date.now()+dOff);
+async function loadDraws(quiet){
+ if(!LIVE){DRW=demoDraws();}else{const r=await API.call('draws',{},quiet);if(!r)return;DRW=r;dOff=Date.parse(r.now)-Date.now();}
+ drawDraws();drawMenu();}
+function drawDraws(){
+ if(!DRW){$('dcard').innerHTML='<p class="muted" style="text-align:center;font-size:14px;padding:30px 0">Загружаем розыгрыши…</p>';return;}
+ const d=DRW.list.find(x=>x.period===DPER[dTab]);
+ if(!d){$('dcard').innerHTML='<p class="muted" style="text-align:center;font-size:14px;padding:30px 0">Этот розыгрыш скоро начнётся</p>';}
+ else{const x=mkItem(d.prize),c=R[x.r],ok=d.my_dep>=d.min_dep,pct=Math.min(100,d.min_dep?d.my_dep/d.min_dep*100:100);
+  $('dcard').innerHTML=`<div class="dr-card" style="--c:${c}">
+   <div aria-hidden="true" class="dr-glow"></div>
+   <div class="dr-top">
+    <div class="tile dr-art" style="${tileBg(c)}">${mono(x,30)}</div>
+    <div style="display:flex;flex-direction:column;gap:4px;min-width:0"><span class="badge" style="align-self:flex-start;background:${c}22;color:${c}">${DTITLE[d.period]}</span>
+     <span class="dr-name">${esc(x.name)}</span><span class="num muted" style="font-size:13px;display:flex;align-items:center;gap:4px">стоимость ${COIN(13)}<b style="color:#FBF2EA">${fmt(x.p)}</b></span></div>
+   </div>
+   <div class="dr-stats">
+    <div><div class="muted" style="font-size:12px">До итогов</div><div class="u num" id="dLeftV" style="font-weight:700;font-size:16px">${dLeft(dMs(d))}</div></div>
+    <div><div class="muted" style="font-size:12px">Участников</div><div class="u num" style="font-weight:700;font-size:16px">${fmt(d.entries)}</div></div>
+   </div>
+   ${d.joined?`<div class="dr-cond ok">${ic('M5 12l5 5 9-10','#88E4A5',18,2.6)}<span><b>Ты участвуешь!</b><small>Победителя выберем случайно, когда время выйдет. Приз сразу придёт на склад.</small></span></div>`
+    :`<div class="dr-cond${ok?' ok':''}"><span style="flex:1;min-width:0"><b>${ok?'Условие выполнено':'Условие: пополни баланс на '+fmt(d.min_dep)+' '+DWHEN[d.period]}</b>
+      <span class="dr-bar"><i style="width:${pct.toFixed(1)}%"></i></span>
+      <small class="num">Пополнено: ${fmt(Math.min(d.my_dep,d.min_dep))} из ${fmt(d.min_dep)}</small></span></div>`}
+   <button class="fire dr-go" id="dGo" data-p="${d.period}" ${d.joined||dMs(d)<=0?'disabled':''}>${d.joined?'Ты в игре ✓':ok?'Участвовать':'Пополнить баланс'}</button>
+  </div>`;}
+ const W=DRW.winners||[];
+ $('dwin').innerHTML=W.length?W.map(w=>{const x=mkItem(w.prize);return `<div class="card" style="display:flex;align-items:center;gap:12px;padding:8px 14px 8px 8px;border-radius:14px${w.me?';border-color:#47AF70':''}">
+  <div class="tile" style="width:44px;height:44px;flex:none;border-radius:10px;${tileBg(R[x.r])}">${mono(x,13)}</div>
+  <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:14px">${w.me?'Ты 🎉':esc(w.user)}</div><div class="muted" style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(x.name)} · ${DTITLE[w.period]}</div></div>
+  <span class="muted" style="font-size:12px;flex:none">${ago(Date.parse(w.ts))}</span></div>`;}).join('')
+  :'<p class="muted" style="text-align:center;font-size:13px;padding:14px 0;margin:0">Победителей пока нет — первые итоги уже скоро</p>';
+}
+seg($('dtabs'),['День','Неделя','Месяц'],0,i=>{dTab=i;drawDraws();});
+$('dcard').addEventListener('click',async e=>{const b=e.target.closest('#dGo');if(!b||b.disabled||dBusy)return;
+ const d=DRW&&DRW.list.find(x=>x.period===b.dataset.p);if(!d)return;
+ if(d.my_dep<d.min_dep){openDeposit();return;}
+ dBusy=true;b.disabled=true;
+ if(LIVE){const r=await API.call('draw_join',{period:d.period});dBusy=false;if(!r){b.disabled=false;loadDraws(true);return;}DRW=r;dOff=Date.parse(r.now)-Date.now();}
+ else{DJOIN.add(d.period);DRW=demoDraws();dBusy=false;}
+ SFX.play('coins');haptic('success');toast('Ты участвуешь! Итоги — когда выйдет время');drawDraws();drawMenu();});
+// таймер; когда время вышло — через пару секунд спросить итоги у сервера
+let dReload=0;
+setInterval(()=>{if(!DRW)return;const d=DRW.list.find(x=>x.period===DPER[dTab]);
+ if(cur==='draws'&&d){const el=$('dLeftV');if(el)el.textContent=dLeft(dMs(d));}
+ if(DRW.list.some(x=>dMs(x)<-2000)&&Date.now()-dReload>15000){dReload=Date.now();loadDraws(true);}},1000);
+// поздравление победителю (приходит один раз при входе)
+function drawWinShow(w){const x=mkItem(w.prize),c=R[x.r];
+ const box=document.createElement('div');box.className='lang-pick dwin-pop';box.setAttribute('role','dialog');
+ box.innerHTML=`<div class="lp-box" style="--c:${c}"><span style="font-size:40px;line-height:1">🎉</span>
+  <h2 class="u" style="margin:0">Ты выиграл!</h2><span class="muted" style="font-size:14px;margin-top:-6px">${DTITLE[w.period]||esc(w.title)}</span>
+  <div class="tile" style="width:120px;height:120px;border-radius:20px;${tileBg(c)}">${mono(x,36)}</div>
+  <b style="font-size:18px;text-align:center">${esc(x.name)}</b><span class="num muted" style="display:flex;align-items:center;gap:5px">${COIN(14)}${fmt(x.p)} · уже на складе</span>
+  <button class="fire" data-dw="go" style="width:100%;height:50px;font-size:15px">На склад</button><button class="lp-x" data-dw="x">Закрыть</button></div>`;
+ (document.getElementById('phone')||document.body).appendChild(box);SFX.play('win_rare');haptic('success');
+ box.onclick=e=>{const b=e.target.closest('[data-dw]');if(!b)return;box.remove();if(b.dataset.dw==='go')go('profile');};}
 
 /* ---------- профиль ---------- */
 const HIST=[['Жаровня',ITEMS[0],'+1 480','#ECB45A'],['Апгрейд',ITEMS[2],'+640','#A57DCB'],['Мины · 5 мин','×2.47','+147','#F8AE74'],['Угольный',ITEMS[7],'+90','#BEAD9E'],['Мины · 3 мины','бум','−100','#F26C3E']];
@@ -3047,7 +3158,7 @@ setInterval(drawDaily,30000);
    АДМИН-ПАНЕЛЬ. Все действия идут на сервер (action 'admin'),
    сервер сам проверяет, что ты в таблице admins.
    ===================================================================== */
-const ADM_TABS=[['dep','Пополнения'],['wd','Выводы'],['users','Игроки'],['partners','Партнёры'],['cases','Кейсы'],['items','Брейнроты'],['promo','Промо'],['site','Доступ']];
+const ADM_TABS=[['dep','Пополнения'],['wd','Выводы'],['users','Игроки'],['partners','Партнёры'],['cases','Кейсы'],['items','Брейнроты'],['promo','Промо'],['draws','Розыгрыши'],['site','Доступ']];
 const AS={tab:'dep',mode:{dep:'active',wd:'active',partners:'list'},page:{dep:1,wd:1,users:1,partners:1,pwd:1,apps:1},q:{users:'',partners:''},card:null,cardPage:1,pcard:null,pcPage:1,pcode:'',pwdHist:false,cnt:{},last:{dep:-1,wd:-1,pwd:-1,apps:-1}};
 const RCOL=r=>R[r]||'#BEAD9E';
 async function adm(op,args,quiet){const r=await API.call('admin',{op,args:args||{}});if(r&&r.msg&&!quiet){toast(r.msg);haptic('success');}return r;}
@@ -3105,6 +3216,7 @@ async function admLoad(){
  else if(T==='partners')await admPartners(B);
  else if(T==='cases')await admCases(B);
  else if(T==='site')await admSite(B);
+ else if(T==='draws')await admDraws(B);
  else if(T==='items')await admItems(B);
  else if(T==='users'){
   const r=await adm(T==='users'?'user_find':'partners',{q:AS.q[T],page:AS.page[T]},true);if(!r)return;
@@ -3247,6 +3359,33 @@ function admSiteDraw(){const r=AS.acc||{},sel=AS.accSel,cur=+r.mode||0;
  </div>`;
  $('accMsg').oninput=e=>{AS.accMsg=e.target.value;$('accPrev').textContent=AS.accMsg.trim()||MAINT_DEF;const b=document.querySelector('[data-a="acc_save"]');if(b)b.disabled=AS.accSel===cur&&AS.accMsg===(r.msg||'');};
 }
+
+// ---------- розыгрыши: приз сейчас и для следующих, порог пополнения ----------
+const DRANGE={day:[400,600],week:[7000,13000],month:[13000,20000]};   // рекомендуемая стоимость приза
+async function admDraws(B){const[r,I]=await Promise.all([adm('draws_admin',{},true),AS.itemsL?Promise.resolve(AS.itemsL):adm('items',{},true)]);if(!r)return;
+ AS.drw=r.periods||[];if(I)AS.itemsL=I;admDrawsDraw();}
+function drOpts(sel,per){const L=(AS.itemsL||[]).filter(x=>x.name!=='Токен').slice().sort((a,b)=>a.price-b.price),[lo,hi]=DRANGE[per];
+ const o=x=>`<option value="${esc(x.name)}"${x.name===sel?' selected':''}>${esc(x.name)} — ${fmt(x.price)}</option>`,inR=x=>x.price>=lo&&x.price<=hi;
+ const a=L.filter(inR),b=L.filter(x=>!inR(x));
+ return `${a.length?`<optgroup label="Подходит: ${fmt(lo)}–${fmt(hi)}">${a.map(o).join('')}</optgroup>`:''}<optgroup label="Все предметы">${b.map(o).join('')}</optgroup>`;}
+function admDrawsDraw(){const P=AS.drw||[];
+ $('admBody').innerHTML=(P.length?P.map(p=>{const o=p.open,[lo,hi]=DRANGE[p.period],left=o?Date.parse(o.ends)-Date.now():0;
+  const cur=o?o.prize:p.next,c=RCOL(cur.rarity);
+  return `<div class="adm-card">
+   <div class="adm-row"><b>${p.title}</b><span class="muted num" style="margin-left:auto;font-size:12px">${o?`до итогов ${dLeft(left)} · участников: ${o.entries}`:'ещё не запущен'}</span></div>
+   <div class="adm-li" style="gap:12px">${art(cur,44)}<span style="flex:1;min-width:0"><small class="muted" style="display:block;font-size:11px;font-weight:700">Сейчас разыгрывается</small><b style="color:${c}">${esc(cur.name)}</b> <span class="muted num" style="font-size:12px">· ${fmt(cur.price)}</span></span></div>
+   <div class="pc-f dr-f">
+    <label>Приз сейчас<select id="drP_${p.period}">${drOpts(cur.name,p.period)}</select></label>
+    <label>Приз следующих розыгрышей<select id="drN_${p.period}">${drOpts(p.next.name,p.period)}</select></label>
+    <label class="w">Сколько пополнить за период, чтобы участвовать<input id="drM_${p.period}" inputmode="numeric" value="${o?o.min_dep:p.min_dep}"></label>
+   </div>
+   <p class="pc-hint">Рекомендуем приз за ${fmt(lo)}–${fmt(hi)}. «Приз сейчас» меняет текущий розыгрыш, «приз следующих» — все, что начнутся после него. Порог пополнения считается только за этот ${p.period==='day'?'день':p.period==='week'?'неделю':'месяц'}.</p>
+   <div class="adm-acts"><button class="fire" data-a="draw_save" data-per="${p.period}">Сохранить</button>
+    <button class="ghost" data-a="draw_finish" data-per="${p.period}" ${o?'':'disabled'}>Подвести итог сейчас</button></div>
+   ${p.done&&p.done.length?`<div style="display:flex;flex-direction:column;gap:6px"><span class="muted" style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase">прошлые итоги</span>
+    ${p.done.map(d=>`<div class="adm-li"><span style="flex:1;min-width:0"><b>${esc(d.prize.name)}</b><small class="muted" style="display:block;font-size:11px">${d.winner?(d.username?'@'+esc(d.username):esc(d.first_name||'игрок'))+' · ID '+d.winner+' · участников: '+d.entries:'участников не было — приз никому не ушёл'}</small></span><span class="muted" style="font-size:11px">${ago(Date.parse(d.ts))}</span></div>`).join('')}</div>`:''}
+  </div>`;}).join(''):admEmpty('Розыгрыши ещё не настроены — запусти новый schema.sql'))
+  +`<p class="pc-hint" style="padding:0 4px">Участвует игрок, который за период пополнил баланс на порог и нажал «Участвовать». Когда время выходит, сервер сам выбирает случайного участника, кладёт приз ему на склад, пишет ему в бота, а админам — кто победил.</p>`;}
 
 // ---------- кейсы: цена, % отдачи, содержимое ----------
 const RNAME={common:'обычный',rare:'редкий',epic:'эпик',legend:'легендарный',myth:'мифик'};
@@ -3398,7 +3537,7 @@ $('admBody').addEventListener('change',async e=>{
 });
 
 // ---------- карточка игрока ----------
-const GNA={admin:'Админ',quest:'Квест',case:'Кейс',upgrade:'Апгрейд',mines:'Мины',sell:'Продажа',deposit:'Пополнение',withdraw:'Вывод',bonus:'Бонус',promo:'Промокод'};
+const GNA={admin:'Админ',quest:'Квест',case:'Кейс',upgrade:'Апгрейд',mines:'Мины',sell:'Продажа',deposit:'Пополнение',withdraw:'Вывод',bonus:'Бонус',promo:'Промокод',draw:'Розыгрыш'};
 function histRows(h){return h.rows.length?`<div style="display:flex;flex-direction:column;gap:6px">${h.rows.map(e=>{const x=e.item?mkItem(e.item):null;
   const v=e.game==='withdraw'?-e.bet:e.payout-e.bet;const c=v>0?'#88E4A5':v<0?'#FF946E':'#DED0C3';
   return `<div class="hrow"><div class="tile" style="width:38px;height:38px;flex:none;border-radius:9px;${x?tileBg(R[x.r]):'background:#2B2119;border:1px solid #503C2F'}">${x?mono(x,12):ic(e.game==='mines'?I.mines:e.game==='deposit'?'M12 5v14M5 12h14':e.game==='withdraw'?'M7 17L17 7M8 7h9v9':I.bonus,'#BEAD9E',18)}</div>
@@ -3471,7 +3610,7 @@ $('admBody').addEventListener('click',async e=>{
  if(a==='pe_new'){const v=$('apId').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');return;}AS.pcard=+v;AS.pcPage=1;haptic('light');await admLoad();return;}
  if(a==='find'){AS.q[AS.tab]=$('auQ').value.trim();AS.page[AS.tab]=1;admLoad();return;}
  if(a==='acc_save'&&AS.accSel>0&&AS.accSel!==(+(AS.acc||{}).mode||0)&&!sure(b))return;   // закрыть — по второму нажатию
- const danger=['user_stats_reset','sec_del','deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg'];
+ const danger=['user_stats_reset','sec_del','deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg','draw_finish'];
  if(danger.includes(a)&&!sure(b))return;
  let r=null;b.disabled=true;
  try{
@@ -3503,6 +3642,10 @@ $('admBody').addEventListener('click',async e=>{
    if(F.manual){const ch={};for(const n of AS.csel){const v=+F.ch[n];if(!(v>0&&v<=100)){toast('Впиши шанс для «'+n+'»: больше 0 и до 100');b.disabled=false;return;}ch[n]=v;}args.chances=ch;}
    r=await adm('case_save',args);if(r){AS.cedit=null;loadCatalog();}}
   else if(a==='case_noimg'){AS.ckeep();r=await adm('case_img',{id:AS.cedit,img:''});if(r){const c=(AS.casesL||[]).find(x=>x.id===AS.cedit);if(c)c.img=null;admCasesDraw();loadCatalog();r=null;}}
+  else if(a==='draw_save'){const per=b.dataset.per,v=k=>$(k+per).value,m=v('drM_').trim();
+   if(!/^\d{1,7}$/.test(m)){toast('Порог пополнения — целое число');b.disabled=false;return;}
+   r=await adm('draw_set',{period:per,prize:v('drP_'),next:v('drN_'),min_dep:m});if(r)DRW=null;}
+  else if(a==='draw_finish'){r=await adm('draw_finish',{period:b.dataset.per});if(r)DRW=null;}
   else if(a==='acc_save'){r=await adm('access_set',{mode:AS.accSel,msg:AS.accMsg.trim()});if(r){AS.acc={...AS.acc,mode:AS.accSel,msg:AS.accMsg.trim()};accChipDraw({admin:true,mode:AS.accSel});}}
   else if(a==='sec_add'){const v=$('secNew').value.trim();if(!v){toast('Впиши название раздела');b.disabled=false;return;}r=await adm('section_save',{name:v});if(r)loadCatalog();}
   else if(a==='sec_up'||a==='sec_down'){r=await adm('section_move',{id,dir:a==='sec_up'?-1:1},true);if(r)loadCatalog();}
@@ -3863,7 +4006,9 @@ function applyState(st,quiet){
 async function loadMe(){
  if(!LIVE)return;
  if(!tg){toast('Открой приложение через Telegram');return;}
- const st=await API.call('me',{});if(st){maintHide();applyState(st);accChipDraw(st.access);}
+ const st=await API.call('me',{});if(st){maintHide();applyState(st);accChipDraw(st.access);
+  if(st.draw_win)setTimeout(()=>drawWinShow(st.draw_win),900);
+  loadDraws(true);}
 }
 /* ---------- техработы: экран «Мы на обновлении» ---------- */
 let maintTimer=null;
