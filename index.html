@@ -238,6 +238,9 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .td-lbl{align-self:flex-start;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:6px;background:#3A2A13;color:#F7CA7C}
 .td-price{display:inline-flex;align-items:center;gap:5px;font-family:Unbounded,sans-serif;font-weight:700;font-size:15px}
 .sec-title{display:flex;align-items:center;gap:12px;margin-top:4px}
+.case-secs{display:flex;flex-direction:column;gap:24px}
+.case-sec{display:flex;flex-direction:column;gap:14px}
+.case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .sec-title h2{font-weight:700;font-size:20px;flex:none}
 .sec-title span{flex:1;height:1px;background:linear-gradient(90deg,transparent,#714A31)}
 .sec-title span:last-child{background:linear-gradient(90deg,#714A31,transparent)}
@@ -425,6 +428,16 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .adm-li .dot,.adm-case .dot{width:9px;height:9px;border-radius:50%;flex:none}
 .adm-x{width:30px;height:30px;flex:none;border-radius:8px;background:none;border:1px solid #413229;display:flex;align-items:center;justify-content:center}
 .adm-x.warn{background:#CB5222!important}
+.adm-x:disabled{opacity:.35}
+.adm-sec input{flex:1;min-width:0;height:36px;padding:0 10px;border-radius:9px;background:#17120F;border:1px solid #413229;color:#FBF2EA;font:700 14px Manrope,sans-serif;outline:none}
+.adm-sec input:focus{border-color:#955A35}
+.ce-cols{display:flex;gap:8px;flex-wrap:wrap}
+.ce-col{width:30px;height:30px;border-radius:9px;border:2px solid transparent;box-shadow:inset 0 0 0 1px rgba(0,0,0,.3);padding:0}
+.ce-col.on{border-color:#FBF2EA}
+.ce-ch{display:flex;align-items:center;gap:4px;flex:none}
+.ce-ch input{width:70px;height:34px;padding:0 8px;border-radius:9px;background:#17120F;border:1px solid #503C2F;color:#FBF2EA;font:800 13px Manrope,sans-serif;outline:none;text-align:right}
+.ce-ch input:focus{border-color:#F28743}
+.ce-ch span{font-size:12px;font-weight:800;color:#BEAD9E}
 .adm-cols{display:flex;gap:8px}.adm-cols button{width:30px;height:30px;border-radius:50%;border:2px solid transparent}.adm-cols button.on{border-color:#FBF2EA;box-shadow:0 0 0 2px #17120F inset}
 .adm-ck{display:flex;align-items:center;gap:8px;font-size:13px;color:#DED0C3}.adm-ck input{accent-color:#F28743;width:18px;height:18px}
 .adm-case summary{display:flex;align-items:center;gap:8px;list-style:none;cursor:pointer;font-size:14px}.adm-case summary::-webkit-details-marker{display:none}
@@ -644,6 +657,7 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .pc-f label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;color:#BEAD9E;min-width:0}
 .pc-f input,.pc-f select{height:46px;padding:0 12px;border-radius:12px;background:#17120F;border:1px solid #413229;color:#FBF2EA;font:700 14px Manrope,sans-serif;outline:none;min-width:0;width:100%}
 .pc-f input::placeholder{color:#6E5D50}
+.pc-f input:disabled{opacity:.5;cursor:not-allowed}
 .pc-f input:focus,.pc-f select:focus{border-color:#955A35}
 .pc-cost{display:flex;align-items:center;gap:10px}.pc-cost>span{flex:1;font-size:13px;color:#BEAD9E}.pc-cost b{color:#FBF2EA}
 .pc-cost .fire{height:44px;padding:0 18px;border-radius:12px;font-size:14px;box-shadow:none}
@@ -710,7 +724,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
  .screen[data-s="case"],.screen[data-s="upgrade"],.screen[data-s="profile"]{max-width:760px}
  .screen[data-s="partner"],.screen[data-s="admin"]{max-width:980px}
  .mgrid{width:100%;max-width:460px;margin-inline:auto}
- #cases{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))!important}
+ .case-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
  #items{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))!important}
  .up-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
  /* шторки снизу — по центру, а не на всю ширину */
@@ -795,7 +809,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
 }
 @media (min-width:1500px){
  .phone{grid-template-columns:340px minmax(0,1fr)}
- #cases{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important}
+ .case-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
 }
 </style>
 </head>
@@ -864,9 +878,8 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
         <span class="badge" id="homeDailyBadge" style="background:#F28743;color:#1A0F09;padding:6px 10px">Забрать</span>
       </button>
 
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="sec-title"><span></span><h2 class="u">Кейсы</h2><span></span></div>
-        <div id="cases" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px"></div>
+      <div class="home-cases" style="display:flex;flex-direction:column;gap:14px">
+        <div id="cases" class="case-secs"></div>
         <p class="muted" id="casesEmpty" hidden style="text-align:center;font-size:14px;padding:30px 0;margin:0">Кейсы скоро появятся 🔥</p>
       </div>
     </section>
@@ -1500,7 +1513,7 @@ const ERR={
   unauthorized:'Открой приложение через Telegram',bad_nick:'Неверный ник Roblox',game_active:'Сначала закончи текущую игру',
   target_cheap:'Цель должна быть дороже ставки',banned:'Аккаунт заблокирован',bad_items:'Предметы не найдены — обнови страницу',
   cannot_cancel:'Заявку уже взяли в работу',not_admin:'Нет прав администратора',bad_input:'Проверь поля',bad_case_id:'id кейса: латиница, цифры, - или _',item_owned:'Этот предмет есть у игроков — удалить нельзя',no_user:'Игрок не найден',quest_not_done:'Квест ещё не выполнен',quest_claimed:'Награда уже получена',no_quest:'Квест не найден',open_first:'Сначала открой клетку',no_game:'Игра не найдена',server_error:'Ошибка сервера, попробуй ещё раз',
-  own_code:'Это твой собственный код',already_bound:'Ты уже закреплён за другим партнёром',not_partner:'Партнёрка не активна',bad_code:'Код: латиница и цифры',code_taken:'Такой код уже занят',no_partner_money:'Не хватает партнёрского баланса',promos_off:'Создание промокодов выключено',pwd_active:'Заявка на вывод уже ждёт',pwd_closed:'Окно вывода сейчас закрыто',pwd_min:'Недостаточно для вывода',bad_parent:'Партнёр-пригласитель не найден',already_partner:'Ты уже партнёр',not_found:'Не найдено',case_not_found:'Кейс не найден',
+  own_code:'Это твой собственный код',already_bound:'Ты уже закреплён за другим партнёром',not_partner:'Партнёрка не активна',bad_code:'Код: латиница и цифры',code_taken:'Такой код уже занят',no_partner_money:'Не хватает партнёрского баланса',promos_off:'Создание промокодов выключено',pwd_active:'Заявка на вывод уже ждёт',pwd_closed:'Окно вывода сейчас закрыто',pwd_min:'Недостаточно для вывода',bad_parent:'Партнёр-пригласитель не найден',already_partner:'Ты уже партнёр',not_found:'Не найдено',case_not_found:'Кейс не найден',case_exists:'Кейс с таким названием уже есть',bad_chance:'Шанс — число больше 0 и до 100',
   case_balance:'Шансы не посчитать: средний дроп должен быть между самым дешёвым и самым дорогим брейнротом кейса',item_exists:'Брейнрот с таким названием уже есть',bad_image:'Картинка слишком большая или не PNG/JPG/WEBP',upload_failed:'Не удалось загрузить фото — проверь Storage в Supabase'
 };
 const API={
@@ -1813,10 +1826,19 @@ const CASES=[
 let casePrice=199,catalogLoaded=false;
 if(LIVE){CASES.length=0;}   // в боевом режиме кейсы приходят с сервера
 const fl=['Все','До 100','Легенды','Ивент'];let filter=0;
+let SECTIONS=[];   // разделы кейсов из админ-панели: [{id, name}] по порядку
 function drawCases(){
  const list=CASES.filter(x=>filter===1?x.p<=100:filter===2?x.p>=799:true);
  $('casesEmpty').hidden=!!list.length||(LIVE&&!catalogLoaded);
- $('cases').innerHTML=list.map(x=>`
+ // сначала разделы (как расставлены в админке), потом кейсы без раздела — в блоке «Кейсы»
+ const known=new Set(SECTIONS.map(x=>x.id)),groups=[];
+ SECTIONS.forEach(sc=>{const l=list.filter(x=>x.sec===sc.id);if(l.length)groups.push([sc.name,l]);});
+ const rest=list.filter(x=>x.sec==null||!known.has(x.sec));
+ if(rest.length||!groups.length)groups.push(['Кейсы',rest]);
+ $('cases').innerHTML=groups.map(([t,l])=>`<div class="case-sec"><div class="sec-title"><span></span><h2 class="u">${esc(t)}</h2><span></span></div>
+  <div class="case-grid">${l.map(caseCard).join('')}</div></div>`).join('');
+}
+function caseCard(x){return `
  <button class="card" data-case="${x.name}" data-price="${x.p}" style="text-align:left;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:16px">
   ${x.hot?'<span class="badge" style="position:absolute;top:10px;left:10px;background:#4C2517;color:#FFB088">ХИТ</span>':''}
   <div style="width:100%;height:108px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 85%,${x.c}33 0%,rgba(31,24,20,0) 70%),#261D18">
@@ -1827,8 +1849,7 @@ function drawCases(){
   <span style="font-weight:800;font-size:14px">${x.name}</span>
   <span class="num" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:10px;background:#31251E;border:1px solid #503C2F;font-weight:800;font-size:14px">
    ${COIN(14)}${fmt(x.p)}</span>
- </button>`).join('');
-}
+ </button>`;}
 $('cases').onclick=e=>{const b=e.target.closest('[data-case]');if(!b)return;$('caseName').textContent=b.dataset.case;casePrice=+b.dataset.price;
  CUR_CASE=CASES.find(x=>x.name===b.dataset.case)||null;CASE_ITEMS=CUR_CASE&&CUR_CASE.items?CUR_CASE.items:ITEMS;drawCaseItems();drawTotal();go('case');};
 drawCases();
@@ -2773,32 +2794,59 @@ async function admPartnerCard(){
 const RNAME={common:'обычный',rare:'редкий',epic:'эпик',legend:'легендарный',myth:'мифик'};
 const art=(x,s)=>`<div class="tile" style="width:${s}px;height:${s}px;flex:none;border-radius:${Math.round(s/4)}px;${tileBg(R[x.rarity||RB(x.price)])}"><span class="u" style="font-weight:800;font-size:${Math.round(s/3.2)}px;color:${R[x.rarity||RB(x.price)]}">${mk(x.name)}</span></div>`;
 async function admCases(B){
- const[L,I]=await Promise.all([adm('cases',{},true),AS.itemsL?Promise.resolve(AS.itemsL):adm('items',{},true)]);if(!L)return;
- AS.casesL=L;if(I)AS.itemsL=I;admCasesDraw();}
+ const[L,I,S]=await Promise.all([adm('cases',{},true),AS.itemsL?Promise.resolve(AS.itemsL):adm('items',{},true),adm('sections',{},true)]);if(!L)return;
+ AS.casesL=L;if(I)AS.itemsL=I;AS.secL=S||[];admCasesDraw();}
+const CCOL=['#E07A3C','#F26C3E','#ECB45A','#BEAD9E','#6E9CC4','#A57DCB','#5FBF86','#E0607E'];   // цвета кейсов
+function admSecBlock(){const S=AS.secL||[];
+ return `<div class="adm-card">
+  <div class="adm-row"><b>Разделы на главной</b><span class="muted" style="margin-left:auto;font-size:12px">в таком порядке на сайте</span></div>
+  ${S.length?`<div class="adm-its">${S.map((x,i)=>`<div class="adm-li adm-sec">
+    <input data-secn="${x.id}" value="${esc(x.name)}" maxlength="40" aria-label="Название раздела">
+    <small class="muted num" style="flex:none">${x.cases} кейс.</small>
+    <button class="adm-x" data-a="sec_up" data-id="${x.id}" aria-label="Выше" ${i?'':'disabled'}>${ic('M6 15l6-6 6 6','#DED0C3',14,2.4)}</button>
+    <button class="adm-x" data-a="sec_down" data-id="${x.id}" aria-label="Ниже" ${i<S.length-1?'':'disabled'}>${ic('M6 9l6 6 6-6','#DED0C3',14,2.4)}</button>
+    <button class="adm-x" data-a="sec_del" data-id="${x.id}" aria-label="Удалить раздел">${ic(I.x,'#FF946E',14,2.4)}</button></div>`).join('')}</div>`
+   :`<p class="muted" style="font-size:12px;margin:0">Разделов пока нет — все кейсы в одном блоке «Кейсы».</p>`}
+  <div style="display:flex;gap:8px"><label class="srch" style="flex:1;min-width:0;height:42px"><input id="secNew" maxlength="40" placeholder="Новый раздел, например «Хэллоуин»"></label>
+   <button class="fire" data-a="sec_add" style="height:42px;padding:0 14px;border-radius:11px;font-size:13px;box-shadow:none">Добавить</button></div>
+  <p class="pc-hint">Чтобы поставить кейс в раздел — открой кейс ниже и выбери «Раздел». Кейсы без раздела показываются в блоке «Кейсы» внизу. Название раздела меняется прямо в строке.</p>
+ </div>
+ <div class="adm-card">
+  <div class="adm-row"><b>Новый кейс</b></div>
+  <div class="pc-f c2"><label>Название<input id="cnName" maxlength="40" placeholder="Например, Spooky"></label><label>Цена<input id="cnPrice" type="number" inputmode="numeric" min="1" placeholder="399"></label></div>
+  <div class="adm-acts"><button class="fire" data-a="case_new">Создать кейс</button></div>
+ </div>`;}
 function admCasesDraw(){
- const B=$('admBody'),L=AS.casesL||[];
- B.innerHTML=(L.length?L.map(c=>{const open=AS.cedit===c.id;return `<div class="adm-card${open?' hot':''}">
+ const B=$('admBody'),L=AS.casesL||[],SN=Object.fromEntries((AS.secL||[]).map(x=>[x.id,x.name]));
+ B.innerHTML=admSecBlock()+(L.length?L.map(c=>{const open=AS.cedit===c.id;return `<div class="adm-card${open?' hot':''}">
   <button class="adm-case-h" data-cedit="${esc(c.id)}"><span class="dot" style="width:10px;height:10px;border-radius:50%;flex:none;background:${esc(c.color)}"></span>
-   <span style="flex:1;min-width:0;text-align:left"><b>${esc(c.name)}</b><small class="muted" style="display:block">${c.items.length} предм. · отдаёт ${c.rtp_now!=null?String(c.rtp_now).replace('.',','):'—'}%${c.active?'':' · скрыт'}</small></span>
+   <span style="flex:1;min-width:0;text-align:left"><b>${esc(c.name)}</b><small class="muted" style="display:block">${c.section!=null&&SN[c.section]?'«'+esc(SN[c.section])+'» · ':''}${c.items.length} предм. · отдаёт ${c.rtp_now!=null?String(c.rtp_now).replace('.',','):'—'}%${c.manual?' · свои шансы':''}${c.active?'':' · скрыт'}</small></span>
    ${c.hot?'<span class="badge" style="background:#4C2517;color:#FFB088">ХИТ</span>':''}<b class="num" style="display:flex;align-items:center;gap:4px">${COIN(13)}${fmt(c.price)}</b>
    ${ic(open?'M6 15l6-6 6 6':'M6 9l6 6 6-6','#827265',16,2.4)}</button>
   ${open?admCaseEditor(c):''}</div>`;}).join(''):admEmpty('Кейсов пока нет'))
- +`<p class="muted" style="font-size:12px;margin:0;line-height:1.45">Шансы считаются сами: кейс в среднем отдаёт столько %, сколько указано (дешёвое выпадает часто, дорогое — редко). Поменял цену кейса или брейнрота — шансы пересчитаются.</p>`;
+ +`<p class="muted" style="font-size:12px;margin:0;line-height:1.45">Обычно шансы считаются сами: кейс в среднем отдаёт столько %, сколько указано (дешёвое выпадает часто, дорогое — редко), и пересчитываются при смене цен. Включи «Свои шансы», чтобы вписать % каждому брейнроту вручную — тогда база их не трогает.</p>`;
  if(AS.cedit)admCaseBind();
 }
 function admCaseEditor(c){
  const F=AS.cform,sel=AS.csel,items=(AS.itemsL||[]).filter(x=>sel.has(x.name)).sort((a,b)=>a.price-b.price);
  const chance=Object.fromEntries(c.items.map(x=>[x.name,x.chance]));
+ if(F.manual)items.forEach(x=>{if(F.ch[x.name]==null)F.ch[x.name]=chance[x.name]!=null?+chance[x.name]:1;});
+
  const q=(AS.cq||'').toLowerCase(),pool=(AS.itemsL||[]).filter(x=>x.kind==='br'&&!sel.has(x.name)&&(!q||x.name.toLowerCase().includes(q))).slice(0,q?40:12);
  const avg=items.length?items.reduce((s,x)=>s+x.price,0)/items.length:0,mn=items.length?items[0].price:0,mx=items.length?items[items.length-1].price:0,tgt=F.price*F.rtp/100;
- const warn=items.length&&!(tgt>mn&&tgt<mx)?`<p class="pc-hint" style="color:#FF946E">Средний дроп (${fmt(tgt)}) должен быть между самым дешёвым (${fmt(mn)}) и самым дорогим (${fmt(mx)}) брейнротом — иначе шансы не посчитать. Добавь дешевле/дороже или поменяй цену.</p>`:'';
+ const warn=F.manual?(items.length?ceHint(F,items):'')
+  :items.length&&!(tgt>mn&&tgt<mx)?`<p class="pc-hint" style="color:#FF946E">Средний дроп (${fmt(tgt)}) должен быть между самым дешёвым (${fmt(mn)}) и самым дорогим (${fmt(mx)}) брейнротом — иначе шансы не посчитать. Добавь дешевле/дороже или поменяй цену.</p>`:'';
  return `<div class="pc-f c2" style="margin-top:4px">
    <label class="w">Название<input id="ceName" value="${esc(F.name)}" maxlength="40"></label>
    <label>Цена кейса<input id="cePrice" type="number" inputmode="numeric" min="1" value="${F.price}"></label>
-   <label>Отдаёт в среднем, %<input id="ceRtp" type="number" inputmode="decimal" min="10" max="120" step="0.5" value="${F.rtp}"></label></div>
-  <div class="pe-tgs">${tgl('ceHot',F.hot,'Метка «ХИТ»','Показывается на карточке кейса')}${tgl('ceAct',F.active,'Показывать игрокам','Выключи, чтобы спрятать кейс')}</div>
+   <label>Отдаёт в среднем, %<input id="ceRtp" type="number" inputmode="decimal" min="10" max="120" step="0.5" value="${F.rtp}" ${F.manual?'disabled title="При своих шансах считается сам"':''}></label>
+   <label>Раздел<select id="ceSec"><option value="">Без раздела («Кейсы»)</option>${(AS.secL||[]).map(x=>`<option value="${x.id}" ${+F.sec===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select></label>
+   <label>Порядок<input id="ceSort" type="number" inputmode="numeric" value="${F.sort}" title="Меньше — левее/выше в разделе"></label>
+   <div class="w" style="display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;color:#BEAD9E">Цвет<div class="ce-cols">${CCOL.map(col=>`<button type="button" class="ce-col${F.color===col?' on':''}" data-ccol="${col}" style="background:${col}" aria-label="Цвет ${col}"></button>`).join('')}</div></div></div>
+  <div class="pe-tgs">${tgl('ceHot',F.hot,'Метка «ХИТ»','Показывается на карточке кейса')}${tgl('ceAct',F.active,'Показывать игрокам','Выключи, чтобы спрятать кейс')}${tgl('ceMan',F.manual,'Свои шансы','Впиши % каждому брейнроту сам — база не пересчитывает')}</div>
   <div class="adm-row"><b>Что внутри</b><span class="muted num" style="margin-left:auto;font-size:12px">${items.length} шт.</span></div>
-  ${items.length?`<div class="adm-its">${items.map(x=>`<div class="adm-li">${art(x,34)}<span style="flex:1;min-width:0"><b>${esc(x.name)}</b><small class="muted num">${fmt(x.price)}${chance[x.name]!=null?' · шанс '+String(chance[x.name]).replace('.',',')+'%':' · новый'}</small></span>
+  ${items.length?`<div class="adm-its">${items.map(x=>`<div class="adm-li">${art(x,34)}<span style="flex:1;min-width:0"><b>${esc(x.name)}</b><small class="muted num">${fmt(x.price)}${F.manual?'':chance[x.name]!=null?' · шанс '+String(chance[x.name]).replace('.',',')+'%':' · новый'}</small></span>
+    ${F.manual?`<label class="ce-ch"><input type="number" inputmode="decimal" min="0.001" max="100" step="0.1" data-cch="${esc(x.name)}" value="${F.ch[x.name]}" aria-label="Шанс ${esc(x.name)}, %"><span>%</span></label>`:''}
     <button class="adm-x" data-crm="${esc(x.name)}" aria-label="Убрать">${ic(I.x,'#FF946E',14,2.4)}</button></div>`).join('')}</div>`:admEmpty('Пусто — добавь брейнротов ниже')}
   ${warn}
   <label class="srch" style="height:44px"><input id="ceQ" value="${esc(AS.cq||'')}" placeholder="Найти брейнрота, чтобы добавить" autocomplete="off"></label>
@@ -2806,9 +2854,19 @@ function admCaseEditor(c){
    :`<p class="muted" style="font-size:12px;margin:0">${q?'Ничего не нашли':'Все брейнроты уже в кейсе'}</p>`}
   <div class="adm-acts"><button class="fire" data-a="case_save" ${items.length?'':'disabled'}>Сохранить</button><button class="ghost" data-a="case_cancel">Отмена</button></div>`;
 }
+// подсказка при своих шансах: сумма % и сколько кейс отдаёт в среднем
+function ceHint(F,items){
+ const sum=items.reduce((a,x)=>a+(+F.ch[x.name]||0),0),ev=sum?items.reduce((a,x)=>a+x.price*(+F.ch[x.name]||0),0)/sum:0,ok=Math.abs(sum-100)<.01;
+ return `<p class="pc-hint" id="ceHint" style="color:${ok?'#88E4A5':'#F7CA7C'}">Сумма шансов: <b>${String(+sum.toFixed(3)).replace('.',',')}%</b>${ok?'':' — лучше ровно 100% (иначе шансы подгонятся пропорционально)'} · кейс отдаёт в среднем <b>${fmt(Math.round(ev))}</b> из ${fmt(F.price)} (${String((F.price?ev/F.price*100:0).toFixed(1)).replace('.',',')}%)</p>`;}
 function admCaseBind(){
- const keep=()=>{const F=AS.cform;F.name=$('ceName').value;F.price=+$('cePrice').value||0;F.rtp=+$('ceRtp').value||0;F.hot=$('ceHot').checked;F.active=$('ceAct').checked;};
- ['ceName','cePrice','ceRtp','ceHot','ceAct'].forEach(id=>$(id).addEventListener('change',keep));
+ const keep=()=>{const F=AS.cform;F.name=$('ceName').value;F.price=+$('cePrice').value||0;F.rtp=+$('ceRtp').value||0;F.hot=$('ceHot').checked;F.active=$('ceAct').checked;
+  F.sec=$('ceSec').value;F.sort=+$('ceSort').value||0;F.manual=$('ceMan').checked;
+  document.querySelectorAll('[data-cch]').forEach(i=>F.ch[i.dataset.cch]=+String(i.value).replace(',','.')||0);};
+ ['ceName','cePrice','ceRtp','ceHot','ceAct','ceSec','ceSort'].forEach(id=>$(id).addEventListener('change',keep));
+ $('ceMan').addEventListener('change',()=>{keep();admCasesDraw();});
+ const hint=()=>{const F=AS.cform,h=$('ceHint');if(!F.manual||!h)return;keep();const items=(AS.itemsL||[]).filter(x=>AS.csel.has(x.name));h.outerHTML=ceHint(F,items);};
+ $('cePrice').addEventListener('input',hint);
+ document.querySelectorAll('[data-cch]').forEach(i=>i.addEventListener('input',hint));
  $('ceQ').oninput=e=>{keep();AS.cq=e.target.value;const pos=e.target.selectionStart;admCasesDraw();const q=$('ceQ');q.focus();q.setSelectionRange(pos,pos);};
  AS.ckeep=keep;
 }
@@ -2857,6 +2915,8 @@ async function imgData(file){const url=URL.createObjectURL(file),im=new Image();
  c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
  let d=c.toDataURL('image/webp',0.9);if(!d.startsWith('data:image/webp'))d=c.toDataURL('image/png');return d;}
 $('admBody').addEventListener('change',async e=>{
+ const sn=e.target.closest('[data-secn]');
+ if(sn){const v=sn.value.trim();if(!v){toast('Название не может быть пустым');admCasesDraw();return;}const r=await adm('section_save',{id:sn.dataset.secn,name:v});if(r){const x=(AS.secL||[]).find(y=>String(y.id)===sn.dataset.secn);if(x)x.name=v;loadCatalog();}return;}
  const dp=e.target.closest('[data-idep]');
  if(dp){const name=dp.dataset.idep,on=dp.checked;dp.disabled=true;const r=await adm('item_save',{name,depositable:on},true);dp.disabled=false;
   if(!r){dp.checked=!on;return;}const it=(AS.itemsL||[]).find(x=>x.name===name);if(it)it.depositable=on;haptic('light');toast(on?`${name} — можно пополнять`:`${name} — пополнение выключено`);loadCatalog();return;}
@@ -2916,10 +2976,11 @@ $('admBody').addEventListener('click',async e=>{
  const pg=e.target.closest('[data-pg]');if(pg){if(pg.disabled)return;const[k,n]=pg.dataset.pg.split(':');
   if(k==='card')AS.cardPage=+n;else if(k==='pcard')AS.pcPage=+n;else AS.page[k]=+n;haptic('light');await admLoad();$('body').scrollTop=0;return;}
  const md=e.target.closest('[data-mode]');if(md){AS.mode[AS.tab]=md.dataset.mode;AS.page[AS.tab]=1;haptic('light');admLoad();return;}
+ const cc=e.target.closest('[data-ccol]');if(cc){AS.ckeep();AS.cform.color=cc.dataset.ccol;admCasesDraw();return;}
  const ce=e.target.closest('[data-cedit],[data-crm],[data-cadd],[data-ifil],[data-iedit]');
  if(ce){const d=ce.dataset;haptic('light');
-  if(d.cedit!=null){if(AS.cedit===d.cedit)AS.cedit=null;else{const c=AS.casesL.find(x=>x.id===d.cedit);AS.cedit=c.id;AS.cform={name:c.name,price:c.price,rtp:+c.rtp,hot:c.hot,active:c.active};AS.csel=new Set(c.items.map(x=>x.name));AS.cq='';}admCasesDraw();return;}
-  if(d.crm!=null){AS.ckeep();AS.csel.delete(d.crm);admCasesDraw();return;}
+  if(d.cedit!=null){if(AS.cedit===d.cedit)AS.cedit=null;else{const c=AS.casesL.find(x=>x.id===d.cedit);AS.cedit=c.id;AS.cform={name:c.name,price:c.price,rtp:Math.min(120,+c.rtp),hot:c.hot,active:c.active,sec:c.section??'',sort:c.sort||0,color:c.color,manual:!!c.manual,ch:Object.fromEntries(c.items.map(x=>[x.name,+x.chance]))};AS.csel=new Set(c.items.map(x=>x.name));AS.cq='';}admCasesDraw();return;}
+  if(d.crm!=null){AS.ckeep();AS.csel.delete(d.crm);delete AS.cform.ch[d.crm];admCasesDraw();return;}
   if(d.cadd!=null){AS.ckeep();AS.csel.add(d.cadd);AS.cq='';admCasesDraw();return;}
   if(d.ifil){AS.ifil=d.ifil;admItemsDraw();return;}
   if(d.iedit!=null){AS.iedit=AS.iedit===d.iedit?null:d.iedit;admItemsDraw();return;}
@@ -2935,7 +2996,7 @@ $('admBody').addEventListener('click',async e=>{
  if(a==='item_cancel'){AS.iedit=null;admItemsDraw();return;}
  if(a==='pe_new'){const v=$('apId').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');return;}AS.pcard=+v;AS.pcPage=1;haptic('light');await admLoad();return;}
  if(a==='find'){AS.q[AS.tab]=$('auQ').value.trim();AS.page[AS.tab]=1;admLoad();return;}
- const danger=['deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg'];
+ const danger=['sec_del','deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg'];
  if(danger.includes(a)&&!sure(b))return;
  let r=null;b.disabled=true;
  try{
@@ -2962,8 +3023,15 @@ $('admBody').addEventListener('click',async e=>{
   else if(a==='pe_unbind')r=await adm('ref_set',{id:b.dataset.pid,code:''});
   else if(a==='ref_bind'){const v=$('cRef').value.trim().toUpperCase();if(!v){toast('Введи код партнёра');b.disabled=false;return;}r=await adm('ref_set',{id:uid,code:v});}
   else if(a==='ref_unbind')r=await adm('ref_set',{id:uid,code:''});
-  else if(a==='case_save'){AS.ckeep();const F=AS.cform;if(!(F.price>0)||!(F.rtp>=10&&F.rtp<=120)){toast('Проверь цену и %');b.disabled=false;return;}
-   r=await adm('case_save',{id:AS.cedit,name:F.name.trim(),price:F.price,rtp:F.rtp,hot:F.hot,active:F.active,items:[...AS.csel]});if(r){AS.cedit=null;loadCatalog();}}
+  else if(a==='case_save'){AS.ckeep();const F=AS.cform;if(!(F.price>0)||(!F.manual&&!(F.rtp>=10&&F.rtp<=120))){toast('Проверь цену и %');b.disabled=false;return;}
+   const args={id:AS.cedit,name:F.name.trim(),price:F.price,rtp:F.manual?'':F.rtp,hot:F.hot,active:F.active,items:[...AS.csel],section:F.sec===''?'':+F.sec,sort:F.sort,color:F.color,manual:F.manual};
+   if(F.manual){const ch={};for(const n of AS.csel){const v=+F.ch[n];if(!(v>0&&v<=100)){toast('Впиши шанс для «'+n+'»: больше 0 и до 100');b.disabled=false;return;}ch[n]=v;}args.chances=ch;}
+   r=await adm('case_save',args);if(r){AS.cedit=null;loadCatalog();}}
+  else if(a==='sec_add'){const v=$('secNew').value.trim();if(!v){toast('Впиши название раздела');b.disabled=false;return;}r=await adm('section_save',{name:v});if(r)loadCatalog();}
+  else if(a==='sec_up'||a==='sec_down'){r=await adm('section_move',{id,dir:a==='sec_up'?-1:1},true);if(r)loadCatalog();}
+  else if(a==='sec_del'){r=await adm('section_delete',{id});if(r)loadCatalog();}
+  else if(a==='case_new'){const nn=$('cnName').value.trim(),pr=Math.round(+$('cnPrice').value);if(!nn||!(pr>0)){toast('Укажи название и цену кейса');b.disabled=false;return;}
+   r=await adm('case_new',{name:nn,price:pr});if(r&&r.id){AS.cnew=r.id;}}
   else if(a==='item_save'){const nw=AS.iedit==='__new',nn=$('ieName').value.trim(),pr=Math.round(+$('iePrice').value);
    if(!nn||!(pr>0)){toast('Укажи название и цену');b.disabled=false;return;}
    const args={name:nw?'':AS.iedit,new_name:nn,price:pr,kind:$('ieKind').value,rarity:$('ieRar').value};if(nw)args.depositable=$('ieDep').checked;
@@ -2971,7 +3039,8 @@ $('admBody').addEventListener('click',async e=>{
   else if(a==='item_noimg'){r=await adm('item_save',{name:AS.iedit,img:''});if(r){delete IMG[AS.iedit];loadCatalog();}}
   else if(a==='item_delete'){r=await adm('item_delete',{name:AS.iedit});if(r){AS.iedit=null;loadCatalog();}}
  }finally{if(b.isConnected)b.disabled=false;}
- if(r){if(['item_save','item_noimg','item_delete','case_save'].includes(a))AS.itemsL=null;admStats();await admLoad();if((uid&&+uid===+USER.id)||(AS.pcard&&+AS.pcard===+USER.id))loadMe();}
+ if(r){if(['item_save','item_noimg','item_delete','case_save'].includes(a))AS.itemsL=null;admStats();await admLoad();
+  if(a==='case_new'&&AS.cnew){const c=(AS.casesL||[]).find(x=>x.id===AS.cnew);AS.cnew=null;if(c){const o=document.querySelector(`[data-cedit="${CSS.escape(c.id)}"]`);if(o){o.click();setTimeout(()=>{const q=$('ceQ');if(q)q.scrollIntoView({block:'center'});},80);}}}if((uid&&+uid===+USER.id)||(AS.pcard&&+AS.pcard===+USER.id))loadMe();}
 });
 
 // ---------- новые заявки: панель и уведомление (проверяем каждые 12 секунд) ----------
@@ -3323,7 +3392,7 @@ async function loadCatalog(){
  const c=await API.call('catalog',{},true);if(!c)return;
 catalogLoaded=true;
  Object.keys(IMG).forEach(k=>delete IMG[k]);Object.assign(IMG,c.imgs||{});
- CASES.length=0;c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,items:(k.items||[]).map(mkItem)}));drawCases();
+ SECTIONS=c.sections||[];CASES.length=0;c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,sec:k.section??null,items:(k.items||[]).map(mkItem)}));drawCases();
  UP_TARGETS=c.upgrade.map(mkItem);
  DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
  DEP.gr=c.deposit.gr.map((o,i)=>({key:'gr'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
