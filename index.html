@@ -656,6 +656,7 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .pc-empty-ic{width:56px;height:56px;border-radius:16px;background:#1B1511;border:1px solid #413229;display:flex;align-items:center;justify-content:center}
 .pe-tgs{display:flex;flex-direction:column;gap:6px}
 .adm-card .srch{min-width:0}
+.vol-range{accent-color:#F28743;flex:1;min-width:60px;max-width:160px;height:28px}.vol-range:disabled{opacity:.5}
 img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,.45));pointer-events:none;-webkit-user-drag:none}
 .adm-case-h{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:0;color:inherit;font:inherit;font-size:14px}
 .pe-tg{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:#17120F;border:1px solid #413229;cursor:pointer}
@@ -1081,6 +1082,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
       <div class="ptitle"><h1>Настройки</h1></div>
       <div class="card" style="border-radius:16px;overflow:hidden">
         <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #413229;font-weight:700;font-size:15px">Звук<input type="checkbox" class="toggle" id="setSound" checked></label>
+        <div id="volRow" style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #413229;font-weight:700;font-size:15px">Громкость<span style="flex:1;min-width:0;display:flex;align-items:center;justify-content:flex-end;gap:8px"><span class="muted num" style="font-size:12px;font-weight:700;min-width:34px;text-align:right" id="volVal">80%</span><input type="range" min="0" max="100" step="5" id="setVol" class="vol-range" aria-label="Громкость"><button type="button" class="iconbtn card" id="volTest" aria-label="Проверить звук" style="width:40px;height:40px;border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F8AE74" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button></span></div>
         <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #413229;font-weight:700;font-size:15px">Вибрация<input type="checkbox" class="toggle" id="setVibro" checked></label>
         <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-bottom:1px solid #413229;font-weight:700;font-size:15px">Уведомления от бота<input type="checkbox" class="toggle"></label>
         <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;font-weight:700;font-size:15px">Скрыть ник в ленте<input type="checkbox" class="toggle"></label>
@@ -1237,13 +1239,14 @@ let _hLast=0;
 const SFX=(()=>{
  let ac=null,master,rev,noiseBuf,vol=0.7,on=true;
  function init(){
-  if(ac){if(ac.state==='suspended')ac.resume();return true;}
+  if(ac){if(ac.state!=='running')ac.resume().catch(()=>{});return true;}
   const C=window.AudioContext||window.webkitAudioContext;if(!C)return false;
   ac=new C();
   master=ac.createGain();master.gain.value=vol;
   const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=7500;lp.Q.value=.5;          // срезаем резкий верх
-  const comp=ac.createDynamicsCompressor();comp.threshold.value=-20;comp.knee.value=24;comp.ratio.value=3;comp.attack.value=.003;comp.release.value=.25;
-  master.connect(lp);lp.connect(comp);comp.connect(ac.destination);
+  const comp=ac.createDynamicsCompressor();comp.threshold.value=-9;comp.knee.value=6;comp.ratio.value=10;comp.attack.value=.002;comp.release.value=.2;   // ограничитель: громко, но без хрипа
+  const boost=ac.createGain();boost.gain.value=2.2;            // общий запас громкости
+  master.connect(boost);boost.connect(lp);lp.connect(comp);comp.connect(ac.destination);
   rev=ac.createConvolver();rev.buffer=impulse(1.7,3.4);const rg=ac.createGain();rg.gain.value=.24;rev.connect(rg);rg.connect(master);  // лёгкое «пространство»
   const n=ac.sampleRate;noiseBuf=ac.createBuffer(1,n,n);const d=noiseBuf.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
   return true;}
@@ -1272,7 +1275,7 @@ const SFX=(()=>{
  // ---------- тики колеса апгрейда: 4 варианта ----------
  const TICK={
   soft:(v=1,at=0)=>{noise({f:3800,q:1.2,v:.045*v,dec:.01,at});tone(2400,{v:.03*v,dec:.018,to:1900,at});},
-  wood:(v=1,at=0)=>{tone(900,{v:.075*v,dec:.03,to:620,at});tone(1820,{type:'triangle',v:.012*v,dec:.015,at});noise({f:1500,q:2,v:.02*v,dec:.01,at});},
+  wood:(v=1,at=0)=>{tone(900,{v:.11*v,dec:.032,to:620,at});tone(1820,{type:'triangle',v:.018*v,dec:.015,at});noise({f:1500,q:2,v:.03*v,dec:.01,at});},
   glass:(v=1,at=0)=>{tone(3136,{v:.03*v,dec:.075,at,send:.25});tone(4700,{v:.009*v,dec:.04,at});},
   ratchet:(v=1,at=0)=>{noise({ft:'highpass',f:2500,q:.7,v:.05*v,dec:.008,at});noise({ft:'highpass',f:3300,q:.7,v:.03*v,dec:.006,at:at+.007});tone(1600,{v:.014*v,dec:.012,to:1300,at});},
  };
@@ -1325,14 +1328,17 @@ const SFX=(()=>{
   setOn(v){on=!!v;},
   now(){return ac?ac.currentTime:0;},
   ready(){return init();},
-  wake(){if(on)init();},
+  // разбудить звук из касания/клика: браузеры и Telegram дают звук только после жеста
+  wake(){if(!on||!init())return;if(ac.state!=='running')ac.resume().catch(()=>{});
+   if(!this._u){this._u=1;try{const b=ac.createBuffer(1,1,22050),s=ac.createBufferSource();s.buffer=b;s.connect(ac.destination);s.start(0);}catch(e){}}},
  };
 })();
 // звук и вибрация из настроек (запоминаем на этом устройстве)
 const PREF={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:v==='1';}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,v?'1':'0');}catch(e){}}};
 let SOUND_ON=PREF.get('bf_sound',true),VIBRO_ON=PREF.get('bf_vibro',true);SFX.setOn(SOUND_ON);
+let SOUND_VOL=(()=>{try{const v=localStorage.getItem('bf_vol');return v==null?80:Math.max(0,Math.min(100,+v));}catch(e){return 80;}})();SFX.setVolume(SOUND_VOL/100);
 // браузер разрешает звук только после касания — будим его на любом нажатии
-document.addEventListener('pointerdown',()=>SFX.wake(),{passive:true});
+['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,()=>SFX.wake(),{capture:true,passive:true}));
 function haptic(kind){
   if(!VIBRO_ON)return;
   if(!tg||!tg.HapticFeedback)return;
@@ -3183,7 +3189,11 @@ function wdOpen(){
  draw();openSheet('wdSheet');
 }
 $('setSound').checked=SOUND_ON;$('setVibro').checked=VIBRO_ON;
-$('setSound').onchange=e=>{SOUND_ON=e.target.checked;PREF.set('bf_sound',SOUND_ON);SFX.setOn(SOUND_ON);if(SOUND_ON)SFX.play('toggleOn');};
+const volDraw=()=>{$('setVol').value=SOUND_VOL;$('volVal').textContent=SOUND_ON?SOUND_VOL+'%':'выкл';$('volRow').style.opacity=SOUND_ON?'':'.45';$('setVol').disabled=!SOUND_ON;};volDraw();
+$('setSound').onchange=e=>{SOUND_ON=e.target.checked;PREF.set('bf_sound',SOUND_ON);SFX.setOn(SOUND_ON);volDraw();if(SOUND_ON){SFX.wake();SFX.play('toggleOn');}};
+let _volT=0;$('setVol').oninput=e=>{SOUND_VOL=+e.target.value;SFX.setVolume(SOUND_VOL/100);volDraw();try{localStorage.setItem('bf_vol',SOUND_VOL);}catch(err){}
+ const n=performance.now();if(n-_volT>90){_volT=n;SFX.play('upTick');}};
+$('volTest').onclick=e=>{e.preventDefault();if(!SOUND_ON){toast('Сначала включи «Звук»');return;}SFX.wake();SFX.play('upWin');};
 $('setVibro').onchange=e=>{VIBRO_ON=e.target.checked;PREF.set('bf_vibro',VIBRO_ON);haptic('light');};
 paintUser();loadCatalog();loadMe();initFeed();drawDaily();
 go('home');
