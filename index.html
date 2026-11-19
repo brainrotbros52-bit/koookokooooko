@@ -606,6 +606,25 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .pick:hover{border-color:#715441}
 .pick.sel{border-color:#F28743;background:#2C1F17}
 .pick.sel::after{content:"";position:absolute;top:6px;right:6px;width:16px;height:16px;border-radius:50%;background:#F28743 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231A0F09' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/11px no-repeat}
+.maint{position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:24px;background:#17120F;overflow:hidden}
+.maint[hidden]{display:none}
+.maint-glow{position:absolute;left:-30%;right:-30%;bottom:-40%;height:80%;background:radial-gradient(ellipse at 50% 100%,rgba(242,120,55,.32),rgba(170,60,24,.1) 45%,transparent 70%);pointer-events:none;animation:fBase 3.2s ease-in-out infinite}
+.maint-box{position:relative;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;max-width:380px}
+.maint-ic{position:relative;width:112px;height:112px;border-radius:32px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,rgba(242,135,67,.22),#221A15 72%);border:1px solid #503C2F;box-shadow:0 20px 60px rgba(242,120,55,.18)}
+.maint-gear{position:absolute;right:-8px;bottom:-8px;width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#2C1F17;border:1px solid #955A35;animation:mWr 2.4s ease-in-out infinite}
+@keyframes mWr{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(14deg)}}
+.maint-msg{margin:0;font-size:15px;line-height:1.5;color:#DED0C3;white-space:pre-line}
+.acc-chip{display:flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:999px;background:#4C2216;border:1px solid #CB5222;color:#FFB088;font:800 11px Manrope,sans-serif;white-space:nowrap}
+.acc-chip[hidden]{display:none}
+@media (max-width:599px){.top.acc-on .logo-t{display:none}}
+.acc-opts{display:flex;flex-direction:column;gap:8px}
+.acc-opt{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:#17120F;border:1px solid #413229;color:inherit;font:inherit;text-align:left;width:100%}
+.acc-opt.on{border-color:#F28743;background:#2C1F17}
+.acc-opt .r{width:20px;height:20px;flex:none;border-radius:50%;border:2px solid #715441;display:flex;align-items:center;justify-content:center}
+.acc-opt.on .r{border-color:#F28743}.acc-opt.on .r::after{content:"";width:10px;height:10px;border-radius:50%;background:#F28743}
+.acc-opt b{display:block;font-size:14px}.acc-opt small{display:block;font-size:12px;color:#A49485;margin-top:2px}
+.acc-prev{border-radius:16px;border:1px dashed #503C2F;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:radial-gradient(ellipse at 50% 120%,rgba(242,120,55,.16),transparent 70%),#17120F}
+.acc-prev b{font-size:16px}.acc-prev p{margin:0;font-size:13px;color:#DED0C3;line-height:1.45;white-space:pre-line}
 .toast{position:absolute;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;transition:all .25s;z-index:9;padding:10px 16px;border-radius:12px;background:#FBF2EA;color:#1A0F09;font-weight:800;font-size:13px;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
@@ -847,6 +866,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
       <button class="iconbtn card" id="burger" aria-label="Открыть меню">
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
       </button>
+      <button class="acc-chip" id="accChip" hidden aria-label="Приложение закрыто для игроков — открыть настройки доступа"></button>
       <button data-go="home" aria-label="На главную" style="display:flex;align-items:center;gap:8px;background:none;border:0;padding:0">
         <svg class="logo-ic" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="url(#logoG)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3.5 5 5.5 5 10.5a5 5 0 0 1-10 0c0-2.4 1.2-3.9 2.2-5 .3 1.7 1.1 2.6 2 3 0-3.3.3-5.6.8-8.5z"/><path d="M12 21a2.2 2.2 0 0 1-2.2-2.2c0-1.4 1.3-2.2 2.2-3.6.9 1.4 2.2 2.2 2.2 3.6A2.2 2.2 0 0 1 12 21z"/></svg>
         <span class="u logo-t" style="font-size:16px"><span class="lt-a">BRAIN</span><span class="lt-b">FIRE</span></span>
@@ -1350,6 +1370,21 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
     <div class="sheet-box" role="dialog" aria-label="Подтверждение пополнения" id="depSheetBox"></div>
   </div>
   <div class="toast" id="toast" role="status"></div>
+  <!-- ===== ТЕХРАБОТЫ: экран для игроков, когда админ закрыл приложение ===== -->
+  <div class="maint" id="maint" hidden role="alertdialog" aria-label="Мы на обновлении">
+    <div class="maint-glow" aria-hidden="true"></div>
+    <div class="maint-box">
+      <span class="u logo-t" style="font-size:18px"><span class="lt-a">BRAIN</span><span class="lt-b">FIRE</span></span>
+      <div class="maint-ic" aria-hidden="true">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="url(#logoG)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3.5 5 5.5 5 10.5a5 5 0 0 1-10 0c0-2.4 1.2-3.9 2.2-5 .3 1.7 1.1 2.6 2 3 0-3.3.3-5.6.8-8.5z"/><path d="M12 21a2.2 2.2 0 0 1-2.2-2.2c0-1.4 1.3-2.2 2.2-3.6.9 1.4 2.2 2.2 2.2 3.6A2.2 2.2 0 0 1 12 21z"/></svg>
+        <span class="maint-gear"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFB088" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span>
+      </div>
+      <h1 class="u" style="font-size:26px;font-weight:700;margin:0">Мы на обновлении</h1>
+      <p class="maint-msg" id="maintMsg"></p>
+      <button class="ghost" id="maintRetry" style="height:48px;padding:0 22px;border-radius:14px;font-size:14px">Проверить снова</button>
+      <span class="muted" style="font-size:12px" id="maintNote">Проверим сами через минуту</span>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1537,6 +1572,7 @@ const API={
           ...(CONFIG.SUPABASE_ANON_KEY.startsWith('eyJ')?{'Authorization':'Bearer '+CONFIG.SUPABASE_ANON_KEY}:{})},
         body:JSON.stringify({action,initData:tg?tg.initData:'',...(body||{})})});
       const j=await r.json().catch(()=>({error:'server_error'}));
+      if(j.error==='maintenance'){API.lastError=j.error;maintShow(j.msg);return null;}
       if(j.error){API.lastError=j.error;if(!silent){toast(ERR[j.error]||'Ошибка: '+j.error);haptic('error');}return null;}
       return j.data;
     }catch(e){API.lastError='network';if(!silent)toast('Нет связи с сервером');return null;}
@@ -2619,7 +2655,7 @@ setInterval(drawDaily,30000);
    АДМИН-ПАНЕЛЬ. Все действия идут на сервер (action 'admin'),
    сервер сам проверяет, что ты в таблице admins.
    ===================================================================== */
-const ADM_TABS=[['dep','Пополнения'],['wd','Выводы'],['users','Игроки'],['partners','Партнёры'],['cases','Кейсы'],['items','Брейнроты'],['promo','Промо']];
+const ADM_TABS=[['dep','Пополнения'],['wd','Выводы'],['users','Игроки'],['partners','Партнёры'],['cases','Кейсы'],['items','Брейнроты'],['promo','Промо'],['site','Доступ']];
 const AS={tab:'dep',mode:{dep:'active',wd:'active',partners:'list'},page:{dep:1,wd:1,users:1,partners:1,pwd:1,apps:1},q:{users:'',partners:''},card:null,cardPage:1,pcard:null,pcPage:1,pcode:'',pwdHist:false,cnt:{},last:{dep:-1,wd:-1,pwd:-1,apps:-1}};
 const RCOL=r=>R[r]||'#BEAD9E';
 async function adm(op,args,quiet){const r=await API.call('admin',{op,args:args||{}});if(r&&r.msg&&!quiet){toast(r.msg);haptic('success');}return r;}
@@ -2676,6 +2712,7 @@ async function admLoad(){
  }
  else if(T==='partners')await admPartners(B);
  else if(T==='cases')await admCases(B);
+ else if(T==='site')await admSite(B);
  else if(T==='items')await admItems(B);
  else if(T==='users'){
   const r=await adm(T==='users'?'user_find':'partners',{q:AS.q[T],page:AS.page[T]},true);if(!r)return;
@@ -2801,6 +2838,23 @@ async function admPartnerCard(){
   <span class="muted" style="font-size:12px">Цифра справа — сколько партнёр заработал с игрока. ✕ — отвязать игрока.</span></div>`:''}`;
 }
 
+
+// ---------- доступ к приложению: «Мы на обновлении» ----------
+const ACC=[[0,'Открыто для всех','Приложение работает как обычно'],
+ [1,'Только партнёры и админы','Обычные игроки видят «Мы на обновлении»'],
+ [2,'Только админы','Игроки и партнёры видят «Мы на обновлении»']];
+async function admSite(B){const r=await adm('access_get',{},true);if(!r)return;AS.acc=r;AS.accSel=+r.mode||0;AS.accMsg=r.msg||'';admSiteDraw();}
+function admSiteDraw(){const r=AS.acc||{},sel=AS.accSel,cur=+r.mode||0;
+ $('admBody').innerHTML=`<div class="adm-card">
+  <div class="adm-row"><b>Кто может заходить</b><span class="badge" style="margin-left:auto;${cur?'background:#4C2216;color:#FFB088':'background:#193E27;color:#88E4A5'}">${cur?'сейчас закрыто':'сейчас открыто'}</span></div>
+  <div class="acc-opts">${ACC.map(([v,t,d])=>`<button class="acc-opt${sel===v?' on':''}" data-acc="${v}"><span class="r"></span><span><b>${t}</b><small>${d}${v===1?` · партнёров: ${r.partners||0}`:''}</small></span></button>`).join('')}</div>
+  <div class="pc-f"><label>Текст для игроков<textarea id="accMsg" maxlength="300" rows="3" placeholder="${esc(MAINT_DEF)}" style="height:auto;min-height:84px;padding:10px 12px;border-radius:12px;background:#17120F;border:1px solid #413229;color:#FBF2EA;font:700 14px Manrope,sans-serif;outline:none;resize:vertical">${esc(AS.accMsg)}</textarea></label></div>
+  <div class="acc-prev" aria-label="Как увидят игроки"><span class="muted" style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase">так увидят игроки</span><b class="u">Мы на обновлении</b><p id="accPrev">${esc(AS.accMsg.trim()||MAINT_DEF)}</p></div>
+  <div class="adm-acts"><button class="fire" data-a="acc_save" ${sel===cur&&AS.accMsg===(r.msg||'')?'disabled':''}>${sel===cur?'Сохранить текст':sel?'Закрыть приложение':'Открыть для всех'}</button></div>
+  <p class="pc-hint">Админы заходят всегда. Включается и выключается примерно за 10 секунд. Балансы, склады и заявки игроков не трогаются — просто никто, кроме выбранных, не может ничего делать, пока закрыто.</p>
+ </div>`;
+ $('accMsg').oninput=e=>{AS.accMsg=e.target.value;$('accPrev').textContent=AS.accMsg.trim()||MAINT_DEF;const b=document.querySelector('[data-a="acc_save"]');if(b)b.disabled=AS.accSel===cur&&AS.accMsg===(r.msg||'');};
+}
 
 // ---------- кейсы: цена, % отдачи, содержимое ----------
 const RNAME={common:'обычный',rare:'редкий',epic:'эпик',legend:'легендарный',myth:'мифик'};
@@ -2997,6 +3051,7 @@ $('admBody').addEventListener('click',async e=>{
  const pg=e.target.closest('[data-pg]');if(pg){if(pg.disabled)return;const[k,n]=pg.dataset.pg.split(':');
   if(k==='card')AS.cardPage=+n;else if(k==='pcard')AS.pcPage=+n;else AS.page[k]=+n;haptic('light');await admLoad();$('body').scrollTop=0;return;}
  const md=e.target.closest('[data-mode]');if(md){AS.mode[AS.tab]=md.dataset.mode;AS.page[AS.tab]=1;haptic('light');admLoad();return;}
+ const ao=e.target.closest('[data-acc]');if(ao){AS.accSel=+ao.dataset.acc;admSiteDraw();return;}
  const cc=e.target.closest('[data-ccol]');if(cc){AS.ckeep();AS.cform.color=cc.dataset.ccol;admCasesDraw();return;}
  const ce=e.target.closest('[data-cedit],[data-crm],[data-cadd],[data-ifil],[data-iedit]');
  if(ce){const d=ce.dataset;haptic('light');
@@ -3017,6 +3072,7 @@ $('admBody').addEventListener('click',async e=>{
  if(a==='item_cancel'){AS.iedit=null;admItemsDraw();return;}
  if(a==='pe_new'){const v=$('apId').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');return;}AS.pcard=+v;AS.pcPage=1;haptic('light');await admLoad();return;}
  if(a==='find'){AS.q[AS.tab]=$('auQ').value.trim();AS.page[AS.tab]=1;admLoad();return;}
+ if(a==='acc_save'&&AS.accSel>0&&AS.accSel!==(+(AS.acc||{}).mode||0)&&!sure(b))return;   // закрыть — по второму нажатию
  const danger=['sec_del','deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg'];
  if(danger.includes(a)&&!sure(b))return;
  let r=null;b.disabled=true;
@@ -3049,6 +3105,7 @@ $('admBody').addEventListener('click',async e=>{
    if(F.manual){const ch={};for(const n of AS.csel){const v=+F.ch[n];if(!(v>0&&v<=100)){toast('Впиши шанс для «'+n+'»: больше 0 и до 100');b.disabled=false;return;}ch[n]=v;}args.chances=ch;}
    r=await adm('case_save',args);if(r){AS.cedit=null;loadCatalog();}}
   else if(a==='case_noimg'){AS.ckeep();r=await adm('case_img',{id:AS.cedit,img:''});if(r){const c=(AS.casesL||[]).find(x=>x.id===AS.cedit);if(c)c.img=null;admCasesDraw();loadCatalog();r=null;}}
+  else if(a==='acc_save'){r=await adm('access_set',{mode:AS.accSel,msg:AS.accMsg.trim()});if(r){AS.acc={...AS.acc,mode:AS.accSel,msg:AS.accMsg.trim()};accChipDraw({admin:true,mode:AS.accSel});}}
   else if(a==='sec_add'){const v=$('secNew').value.trim();if(!v){toast('Впиши название раздела');b.disabled=false;return;}r=await adm('section_save',{name:v});if(r)loadCatalog();}
   else if(a==='sec_up'||a==='sec_down'){r=await adm('section_move',{id,dir:a==='sec_up'?-1:1},true);if(r)loadCatalog();}
   else if(a==='sec_del'){r=await adm('section_delete',{id});if(r)loadCatalog();}
@@ -3406,8 +3463,26 @@ function applyState(st,quiet){
 async function loadMe(){
  if(!LIVE)return;
  if(!tg){toast('Открой приложение через Telegram');return;}
- const st=await API.call('me',{});if(st)applyState(st);
+ const st=await API.call('me',{});if(st){maintHide();applyState(st);accChipDraw(st.access);}
 }
+/* ---------- техработы: экран «Мы на обновлении» ---------- */
+let maintTimer=null;
+const MAINT_DEF='Мы на обновлении — скоро вернёмся. Балансы и брейнроты в сохранности.';
+function maintShow(msg){
+ $('maintMsg').textContent=(msg||'').trim()||MAINT_DEF;
+ if($('maint').hidden){$('maint').hidden=false;document.querySelectorAll('.sheet.open').forEach(x=>closeSheet(x.id));closeDeposit();$('phone').classList.remove('open');
+  if(tg&&tg.BackButton)tg.BackButton.hide();}
+ clearInterval(maintTimer);maintTimer=setInterval(maintCheck,60000);   // сами проверяем раз в минуту
+}
+function maintHide(){if(!$('maint').hidden){$('maint').hidden=true;syncBack();}clearInterval(maintTimer);maintTimer=null;}
+async function maintCheck(){const st=await API.call('me',{},true);if(st){maintHide();applyState(st);accChipDraw(st.access);loadCatalog();toast('Мы снова работаем 🔥');}}
+$('maintRetry').onclick=async()=>{const b=$('maintRetry');b.disabled=true;b.textContent='Проверяем…';await maintCheck();b.disabled=false;b.textContent='Проверить снова';
+ if(!$('maint').hidden)$('maintNote').textContent='Пока ещё обновляемся — попробуй чуть позже';};
+// админ видит, что для игроков приложение закрыто
+function accChipDraw(a){const c=$('accChip');const m=a&&a.admin?+a.mode||0:0;c.hidden=!m;
+ document.querySelector('.top').classList.toggle('acc-on',!!m);
+ if(m){c.textContent='🔒 Закрыто';c.title=m===2?'Заходят только админы':'Заходят только партнёры и админы';}}
+$('accChip').onclick=()=>{AS.tab='site';go('admin');};
 /* ---------- каталог с сервера: кейсы, шансы, предметы, бафы ---------- */
 async function loadCatalog(){
  if(!LIVE)return;
