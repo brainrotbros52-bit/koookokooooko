@@ -666,6 +666,16 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .mp-next{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid #413229;font-size:12px;color:#A49485;min-width:0}
 .mp-next b{color:#DED0C3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mp-next .mp-art{width:28px;height:28px;border-radius:8px;font-size:11px}
+.m-inv{display:flex;flex-direction:column;gap:10px}
+.m-inv-head{display:flex;align-items:center;gap:8px;min-height:28px}
+.m-inv-sum{margin-left:auto;display:flex;align-items:center;gap:4px;font-size:13px;font-weight:800;color:#F7CA7C;white-space:nowrap}
+.m-inv-all{height:30px;padding:0 10px;border-radius:9px;background:#2B2119;border:1px solid #503C2F;color:#DED0C3;font:800 12px Manrope,sans-serif;white-space:nowrap}
+.m-inv-all:hover{border-color:#955A35}
+.m-inv-grid{max-height:300px;padding:2px;margin:-2px}
+.m-inv-grid .pick{gap:5px;padding:7px}
+.m-inv-n{font-size:11px;font-weight:700;line-height:1.25;min-height:28px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.m-inv-play{display:flex;align-items:center;gap:10px;min-height:56px;padding:0 14px;border-radius:14px;background:#221A15;border:1px solid #955A35;font-weight:700;font-size:14px}
+.m-inv-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px;border-radius:14px;border:1px dashed #715441;text-align:center;font-size:14px}
 .m-pick{display:flex;align-items:center;gap:10px;width:100%;min-height:64px;padding:8px 12px;border-radius:14px;background:#221A15;border:1px dashed #715441;color:#DED0C3;font:700 14px Manrope,sans-serif;text-align:left}
 .m-pick:hover{border-color:#F28743}
 .m-pick.has{border-style:solid;border-color:#955A35}
@@ -1312,16 +1322,13 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
       </div>
       <div class="mgrid" id="mgrid"></div>
       <div class="m-ctl">
-      <div id="mmode" class="seg" role="group" aria-label="Чем ставить" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
-      <div class="card" id="mNextCard" style="display:flex;justify-content:space-between;padding:12px 14px;border-radius:14px;font-size:13px">
+      <div id="mmode" hidden></div>
+      <div class="card" id="mNextCard" hidden style="display:flex;justify-content:space-between;padding:12px 14px;border-radius:14px;font-size:13px">
         <span class="muted">Следующая клетка</span><span class="num" style="font-weight:800" id="mnext">×1.13</span>
       </div>
       <div class="card m-prize" id="mPrize" hidden></div>
-      <div id="mBetBr" style="display:flex;flex-direction:column;gap:8px" hidden>
-        <span class="sec">Ставка брейнротами</span>
-        <button class="m-pick" id="mPick"></button>
-      </div>
-      <div id="mBetCoins" style="display:flex;flex-direction:column;gap:8px">
+      <div id="mBetBr" class="m-inv" hidden></div>
+      <div id="mBetCoins" style="display:flex;flex-direction:column;gap:8px" hidden>
         <span class="sec">Ставка</span>
         <div style="display:flex;gap:8px">
           <div class="card" style="flex:1;display:flex;align-items:center;gap:8px;height:48px;padding:0 14px;border-radius:12px">
@@ -1563,10 +1570,6 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
     <div class="sheet-box" role="dialog" aria-label="Вывод" id="wdBox"></div>
   </div>
   <!-- шторка: выбор брейнротов для мин -->
-  <div class="sheet" id="mSheet" aria-hidden="true">
-    <div class="sheet-bg" data-close></div>
-    <div class="sheet-box" role="dialog" aria-label="Ставка брейнротами" id="mSheetBox"></div>
-  </div>
   <!-- шторка: анкета партнёра -->
   <div class="sheet" id="paSheet" aria-hidden="true">
     <div class="sheet-bg" data-close></div>
@@ -1703,6 +1706,9 @@ const EN={
  // редкость и названия
  'Обычный':'Common','Редкий':'Rare','Эпический':'Epic','Легендарный':'Legendary','Мифический':'Mythic','Токен':'Token',
  'Жаровня':'Brazier','Тлеющий':'Smoldering','Угольный':'Coal','Пепел Сахура':'Sahur Ash','Вулкан':'Volcano','Сердце пламени':'Heart of Flame','Драгон':'Dragon','До 100':'Under 100','Легенды':'Legends','Ивент':'Event',
+ 'Отметь брейнротов со склада — на каждой открытой клетке брейнрот будет дорожать по множителю':'Pick brainrots from your inventory — every opened tile upgrades the brainrot by the multiplier',
+ 'Отметь брейнротов со склада':'Pick brainrots from your inventory','отметь, что ставишь':'pick what to bet','На складе пока нет брейнротов':'No brainrots in your inventory yet',
+ 'Открыть кейс':'Open a case','Мины теперь только на брейнротах':'Mines are brainrots-only now',
  'награда':'reward',
  'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
  'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
@@ -1973,7 +1979,7 @@ function haptic(kind){
   }catch(e){}
 }
 /* запросы к серверу (Supabase Edge Function «api»). initData проверяется на сервере */
-const ERR={draw_need_deposit:'Сначала пополни баланс на нужную сумму',draw_closed:'Розыгрыш уже закончился — подводим итог',
+const ERR={mines_coins_off:'Мины теперь только на брейнротах',draw_need_deposit:'Сначала пополни баланс на нужную сумму',draw_closed:'Розыгрыш уже закончился — подводим итог',
   no_money:'Недостаточно средств',bad_promo:'Такого промокода нет или он закончился',promo_used:'Ты уже использовал этот промокод',
   promo_for_deposit:'Этот промокод работает при пополнении',promo_for_profile:'Этот промокод вводится в профиле',
   deposit_active:'У тебя уже есть заявка в очереди',dep_limit:'За один раз можно внести до 5 предметов',wager_left:'Сначала отыграй баланс',daily_wait:'Бонус ещё не доступен',
@@ -2098,6 +2104,7 @@ function go(s){
  const prevS=cur;cur=s;if(prevS!==s)haptic('light');syncBack();document.querySelectorAll('.screen').forEach(e=>e.classList.toggle('on',e.dataset.s===s));
  if(s==='case'&&!spinning)buildReels(MS[mIdx]);
  if(s==='upgrade')drawUp();
+ if(s==='mines')drawMines();
  if(s==='quests')loadQuests();
  if(s==='draws')loadDraws();
  if(s==='admin')admOpen();
@@ -2614,9 +2621,20 @@ const gemSvg=ic(I.gem,'#F7CA7C',26,1.8);
 const bombSvg=ic(I.mines,'#FF946E',26,1.8);
 function coef(k){let c=1;for(let i=0;i<k;i++)c*=(25-i)/(25-mines-i);return c*0.97;}
 // мины на брейнротах: ставим брейнротов со склада, в клетке — брейнрот, которого заберёшь на этом шаге
-let mMode='coins',mSel=new Set(),mStake=0,mGameBr=false;
+let mMode='br',mSel=new Set(),mStake=0,mGameBr=false;   // мины только на брейнротах
 let MINES_POOL=LIVE?[]:ITEMS.filter(x=>x.p>0);      // призы (с сервера — mines_pool)
 const mPrize=v=>{let b=null;for(const x of MINES_POOL)if(x.p<=v&&(!b||x.p>b.p))b=x;return b;};   // самый дорогой брейнрот не дороже v
+// лестница приза (так же считает сервер): на шаге j — брейнрот по ставке × множитель; если следующий
+// дороже всего на 3% и ближе — берём его; брейнрот от клетки к клетке только дорожает; остаток — монетами
+let mLadC={key:'',L:[]};
+function mLadder(st,k){if(!st||k<=0)return null;const key=st+':'+mines+':'+MINES_POOL.length;
+ if(mLadC.key!==key){mLadC={key,L:[]};}const L=mLadC.L;
+ const P=MINES_POOL.slice().sort((a,b)=>a.p-b.p||(a.name<b.name?-1:1));
+ for(let j=L.length+1;j<=k;j++){const v=Math.floor(st*coef(j)),pv=L[j-2]||null;
+  let a=null,b=null;for(const x of P){if(x.p<=v){if(!a||x.p>a.p)a=x;}else{b=x;break;}}   // при равной цене — первый по имени, как на сервере
+  let c=a;if(b&&b.p<=v*1.03&&(!a||a.p<=(pv?pv.p:0)||(v-a.p)>(b.p-v)))c=b;
+  if(pv&&(!c||c.p<pv.p))c=pv;L.push(c);}
+ return L[k-1];}
 const mBr=()=>mState==='idle'?mMode==='br':mGameBr;
 const mSelItems=()=>INV.filter(x=>mSel.has(x.id)&&!x.coin);
 const mStakeNow=()=>mState==='play'?mStake:mMode==='br'?mSelItems().reduce((a,x)=>a+x.p,0):Math.floor(+$('bet').value||0);
@@ -2627,7 +2645,7 @@ function drawMines(reveal){
   const op=$('mgrid').dataset['o'+i];
   let cls='cell',inner='';
   if(op==='g'){cls+=' gem';
-   const pz=br?mPrize(Math.floor(st*coef(+$('mgrid').dataset['k'+i]||1))):null;
+   const pz=br?mLadder(st,+$('mgrid').dataset['k'+i]||1):null;
    inner=pz?`<span class="cz">${pz.mono}<small class="num">${fmt(pz.p)}</small></span>`:gemSvg;}
   else if(op==='b'){cls+=' boom';inner=bombSvg;}
   else if(reveal){if(bombs.has(i)){cls+=' boom dim';inner=bombSvg;}else{cls+=' gem dim';inner=gemSvg;}}
@@ -2639,22 +2657,19 @@ function drawMines(reveal){
  $('mBetCoins').hidden=br;$('mBetBr').hidden=!br;$('mNextCard').hidden=br;$('mPrize').hidden=!br;
  document.querySelectorAll('#mmode button').forEach(x=>x.disabled=mState==='play');
  if(br){
-  const S=mState==='play'?[]:mSelItems(),pk=$('mPick');pk.disabled=mState==='play';pk.classList.toggle('has',!!(S.length||mState==='play'));
-  pk.innerHTML=mState==='play'?`<span style="flex:1">Поставлено брейнротов на ${COIN(13)}<b class="num">${fmt(st)}</b></span>`
-   :S.length?`<span class="m-thumbs">${S.slice(0,S.length>4?3:4).map(x=>mArt(x,'')).join('')}${S.length>4?`<div class="more">+${S.length-3}</div>`:''}</span><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><b>${S.length} ${S.length===1?'брейнрот':S.length<5?'брейнрота':'брейнротов'}</b><span class="num" style="display:flex;align-items:center;gap:4px;color:#F7CA7C">${COIN(12)}${fmt(st)}</span></span>${ic(I.chev,'#827265',16,2.4)}`
-   :`<span class="up-eic" style="width:44px;height:44px">${ic('M12 5v14M5 12h14','currentColor',20,2.4)}</span><span style="flex:1">Выбрать брейнротов со склада</span>`;
+  mInvDraw(st);
   // что заберёшь сейчас и на следующей клетке
-  const now=opened?Math.floor(st*coef(opened)):0,nx=Math.floor(st*coef(opened+1)),pz=now?mPrize(now):null,pn=st?mPrize(nx):null;
+  const now=opened?Math.floor(st*coef(opened)):0,nx=Math.floor(st*coef(opened+1)),pz=now?mLadder(st,opened):null,pn=st?mLadder(st,opened+1):null;
   $('mPrize').innerHTML=st?`<div class="mp-row">${pz?mArt(pz):`<div class="mp-art" style="background:#2B2119;border:1px solid #503C2F">${ic(I.gem,'#F7CA7C',22,1.8)}</div>`}
     <span class="mp-t"><small>${opened?'Заберёшь сейчас · ×'+coef(opened).toFixed(2):'Открой клетку — появится приз'}</small><b>${pz?pz.name:opened?fmt(now)+' монет':'—'}</b>${pz&&now-pz.p>0?`<small class="num">+ ${fmt(now-pz.p)} монет сдачей</small>`:''}</span>
     ${pz?`<b class="num" style="display:flex;align-items:center;gap:4px">${COIN(13)}${fmt(pz.p)}</b>`:''}</div>
    ${mState==='play'||!opened?`<div class="mp-next"><span style="flex:none">Следующая · ×${coef(opened+1).toFixed(2)}</span>${pn?mArt(pn)+`<b>${pn.name}</b>`:`<b class="num">${fmt(nx)}</b>`}</div>`:''}`
-   :`<span class="muted" style="font-size:13px">Выбери брейнротов — в каждой открытой клетке будет брейнрот, которого заберёшь</span>`;
+   :`<span class="muted" style="font-size:13px">Отметь брейнротов со склада — на каждой открытой клетке брейнрот будет дорожать по множителю</span>`;
  }
  const b=$('mbtn');
  if(mState==='play'){
   if(!opened){b.textContent='Выбери клетку';b.disabled=true;}
-  else if(br){const pay=Math.floor(st*coef(opened)),pz=mPrize(pay);b.textContent=pz?`Забрать ${pz.name}${pay-pz.p>0?' + '+fmt(pay-pz.p):''}`:`Забрать ${fmt(pay)}`;b.disabled=false;}
+  else if(br){const pay=Math.floor(st*coef(opened)),pz=mLadder(st,opened);b.textContent=pz?`Забрать ${pz.name}${pay-pz.p>0?' + '+fmt(pay-pz.p):''}`:`Забрать ${fmt(pay)}`;b.disabled=false;}
   else{b.textContent=`Забрать ${fmt(Math.floor(bet*coef(opened)))}`;b.disabled=false;}}
  else{b.textContent=br&&!st?'Выбери брейнротов':'Начать игру';b.disabled=false;}
  document.querySelectorAll('#mcount button').forEach(x=>x.disabled=mState==='play');
@@ -2678,12 +2693,12 @@ async function cashOut(){
  if(API.on()){if(mBusy)return;mBusy=true;const res=await API.call('mines_cashout',{game:mGame});mBusy=false;if(!res)return;
   bombs=new Set(res.bombs);mState='won';drawMines(true);SFX.play('mineCash');toast(mWinMsg(res));haptic('success');applyState(res.state);return;}
  SFX.play('mineCash');haptic('success');const win=Math.floor(mStake*coef(opened));
- if(mGameBr){const pz=mPrize(win);if(pz)INV.unshift({...pz,id:uid++,src:'Мины'});setBal(bal+win-(pz?pz.p:0));mState='won';drawMines(true);toast(mWinMsg({item:pz,change:win-(pz?pz.p:0),payout:win}));return;}
+ if(mGameBr){const pz=mLadder(mStake,opened),ch=Math.max(0,win-(pz?pz.p:0));if(pz)INV.unshift({...pz,id:uid++,src:'Мины'});setBal(bal+(pz?ch:win));mState='won';drawMines(true);toast(mWinMsg({item:pz,change:ch,payout:win}));return;}
  setBal(bal+win);mState='won';drawMines(true);toast('+'+fmt(win)+' на баланс');}
 $('mbtn').onclick=async()=>{
  if(mState==='play'){if(opened)cashOut();return;}
  if(mMode==='br'){   // ставка брейнротами
-  const S=mSelItems();if(!S.length){mPickOpen();return;}
+  const S=mSelItems();if(!S.length){toast(INV.some(x=>!x.coin)?'Отметь брейнротов со склада':'Склад пуст — открой кейс');const g=$('mBetBr');if(g)g.scrollIntoView({behavior:'smooth',block:'center'});haptic('warning');return;}
   const st=S.reduce((a,x)=>a+x.p,0),ids=S.map(x=>x.id);
   if(API.on()){
    if(mBusy)return;mBusy=true;const res=await API.call('mines_start_br',{items:ids,mines});mBusy=false;if(!res)return;
@@ -2701,28 +2716,31 @@ $('mbtn').onclick=async()=>{
 document.querySelectorAll('[data-bet]').forEach(b=>b.onclick=()=>{if(mState==='play')return;const v=Math.max(1,Math.floor((+$('bet').value||1)*+b.dataset.bet));$('bet').value=v;drawMines();});
 $('bet').oninput=()=>drawMines();
 seg($('mcount'),MC.map(n=>n+' мин'),0,i=>{mines=MC[i];if(mState!=='play'){resetGrid();mState='idle';}drawMines();});
-seg($('mmode'),['Монеты','Брейнроты'],0,i=>{if(mState==='play')return;mMode=i?'br':'coins';resetGrid();mState='idle';drawMines();});
-// шторка выбора брейнротов для ставки
-function mPickOpen(){
- if(mState==='play')return;
- const L=INV.filter(x=>!x.coin);
- if(!L.length){toast('Склад пуст — открой кейс');return;}
- const draw=()=>{const S=mSelItems(),sum=S.reduce((a,x)=>a+x.p,0);
-  $('mSheetBox').innerHTML=`<div class="sheet-grab"></div>
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="display:flex;flex-direction:column;gap:4px"><h2 class="u" style="font-weight:700;font-size:20px">Ставка брейнротами</h2>
-   <span class="muted" style="font-size:13px">Выиграешь — получишь брейнрота дороже. Мина — поставленные сгорят.</span></div>${XBTN}</div>
-  <div class="ms-grid">${L.map(x=>`<button data-mid="${x.id}" class="pick${mSel.has(x.id)?' sel':''}">
-   <div class="tile" style="width:100%;height:56px;${tileBg(R[x.r])}">${mono(x,16)}</div>
-   <span style="font-size:11px;font-weight:700;line-height:1.25;min-height:28px">${x.name}</span><b class="num" style="font-size:12px">${fmt(x.p)}</b></button>`).join('')}</div>
-  <div style="display:flex;gap:8px"><button class="ghost" id="msAll" style="height:52px;padding:0 14px;border-radius:14px;font-size:13px">${S.length===L.length?'Снять все':'Выбрать все'}</button>
-   <button class="fire" id="msOk" style="flex:1;height:52px;font-size:15px" ${S.length?'':'disabled'}>${S.length?`Поставить ${S.length} · ${fmt(sum)}`:'Выбери брейнротов'}</button></div>`;
-  $('mSheetBox').querySelectorAll('[data-mid]').forEach(b=>b.onclick=()=>{const id=+b.dataset.mid;mSel.has(id)?mSel.delete(id):mSel.add(id);draw();drawMines();});
-  $('msAll').onclick=()=>{if(mSelItems().length===L.length)mSel.clear();else L.forEach(x=>mSel.add(x.id));draw();drawMines();};
-  $('msOk').onclick=()=>{closeSheet('mSheet');drawMines();};
- };
- draw();openSheet('mSheet');
+// склад прямо в панели мин: отмечаешь брейнротов — они и есть ставка
+var mInvSig='';
+function mInvDraw(st){
+ const box=$('mBetBr'),L=INV.filter(x=>!x.coin);
+ for(const id of [...mSel])if(!L.some(x=>x.id===id))mSel.delete(id);
+ if(mState==='play'){if(mInvSig!=='play'){mInvSig='play';}
+  box.innerHTML=`<div class="m-inv-head"><span class="sec">Ставка</span></div><div class="m-inv-play">${ic(I.gem,'#F7CA7C',18,2)}<span style="flex:1">Поставлено брейнротов на</span><b class="num" style="display:flex;align-items:center;gap:4px;color:#F7CA7C">${COIN(14)}${fmt(st)}</b></div>`;return;}
+ if(!L.length){mInvSig='empty';box.innerHTML=`<div class="m-inv-head"><span class="sec">Ставка брейнротами</span></div>
+  <div class="m-inv-empty"><span class="muted">На складе пока нет брейнротов</span><button class="fire" data-go="home" style="height:42px;padding:0 16px;border-radius:12px;font-size:14px;box-shadow:none">Открыть кейс</button></div>`;return;}
+ const sig=L.map(x=>x.id+':'+x.p).join(',');
+ if(sig!==mInvSig){const g=box.querySelector('.m-inv-grid'),top=g?g.scrollTop:0;mInvSig=sig;
+  box.innerHTML=`<div class="m-inv-head"><span class="sec">Ставка брейнротами</span><span class="m-inv-sum num" id="mInvSum"></span><button class="m-inv-all" id="mInvAll"></button></div>
+  <div class="ms-grid m-inv-grid">${L.map(x=>`<button data-mid="${x.id}" class="pick" aria-pressed="false">
+   <div class="tile" style="width:100%;height:58px;${tileBg(R[x.r])}">${mono(x,16)}</div>
+   <span class="m-inv-n">${esc(x.name)}</span><b class="num" style="display:flex;align-items:center;gap:3px;font-size:12px">${COIN(11)}${fmt(x.p)}</b></button>`).join('')}</div>`;
+  const ng=box.querySelector('.m-inv-grid');if(ng)ng.scrollTop=top;}
+ box.querySelectorAll('[data-mid]').forEach(b=>{const on=mSel.has(+b.dataset.mid);b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on);});
+ const S=mSelItems(),sum=S.reduce((a,x)=>a+x.p,0);
+ $('mInvSum').innerHTML=S.length?`${S.length} · ${COIN(12)}${fmt(sum)}`:'отметь, что ставишь';
+ $('mInvAll').textContent=S.length===L.length?'Снять все':'Выбрать все';
 }
-$('mPick').onclick=()=>mPickOpen();
+$('mBetBr').addEventListener('click',e=>{if(mState==='play')return;
+ const t=e.target.closest('[data-mid]');
+ if(t){const id=+t.dataset.mid;mSel.has(id)?mSel.delete(id):mSel.add(id);SFX.play('tap');haptic('light');if(mState!=='idle'){resetGrid();mState='idle';}drawMines();return;}
+ if(e.target.closest('#mInvAll')){const L=INV.filter(x=>!x.coin);if(mSelItems().length===L.length)mSel.clear();else L.forEach(x=>mSel.add(x.id));SFX.play('tap');if(mState!=='idle'){resetGrid();mState='idle';}drawMines();}});
 
 /* ---------- бонусы ---------- */
 let DAYS=[10,15,20,30,40,60,100];   // награды по дням серии (с сервера — своя таблица daily_rewards)
@@ -4061,6 +4079,7 @@ function applyState(st,quiet){
   [...$('mcount').children].forEach((x,i)=>x.classList.toggle('on',MC[i]===mines));drawMines();}
  wDraw();
  if(!quiet){if(cur==='profile')drawProfile();if(cur==='upgrade')drawUp();}
+ if(cur==='mines'&&mState!=='play')drawMines();   // склад в панели мин — свежий
 }
 async function loadMe(){
  if(!LIVE)return;
