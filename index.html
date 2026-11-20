@@ -678,25 +678,25 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .wheel.win #arcGlow{filter:brightness(1.25)}
 .wheel.lose #arcGlow{filter:grayscale(.7) brightness(.6)}
 
-.wheel{position:relative;width:270px;height:270px;margin:22px auto 0}   /* сверху место под пламя стрелки */
+.wheel{position:relative;width:270px;height:270px;margin:0 auto}
 .wheel svg{position:absolute;inset:0}
 .needle{position:absolute;inset:0;transform:rotate(0deg)}
 #ntail{opacity:.08}
 /* пламенная стрелка апгрейда: огонь дрожит, на ходу (--heat от 0 до 1) клонится назад и разгорается */
 @property --heat{syntax:'<number>';inherits:true;initial-value:0}
-#nflame .nf-lean{transform-origin:135px 21px;transform:rotate(calc(var(--heat) * -58deg)) scale(calc(1 + var(--heat) * .4),calc(1 + var(--heat) * .62))}
+#nflame .nf-lean{transform-origin:135px 14px;transform:rotate(calc(var(--heat) * -70deg)) scale(calc(1 + var(--heat) * .2),calc(1 + var(--heat) * .55))}
 #nflame .nf-o{transform-origin:135px 22px;animation:nfo .9s ease-in-out infinite alternate}
 #nflame .nf-m{transform-origin:135px 20px;animation:nfm .62s ease-in-out infinite alternate}
 #nflame .nf-i{transform-origin:135px 19px;animation:nfi .48s ease-in-out infinite alternate}
-#nflame .nf-glow{opacity:calc(.45 + var(--heat) * .5);transform-origin:135px 12px;animation:nfg 1.6s ease-in-out infinite alternate}
+#nflame .nf-glow{opacity:calc(.4 + var(--heat) * .45);transform-origin:135px 14px;animation:nfg 1.6s ease-in-out infinite alternate}
 #nflame .nf-em{opacity:0;animation:nfe 1.4s ease-out infinite}
 #nflame .nf-em.e2{animation-delay:.5s}#nflame .nf-em.e3{animation-delay:.95s}
 @keyframes nfo{0%{transform:scale(1,1) skewX(0)}45%{transform:scale(.93,1.09) skewX(-4deg)}100%{transform:scale(1.05,.94) skewX(3deg)}}
 @keyframes nfm{0%{transform:scale(1,1) skewX(2deg)}50%{transform:scale(.9,1.13) skewX(-3deg)}100%{transform:scale(1.06,.92) skewX(1deg)}}
 @keyframes nfi{0%{transform:scale(1,1)}100%{transform:scale(.86,1.16)}}
 @keyframes nfg{0%{transform:scale(.92)}100%{transform:scale(1.1)}}
-@keyframes nfe{0%{opacity:0;transform:translate(0,6px)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx,0px),-16px)}}
-#nflame .nf-em.e1{--dx:-4px}#nflame .nf-em.e2{--dx:5px}
+@keyframes nfe{0%{opacity:0;transform:translate(0,2px)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx,0px),-4px)}}
+#nflame .nf-em.e1{--dx:-2px}#nflame .nf-em.e2{--dx:3px}
 .wheel.win #nflame .nf-o{fill:#F7CA7C}.wheel.lose #nflame .nf-glow{opacity:.2}
 .wheel-c{position:absolute;inset:58px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2B2119,#1B1511 70%);border:1px solid #413229;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center}
 .wheel-c{overflow:hidden}
@@ -1215,21 +1215,21 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
               <defs>
                 <linearGradient id="nfO" gradientUnits="userSpaceOnUse" x1="0" y1="22" x2="0" y2="-18"><stop offset="0" stop-color="#FF8A3A"/><stop offset=".55" stop-color="#F2552E"/><stop offset="1" stop-color="#B8261A" stop-opacity=".85"/></linearGradient>
                 <linearGradient id="nfM" gradientUnits="userSpaceOnUse" x1="0" y1="21" x2="0" y2="-6"><stop offset="0" stop-color="#FFD27A"/><stop offset="1" stop-color="#FF9A3D"/></linearGradient>
-                <linearGradient id="nfA" gradientUnits="userSpaceOnUse" x1="0" y1="47" x2="0" y2="16"><stop offset="0" stop-color="#FFD27A"/><stop offset=".5" stop-color="#FF8A3A"/><stop offset="1" stop-color="#D9431F"/></linearGradient>
+                <linearGradient id="nfA" gradientUnits="userSpaceOnUse" x1="0" y1="25" x2="0" y2="11"><stop offset="0" stop-color="#FFE2A8"/><stop offset=".5" stop-color="#FF8A3A"/><stop offset="1" stop-color="#D9431F"/></linearGradient>
               </defs>
-              <circle class="nf-glow" cx="135" cy="12" r="26" fill="url(#cmG)"/>
+              <circle class="nf-glow" cx="135" cy="14" r="11" fill="url(#cmG)"/>
               <g class="nf-lean">
-                <circle class="nf-em e1" cx="131" cy="2" r="1.6" fill="#FFC27A"/>
-                <circle class="nf-em e2" cx="139" cy="0" r="1.3" fill="#FFD9A0"/>
-                <circle class="nf-em e3" cx="135" cy="-4" r="1.1" fill="#FF9A3D"/>
-                <g transform="translate(135 22) scale(1.12 1.22) translate(-135 -22)">
+                <circle class="nf-em e1" cx="133" cy="5" r=".8" fill="#FFC27A"/>
+                <circle class="nf-em e2" cx="137" cy="4.5" r=".7" fill="#FFD9A0"/>
+                <circle class="nf-em e3" cx="135" cy="3" r=".6" fill="#FF9A3D"/>
+                <g transform="translate(135 14) scale(.34 .33) translate(-135 -22)">
                 <path class="nf-o" d="M135 -17C141 -6 150 0 150 10C150 18 143 22 135 22C127 22 120 18 120 10C120 3 125 -2 127 -8C128 -3 130 0 132 1C131 -6 132 -11 135 -17Z" fill="url(#nfO)"/>
                 <path class="nf-m" d="M135 -6C139 1 145 5 145 11C145 17 140 20 135 20C130 20 125 17 125 11C125 6 129 2 131 -2C131.5 1 133 3 134 3C133.5 0 134 -3 135 -6Z" fill="url(#nfM)"/>
                 <path class="nf-i" d="M135 4C137.5 8 141 10 141 13.5C141 17 138.5 19 135 19C131.5 19 129 17 129 13.5C129 10 132.5 8 135 4Z" fill="#FFF1C9"/>
                 </g>
               </g>
-              <path d="M135 47L124 16.5L135 22L146 16.5Z" fill="url(#nfA)" stroke="#17120F" stroke-width="1.7" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px rgba(255,140,60,.9))"/>
-              <path d="M135 41L135 24.5" stroke="#FFF4E2" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+              <path d="M135 25.5L128 11L135 14.5L142 11Z" fill="url(#nfA)" stroke="#17120F" stroke-width="1.4" stroke-linejoin="round" style="filter:drop-shadow(0 0 3px rgba(255,140,60,.9))"/>
+              <path d="M135 22L135 16" stroke="#FFF4E2" stroke-width="1.2" stroke-linecap="round" opacity=".8"/>
             </g>
           </svg>
         </div>
@@ -1837,8 +1837,18 @@ const SFX=(()=>{
   wood:(v=1,at=0)=>{tone(900,{v:.14*v,dec:.034,to:620,at});tone(1820,{type:'triangle',v:.024*v,dec:.015,at});noise({f:1500,q:2,v:.04*v,dec:.01,at});},
   glass:(v=1,at=0)=>{tone(3136,{v:.03*v,dec:.075,at,send:.25});tone(4700,{v:.009*v,dec:.04,at});},
   ratchet:(v=1,at=0)=>{noise({ft:'highpass',f:2500,q:.7,v:.05*v,dec:.008,at});noise({ft:'highpass',f:3300,q:.7,v:.03*v,dec:.006,at:at+.007});tone(1600,{v:.014*v,dec:.012,to:1300,at});},
+  ember:(v=1,at=0)=>{const r=1+(Math.random()-.5)*.08;tone(1250*r,{v:.075*v,dec:.026,to:880*r,at});tone(2500*r,{type:'triangle',v:.012*v,dec:.012,at});noise({f:3400,q:1.6,v:.035*v,dec:.009,at});},
  };
- let tickKind='wood';
+ let tickKind='ember';
+ // ---------- звук колеса апгрейда: мягкий щелчок на риске, в конце маримба ----------
+ const UPS={
+  soft:{name:'Мягкий',   // тихий пластиковый щелчок и мягкая маримба
+   start(at=0){mallet(N(76),{v:.045,dec:.4,at});mallet(N(83),{v:.04,dec:.55,at:at+.08});},
+   tick(v=1,at=0){const r=1+(Math.random()-.5)*.04;tone(980*r,{v:.05*v,a:.002,dec:.024,to:760*r,lp:2600,at});tone(410*r,{v:.026*v,a:.002,dec:.03,at});},
+   win(at=0){[72,76,79,84].forEach((n,i)=>mallet(N(n),{v:.058,dec:.95,at:at+i*.085}));pad([60,67,72,76],1.4,at+.1);sparkle(.4,6,at+.25);},
+   lose(at=0){tone(N(67),{type:'triangle',v:.06,dec:.3,lp:1000,at});tone(N(63),{type:'triangle',v:.06,dec:.55,lp:900,at:at+.2});}},
+ };
+ const upKind='soft';
 
  // ---------- все звуки ----------
  const S={
@@ -1870,10 +1880,12 @@ const SFX=(()=>{
   win_legend(){sub(N(45),.9);[69,73,76,81].forEach((n,i)=>mallet(N(n),{v:.08,dec:1,at:i*.06}));sparkle(.3,10,.2);},
   win_myth(){sub(N(45),1.4);pad([57,64,69,73],1.8);[69,76,81,85,88].forEach((n,i)=>mallet(N(n),{v:.075,dec:1.2,at:.05+i*.07}));sparkle(.5,16,.25);},
   // апгрейд
-  upStart(){noise({f:400,to:1800,q:.8,v:.11,a:.25,dec:.3});},
-  upTick(v=1,at=0){TICK[tickKind](v,at);},
-  upWin(){[72,76,79,84,88].forEach((n,i)=>mallet(N(n),{v:.075,dec:.9,at:i*.07}));pad([60,67,72,76],1.3);sparkle(.45,12,.2);},
-  upLose(){tone(N(67),{type:'triangle',v:.08,dec:.35,lp:1200});tone(N(62),{type:'triangle',v:.08,dec:.6,lp:900,at:.22});tone(90,{v:.07,dec:.3,at:.22,to:60});},
+  // апгрейд: «фшух» — стрелка вспыхивает, во время прокрутки гудит огонь (fire*), на замедлении — тёплые щелчки
+  // апгрейд — звук выбранного варианта (настройки → «Звук апгрейда»)
+  upStart(){UPS[upKind].start();},
+  upTick(v=1,at=0){UPS[upKind].tick(v,at);},
+  upWin(){UPS[upKind].win();},
+  upLose(){UPS[upKind].lose();},
   // мины
   mineStart(){S.tap();noise({ft:'lowpass',f:400,to:1600,v:.06,a:.06,dec:.12});},
   mineSafe(k=0){const sc=[72,74,76,79,81,84,86,88,91,93,96];mallet(N(sc[Math.min(k,sc.length-1)]),{v:.075,dec:.45});noise({f:5000,q:2,v:.018,dec:.02});},
@@ -2532,12 +2544,14 @@ $('upBtn').onclick=async()=>{
   n.style.transform=`rotate(${ang}deg)`;
   const sp=Math.abs(ang-prev);prev=ang;           // скорость → длина/яркость хвоста
   // деревянный тик, когда стрелка проходит риску шкалы (не чаще раза в 32 мс; на медленном ходу чуть громче)
-  const mark=Math.floor(ang/5);if(mark!==lastMark&&now-lastTick>=32){lastMark=mark;lastTick=now;SFX.play('upTick',Math.max(.55,Math.min(1,1.15-sp/20)));}
+  // щелчок на каждой риске: на большой скорости тихий, на замедлении отчётливее
+  const mark=Math.floor(ang/5);if(mark!==lastMark&&now-lastTick>=45){lastMark=mark;lastTick=now;SFX.play('upTick',Math.max(.35,Math.min(1,1.1-sp/14)));}
   tail.style.opacity=Math.min(1,.08+sp/7).toFixed(3);
   n.style.setProperty('--heat',Math.min(1,sp/9).toFixed(3));   // пламя клонится назад и разгорается
   if(k<1){requestAnimationFrame(fr);return;}
   tail.style.transition='opacity .6s';tail.style.opacity='.08';setTimeout(()=>tail.style.transition='',700);
   n.style.transition='--heat .7s ease-out';n.style.setProperty('--heat','0');setTimeout(()=>n.style.transition='',800);
+
   upDone();
  })(t0);
  function upDone(){setTimeout(wNorm,50);
