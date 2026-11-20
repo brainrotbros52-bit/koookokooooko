@@ -795,6 +795,50 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .dr-go{position:relative;height:52px;font-size:15px}
 .dwin-pop .lp-box{background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--c) 30%,transparent),transparent 60%),#1B1511}
 @media (min-width:900px){.dr-art{width:128px;height:128px}.dr-name{font-size:20px}}
+/* широкий экран: левая лента, меню вкладок сверху (на телефоне скрыто) */
+.lfeed,.tnav,.dsk,.dep-t{display:none}
+.lfeed{flex-direction:column;gap:10px;padding:14px 12px;border-right:1px solid #33261E;background:rgba(20,14,11,.62);overflow:hidden;min-height:0}
+.lf-head{display:flex;align-items:center;gap:8px;font-size:14px}
+.lf-seg{align-self:stretch}.lf-seg button{flex:1}
+.lf-list{display:flex;flex-direction:column;gap:8px;overflow-y:auto;min-height:0;flex:1;scrollbar-width:none;margin:0 -4px;padding:0 4px 10px;-webkit-mask-image:linear-gradient(#000 88%,transparent);mask-image:linear-gradient(#000 88%,transparent)}
+.lf-list::-webkit-scrollbar{display:none}
+.lfeed .drop{width:auto;flex:none;padding:7px 7px 8px;gap:3px}
+.lfeed .drop-art{height:66px}
+.lfeed .da-f{font-size:24px}
+.lfeed .drop-n{display:-webkit-box;-webkit-line-clamp:1;font-size:12px}
+.lfeed .da-upw{width:46px;height:46px}
+.drop-n{display:none;font-size:12px;font-weight:800;line-height:1.25;text-align:center;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:100%}
+.lfeed .drop-p{display:flex;align-items:center;gap:4px;font-size:14px}
+.lfeed .drop-u{font-size:11px}
+.lfeed .drop.fresh{animation:lfIn .5s cubic-bezier(.2,1.2,.3,1)}
+@keyframes lfIn{from{opacity:0;transform:translateY(-14px) scale(.9)}}
+#sideTop .drop{border-color:#8C6A2E;background:radial-gradient(ellipse at 50% 0%,rgba(247,202,124,.18),transparent 70%),rgba(38,28,22,.9)}
+.lf-crown{position:absolute!important;top:3px;left:3px;z-index:2;display:flex;align-items:center;gap:3px;padding:2px 6px;border-radius:7px;background:#F7CA7C;color:#1A0F09;font:800 10px Manrope,sans-serif}
+.tnav{align-items:center;justify-content:center;gap:4px;padding:0 24px;border-bottom:1px solid #33261E;background:rgba(26,18,14,.55)}
+.tn-it{position:relative;display:flex;align-items:center;gap:8px;height:50px;padding:0 14px;background:none;border:0;color:#BEAD9E;font:800 14px Manrope,sans-serif;white-space:nowrap}
+.tn-it svg{flex:none}
+.tn-it:hover{color:#FBF2EA}
+.tn-it.on{color:#FBF2EA}
+.tn-it.on::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,#F26C3E,#FFB05A);box-shadow:0 0 12px rgba(242,108,62,.7)}
+.tn-b{position:absolute;top:5px;right:2px;padding:1px 5px;border-radius:6px;background:#F26C3E;color:#1A0F09;font:800 10px Manrope,sans-serif}
+.top-ava{width:44px;height:44px;border-radius:12px;border:1px solid #955A35;background:linear-gradient(135deg,#F28743,#B8401E);color:#FFF4E2;font-weight:800;font-size:17px;align-items:center;justify-content:center;flex:none}
+/* баннер промокода на главной */
+.hpromo{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;padding:16px;border-radius:20px;border:1px solid #6B4630;background:radial-gradient(ellipse at 85% 50%,rgba(255,138,58,.42),transparent 55%),radial-gradient(ellipse at 100% 0%,rgba(184,86,220,.3),transparent 50%),linear-gradient(120deg,#2A1A12,#3A2015 60%,#4A2416)}
+.hp-t{position:relative;z-index:1;flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.hp-lbl{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FFB088}
+.hp-big{font-family:Unbounded,sans-serif;font-weight:800;font-size:22px;line-height:1.15}
+.hp-big b{color:#FFB05A}
+.hp-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hp-code{display:flex;align-items:center;gap:8px;height:44px;padding:0 6px 0 12px;border-radius:12px;background:rgba(14,10,8,.6);border:1px solid #6B4630}
+.hp-code small{font-size:10px;font-weight:800;color:#A49485;letter-spacing:.08em}
+.hp-code b{font-family:Unbounded,sans-serif;font-size:15px;letter-spacing:.06em}
+.hp-cp{width:32px;height:32px;border-radius:9px;border:0;background:#2B2119;color:#DED0C3;display:flex;align-items:center;justify-content:center}
+.hp-go{height:44px;padding:0 18px;border-radius:12px;font-size:14px}
+.hp-art{position:relative;flex:none;width:96px;height:96px}
+.hp-art .coin-big{position:absolute;inset:8px;filter:drop-shadow(0 8px 18px rgba(255,120,40,.55));animation:hpFloat 3.2s ease-in-out infinite}
+.hp-art .hp-pct{position:absolute;right:-4px;bottom:2px;padding:4px 8px;border-radius:10px;background:#FFF4E2;color:#1A0F09;font:800 14px Unbounded,sans-serif;transform:rotate(-8deg);box-shadow:0 6px 16px rgba(0,0,0,.4)}
+@keyframes hpFloat{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-6px) rotate(6deg)}}
+@media (min-width:900px){.hpromo{padding:26px 30px;min-height:170px}.hp-big{font-size:34px}.hp-art{width:170px;height:150px}.hp-art .coin-big{inset:6px 22px}.hp-art .hp-pct{font-size:22px;padding:6px 12px}}
 .lang-pick{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(10,8,7,.86);backdrop-filter:blur(6px);animation:in .25s ease}
 .lp-box{width:min(360px,100%);display:flex;flex-direction:column;align-items:center;gap:14px;padding:22px 18px;border-radius:24px;background:radial-gradient(ellipse at 50% 0%,rgba(242,135,67,.2),transparent 60%),#1B1511;border:1px solid #503C2F;box-shadow:0 30px 80px rgba(0,0,0,.6)}
 .lp-box h2{margin:2px 0 4px;text-align:center;font-size:20px;font-weight:700;line-height:1.3}
@@ -1013,17 +1057,22 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
 }
 @media (min-width:1100px){
  /* меню из «бургера» становится постоянной панелью слева, шапка — во всю ширину */
- .phone{display:grid;grid-template-columns:310px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
- .top{grid-column:1/-1;grid-row:1;padding-left:24px;padding-right:24px;border-bottom:1px solid #33261E;background:rgba(26,18,14,.8);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
- #burger{display:none}
- .drawer{position:relative;top:auto;bottom:auto;left:auto;grid-column:1;grid-row:2;width:auto;max-width:none;transform:none!important;transition:none;box-shadow:none;z-index:1;border-right:1px solid #33261E;background:rgba(22,15,12,.62)}
- .drawer .nv-head{display:none!important}
- .body{grid-column:2;grid-row:2}
- .scrim{display:none}
+ .phone{display:grid;grid-template-columns:232px minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr)}
+ .lfeed{display:flex;grid-column:1;grid-row:1/-1;z-index:3}
+ .top{grid-column:2;grid-row:1;padding-left:24px;padding-right:24px;background:rgba(26,18,14,.8);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+ .tnav{display:flex;grid-column:2;grid-row:2;z-index:2}
+ .body{grid-column:2;grid-row:3}
+ #burger,.drawer,.scrim{display:none!important}
+ .dsk{display:flex}
+ .dep-t{display:inline;font-weight:800;font-size:14px}
+ .top .depBtn{width:auto;padding:0 16px;gap:8px}
+ /* главная: лента и топ дроп — слева, тут их не дублируем */
+ .screen[data-s="home"]>.home-feed,.screen[data-s="home"]>#topDrop{display:none!important}
+ .screen[data-s="home"]>#homeDaily{grid-column:1/-1;grid-row:auto;height:auto}
  .screen[data-s="home"]{max-width:1240px}
 }
 @media (min-width:1500px){
- .phone{grid-template-columns:340px minmax(0,1fr)}
+ .phone{grid-template-columns:256px minmax(0,1fr)}
  .case-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
  .cc-art{height:200px}
 }
@@ -1048,6 +1097,13 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
   <div class="bgfx" aria-hidden="true"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i><i class="bl b4"></i><div class="bg-dots"></div><div class="bg-em" id="bgEm"></div></div>
   <div class="glow" aria-hidden="true"></div>
 
+  <!-- широкий экран: слева — лента дропов -->
+  <aside class="lfeed" id="lfeed" aria-label="Лента дропов">
+    <div class="lf-head"><span class="live"><i></i>LIVE</span><b>Лента дропов</b></div>
+    <div class="fseg lf-seg" id="sideSeg"><button class="on" data-f="all">Все</button><button data-f="top">Топ</button></div>
+    <div id="sideTop"></div>
+    <div class="lf-list" id="sideDrops"></div>
+  </aside>
   <header class="top">
     <div style="display:flex;align-items:center;gap:10px">
       <button class="iconbtn card" id="burger" aria-label="Открыть меню">
@@ -1060,20 +1116,24 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
       </button>
     </div>
     <div style="display:flex;align-items:center;gap:6px">
+      <button class="iconbtn card dsk" data-go="settings" aria-label="Настройки"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 4v4M9 10v4M17 16v4"/></svg></button>
       <div class="card" style="display:flex;align-items:center;gap:7px;height:44px;padding:0 12px 0 10px;border-radius:12px">
         <span class="bal-coin"><svg class="coin" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#coin"/></svg></span>
         <span class="num bal" style="font-weight:800;font-size:15px">0</span>
       </div>
       <button class="iconbtn depBtn" aria-label="Пополнить баланс" style="border:0;background:#F28743;color:#1A0F09">
-        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="dep-t">Пополнить</span>
       </button>
+      <button class="top-ava dsk u uava" data-go="profile" aria-label="Профиль">F</button>
     </div>
   </header>
+  <nav class="tnav" id="tnav" aria-label="Разделы"></nav>
 
   <main class="body" id="body">
 
     <!-- ===== КЕЙСЫ (главная) ===== -->
     <section class="screen" data-s="home">
+      <div class="hpromo" id="homePromo" hidden></div>
       <div class="topdrop" id="topDrop"></div>
 
       <div class="home-feed" style="display:flex;flex-direction:column;gap:10px">
@@ -1606,9 +1666,9 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
    ===================================================================== */
 const CONFIG={
   SUPABASE_URL:'https://iubcymzjennfjsrytvmi.supabase.co',   // адрес твоего проекта Supabase
-  SUPABASE_ANON_KEY:'',       // publishable key (sb_publishable_...) или старый anon key — Project Settings → API Keys
-  BOT_USERNAME:'brainfire_bot',// юзернейм бота без @ — для реферальной ссылки
-  BOT_NICK:'BrainFire_Trade'   // ник аккаунта в Roblox, которому кидают трейд
+  SUPABASE_ANON_KEY:'sb_publishable_7C7DudTjUTGZrGLPNCdDEw_6lERL7Kj',       // publishable key (sb_publishable_...) или старый anon key — Project Settings → API Keys
+  BOT_USERNAME:'brainrotfirebot',// юзернейм бота без @ — для реферальной ссылки
+  BOT_NICK:'Brain_Fair1'   // ник аккаунта в Roblox, которому кидают трейд
 };
 /* =====================================================================
    ЯЗЫК: русский / English.
@@ -1709,6 +1769,8 @@ const EN={
  'Отметь брейнротов со склада — на каждой открытой клетке брейнрот будет дорожать по множителю':'Pick brainrots from your inventory — every opened tile upgrades the brainrot by the multiplier',
  'Отметь брейнротов со склада':'Pick brainrots from your inventory','отметь, что ставишь':'pick what to bet','На складе пока нет брейнротов':'No brainrots in your inventory yet',
  'Открыть кейс':'Open a case','Мины теперь только на брейнротах':'Mines are brainrots-only now',
+ 'Промокод на пополнение':'Deposit promo code','к пополнению':'on deposit','монет на баланс':'coins to balance','КОД':'CODE','Пополнить с кодом':'Top up with code',
+ 'Скопировать промокод':'Copy promo code','Промокод скопирован':'Promo code copied','Разделы':'Sections','Профиль':'Profile','24ч':'24h',
  'награда':'reward',
  'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
  'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
@@ -2060,7 +2122,25 @@ const EMBERS=Array.from({length:16},()=>`<i class="em" style="left:${(Math.rando
 const owner={home:'home',case:'home',admin:'settings'};
 function dBadge(){const d=DRW&&DRW.list&&DRW.list.find(x=>x.period==='day');if(!d)return '';if(d.joined)return '✓';
  const h=Math.ceil(Math.max(0,dMs(d))/36e5);return h+' ч';}
-function drawMenu(){
+// баннер промокода на главной (какой промокод — выбирает админ во вкладке «Промо»)
+var HOME_PROMO=LIVE?null:{code:'EMBER15',kind:'deposit',value:15};
+function drawHomePromo(){const el=$('homePromo'),p=HOME_PROMO;if(!el)return;if(!p){el.hidden=true;el.innerHTML='';return;}
+ const dep=p.kind==='deposit';el.hidden=false;
+ el.innerHTML=`<div class="hp-t"><span class="hp-lbl">Промокод${dep?' на пополнение':''}</span>
+  <div class="hp-big">${dep?`<b>+${p.value}%</b> к пополнению`:`<b>+${fmt(p.value)}</b> монет на баланс`}</div>
+  <div class="hp-row"><div class="hp-code"><small>КОД</small><b class="notr">${esc(p.code)}</b><button class="hp-cp" id="hpCopy" aria-label="Скопировать промокод">${ic('M9 9h11v11H9zM5 15V6a2 2 0 0 1 2-2h8','currentColor',15,2.2)}</button></div>
+   <button class="fire hp-go" id="hpGo">${dep?'Пополнить с кодом':'Активировать'}</button></div></div>
+  <div class="hp-art" aria-hidden="true"><svg class="coin coin-big" viewBox="0 0 24 24"><use href="#coin"/></svg><span class="hp-pct">${dep?'+'+p.value+'%':'+'+fmt(p.value)}</span></div>`;
+ $('hpCopy').onclick=e=>{e.stopPropagation();copyTxt(p.code,'Промокод скопирован');};
+ $('hpGo').onclick=()=>{haptic('light');if(dep){DEP_PREFILL=p.code;openDeposit();return;}
+  go('profile');setTimeout(()=>{const i=$('promoIn');if(i){i.value=p.code;const d=i.closest('details');if(d)d.open=true;$('promoGo').click();}},150);};}
+// вкладки сверху на широком экране
+function drawTnav(){const el=$('tnav');if(!el)return;const act=owner[cur]||cur;
+ let qn=0,dl=false;try{qn=QLIST.filter(q=>q.progress>=q.goal&&!q.claimed).length;dl=!DAILY_NEXT||DAILY_NEXT<=Date.now();}catch(e){}
+ const T=[['home',I.cases,'Кейсы','#F28743'],['upgrade',I.upgrade,'Апгрейд','#ECB45A'],['mines',I.mines,'Мины','#F26C3E'],
+  ['quests',I.quests,'Квесты','#8FC7F2',qn?String(qn):''],['draws',I.draws,'Розыгрыши','#F7CA7C',dBadge()],['bonus',I.bonus,'Бонусы','#E8B365',dl?'+':'']];
+ el.innerHTML=T.map(([s,ip,t,c,b])=>`<button class="tn-it${act===s?' on':''}" data-go="${s}"${act===s?' aria-current="page"':''}>${ic(ip,c,20,2)}<span>${t}</span>${b?`<i class="tn-b">${b}</i>`:''}</button>`).join('');}
+function drawMenu(){drawTnav();
  const act=owner[cur]||cur,cn=CASES.length,pl=(n,a,b,c)=>{const m=n%10,h=n%100;return m===1&&h!==11?a:m>=2&&m<=4&&(h<12||h>14)?b:c;};
  const nv=(s,icon,t,d,tag,c)=>`<button data-go="${s}" class="nv-it${act===s?' on':''}" style="--c:${c}"${act===s?' aria-current="page"':''}>
    <span class="nv-ic">${icon}</span><span class="nv-t"><b>${t}</b><small>${d}</small></span>${tag||ic(I.chev,'currentColor',16,2.4).replace('<svg','<svg class="nv-chev"')}</button>`;
@@ -2210,12 +2290,13 @@ function srcArt(d){
  if(d.src==='upgrade')return {c:'#ECB45A',html:UPWHEEL,label:'Апгрейд'};
  return {c:'#F7CA7C',html:ic(I.draws,'#F7CA7C',28,2),label:'Розыгрыш'};
 }
-$('drops').addEventListener('click',e=>{const d=e.target.closest('.drop');if(!d)return;const on=!d.classList.contains('flip');
- document.querySelectorAll('#drops .drop.flip').forEach(x=>x.classList.remove('flip'));if(on)d.classList.add('flip');haptic('light');});
+['drops','sideDrops','sideTop'].forEach(id=>$(id).addEventListener('click',e=>{const d=e.target.closest('.drop');if(!d)return;const on=!d.classList.contains('flip');
+ document.querySelectorAll('.drop.flip').forEach(x=>x.classList.remove('flip'));if(on)d.classList.add('flip');haptic('light');}));
 
 /* топ дроп за 24 часа */
 let TOP={...ITEMS[1],user:'ma***k',src:'case',from:'Жаровня',cost:199,ts:Date.now()-5.2*3600e3};
 function drawTop(flash){
+ sideTopDraw();
  if(!TOP){$('topDrop').innerHTML=`<div class="td-glow" style="--c:#F28743"></div><div class="td-art" style="--c:#715441"><span class="u" style="font-size:18px">?</span></div>
   <div style="position:relative;flex:1;display:flex;flex-direction:column;gap:4px"><span class="td-lbl">Топ дроп за 24 часа</span><b style="font-size:14px">Пока никто не выбил</b><span class="muted" style="font-size:12px">Открой кейс — может, это будешь ты</span></div>`;return;}
  const d=TOP,c=R[d.r],x=d.cost?d.p/d.cost:0;
@@ -2250,12 +2331,22 @@ function dropHTML(d,fresh){const c=R[d.r];if(!d.id){d.id=++dropSeq;}DROPS[d.id]=
    <div class="da-f"><span class="u">${d.mono}</span></div>
    <div class="da-b">${S.html}</div>
   </div></div>
+  <div class="drop-n">${d.name}</div>
   <div class="drop-p num">${fmt(d.p)}</div>
   <div class="drop-u"><span class="du-i">${d.user}</span><span class="du-s">${S.label}</span></div>
  </div>`;}
 function drawFeed(){const list=FEED.filter(d=>feedMode==='all'||isTop(d)).slice(0,14);
- $('drops').innerHTML=list.length?list.map(d=>dropHTML(d)).join(''):`<span class="muted" style="font-size:13px;padding:30px 0">${feedMode==='top'?'Ждём легендарку…':'Пока тихо — будь первым'}</span>`;}
+ $('drops').innerHTML=list.length?list.map(d=>dropHTML(d)).join(''):`<span class="muted" style="font-size:13px;padding:30px 0">${feedMode==='top'?'Ждём легендарку…':'Пока тихо — будь первым'}</span>`;
+ drawSideFeed();}
+// левая колонка на широком экране — та же лента сверху вниз
+let lfMode='all';const LF_MAX=24;
+function drawSideFeed(){const list=FEED.filter(d=>lfMode==='all'||isTop(d)).slice(0,LF_MAX);
+ $('sideDrops').innerHTML=list.length?list.map(d=>dropHTML(d)).join(''):`<span class="muted" style="font-size:12px;text-align:center;padding:20px 0">${lfMode==='top'?'Ждём легендарку…':'Пока тихо — будь первым'}</span>`;}
+function sideTopDraw(){const d=TOP;if(!d){$('sideTop').innerHTML='';return;}
+ $('sideTop').innerHTML=dropHTML(d).replace('<div class="drop-art">','<span class="lf-crown" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z" fill="currentColor"/></svg>24ч</span><div class="drop-art">');}
 function pushDrop(d){FEED.unshift(d);FEED=FEED.slice(0,40);if(!TOP||d.p>TOP.p){TOP=d;drawTop(true);if(!LIVE||feedReady)toast('Новый топ дроп: '+d.name);}
+ if(lfMode==='all'||isTop(d)){const sb=$('sideDrops');if(sb.firstElementChild&&sb.firstElementChild.classList.contains('muted'))sb.innerHTML='';
+  sb.insertAdjacentHTML('afterbegin',dropHTML(d,true));while(sb.children.length>LF_MAX)sb.lastElementChild.remove();}
  if(feedMode==='top'&&!isTop(d))return;
  const box=$('drops');if(box.firstElementChild&&box.firstElementChild.classList.contains('muted'))box.innerHTML='';
  box.insertAdjacentHTML('afterbegin',dropHTML(d,true));
@@ -2281,6 +2372,8 @@ function initFeed(){if(LIVE){TOP=null;liveFeed();return;}
  (function tick(){setTimeout(()=>{pushDrop(fakeDrop());tick();},1800+Math.random()*2600);})();}
 $('feedSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;feedMode=b.dataset.f;
  [...$('feedSeg').children].forEach(x=>x.classList.toggle('on',x===b));drawFeed();};
+$('sideSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;lfMode=b.dataset.f;haptic('light');
+ [...$('sideSeg').children].forEach(x=>x.classList.toggle('on',x===b));drawSideFeed();};
 
 const CASES=[
  {name:'Тлеющий',p:49,c:R.common},{name:'Угольный',p:99,c:R.rare,hot:1},{name:'Жаровня',p:199,c:'#F28743'},
@@ -3065,7 +3158,7 @@ $('depTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;depTab=
 $('depSort').onclick=()=>{depAsc=!depAsc;$('depSort').classList.toggle('desc',!depAsc);haptic('light');drawDep();};
 /* ---------- заявка на пополнение: ник + промокод → очередь ---------- */
 const PROMOS={};          // демо-промокодов нет — создавай свои в базе (admin_add_promo)
-let DEP_PROMO=null;       // промокод +% к пополнению, активированный в профиле
+let DEP_PROMO=null;var DEP_PREFILL=null;       // промокод +% к пополнению, активированный в профиле
 let DQ=null,dqNick='',dqTimer=null;                       // DQ — активная заявка
 const X_SVG='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DED0C3" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';const XBTN=`<button class="iconbtn card" data-close aria-label="Закрыть">${X_SVG}</button>`;
 const nickOk=v=>/^[A-Za-z0-9_]{3,20}$/.test(v);
@@ -3143,6 +3236,7 @@ function dqForm(){
   };
  };
  draw();
+ if(DEP_PREFILL&&!f.on){f.promo=DEP_PREFILL;DEP_PREFILL=null;draw();$('dqPromoGo').click();}   // промокод с баннера главной
 }
 
 function dqQueue(){
@@ -3319,7 +3413,9 @@ async function admLoad(){
     <span class="muted" style="font-size:12px">Каждый игрок может активировать код один раз. Монеты с промокода отыгрываются ×3.</span></div>
    ${L.length?`<div class="adm-card" style="gap:6px">${L.map(p=>`<div class="adm-li" style="${p.active?'':'opacity:.5'}"><span style="flex:1;min-width:0"><b class="u" style="letter-spacing:.04em">${esc(p.code)}</b>
      <small class="muted">${p.kind==='coins'?fmt(p.value)+' монет':'+'+p.value+'% к пополнению'} · использовано ${p.used}${p.uses_left!=null?` · осталось ${p.uses_left}`:' · без лимита'}${p.active?'':' · выключен'}</small></span>
-     ${p.active?`<button class="ghost" style="height:34px;padding:0 10px;font-size:12px" data-a="promo_off" data-code="${esc(p.code)}">Выключить</button>`:''}</div>`).join('')}</div>`:admEmpty('Промокодов пока нет')}`;}
+     ${p.active?`<button class="${p.home?'fire':'ghost'}" style="height:34px;padding:0 10px;font-size:12px;box-shadow:none" data-a="promo_home" data-code="${p.home?'':esc(p.code)}">${p.home?'На главной ✓':'На главную'}</button>
+      <button class="ghost" style="height:34px;padding:0 10px;font-size:12px" data-a="promo_off" data-code="${esc(p.code)}">Выключить</button>`:''}</div>`).join('')}</div>
+   <p class="pc-hint" style="padding:0 4px">«На главную» — промокод появится большим баннером на главной (кнопка «Пополнить с кодом» сама подставит его в заявку). Нажми ещё раз, чтобы убрать баннер.</p>`:admEmpty('Промокодов пока нет')}`;}
 }
 
 
@@ -3703,6 +3799,7 @@ $('admBody').addEventListener('click',async e=>{
    if(!/^[A-Z0-9_-]{2,30}$/.test(code)||!(value>0)){toast('Код: латиница/цифры, и сколько дать');b.disabled=false;return;}
    r=await adm(a,{code,kind:$('apKind').value,value,uses});}
   else if(a==='promo_off')r=await adm(a,{code:b.dataset.code});
+  else if(a==='promo_home'){r=await adm('promo_home',{code:b.dataset.code});if(r)loadCatalog();}
   else if(a==='pwd_done'||a==='pwd_reject'||a==='papp_reject')r=await adm(a,{id});
   else if(a==='pe_save'){const v=k=>$(k).value.trim(),c=k=>$(k).checked,code=v('peCode').toUpperCase();
    if(!/^[A-Z0-9]{3,16}$/.test(code)){toast('Код: латиница и цифры, 3–16 символов');b.disabled=false;return;}
@@ -4112,7 +4209,7 @@ async function loadCatalog(){
  const c=await API.call('catalog',{},true);if(!c)return;
 catalogLoaded=true;
  Object.keys(IMG).forEach(k=>delete IMG[k]);Object.assign(IMG,c.imgs||{});
- SECTIONS=c.sections||[];CASES.length=0;setTimeout(drawMenu,0);c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,sec:k.section??null,img:k.img||null,items:(k.items||[]).map(mkItem)}));drawCases();
+ HOME_PROMO=c.home_promo||null;setTimeout(drawHomePromo,0);SECTIONS=c.sections||[];CASES.length=0;setTimeout(drawMenu,0);c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,sec:k.section??null,img:k.img||null,items:(k.items||[]).map(mkItem)}));drawCases();
  UP_TARGETS=c.upgrade.map(mkItem);
  MINES_POOL=(c.mines_pool||c.upgrade||[]).map(mkItem);
  DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
@@ -4161,7 +4258,7 @@ let _volT=0;$('setVol').oninput=e=>{SOUND_VOL=+e.target.value;SFX.setVolume(SOUN
 $('volTest').onclick=e=>{e.preventDefault();if(!SOUND_ON){toast('Сначала включи «Звук»');return;}SFX.wake();SFX.play('upWin');};
 $('setVibro').onchange=e=>{VIBRO_ON=e.target.checked;PREF.set('bf_vibro',VIBRO_ON);haptic('light');};
 $('bgEm').innerHTML=Array.from({length:14},()=>`<i style="left:${(Math.random()*100).toFixed(1)}%;--dx:${(Math.random()*80-40).toFixed(0)}px;animation-duration:${(10+Math.random()*9).toFixed(1)}s;animation-delay:-${(Math.random()*18).toFixed(1)}s;${Math.random()<.45?'width:2px;height:2px;':''}"></i>`).join('');
-paintUser();loadCatalog();loadMe();initFeed();drawDaily();
+paintUser();loadCatalog();loadMe();initFeed();drawDaily();drawHomePromo();
 go('home');
 trStart();                       // английский — переводим экран и всё, что появится
 if(!LANG)setTimeout(()=>langPick(true),300);   // первый вход — спросить язык
