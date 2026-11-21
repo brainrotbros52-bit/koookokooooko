@@ -1531,7 +1531,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
           </div>
         </details>
         <button class="prow" id="partnerRow" data-go="partner" hidden><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F8AE74" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="prow-t"><b>Кабинет партнёра</b><span class="muted">Доход, ссылки, промокоды, выводы</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#827265" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
-        <button class="prow" id="applyRow" hidden><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F8AE74" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5"/></svg></span><span class="prow-t"><b>Стать партнёром</b><span class="muted">Заполни анкету — рассмотрим быстро</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#827265" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        <button class="prow" id="applyRow" hidden><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F8AE74" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5"/></svg></span><span class="prow-t"><b id="applyT">Стать партнёром</b><span class="muted">Заполни анкету — рассмотрим быстро</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#827265" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
         <button class="prow" data-go="settings"><span class="prow-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DED0C3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 4v4M9 10v4M17 16v4"/></svg></span><span class="prow-t"><b>Настройки</b><span class="muted">Звук, уведомления, язык</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#827265" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       </div>
     </section>
@@ -1753,7 +1753,7 @@ const EN={
  'Изменить ник':'Change nickname','Ник берётся из Telegram':'Your nickname comes from Telegram','Скопировать ID':'Copy ID','Как работает отыгрыш':'How wagering works','отыгрыш':'wager',
  'Пополнить':'Top up','кейсов':'cases','апгрейдов':'upgrades','мины':'mines','выведено':'withdrawn','Инвентарь':'Inventory','История':'History','Промокод':'Promo code',
  'Есть код? Введи его':'Have a code? Enter it','Введи код':'Enter code','Активировать':'Activate','Кабинет партнёра':'Partner dashboard','Доход, ссылки, промокоды, выводы':'Income, links, promo codes, payouts',
- 'Стать партнёром':'Become a partner','Заполни анкету — рассмотрим быстро':'Fill out the form — we’ll review it fast','Настройки':'Settings','Звук, уведомления, язык':'Sound, notifications, language',
+ 'Стать партнёром':'Become a partner','Стать субпартнёром':'Become a sub-partner','Анкета субпартнёра':'Sub-partner application','Заполни анкету — рассмотрим быстро':'Fill out the form — we’ll review it fast','Настройки':'Settings','Звук, уведомления, язык':'Sound, notifications, language',
  'Рекорд':'Record','Пока пусто. Открой кейс —':'Empty for now. Open a case —','брейнрот появится здесь':'your brainrot will appear here','К кейсам':'To cases','Загружаем историю…':'Loading history…',
  'Пока ничего не было':'Nothing yet','ID скопирован':'ID copied','Такого промокода нет':'No such promo code','Введи промокод':'Enter a promo code','Можно выводить':'Ready to withdraw',
  // настройки
@@ -1798,7 +1798,7 @@ const EN={
  'Неверный ник Roblox':'Invalid Roblox nickname','Сначала закончи текущую игру':'Finish the current game first','Цель должна быть дороже ставки':'The target must cost more than the stake','Аккаунт заблокирован':'Account blocked',
  'Предметы не найдены — обнови страницу':'Items not found — refresh the page','Заявку уже взяли в работу':'The request is already being processed','Игрок не найден':'Player not found','Квест ещё не выполнен':'Quest not completed yet',
  'Награда уже получена':'Reward already claimed','Квест не найден':'Quest not found','Сначала открой клетку':'Open a tile first','Игра не найдена':'Game not found','Ошибка сервера, попробуй ещё раз':'Server error, try again',
- 'Это твой собственный код':'That’s your own code','Ты уже закреплён за другим партнёром':'You’re already linked to another partner','Партнёрка не активна':'Partnership is not active','Код: латиница и цифры':'Code: Latin letters and digits',
+ 'Это твой собственный код':'That’s your own code','Ты партнёр — привязаться к другому партнёру нельзя (только субпартнёрство)':'You are a partner — you can’t be bound to another partner (sub-partnership only)','Ты уже закреплён за другим партнёром':'You’re already linked to another partner','Партнёрка не активна':'Partnership is not active','Код: латиница и цифры':'Code: Latin letters and digits',
  'Такой код уже занят':'This code is already taken','Ты уже партнёр':'You’re already a partner','Не найдено':'Not found','Кейс не найден':'Case not found','Нет связи с сервером':'No connection to the server',
  'Этот предмет нельзя вывести — его можно только продать':'This item can’t be withdrawn — you can only sell it','Заявка на вывод уже ждёт':'A withdrawal request is already waiting',
  // редкость и названия
@@ -1809,7 +1809,7 @@ const EN={
  'Открыть кейс':'Open a case','Мины теперь только на брейнротах':'Mines are brainrots-only now',
  'Промокод на пополнение':'Deposit promo code','к пополнению':'on deposit','монет на баланс':'coins to balance','КОД':'CODE','Пополнить с кодом':'Top up with code',
  'Скопировать промокод':'Copy promo code','Промокод скопирован':'Promo code copied','Разделы':'Sections','Профиль':'Profile','24ч':'24h',
- 'Бесплатный':'Free','🎁 Бесплатно · 1 раз':'🎁 Free · once','🎁 Открыть бесплатно':'🎁 Open for free','Уже открыт':'Already opened','Реферальный':'Referral',
+ 'Бесплатный':'Free','🎁 Бесплатно':'🎁 Free','🎁 Бесплатно · 1 раз':'🎁 Free · once','🎁 Открыть бесплатно':'🎁 Open for free','Уже открыт':'Already opened','Реферальный':'Referral',
  '2 монеты':'2 coins','4 монеты':'4 coins','Пригласи друга':'Invite a friend','Дай другу свой код или ссылку — бонус получите оба':'Give a friend your code or link — you both get a bonus',
  'другу к каждому пополнению и бесплатный кейс «Реферальный»':'for your friend on every deposit, plus a free «Referral» case','тебе — с каждого пополнения друга, сразу на баланс':'for you from every deposit your friend makes, straight to your balance',
  'ТВОЙ КОД':'YOUR CODE','Скопировать код':'Copy code','Скопировать ссылку':'Copy link','Поделиться':'Share','друзей':'friends','пополнили':'deposited','заработано':'earned',
@@ -1819,7 +1819,7 @@ const EN={
  'Код друга работает в боевом режиме':"Friend codes work in the live app",'Код активирован':'Code activated',
  'Ты партнёр':'You are a partner','Твои реф-ссылки, коды, промокоды и доход — в кабинете партнёра':'Your referral links, codes, promo codes and income are in the partner dashboard','Открыть кабинет партнёра':'Open partner dashboard',
  '🔒 За код друга':'🔒 For a friend code','🔒 Введи код друга или партнёра':"🔒 Enter a friend's or partner's code",'Введи код друга или партнёра — и кейс откроется бесплатно':"Enter a friend's or partner's code to open this case for free",'Этот кейс бесплатный: введи код друга или партнёра (в «Бонусах», в профиле или в заявке на пополнение) — и открой его один раз.':"This case is free: enter a friend's or partner's code (in Bonuses, your profile or a deposit request) and open it once.",
- 'награда':'reward',
+ 'награда':'reward','Промокод партнёра':'Partner promo code',
  'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
  'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
  'Победителя выберем случайно, когда время выйдет. Приз сразу придёт на склад.':'The winner is picked at random when time runs out. The prize goes straight to the inventory.',
@@ -1838,6 +1838,7 @@ const EN={
 };
 const _N='([\\d\\s.,]+)';
 const EN_RX=[
+ [/^Ты пришёл от партнёра (\S+) — после одобрения станешь его субпартнёром: он будет получать процент с твоего дохода, а ты — свой кабинет партнёра\.$/,'You came from partner $1 — once approved you become their sub-partner: they get a share of your income, you get your own partner dashboard.'],
  [/^(Код друга|Бонус друга) \+(\d+)%$/,(m,a,n)=>`${a==='Код друга'?"Friend's code":'Friend bonus'} +${n}%`],
  [/^Код друга (\S+): \+(\d+)% к (?:пополнениям и бесплатный кейс(?: «Реферальный»)?!|каждому пополнению и бесплатный кейс)$/,"Friend's code $1: +$2% on deposits and a free case!"],
 
@@ -2102,7 +2103,7 @@ const ERR={ref_case_locked:'Этот кейс открывается после 
   unauthorized:'Открой приложение через Telegram',bad_nick:'Неверный ник Roblox',game_active:'Сначала закончи текущую игру',
   target_cheap:'Цель должна быть дороже ставки',banned:'Аккаунт заблокирован',bad_items:'Предметы не найдены — обнови страницу',
   cannot_cancel:'Заявку уже взяли в работу',not_admin:'Нет прав администратора',bad_input:'Проверь поля',bad_case_id:'id кейса: латиница, цифры, - или _',item_owned:'Этот предмет есть у игроков — удалить нельзя',no_user:'Игрок не найден',quest_not_done:'Квест ещё не выполнен',quest_claimed:'Награда уже получена',no_quest:'Квест не найден',open_first:'Сначала открой клетку',no_game:'Игра не найдена',server_error:'Ошибка сервера, попробуй ещё раз',
-  own_code:'Это твой собственный код',already_bound:'Ты уже закреплён за другим партнёром',not_partner:'Партнёрка не активна',bad_code:'Код: латиница и цифры',code_taken:'Такой код уже занят',no_partner_money:'Не хватает партнёрского баланса',promos_off:'Создание промокодов выключено',pwd_active:'Заявка на вывод уже ждёт',pwd_closed:'Окно вывода сейчас закрыто',pwd_min:'Недостаточно для вывода',bad_parent:'Партнёр-пригласитель не найден',already_partner:'Ты уже партнёр',not_found:'Не найдено',case_not_found:'Кейс не найден',not_withdrawable:'Этот предмет нельзя вывести — его можно только продать',case_exists:'Кейс с таким названием уже есть',bad_chance:'Шанс — число больше 0 и до 100',
+  own_code:'Это твой собственный код',already_bound:'Ты уже закреплён за другим партнёром',partner_no_bind:'Ты партнёр — привязаться к другому партнёру нельзя (только субпартнёрство)',not_partner:'Партнёрка не активна',bad_code:'Код: латиница и цифры',code_taken:'Такой код уже занят',no_partner_money:'Не хватает партнёрского баланса',promos_off:'Создание промокодов выключено',pwd_active:'Заявка на вывод уже ждёт',pwd_closed:'Окно вывода сейчас закрыто',pwd_min:'Недостаточно для вывода',bad_parent:'Партнёр-пригласитель не найден',already_partner:'Ты уже партнёр',not_found:'Не найдено',case_not_found:'Кейс не найден',not_withdrawable:'Этот предмет нельзя вывести — его можно только продать',case_exists:'Кейс с таким названием уже есть',bad_chance:'Шанс — число больше 0 и до 100',
   case_balance:'Шансы не посчитать: средний дроп должен быть между самым дешёвым и самым дорогим брейнротом кейса',item_exists:'Брейнрот с таким названием уже есть',bad_image:'Картинка слишком большая или не PNG/JPG/WEBP',upload_failed:'Не удалось загрузить фото — проверь Storage в Supabase'
 };
 const API={
@@ -2478,7 +2479,7 @@ $('cases').onclick=e=>{const b=e.target.closest('[data-case]');if(!b)return;$('c
  ch.setAttribute('stroke',CUR_CASE&&CUR_CASE.c||'#E07A3C');
  ci.onerror=()=>{ci.hidden=true;ch.style.display='';$('caseCap').querySelector('img')?.remove();};   // у SVG нет .hidden — прячем через style
  if(src){ci.src=src;ci.hidden=false;ch.style.display='none';}else{ci.hidden=true;ci.removeAttribute('src');ch.style.display='';}
- $('caseCap').innerHTML=`${src?`<img src="${esc(src)}" alt="">`:''}<span>${esc(b.dataset.case)}</span><span class="num" style="display:flex;align-items:center;gap:4px;color:#E8B365">${COIN(14)}${fmt(casePrice)}</span>`;
+ $('caseCap').innerHTML=`${src?`<img src="${esc(src)}" alt="">`:''}<span>${esc(b.dataset.case)}</span>${CUR_CASE&&CUR_CASE.free?'<span style="color:#5CD6C8;font-weight:800">🎁 Бесплатно</span>':`<span class="num" style="display:flex;align-items:center;gap:4px;color:#E8B365">${COIN(14)}${fmt(casePrice)}</span>`}`;
  caseReset();drawCaseItems();drawTotal();go('case');};
 drawCases();
 
@@ -3834,7 +3835,7 @@ $('admBody').addEventListener('change',async e=>{
 });
 
 // ---------- карточка игрока ----------
-const GNA={admin:'Админ',quest:'Квест',case:'Кейс',upgrade:'Апгрейд',mines:'Мины',sell:'Продажа',deposit:'Пополнение',withdraw:'Вывод',bonus:'Бонус',promo:'Промокод',draw:'Розыгрыш',ref:'Реферал'};
+const GNA={admin:'Админ',quest:'Квест',case:'Кейс',upgrade:'Апгрейд',mines:'Мины',sell:'Продажа',deposit:'Пополнение',withdraw:'Вывод',bonus:'Бонус',promo:'Промокод',draw:'Розыгрыш',ref:'Реферал',ppromo:'Промокод партнёра'};
 function histRows(h){return h.rows.length?`<div style="display:flex;flex-direction:column;gap:6px">${h.rows.map(e=>{const x=e.item?mkItem(e.item):null;
   const v=e.game==='withdraw'?-e.bet:e.payout-e.bet;const c=v>0?'#88E4A5':v<0?'#FF946E':'#DED0C3';
   return `<div class="hrow"><div class="tile" style="width:38px;height:38px;flex:none;border-radius:9px;${x?tileBg(R[x.r]):'background:#2B2119;border:1px solid #503C2F'}">${x?mono(x,12):ic(e.game==='mines'?I.mines:e.game==='deposit'?'M12 5v14M5 12h14':e.game==='withdraw'?'M7 17L17 7M8 7h9v9':I.bonus,'#BEAD9E',18)}</div>
@@ -4121,16 +4122,16 @@ async function pcPromos(B){
  const inp=(id,ph,extra)=>`<input id="${id}" placeholder="${ph}" ${extra||''}>`;
  B.innerHTML=`${r.promos_on?`
  <div class="pc-card"><h3>Промокод на монеты</h3>
-  <p class="pc-hint">Стоимость (монеты × активации) сразу списывается с партнёрского баланса. Каждый, кто введёт код, получит монеты (отыгрыш ×3) и закрепится за тобой, если он ещё ничей.</p>
+  <p class="pc-hint">Стоимость (монеты × активации) сразу списывается с обычного игрового баланса (не с партнёрского). Каждый, кто введёт код, получит монеты (отыгрыш ×3) и закрепится за тобой, если он ещё ничей.</p>
   <div class="pc-f c2"><label class="w">Название кода${inp('pcCc','MYCODE','maxlength="20" autocomplete="off" style="text-transform:uppercase"')}</label>
    <label>Монет за активацию${inp('pcCv','10','type="number" inputmode="numeric" min="1"')}</label><label>Активаций${inp('pcCu','5','type="number" inputmode="numeric" min="1" max="1000"')}</label></div>
-  <div class="pc-cost"><span>Спишется: <b class="num" id="pcCcost">0</b> из <span class="num">${pn(r.balance)}</span></span><button class="fire" data-a="pc_coins">Создать</button></div></div>
+  <div class="pc-cost"><span>Спишется: <b class="num" id="pcCcost">0</b> из <span class="num">${fmt(r.game_balance??bal)}</span> на балансе</span><button class="fire" data-a="pc_coins">Создать</button></div></div>
  <div class="pc-card"><h3>Промокод на кейс</h3>
-  <p class="pc-hint">Списывается цена кейса × активации. Игрок получит бесплатное открытие — предмет сразу упадёт в инвентарь.</p>
+  <p class="pc-hint">Списывается цена кейса × активации — с обычного игрового баланса. Игрок получит бесплатное открытие — предмет сразу упадёт в инвентарь.</p>
   ${CASES.length?`<div class="pc-f c2"><label class="w">Название кода${inp('pcKc','MYCASE','maxlength="20" autocomplete="off" style="text-transform:uppercase"')}</label>
-   <label>Кейс<select id="pcKcase">${CASES.map(c=>`<option value="${esc(c.id)}" data-p="${c.p}">${esc(c.name)} — ${fmt(c.p)}</option>`).join('')}</select></label>
+   <label>Кейс<select id="pcKcase">${CASES.filter(c=>!c.free).map(c=>`<option value="${esc(c.id)}" data-p="${c.p}">${esc(c.name)} — ${fmt(c.p)}</option>`).join('')}</select></label>
    <label>Активаций${inp('pcKu','5','type="number" inputmode="numeric" min="1" max="1000"')}</label></div>
-  <div class="pc-cost"><span>Спишется: <b class="num" id="pcKcost">0</b> из <span class="num">${pn(r.balance)}</span></span><button class="fire" data-a="pc_case">Создать</button></div>`
+  <div class="pc-cost"><span>Спишется: <b class="num" id="pcKcost">0</b> из <span class="num">${fmt(r.game_balance??bal)}</span> на балансе</span><button class="fire" data-a="pc_case">Создать</button></div>`
   :'<p class="pc-hint">Кейсов пока нет.</p>'}</div>`
  :`<div class="pc-card"><p class="pc-hint" style="text-align:center">Создание своих промокодов выключено. Напиши админу, если нужно.</p></div>`}
  <div class="pc-card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Мои промокоды</h3><span class="muted num" style="font-size:12px">${r.promos.length}</span></div>
@@ -4140,7 +4141,7 @@ async function pcPromos(B){
    <div class="pc-bar"><i style="width:${(used/Math.max(1,p.uses_total)*100).toFixed(1)}%"></i></div>
    <span class="muted num" style="font-size:12px">Активировано ${used} из ${p.uses_total} · списано ${fmt(p.cost)}</span></div>`;}).join('')
   :'<p class="pc-hint">Ты ещё не создавал промокоды.</p>'}
-  ${r.promos.some(p=>p.active)?'<p class="pc-hint">«Остановить» — неиспользованные активации вернутся на партнёрский баланс.</p>':''}</div>
+  ${r.promos.some(p=>p.active)?'<p class="pc-hint">«Остановить» — неиспользованные активации вернутся туда, откуда списаны (новые промокоды — на игровой баланс).</p>':''}</div>
  <div class="pc-card"><h3>Как работают твои коды</h3>${pcTable(['Промокод','Регистрации','Первые деп.','Сумма деп.','Доход'],
    codes.map(c=>`<tr><td class="l"><b>${esc(c.code)}</b></td><td class="num">${fmt(c.regs||0)}</td><td class="num">${fmt(c.ftd||0)}</td><td class="num">${fmt(c.dep_sum||0)}</td><td class="num ${pcls(c.income)}">${pn(c.income||0)}</td></tr>`).join(''))}
   <p class="pc-hint">Учитываются игроки, которые закрепились за тобой через этот код.</p></div>`;
@@ -4176,7 +4177,7 @@ async function pcWd(B){
 async function pcSubs(B){
  const r=await pc('subs');if(!r||PC.tab!=='subs')return;const link=`https://t.me/${CONFIG.BOT_USERNAME}?startapp=s_${r.code}`,sp=String(+r.sub_pct).replace('.',',');
  B.innerHTML=`<div class="pc-card"><h3>Приводи партнёров — получай ${sp}% от их дохода</h3>
-  <p class="pc-hint">Отправь ссылку стримеру или блогеру. Он заполнит анкету в боте, после одобрения ты получаешь ${sp}% с его чистого дохода, пока партнёрство активно. Его минусы на тебя не переходят.</p>
+  <p class="pc-hint">Отправь ссылку стримеру или блогеру. Он заполнит анкету «Стать субпартнёром» (её видят и те, кто пришёл по твоей обычной реф-ссылке или коду), после одобрения ты получаешь ${sp}% с его чистого дохода, пока партнёрство активно. Его минусы на тебя не переходят. Партнёр не может быть твоим игроком — только субпартнёром.</p>
   <div class="pc-link"><span class="v">${esc(link.replace('https://',''))}</span><button class="fire" data-copy="${esc(link)}" aria-label="Скопировать">${CPYI('#1A0F09')}</button></div>
   <div class="pc-grid"><div class="pc-t"><span>Субпартнёров</span><b class="u num">${r.rows.length}</b></div><div class="pc-t"><span>Заработано с них</span><b class="u num ${pcls(r.sub_earned)}">${pn(r.sub_earned)}${COIN(15)}</b></div></div>
   ${r.apps?`<p class="pc-hint">Анкет на рассмотрении: <b style="color:#FFB088">${r.apps}</b></p>`:''}</div>
@@ -4212,13 +4213,14 @@ $('pcBody').addEventListener('click',async e=>{
   else if(a==='pc_stop')r=await pc('promo_stop',{code:b.dataset.code});
   else if(a==='pc_wd'){r=await pc('withdraw',{});if(r){SFX.play('withdraw');haptic('success');toast(r.auto?`+${fmt(r.amount)} на игровой баланс`:`Заявка на ${fmt(r.amount)} отправлена — админ подтвердит`);if(r.state)applyState(r.state,true);}}
  }finally{if(b.isConnected)b.disabled=false;}
- if(r){if(r.msg){toast(r.msg);haptic('success');}const i=await pc('info');if(i){PC.info=i;pcHeadDraw();}pcLoad();}
+ if(r){if(r.state)applyState(r.state,true);if(r.msg){toast(r.msg);haptic('success');}const i=await pc('info');if(i){PC.info=i;pcHeadDraw();}pcLoad();}
 });
 
 /* ---------- анкета на партнёрство (для тех, кто пришёл по ссылке субпартнёрства) ---------- */
 function paOpen(){
  $('paBox').innerHTML=`<div class="sheet-grab"></div>
-  <div style="display:flex;align-items:center;justify-content:space-between"><h2 class="u" style="font-weight:700;font-size:20px">Анкета партнёра</h2>${XBTN}</div>
+  <div style="display:flex;align-items:center;justify-content:space-between"><h2 class="u" style="font-weight:700;font-size:20px">${USER.applyParent?'Анкета субпартнёра':'Анкета партнёра'}</h2>${XBTN}</div>
+  ${USER.applyParent?`<p class="pc-hint" style="font-size:13px;color:#F8AE74">Ты пришёл от партнёра ${esc(USER.applyParent)} — после одобрения станешь его субпартнёром: он будет получать процент с твоего дохода, а ты — свой кабинет партнёра.</p>`:''}
   <p class="pc-hint" style="font-size:13px">Расскажи о себе — админы посмотрят и откроют кабинет партнёра: ссылки, статистика, процент с игры твоих игроков.</p>
   <div class="pc-f"><label>Где ты ведёшь блог или стримишь <span style="color:#FF946E">*</span><input id="paLink" placeholder="Ссылка на канал или профиль" maxlength="200" autocomplete="off"></label>
    <label>Как с тобой связаться<input id="paContact" value="${esc(TU&&TU.username?'@'+TU.username:'')}" placeholder="@ник в Telegram" maxlength="100" autocomplete="off"></label>
@@ -4231,7 +4233,7 @@ function paOpen(){
   closeSheet('paSheet');haptic('success');toast('Анкета отправлена — ответим в боте');};
  openSheet('paSheet');
 }
-function paRow(){const r=$('applyRow');r.hidden=!(USER.canApply||USER.app);
+function paRow(){const r=$('applyRow');r.hidden=!(USER.canApply||USER.app);if($('applyT'))$('applyT').textContent=USER.applyParent?'Стать субпартнёром':'Стать партнёром';
  r.querySelector('.muted').textContent=USER.app==='new'?'Анкета на рассмотрении':USER.app==='rejected'?'Анкету отклонили — можно отправить снова':'Заполни анкету — рассмотрим быстро';}
 $('applyRow').onclick=()=>{if(USER.app==='new'){toast('Анкета уже на рассмотрении');return;}paOpen();};
 
@@ -4257,7 +4259,7 @@ function pcDemo(op,a){
   return {all:sum(D.rows),period:sum(L),players_upto:D.info.players,rows:Object.entries(g).map(([k,l])=>({day:k.split('|')[0],src:a.detail?k.split('|')[1]:null,...sum(l)})).sort((x,y)=>x.day<y.day?1:-1)};}
  if(op==='links'){const g={};D.rows.filter(r=>r.src!=='code'&&r.day>dAdd(D.T,-30)).forEach(r=>{const k=r.src+'|'+r.sub;(g[k]=g[k]||[]).push(r);});
   return Object.entries(g).map(([k,l])=>({src:k.split('|')[0],sub:k.split('|')[1],...sum(l)}));}
- if(op==='codes')return {balance:D.info.balance,promos_on:true,code:'FORTIK',codes:[{code:'FORTIK',...sum(D.rows.filter(r=>r.src==='code'))}],promos:D.promos};
+ if(op==='codes')return {balance:D.info.balance,game_balance:bal,promos_on:true,code:'FORTIK',codes:[{code:'FORTIK',...sum(D.rows.filter(r=>r.src==='code'))}],promos:D.promos};
  if(op==='promo_create'){toast('В демо промокоды не создаются');return null;}
  if(op==='promo_stop'){toast('В демо ничего не меняется');return null;}
  if(op==='wd')return {balance:D.info.balance,wd_min:100,wd_any_day:false,wd_auto:false,window:D.info.window,count:4,sum:441,pending:null,total:4,page:1,size:15,rows:D.wd};
@@ -4283,7 +4285,7 @@ function applyState(st,quiet){
  INV.length=0;(st.inventory||[]).forEach(o=>INV.push(mkItem(o)));
  WG.left=st.wager_left;WG.total=st.wager_total;
  STATS=st.stats||STATS;BEST=st.best?{...mkItem(st.best),src:st.best.src}:null;
- const wasP=USER.partner;USER.partner=!!st.is_partner;$('partnerRow').hidden=!USER.partner;USER.canApply=!!st.can_apply;USER.app=st.partner_app||null;paRow();
+ const wasP=USER.partner;USER.partner=!!st.is_partner;$('partnerRow').hidden=!USER.partner;USER.canApply=!!st.can_apply;USER.applyParent=st.apply_parent||null;USER.app=st.partner_app||null;paRow();
  if(wasP!==USER.partner){drawMenu();if(cur==='bonus')loadPref();if(cur==='partner'&&!USER.partner)go('profile');}
  const wasAdm=USER.admin;USER.admin=!!st.is_admin;$('admEntry').hidden=!USER.admin;if(USER.admin&&!wasAdm)setTimeout(admPoll,500);
  DAILY_NEXT=st.daily_next?Date.parse(st.daily_next):null;DAILY_DAY=st.daily_day||1;DAILY_STREAK=st.daily_streak||0;
