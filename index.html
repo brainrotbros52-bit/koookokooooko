@@ -1843,6 +1843,9 @@ const EN_RX=[
 
  [/^Условие: пополни баланс на ([\d\s.,]+) (сегодня|за эту неделю|за этот месяц)$/,(m,n,w)=>`Condition: top up ${n} ${w==='сегодня'?'today':w==='за эту неделю'?'this week':'this month'}`],
  [/^Пополнено: ([\d\s.,]+) из ([\d\s.,]+)$/,'Deposited: $1 of $2'],
+ [/^Пополнено с (\d\d\.\d\d), (\d\d:\d\d): ([\d\s.,]+) из ([\d\s.,]+)$/,'Deposited since $1, $2: $3 of $4'],
+ [/^Условие: пополни баланс на ([\d\s.,]+) за время розыгрыша$/,'Condition: top up $1 during the draw'],
+ [/^Пополнения считаются с (\d\d\.\d\d), (\d\d:\d\d)$/,'Deposits count from $1, $2'],
  [/^(\d+) (кейс|кейса|кейсов)$/,(m,n)=>`${n} ${n==='1'?'case':'cases'}`],
  [/^(\d+) (предмет|предмета|предметов)$/,(m,n)=>`${n} ${n==='1'?'item':'items'}`],
  [/^(\d+) (брейнрот|брейнрота|брейнротов)$/,(m,n)=>`${n} ${n==='1'?'brainrot':'brainrots'}`],
@@ -3010,6 +3013,7 @@ seg($('qtabs'),['Ежедневные','Недельные'],0,i=>{qTab=i;drawQ(
    Итоги подводит сервер: случайный участник получает приз на склад. */
 const DPER=['day','week','month'],DTITLE={day:'Розыгрыш дня',week:'Розыгрыш недели',month:'Розыгрыш месяца'};
 const DWHEN={day:'сегодня',week:'за эту неделю',month:'за этот месяц'};
+const dStart=t=>{const d=new Date(t),z=n=>String(n).padStart(2,'0');return `${z(d.getDate())}.${z(d.getMonth()+1)}, ${z(d.getHours())}:${z(d.getMinutes())}`;};   // с какого момента считаются пополнения
 var DRW=null,dTab=0,dBusy=false,dOff=0;const DJOIN=new Set();   // dOff — разница часов сервера и телефона
 function dEnd(p){const d=new Date();if(p==='day'){d.setHours(24,0,0,0);}else if(p==='week'){d.setHours(0,0,0,0);d.setDate(d.getDate()+((8-d.getDay())%7||7));}else{d.setHours(0,0,0,0);d.setMonth(d.getMonth()+1,1);}return d.toISOString();}
 function demoDraws(){const P=[ITEMS[3],ITEMS[0],ITEMS[1]],N=[318,1204,4870],dep=QD.deposit||0;
@@ -3039,9 +3043,9 @@ function drawDraws(){
     <div><div class="muted" style="font-size:12px">Участников</div><div class="u num" style="font-weight:700;font-size:16px">${fmt(d.entries)}</div></div>
    </div>
    ${d.joined?`<div class="dr-cond ok">${ic('M5 12l5 5 9-10','#88E4A5',18,2.6)}<span><b>Ты участвуешь!</b><small>Победителя выберем случайно, когда время выйдет. Приз сразу придёт на склад.</small></span></div>`
-    :`<div class="dr-cond${ok?' ok':''}"><span style="flex:1;min-width:0"><b>${ok?'Условие выполнено':'Условие: пополни баланс на '+fmt(d.min_dep)+' '+DWHEN[d.period]}</b>
+    :`<div class="dr-cond${ok?' ok':''}"><span style="flex:1;min-width:0"><b>${ok?'Условие выполнено':'Условие: пополни баланс на '+fmt(d.min_dep)+' за время розыгрыша'}</b>
       <span class="dr-bar"><i style="width:${pct.toFixed(1)}%"></i></span>
-      <small class="num">Пополнено: ${fmt(Math.min(d.my_dep,d.min_dep))} из ${fmt(d.min_dep)}</small></span></div>`}
+      <small class="num">Пополнено с ${dStart(d.starts)}: ${fmt(Math.min(d.my_dep,d.min_dep))} из ${fmt(d.min_dep)}</small></span></div>`}
    <button class="fire dr-go" id="dGo" data-p="${d.period}" ${d.joined||dMs(d)<=0?'disabled':''}>${d.joined?'Ты в игре ✓':ok?'Участвовать':'Пополнить баланс'}</button>
   </div>`;}
  const W=DRW.winners||[];
@@ -3660,18 +3664,23 @@ function admDrawsDraw(){const P=AS.drw||[];
   const cur=o?o.prize:p.next,c=RCOL(cur.rarity);
   return `<div class="adm-card">
    <div class="adm-row"><b>${p.title}</b><span class="muted num" style="margin-left:auto;font-size:12px">${o?`до итогов ${dLeft(left)} · участников: ${o.entries}`:'ещё не запущен'}</span></div>
+   ${o?`<small class="muted num" style="font-size:12px;margin-top:-4px">Пополнения считаются с ${dStart(o.starts)}</small>`:''}
    <div class="adm-li" style="gap:12px">${art(cur,44)}<span style="flex:1;min-width:0"><small class="muted" style="display:block;font-size:11px;font-weight:700">Сейчас разыгрывается</small><b style="color:${c}">${esc(cur.name)}</b> <span class="muted num" style="font-size:12px">· ${fmt(cur.price)}</span></span></div>
    <div class="pc-f dr-f">
     <label>Приз сейчас<select id="drP_${p.period}">${drOpts(cur.name,p.period)}</select></label>
     <label>Приз следующих розыгрышей<select id="drN_${p.period}">${drOpts(p.next.name,p.period)}</select></label>
     <label class="w">Сколько пополнить за период, чтобы участвовать<input id="drM_${p.period}" inputmode="numeric" value="${o?o.min_dep:p.min_dep}"></label>
    </div>
-   <p class="pc-hint">Рекомендуем приз за ${fmt(lo)}–${fmt(hi)}. «Приз сейчас» меняет текущий розыгрыш, «приз следующих» — все, что начнутся после него. Порог пополнения считается только за этот ${p.period==='day'?'день':p.period==='week'?'неделю':'месяц'}.</p>
+   <p class="pc-hint">Рекомендуем приз за ${fmt(lo)}–${fmt(hi)}. «Приз сейчас» меняет текущий розыгрыш, «приз следующих» — все, что начнутся после него. Порог пополнения считается только за время этого розыгрыша — пополнения до его начала не в счёт.</p>
    <div class="adm-acts"><button class="fire" data-a="draw_save" data-per="${p.period}">Сохранить</button>
-    <button class="ghost" data-a="draw_finish" data-per="${p.period}" ${o?'':'disabled'}>Подвести итог сейчас</button></div>
+    <button class="ghost" data-a="draw_finish" data-per="${p.period}" ${o?'':'disabled'}>Подвести итог сейчас</button>
+    <button class="ghost danger" data-a="draw_reset" data-per="${p.period}">Сбросить</button></div>
    ${p.done&&p.done.length?`<div style="display:flex;flex-direction:column;gap:6px"><span class="muted" style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase">прошлые итоги</span>
     ${p.done.map(d=>`<div class="adm-li"><span style="flex:1;min-width:0"><b>${esc(d.prize.name)}</b><small class="muted" style="display:block;font-size:11px">${d.winner?(d.username?'@'+esc(d.username):esc(d.first_name||'игрок'))+' · ID '+d.winner+' · участников: '+d.entries:'участников не было — приз никому не ушёл'}</small></span><span class="muted" style="font-size:11px">${ago(Date.parse(d.ts))}</span></div>`).join('')}</div>`:''}
   </div>`;}).join(''):admEmpty('Розыгрыши ещё не настроены — запусти новый schema.sql'))
+  +(P.length?`<div class="adm-card"><div class="adm-row"><b>Сбросить все розыгрыши</b></div>
+   <p class="pc-hint" style="margin:0">Удаляет текущие розыгрыши, участников и прошлые итоги. Новые начнутся с этой минуты — пополнения считаются заново, игрокам нужно снова нажать «Участвовать». Призы и пороги сохраняются. Нажми два раза.</p>
+   <div class="adm-acts"><button class="ghost danger" data-a="draws_reset_all">Сбросить все</button></div></div>`:'')
   +`<p class="pc-hint" style="padding:0 4px">Участвует игрок, который за период пополнил баланс на порог и нажал «Участвовать». Когда время выходит, сервер сам выбирает случайного участника, кладёт приз ему на склад, пишет ему в бота, а админам — кто победил.</p>`;}
 
 // ---------- кейсы: цена, % отдачи, содержимое ----------
@@ -3776,17 +3785,18 @@ function admItemsDraw(){
   <div class="adm-row" style="flex-wrap:nowrap">
    <button data-iedit="${esc(x.name)}" style="flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left">${art(x,42)}
     <span style="flex:1;min-width:0"><b style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(x.name)}</b>
-     <small class="muted" style="font-size:11px">${x.kind==='gr'?'гир':RNAME[x.rarity]||x.rarity}${x.cases?' · в кейсах: '+x.cases:''}${x.owned?' · у игроков: '+x.owned:''}${x.img?'':' · без фото'}</small></span>
+     <small class="muted" style="font-size:11px">${x.kind==='gr'?'гир':RNAME[x.rarity]||x.rarity}${x.dep_price!=null&&x.dep_price!==x.price?' · <span style="color:#7FD6A8">в пополнении: '+fmt(x.dep_price)+'</span>':''}${x.cases?' · в кейсах: '+x.cases:''}${x.owned?' · у игроков: '+x.owned:''}${x.img?'':' · без фото'}</small></span>
     <b class="num" style="display:flex;align-items:center;gap:4px;font-size:14px">${COIN(12)}${fmt(x.price)}</b></button>
    <label title="Можно пополнять" style="display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:800;color:#A49485;text-transform:uppercase;letter-spacing:.04em"><input type="checkbox" class="toggle" data-idep="${esc(x.name)}" ${x.depositable?'checked':''}>пополн.</label>
    <label title="Можно вывести в Roblox" style="display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:800;color:#A49485;text-transform:uppercase;letter-spacing:.04em"><input type="checkbox" class="toggle" data-iwd="${esc(x.name)}" ${x.withdrawable!==false?'checked':''}>вывод</label></div>
   ${open?admItemForm(x):''}</div>`;}).join(''):admEmpty('Ничего не нашли')}
- <p class="muted" style="font-size:12px;margin:0;line-height:1.45">Переключатель справа — можно ли пополнять этим брейнротом. Цена одна на весь сайт: пополнение, кейсы, апгрейд, инвентарь.</p>`;
+ <p class="muted" style="font-size:12px;margin:0;line-height:1.45">Переключатель справа — можно ли пополнять этим брейнротом. «Цена» — для кейсов, апгрейда, мин, продажи и вывода. «Цена в пополнении» — сколько монет игрок получит, когда внесёт этого брейнрота (пусто — как цена).</p>`;
  $('aiQ').oninput=e=>{AS.iq=e.target.value;const pos=e.target.selectionStart;admItemsDraw();const i=$('aiQ');i.focus();i.setSelectionRange(pos,pos);};
 }
 function admItemForm(x){const nw=!x.name;return `<div class="pc-f c2">
   <label class="w">Название<input id="ieName" value="${esc(x.name)}" maxlength="60" placeholder="Например, Tung Tung Sahur" autocomplete="off"></label>
   <label>Цена<input id="iePrice" type="number" inputmode="numeric" min="1" value="${x.price}" placeholder="100"></label>
+  <label>Цена в пополнении<input id="ieDepP" type="number" inputmode="numeric" min="1" value="${x.dep_price??''}" placeholder="как цена"></label>
   <label>Тип<select id="ieKind"><option value="br" ${x.kind!=='gr'?'selected':''}>Брейнрот</option><option value="gr" ${x.kind==='gr'?'selected':''}>Гир</option></select></label>
   <label class="w">Редкость (цвет)<select id="ieRar"><option value="">По цене — автоматически</option>${Object.entries(RNAME).map(([k,t])=>`<option value="${k}" ${!nw&&x.rarity===k&&x.rarity!==RB(x.price)?'selected':''}>${t}</option>`).join('')}</select></label></div>
  ${nw?tgl('ieDep',true,'Можно пополнять','Появится в окне пополнения'):''}
@@ -3897,7 +3907,7 @@ $('admBody').addEventListener('click',async e=>{
  if(a==='pe_new'){const v=$('apId').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');return;}AS.pcard=+v;AS.pcPage=1;haptic('light');await admLoad();return;}
  if(a==='find'){AS.q[AS.tab]=$('auQ').value.trim();AS.page[AS.tab]=1;admLoad();return;}
  if(a==='acc_save'&&AS.accSel>0&&AS.accSel!==(+(AS.acc||{}).mode||0)&&!sure(b))return;   // закрыть — по второму нажатию
- const danger=['user_stats_reset','sec_del','deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg','draw_finish'];
+ const danger=['user_stats_reset','sec_del','deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg','draw_finish','draw_reset','draws_reset_all'];
  if(danger.includes(a)&&!sure(b))return;
  let r=null;b.disabled=true;
  try{
@@ -3934,6 +3944,8 @@ $('admBody').addEventListener('click',async e=>{
    if(!/^\d{1,7}$/.test(m)){toast('Порог пополнения — целое число');b.disabled=false;return;}
    r=await adm('draw_set',{period:per,prize:v('drP_'),next:v('drN_'),min_dep:m});if(r)DRW=null;}
   else if(a==='draw_finish'){r=await adm('draw_finish',{period:b.dataset.per});if(r)DRW=null;}
+  else if(a==='draw_reset'){r=await adm('draws_reset',{period:b.dataset.per});if(r)DRW=null;}
+  else if(a==='draws_reset_all'){r=await adm('draws_reset',{});if(r)DRW=null;}
   else if(a==='acc_save'){r=await adm('access_set',{mode:AS.accSel,msg:AS.accMsg.trim()});if(r){AS.acc={...AS.acc,mode:AS.accSel,msg:AS.accMsg.trim()};accChipDraw({admin:true,mode:AS.accSel});}}
   else if(a==='sec_add'){const v=$('secNew').value.trim();if(!v){toast('Впиши название раздела');b.disabled=false;return;}r=await adm('section_save',{name:v});if(r)loadCatalog();}
   else if(a==='sec_up'||a==='sec_down'){r=await adm('section_move',{id,dir:a==='sec_up'?-1:1},true);if(r)loadCatalog();}
@@ -3942,7 +3954,8 @@ $('admBody').addEventListener('click',async e=>{
    r=await adm('case_new',{name:nn,price:pr});if(r&&r.id){AS.cnew=r.id;}}
   else if(a==='item_save'){const nw=AS.iedit==='__new',nn=$('ieName').value.trim(),pr=Math.round(+$('iePrice').value);
    if(!nn||!(pr>0)){toast('Укажи название и цену');b.disabled=false;return;}
-   const args={name:nw?'':AS.iedit,new_name:nn,price:pr,kind:$('ieKind').value,rarity:$('ieRar').value};if(nw)args.depositable=$('ieDep').checked;
+   const dpv=$('ieDepP').value.trim();if(dpv&&!(Math.round(+dpv)>0)){toast('Цена в пополнении — число больше 0 или пусто');b.disabled=false;return;}
+   const args={name:nw?'':AS.iedit,new_name:nn,price:pr,dep_price:dpv?String(Math.round(+dpv)):'',kind:$('ieKind').value,rarity:$('ieRar').value};if(nw)args.depositable=$('ieDep').checked;
    r=await adm('item_save',args);if(r){AS.iedit=nw?nn:null;loadCatalog();}}
   else if(a==='item_noimg'){r=await adm('item_save',{name:AS.iedit,img:''});if(r){delete IMG[AS.iedit];loadCatalog();}}
   else if(a==='item_delete'){r=await adm('item_delete',{name:AS.iedit});if(r){AS.iedit=null;loadCatalog();}}
