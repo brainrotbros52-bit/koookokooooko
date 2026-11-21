@@ -946,6 +946,7 @@ html.tg .top{padding-top:calc(14px + var(--app-top,0px))}
 .bh-img{width:112px;flex:none;align-self:center;margin-right:-6px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
 .bh-cond{display:flex;flex-direction:column;gap:6px}.bh-cond>div{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;color:#DED0C3;padding:6px 6px 6px 10px;border-radius:10px;background:rgba(0,0,0,.28);border:1px solid #2F3A33}
 .bh-mini{flex:none;height:30px;padding:0 10px;border-radius:9px;border:0;background:#2AABEE;color:#fff;font-weight:800;font-size:12px}.bh-ok{padding-right:6px}
+.bot-st{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:12px;background:#17120F;border:1px solid #3A2C24;font-size:12.5px;line-height:1.4;color:#DED0C3;word-break:break-word}.bot-st .bad{color:#FF946E}.bot-st.warn{color:#F8AE74}
 .dr-time{display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:12px;background:#17120F;border:1px solid #3A2C24}
 .bc-sec{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#BEAD9E;margin:6px 2px -2px}
 .bc-row{display:flex;align-items:center;gap:12px;padding:10px 12px 10px 10px;border-radius:16px;background:#1F1814;border:1px solid #3A2C24;text-align:left;color:inherit;font:inherit;width:100%}
@@ -2051,6 +2052,7 @@ function langPick(first){
 
 
 const LIVE=!!CONFIG.SUPABASE_URL;
+const APP_HREF=()=>location.protocol==='https:'?location.href.split('#')[0].split('?')[0]:'';   // адрес сайта — сервер запомнит его для кнопки «Играть» в боте (только от админа)
 var NICK_EX=['fokil667','kolip982','mirex451','zantok309','pelvo774','drufik528','tomrex816','vaxil203'];
 const nickEx=()=>'Например, '+NICK_EX[Math.floor(Math.random()*NICK_EX.length)];   // пример ника в заявках
 
@@ -3981,7 +3983,16 @@ function admUpDraw(){const r=AS.up||{},st=r.stats||{};
   </div>`;
  $('upRig').onchange=async e=>{const on=e.target.checked;e.target.disabled=true;const x=await adm('up_rig',{on});e.target.disabled=false;if(!x){e.target.checked=!on;return;}AS.up.rig=on;admUpDraw();};
 }
-async function admSite(B){const[r,inv]=await Promise.all([adm('access_get',{},true),adm('invites',{},true)]);if(!r)return;AS.acc=r;AS.inv=inv||[];AS.accSel=+r.mode||0;AS.accMsg=r.msg||'';admSiteDraw();}
+async function admSite(B){const[r,inv,bi]=await Promise.all([adm('access_get',{},true),adm('invites',{},true),API.call('bot_info',{},true)]);if(!r)return;AS.acc=r;AS.inv=inv||[];AS.bot=bi;AS.accSel=+r.mode||0;AS.accMsg=r.msg||'';admSiteDraw();}
+// состояние бота: куда Telegram шлёт сообщения, ошибки
+function botStat(){const b=AS.bot;if(!b)return `<div class="bot-st warn">⚠️ Состояние бота не получено — обнови функцию api (index.ts) в Supabase</div>`;
+ const L=[];
+ L.push(b.token?`<span>✅ Токен бота есть${b.bot?' — @'+esc(b.bot):''}</span>`:`<span class="bad">❌ Нет TELEGRAM_BOT_TOKEN в секретах функции</span>`);
+ L.push(b.ours?`<span>✅ Сообщения боту приходят на сервер</span>`:`<span class="bad">❌ Сообщения боту идут не сюда${b.url?': '+esc(b.url):' (вебхук не задан)'} — нажми «Подключить бота»</span>`);
+ if(b.error&&b.error_at&&Date.now()/1000-b.error_at<3600)L.push(`<span class="bad">❌ Telegram не смог достучаться: ${esc(b.error)}${/401|403|Unauthorized|Forbidden/i.test(b.error)?' — выключи Verify JWT у функции api':''}</span>`);
+ if(b.pending)L.push(`<span>⏳ Ждут ответа: ${b.pending}</span>`);
+ L.push(b.app?`<span>✅ Кнопка «Играть» ведёт на ${esc(b.app)}</span>`:`<span class="bad">⚠️ Адрес сайта ещё не сохранён — открой приложение в Telegram (не в браузере)</span>`);
+ return `<div class="bot-st">${L.join('')}</div>`;}
 const invLink=c=>`https://t.me/${CONFIG.BOT_USERNAME}?startapp=i_${c}`;
 function admSiteDraw(){const r=AS.acc||{},sel=AS.accSel,cur=+r.mode||0;
  $('admBody').innerHTML=`<div class="adm-card">
@@ -3993,8 +4004,9 @@ function admSiteDraw(){const r=AS.acc||{},sel=AS.accSel,cur=+r.mode||0;
   <p class="pc-hint">Админы заходят всегда. Включается и выключается примерно за 10 секунд. Балансы, склады и заявки игроков не трогаются — просто никто, кроме выбранных, не может ничего делать, пока закрыто.</p>
  </div>
  <div class="adm-card"><div class="adm-row"><b>Бот в Telegram</b></div>
-  <p class="pc-hint" style="margin:0">Нажми один раз — и бот начнёт отвечать на /start: картинка «Добро пожаловать», текст и две кнопки — «🚀 Играть!» и «📢 Новости» (канал @brainfiretgk). Ещё включится кнопка «Играть» слева от поля ввода. Жми из приложения, открытого в Telegram (адрес сайта бот запомнит отсюда). Картинка берётся из <b>img/welcome.jpg</b> на GitHub.</p>
-  <button class="fire" data-a="bot_setup" style="height:46px;font-size:14px;box-shadow:none">Подключить бота</button>
+  <p class="pc-hint" style="margin:0">Бот отвечает на /start: картинка «Добро пожаловать», текст и кнопки «🚀 Играть!» и «📢 Новости» (@brainfiretgk). Подключается сам, как только обновлена функция api, а адрес сайта для кнопки «Играть» запоминается, когда админ открывает приложение в Telegram. Ниже видно, всё ли в порядке; если есть ❌ — нажми кнопку. Картинка — <b>img/welcome.jpg</b> на GitHub.</p>
+  ${botStat()}
+  <button class="fire" data-a="bot_setup" style="height:46px;font-size:14px;box-shadow:none">${AS.bot&&AS.bot.ours?'Подключить заново':'Подключить бота'}</button>
   <p class="pc-hint" style="margin:0">Кнопка <b>«Открыть»</b> рядом с ботом в списке чатов включается в @BotFather: /mybots → твой бот → Bot Settings → Configure Mini App → Enable Mini App → пришли адрес сайта.</p></div>
  <div class="adm-card"><div class="adm-row"><b>Ссылки-приглашения</b><span class="muted num" style="margin-left:auto;font-size:12px">зашло по ним: ${fmt(r.invited||0)}</span></div>
   <p class="pc-hint" style="margin:0">Пускают в закрытое приложение — у зашедших всё работает как обычно. Сам выбираешь, сколько человек может зайти по ссылке. Когда откроешь приложение для всех, все ссылки сгорят: закроешь снова — по старым ссылкам уже не зайти, создай новые.</p>
@@ -4699,7 +4711,7 @@ function applyState(st,quiet){
 async function loadMe(){
  if(!LIVE)return;
  if(!tg){toast('Открой приложение через Telegram');return;}
- const st=await API.call('me',{});if(st){maintHide();applyState(st);accChipDraw(st.access);
+ const st=await API.call('me',{app:APP_HREF()});if(st){maintHide();applyState(st);accChipDraw(st.access);
   if(st.draw_win)setTimeout(()=>drawWinShow(st.draw_win),900);
   loadDraws(true);}
 }
@@ -4713,7 +4725,7 @@ function maintShow(msg){
  clearInterval(maintTimer);maintTimer=setInterval(maintCheck,60000);   // сами проверяем раз в минуту
 }
 function maintHide(){if(!$('maint').hidden){$('maint').hidden=true;syncBack();}clearInterval(maintTimer);maintTimer=null;}
-async function maintCheck(){const st=await API.call('me',{},true);if(st){maintHide();applyState(st);accChipDraw(st.access);loadCatalog();toast('Мы снова работаем 🔥');}}
+async function maintCheck(){const st=await API.call('me',{app:APP_HREF()},true);if(st){maintHide();applyState(st);accChipDraw(st.access);loadCatalog();toast('Мы снова работаем 🔥');}}
 $('maintRetry').onclick=async()=>{const b=$('maintRetry');b.disabled=true;b.textContent='Проверяем…';await maintCheck();b.disabled=false;b.textContent='Проверить снова';
  if(!$('maint').hidden)$('maintNote').textContent='Пока ещё обновляемся — попробуй чуть позже';};
 // админ видит, что для игроков приложение закрыто
