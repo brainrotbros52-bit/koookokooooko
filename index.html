@@ -2753,7 +2753,7 @@ async function liveFeed(){
  // приложение свёрнуто — ленту не спрашиваем (меньше нагрузки на сервер), вернулся — сразу догоняем
  const pull=async()=>{if(document.hidden||feedBusy)return;feedBusy=true;try{const L=await API.pub('feed',{after:feedLast});if(!L)return;
   L.forEach(o=>{if(o.id>feedLast){feedLast=o.id;pushDrop(srvDrop(o));}});}finally{feedBusy=false;}};
- setInterval(pull,5000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)pull();});
+ setInterval(pull,8000);   // лента раз в 8 с — меньше запросов к серверуdocument.addEventListener('visibilitychange',()=>{if(!document.hidden)pull();});
  setInterval(async()=>{if(document.hidden)return;const t=await API.pub('top');if(t&&(!TOP||t.price>TOP.p)){TOP=srvDrop(t);drawTop(true);}},60000);
 }
 function initFeed(){if(LIVE){TOP=null;liveFeed();return;}
@@ -3510,7 +3510,7 @@ function wdCards(){if(!WDS.length)return '';
    ${w.status!=='accepted'?`<div class="wd-acts">${w.status==='sent'?`<button class="fire" data-wdok="${w.id}">Принять</button>`:''}<button class="ghost danger" data-wdx="${w.id}">Отменить вывод</button></div>`:''}</div>`;}).join('')}</div>`;}
 $('pbody').addEventListener('click',e=>{const o=e.target.closest('[data-wdopen]');if(!o)return;e.stopPropagation();haptic('light');wdOpen();},true);
 // пока есть выводы в работе — раз в 20 с узнаём, не написал ли админ
-setInterval(async()=>{if(!LIVE||!WDS.length||document.hidden)return;const st=await API.call('me',{},true);if(st)applyState(st,true);},20000);
+setInterval(async()=>{if(!LIVE||!WDS.length||document.hidden)return;const st=await API.call('me',{},true);if(st)applyState(st,true);},45000);
 function drawProfile(){
  if(!pBannerDone){pBannerDone=true;$('pBanner').innerHTML=`<div class="dfire" style="height:100%"><div class="base"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div>${EMBERS}</div>`;}
  // статистика и рекорд
@@ -3872,7 +3872,7 @@ function dqQueue(){
 }
 // демо: очередь двигается сама (в реальном боте — обновления с сервера)
 function dqTick(){clearInterval(dqTimer);
- if(API.on()){dqTimer=setInterval(dqPoll,4000);return;}
+ if(API.on()){dqTimer=setInterval(dqPoll,6000);return;}
  dqTimer=setInterval(()=>{if(!DQ){clearInterval(dqTimer);return;}
  if(DQ.pos>1){DQ.pos--;haptic(DQ.pos===1?'success':'light');if(DQ.pos===1){DQ.end=Date.now()+5*60000;toast('Твоя очередь — отправь трейд!');}
   if($('depSheet').classList.contains('open'))dqQueue();else dqPill();}
