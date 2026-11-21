@@ -338,6 +338,12 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .pitem{display:flex;flex-direction:column;gap:6px;padding:8px 8px 10px;border-radius:14px}
 .pitem-sell{display:flex;align-items:center;justify-content:center;gap:4px;height:32px;border-radius:9px;background:#17120F;border:1px solid #503C2F;color:#FBF2EA;font-size:12px;font-weight:800}
 .pitem-sell:hover{border-color:#F28743;background:#2C1F17}
+.ex-head{display:flex;flex-direction:column;gap:3px}
+.ex-sum{font-weight:800;font-size:14px;color:#F7CA7C}.ex-sum.plus{color:#88E4A5}.ex-sum.bad{color:#FF946E}
+.ex-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:28px;align-items:center}
+.ex-chip{height:28px;padding:0 10px;border-radius:14px;background:#2B2119;border:1px solid var(--c);color:#FBF2EA;font:700 12px Manrope,sans-serif}
+.ex-grid{max-height:38vh}
+.ex-grid .pick:disabled{opacity:.45}
 .pitem-acts{display:grid;grid-template-columns:1fr 1fr;gap:5px;position:relative;z-index:1;margin-bottom:2px}
 .pitem-acts .pitem-sell{height:32px;padding:0 4px;font-size:12px}
 .pitem-sell.wd{background:linear-gradient(135deg,#FF9A4D,#E9662E);border-color:transparent;color:#1A0B04}
@@ -794,6 +800,8 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .pick.pk::before,.pitem::before{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--c);box-shadow:0 0 12px var(--c)}
 .pick.pk.sel{border-color:#F28743;box-shadow:inset 0 0 0 1px #F28743}
 .pk-art{height:64px;display:flex;align-items:center;justify-content:center}
+.pick.pk,.pitem{min-height:min-content;flex-shrink:0}   /* в прокручиваемых списках не сжимать карточки */
+.up-grid,.ms-grid,.inv-grid{grid-auto-rows:max-content}
 .pitem .pk-art{height:84px}
 @media (min-width:900px){.pk-art{height:78px}.pitem .pk-art{height:100px}}
 .pick:hover{border-color:#715441}
@@ -1880,7 +1888,7 @@ const EN={
  'Код друга работает в боевом режиме':"Friend codes work in the live app",'Код активирован':'Code activated',
  'Ты партнёр':'You are a partner','Твои реф-ссылки, коды, промокоды и доход — в кабинете партнёра':'Your referral links, codes, promo codes and income are in the partner dashboard','Открыть кабинет партнёра':'Open partner dashboard',
  '🔒 За код друга':'🔒 For a friend code','🔒 Введи код друга или партнёра':"🔒 Enter a friend's or partner's code",'Введи код друга или партнёра — и кейс откроется бесплатно':"Enter a friend's or partner's code to open this case for free",'Этот кейс бесплатный: введи код друга или партнёра (в «Бонусах», в профиле или в заявке на пополнение) — и открой его один раз.':"This case is free: enter a friend's or partner's code (in Bonuses, your profile or a deposit request) and open it once.",
- 'награда':'reward','пламя феникса!':'phoenix flame!','стрик окончен':'streak over','феникс!':'phoenix!','🔥 Пламя феникса! Стрик: 50% на приз вдвое дороже':'🔥 Phoenix flame! Streak: 50% for a prize twice as valuable','Можно поставить максимум 6 брейнротов':'You can stake up to 6 brainrots','Промокод партнёра':'Partner promo code',
+ 'награда':'reward','Нет в наличии':'Out of stock','Заменить':'Replace','Замена':'Replacement','Ровно по цене':'Exact price','Не хватает на доплату':'Not enough to top up','Заменено!':'Replaced!','Вместо':'Instead of','Нажми на брейнротов ниже (можно одного и того же несколько раз)':'Tap brainrots below (you can pick the same one several times)','Этот брейнрот можно вывести и так':'This brainrot can be withdrawn as is','Слишком большая доплата — выбери брейнротов подешевле':'Top-up too large — pick cheaper brainrots','пламя феникса!':'phoenix flame!','стрик окончен':'streak over','феникс!':'phoenix!','🔥 Пламя феникса! Стрик: 50% на приз вдвое дороже':'🔥 Phoenix flame! Streak: 50% for a prize twice as valuable','Можно поставить максимум 6 брейнротов':'You can stake up to 6 brainrots','Промокод партнёра':'Partner promo code',
  'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
  'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
  'Победителя выберем случайно, когда время выйдет. Приз сразу придёт на склад.':'The winner is picked at random when time runs out. The prize goes straight to the inventory.',
@@ -2157,7 +2165,7 @@ function haptic(kind){
   }catch(e){}
 }
 /* запросы к серверу (Supabase Edge Function «api»). initData проверяется на сервере */
-const ERR={up_too_many:'Можно поставить максимум 6 брейнротов',ref_case_locked:'Этот кейс открывается после кода друга или партнёра',ref_case_used:'Ты уже открыл этот кейс',mines_coins_off:'Мины теперь только на брейнротах',draw_need_deposit:'Сначала пополни баланс на нужную сумму',draw_closed:'Розыгрыш уже закончился — подводим итог',
+const ERR={exch_not_needed:'Этот брейнрот можно вывести и так',exch_too_many:'Можно взять максимум 5 брейнротов',exch_topup_big:'Слишком большая доплата — выбери брейнротов подешевле',up_too_many:'Можно поставить максимум 6 брейнротов',ref_case_locked:'Этот кейс открывается после кода друга или партнёра',ref_case_used:'Ты уже открыл этот кейс',mines_coins_off:'Мины теперь только на брейнротах',draw_need_deposit:'Сначала пополни баланс на нужную сумму',draw_closed:'Розыгрыш уже закончился — подводим итог',
   no_money:'Недостаточно средств',bad_promo:'Такого промокода нет или он закончился',promo_used:'Ты уже использовал этот промокод',
   promo_for_deposit:'Этот промокод работает при пополнении',promo_for_profile:'Этот промокод вводится в профиле',
   deposit_active:'У тебя уже есть заявка в очереди',dep_limit:'За один раз можно внести до 5 предметов',wager_left:'Сначала отыграй баланс',daily_wait:'Бонус ещё не доступен',
@@ -3227,7 +3235,7 @@ function drawProfile(){
      <div class="pk-art">${mono(x,26)}</div>
      <span style="font-size:12px;font-weight:800;line-height:1.25;min-height:30px;text-align:center">${x.name}</span>
      <span class="num" style="display:flex;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:800;color:#F7CA7C">${COIN(12)}${fmt(x.p)}</span>
-     <div class="pitem-acts"><button class="pitem-sell" data-sell="${x.id}">Продать</button><button class="pitem-sell wd" data-wd="${x.id}" ${x.nowd?'disabled title="Этот предмет можно только продать"':''}>Вывести</button></div></div>`).join('')}</div>`
+     <div class="pitem-acts"><button class="pitem-sell" data-sell="${x.id}">Продать</button><button class="pitem-sell wd" data-wd="${x.id}">Вывести</button></div></div>`).join('')}</div>`
    :`<div class="pempty">${ic('M12 2c1 3.5 5 5.5 5 10.5a5 5 0 0 1-10 0c0-2.4 1.2-3.9 2.2-5 .3 1.7 1.1 2.6 2 3 0-3.3.3-5.6.8-8.5zM12 21a2.2 2.2 0 0 1-2.2-2.2c0-1.4 1.3-2.2 2.2-3.6.9 1.4 2.2 2.2 2.2 3.6A2.2 2.2 0 0 1 12 21z','#715441',44,1.4)}
      <span class="muted" style="font-size:14px;text-align:center;line-height:1.45">Пока пусто. Открой кейс —<br>брейнрот появится здесь</span>
      <button class="fire" data-go="home" style="height:44px;padding:0 18px;border-radius:12px;font-size:14px;box-shadow:none">К кейсам</button></div>`}
@@ -3256,7 +3264,7 @@ $('promoGo').onclick=async()=>{const v=$('promoIn').value.trim().toUpperCase();i
  usedPromos.add(v);setBal(bal+P[v]);wAddNeed(P[v]*WAGER_BONUS,'промокод ×3');SFX.play('bonus');haptic('success');toast('+'+P[v]+' на баланс');$('promoIn').value='';};
 const usedPromos=new Set();
 $('pbody').onclick=async e=>{const pg=e.target.closest('[data-pg]');if(pg){if(pg.disabled)return;histPage=+pg.dataset.pg.split(':')[1];haptic('light');drawProfile();return;}
- const wd=e.target.closest('[data-wd]');if(wd){if(wd.disabled)return;haptic('light');wdOpen(+wd.dataset.wd);return;}
+ const wd=e.target.closest('[data-wd]');if(wd){haptic('light');const x=INV.find(y=>y.id===+wd.dataset.wd);if(!x)return;if(x.nowd)exchOpen(x);else wdOpen(x.id);return;}
  const b=e.target.closest('[data-sell]');if(!b)return;haptic('light');
  if(API.on()){
   const ids=b.dataset.sell==='all'?INV.map(x=>x.id):[+b.dataset.sell];
@@ -4491,6 +4499,7 @@ catalogLoaded=true;
  UP_TARGETS=c.upgrade.map(mkItem);
  MINES_POOL=(c.mines_pool||c.upgrade||[]).map(mkItem);
  DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
+ WD_POOL=(c.wd_pool||[]).map(mkItem);
  DEP.gr=c.deposit.gr.map((o,i)=>({key:'gr'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
  const T={down:['Снижают','цена ниже','#FF946E'],top:['Топ','+30% и выше','#F7CA7C'],high:['Высокие','от +15%','#FCAD68'],mid:['Средние','от +5%','#E8B365'],base:['Базовые','до +5%','#BEAD9E']};
  BUFFS.length=0;Object.keys(BUFF_V).forEach(k=>delete BUFF_V[k]);
@@ -4498,6 +4507,7 @@ catalogLoaded=true;
   if(l.length)BUFFS.push({t:T[t][0],d:T[t][1],c:T[t][2],neg:t==='down'?1:0,l});l.forEach(([n,v])=>BUFF_V[n]=v);}
  if(c.settings){if(c.settings.daily_amount)DAILY_AMOUNT=+c.settings.daily_amount;
   const S=c.settings,n=(k,d)=>S[k]!=null&&isFinite(+S[k])?+S[k]:d;
+  EXC={max:n('exchange_max_items',5),topup:n('exchange_topup_pct',20)};
   UPC={max:n('upgrade_max',75),edge:n('upgrade_edge',90),phx:n('upgrade_phoenix',15),show:n('upgrade_phoenix_show',25),smax:n('upgrade_streak_max',4),spct:n('upgrade_streak_pct',50),items:n('upgrade_max_items',6)};}
  const mx=Math.max(0,...c.buffs.map(b=>+b.pct));const bb=document.querySelector('.buffbar .badge');if(bb)bb.textContent='до +'+String(mx).replace('.',',')+'%';
  drawDaily();if($('depModal').classList.contains('open'))drawDep();
@@ -4505,11 +4515,57 @@ catalogLoaded=true;
  try{drawTop();drawFeed();if(cur==='profile')drawProfile();if(cur==='upgrade')drawUp();if(cur==='admin'&&AS.tab==='items'&&!AS.iedit)admItemsDraw();}catch(e){}
 }
 /* ---------- вывод предметов ---------- */
+// ---------- замена: предмета нет в наличии для вывода → взять до 5 брейнротов, которых можно вывести ----------
+var WD_POOL=[],EXC={max:5,topup:20};
+function exchOpen(x){
+ const V=x.p,lim=Math.floor(V*EXC.topup/100);let pick=[],q='',step=0;
+ const box=$('wdBox'),close=`<button class="iconbtn card" data-close aria-label="Закрыть"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DED0C3" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`;
+ const pool=()=>(LIVE?WD_POOL:ITEMS.filter(i=>!i.nowd&&!i.coin&&i.p>0));
+ const draw=()=>{
+  if(step===0){
+   box.innerHTML=`<div class="sheet-grab"></div>
+   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2 class="u" style="font-weight:700;font-size:20px">Нет в наличии</h2>${close}</div>
+   <div class="pitem" style="--c:${R[x.r]};flex-direction:row;align-items:center;gap:12px;padding:10px 12px">
+    <div class="pk-art" style="width:72px;height:72px;flex:none">${mono(x,22)}</div>
+    <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px"><b style="font-size:15px">${x.name}</b><span class="num" style="display:flex;align-items:center;gap:4px;font-weight:800;color:#F7CA7C">${COIN(12)}${fmt(V)}</span></span></div>
+   <p class="pc-hint" style="font-size:13px;margin:0">Этого брейнрота сейчас нет в наличии для вывода в Roblox. Замени его на других — до ${EXC.max} шт., их можно вывести. Взял чуть дороже — доплатишь с баланса (до ${fmt(lim)}), дешевле — остаток придёт монетами на баланс.</p>
+   <button class="fire" id="exGo1" style="height:54px;font-size:15px">Заменить</button>
+   <button class="ghost" id="exSell" style="height:46px;font-size:14px">Продать за ${fmt(V)}</button>`;
+   $('exGo1').onclick=()=>{step=1;draw();};
+   $('exSell').onclick=async()=>{$('exSell').disabled=true;
+    if(API.on()){const r=await API.call('sell',{ids:[x.id]});if(!r){$('exSell').disabled=false;return;}applyState(r.state);}
+    else{const i=INV.findIndex(y=>y.id===x.id);if(i>=0)INV.splice(i,1);setBal(bal+V);drawProfile();}
+    closeSheet('wdSheet');SFX.play('sell');toast('+'+fmt(V)+' на баланс');};
+   return;}
+  const S=pick.reduce((a,y)=>a+y.p,0),diff=S-V,full=pick.length>=EXC.max;
+  const L=pool().filter(y=>!q||y.name.toLowerCase().includes(q)).sort((a,b)=>Math.abs(a.p-Math.max(1,V-S))-Math.abs(b.p-Math.max(1,V-S))||a.p-b.p).slice(0,60);
+  const sumTxt=!pick.length?`Выбери до ${EXC.max} брейнротов`:diff>lim?`Доплата ${fmt(diff)} — слишком много, можно до ${fmt(lim)}`:diff>0?`Доплата с баланса: ${fmt(diff)}`:diff<0?`Остаток на баланс: +${fmt(-diff)}`:'Ровно по цене';
+  const ok=pick.length&&diff<=lim&&(diff<=0||bal>=diff);
+  box.innerHTML=`<div class="sheet-grab"></div>
+   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2 class="u" style="font-weight:700;font-size:20px">Замена</h2>${close}</div>
+   <div class="ex-head"><span class="muted" style="font-size:12px">Вместо <b style="color:#FBF2EA">${x.name}</b> · ${fmt(V)}</span><span class="num ex-sum${diff>lim?' bad':diff<0?' plus':''}">${sumTxt}</span></div>
+   <div class="ex-chips">${pick.length?pick.map((y,i)=>`<button class="ex-chip" data-rm="${i}" style="--c:${R[y.r]}">${y.name} · ${fmt(y.p)} ✕</button>`).join(''):'<span class="muted" style="font-size:12px">Нажми на брейнротов ниже (можно одного и того же несколько раз)</span>'}</div>
+   <div class="srch" style="height:44px"><input id="exQ" value="${esc(q)}" placeholder="Поиск брейнрота…" autocomplete="off"></div>
+   <div class="ms-grid ex-grid">${L.map(y=>`<button class="pick pk" data-add="${esc(y.name)}" style="--c:${R[y.r]}" ${full?'disabled':''}>
+     <div class="pk-art">${mono(y,20)}</div><span style="font-size:11px;font-weight:700;line-height:1.2;min-height:26px">${y.name}</span>
+     <b class="num" style="display:flex;align-items:center;gap:3px;font-size:12px">${COIN(11)}${fmt(y.p)}</b></button>`).join('')||'<p class="muted" style="grid-column:1/-1;text-align:center;font-size:13px">Ничего не нашлось</p>'}</div>
+   <button class="fire" id="exGo" style="height:54px;font-size:15px" ${ok?'':'disabled'}>${!pick.length?'Заменить':diff>0&&bal<diff?'Не хватает на доплату':`Заменить на ${pick.length} шт.`}</button>`;
+  $('exQ').oninput=e=>{q=e.target.value.trim().toLowerCase();const pos=e.target.selectionStart;draw();const i=$('exQ');i.focus();i.setSelectionRange(pos,pos);};
+  box.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{if(pick.length>=EXC.max){toast(`Можно взять максимум ${EXC.max} брейнротов`);return;}const y=pool().find(i=>i.name===b.dataset.add);if(y){pick.push(y);haptic('light');draw();}});
+  box.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{pick.splice(+b.dataset.rm,1);draw();});
+  $('exGo').onclick=async()=>{if(!ok)return;$('exGo').disabled=true;let ids;
+   if(API.on()){const r=await API.call('exchange',{id:x.id,names:pick.map(y=>y.name)});if(!r){$('exGo').disabled=false;return;}applyState(r.state);ids=r.ids;}
+   else{const i=INV.findIndex(y=>y.id===x.id);if(i>=0)INV.splice(i,1);setBal(bal-diff);ids=pick.map(y=>{const n={...y,id:uid++,src:'Замена'};INV.unshift(n);return n.id;});drawProfile();}
+   SFX.play('bonus');haptic('success');toast(diff<0?`Заменено! +${fmt(-diff)} на баланс`:diff>0?`Заменено, доплата ${fmt(diff)}`:'Заменено!');
+   closeSheet('wdSheet');setTimeout(()=>wdOpen(ids),350);};
+ };
+ draw();openSheet('wdSheet');
+}
 function wdOpen(only){
  if(WG.left>0){wSheet();return;}
  if(!INV.length){toast('Инвентарь пуст');return;}
  if(!INV.some(x=>!x.nowd)){toast('Эти предметы нельзя вывести — их можно только продать');return;}
- const sel=new Set(INV.filter(x=>!x.nowd&&(only==null||x.id===only)).map(x=>x.id));let nick=dqNick;
+ const sel=new Set(INV.filter(x=>!x.nowd&&(only==null||(Array.isArray(only)?only.includes(x.id):x.id===only))).map(x=>x.id));let nick=dqNick;
  const draw=()=>{const S=INV.filter(x=>sel.has(x.id)),tot=S.reduce((a,x)=>a+x.p,0),ok=nickOk(nick)&&S.length;
   $('wdBox').innerHTML=`<div class="sheet-grab"></div>
   <div style="display:flex;align-items:center;justify-content:space-between"><h2 class="u" style="font-weight:700;font-size:20px">Вывод в Roblox</h2>
