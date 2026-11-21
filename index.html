@@ -915,6 +915,11 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .ci-p{display:flex;align-items:center;gap:4px;font-weight:800;font-size:13px;color:#F7CA7C}
 @media (min-width:900px){.citem{padding:16px 10px 15px;gap:8px}.ci-art{height:112px}.ci-art>.u{font-size:40px!important}.ci-n{font-size:13px}.ci-p{font-size:15px}}
 .cc-free.lock{background:#2B2119;border-color:#503C2F;color:#DED0C3}.cc-free.off{background:#221A15;border-color:#413229;color:#8F7F72}
+.sub-box{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(63,208,122,.08);border:1px solid rgba(63,208,122,.3);font-size:13px;color:#D9CBBE;line-height:1.35}
+.sub-box b{color:#fff}
+.sub-box.need{animation:subPulse .9s ease 2;border-color:#3FD07A}
+@keyframes subPulse{50%{box-shadow:0 0 0 4px rgba(63,208,122,.25)}}
+.sub-go{flex:none;padding:8px 14px;border-radius:11px;background:#2AABEE;color:#fff;font-weight:700;font-size:13px;border:0}
 .free-hint{font-size:13px;color:#BEAD9E;text-align:center;line-height:1.45;margin:0}
 .cc-free{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:10px;background:#123A35;border:1px solid #2C7C70;color:#7FE6D6;font-weight:800;font-size:13px}
 #openBtn.free{background:linear-gradient(135deg,#3FD0BE,#2AA897);color:#06201C;box-shadow:0 8px 28px rgba(63,208,190,.3),inset 0 -3px 0 rgba(10,70,60,.35)}
@@ -1276,6 +1281,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
           <button class="fast-btn" id="fastBtn" aria-pressed="false" aria-label="Быстрое открытие"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>быстро</button>
           <input type="checkbox" id="fast" hidden>
         </div>
+        <div class="sub-box" id="subBox" hidden><span>📢 Только для подписчиков <b id="subName"></b></span><button class="sub-go" id="subGo">Подписаться</button></div>
         <p class="free-hint" id="freeHint" hidden>Этот кейс бесплатный: введи код друга или партнёра (в «Бонусах», в профиле или в заявке на пополнение) — и открой его один раз.</p>
       </div>
       <div class="case-items" style="display:flex;flex-direction:column;gap:12px">
@@ -1898,7 +1904,7 @@ const EN={
  'Код друга работает в боевом режиме':"Friend codes work in the live app",'Код активирован':'Code activated',
  'Ты партнёр':'You are a partner','Твои реф-ссылки, коды, промокоды и доход — в кабинете партнёра':'Your referral links, codes, promo codes and income are in the partner dashboard','Открыть кабинет партнёра':'Open partner dashboard',
  '🔒 За код друга':'🔒 For a friend code','🔒 Введи код друга или партнёра':"🔒 Enter a friend's or partner's code",'Введи код друга или партнёра — и кейс откроется бесплатно':"Enter a friend's or partner's code to open this case for free",'Этот кейс бесплатный: введи код друга или партнёра (в «Бонусах», в профиле или в заявке на пополнение) — и открой его один раз.':"This case is free: enter a friend's or partner's code (in Bonuses, your profile or a deposit request) and open it once.",
- 'награда':'reward','⏳ через':'⏳ in','⏳ Бесплатно через':'⏳ Free in','Бесплатный кейс ещё перезаряжается — загляни позже':'The free case is recharging — come back later','Админ уже проверяет твой трейд':'An admin is already checking your trade','на трейд — потом заявка отменится':'to send the trade — then the request is cancelled','Время вышло — заявка отменена. Если трейд уже отправлен, админ его проверит':'Time is up — request cancelled. If you already sent the trade, an admin will check it','Нет в наличии':'Out of stock','Заменить':'Replace','Замена':'Replacement','Ровно по цене':'Exact price','Не хватает на доплату':'Not enough to top up','Заменено!':'Replaced!','Вместо':'Instead of','Нажми на брейнротов ниже (можно одного и того же несколько раз)':'Tap brainrots below (you can pick the same one several times)','Этот брейнрот можно вывести и так':'This brainrot can be withdrawn as is','Слишком большая доплата — выбери брейнротов подешевле':'Top-up too large — pick cheaper brainrots','пламя феникса!':'phoenix flame!','стрик окончен':'streak over','феникс!':'phoenix!','🔥 Пламя феникса! Стрик: 50% на приз вдвое дороже':'🔥 Phoenix flame! Streak: 50% for a prize twice as valuable','Можно поставить максимум 6 брейнротов':'You can stake up to 6 brainrots','Промокод партнёра':'Partner promo code',
+ 'награда':'reward','📢 Только для подписчиков':'📢 Subscribers only:','Сначала подпишись на канал — потом жми «Открыть»':'Subscribe to the channel first, then tap “Open”','Не получилось проверить подписку — попробуй чуть позже':'Could not check the subscription — try again a bit later','Подписаться':'Subscribe','⏳ через':'⏳ in','⏳ Бесплатно через':'⏳ Free in','Бесплатный кейс ещё перезаряжается — загляни позже':'The free case is recharging — come back later','Админ уже проверяет твой трейд':'An admin is already checking your trade','на трейд — потом заявка отменится':'to send the trade — then the request is cancelled','Время вышло — заявка отменена. Если трейд уже отправлен, админ его проверит':'Time is up — request cancelled. If you already sent the trade, an admin will check it','Нет в наличии':'Out of stock','Заменить':'Replace','Замена':'Replacement','Ровно по цене':'Exact price','Не хватает на доплату':'Not enough to top up','Заменено!':'Replaced!','Вместо':'Instead of','Нажми на брейнротов ниже (можно одного и того же несколько раз)':'Tap brainrots below (you can pick the same one several times)','Этот брейнрот можно вывести и так':'This brainrot can be withdrawn as is','Слишком большая доплата — выбери брейнротов подешевле':'Top-up too large — pick cheaper brainrots','пламя феникса!':'phoenix flame!','стрик окончен':'streak over','феникс!':'phoenix!','🔥 Пламя феникса! Стрик: 50% на приз вдвое дороже':'🔥 Phoenix flame! Streak: 50% for a prize twice as valuable','Можно поставить максимум 6 брейнротов':'You can stake up to 6 brainrots','Промокод партнёра':'Partner promo code',
  'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
  'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
  'Победителя выберем случайно, когда время выйдет. Приз сразу придёт на склад.':'The winner is picked at random when time runs out. The prize goes straight to the inventory.',
@@ -2175,7 +2181,7 @@ function haptic(kind){
   }catch(e){}
 }
 /* запросы к серверу (Supabase Edge Function «api»). initData проверяется на сервере */
-const ERR={free_case_cd:'Бесплатный кейс ещё перезаряжается — загляни позже',exch_not_needed:'Этот брейнрот можно вывести и так',exch_too_many:'Можно взять максимум 5 брейнротов',exch_topup_big:'Слишком большая доплата — выбери брейнротов подешевле',up_too_many:'Можно поставить максимум 6 брейнротов',ref_case_locked:'Этот кейс открывается после кода друга или партнёра',ref_case_used:'Ты уже открыл этот кейс',mines_coins_off:'Мины теперь только на брейнротах',draw_need_deposit:'Сначала пополни баланс на нужную сумму',draw_closed:'Розыгрыш уже закончился — подводим итог',
+const ERR={need_sub:'Сначала подпишись на канал — потом жми «Открыть»',sub_check_failed:'Не получилось проверить подписку — попробуй чуть позже',free_case_cd:'Бесплатный кейс ещё перезаряжается — загляни позже',exch_not_needed:'Этот брейнрот можно вывести и так',exch_too_many:'Можно взять максимум 5 брейнротов',exch_topup_big:'Слишком большая доплата — выбери брейнротов подешевле',up_too_many:'Можно поставить максимум 6 брейнротов',ref_case_locked:'Этот кейс открывается после кода друга или партнёра',ref_case_used:'Ты уже открыл этот кейс',mines_coins_off:'Мины теперь только на брейнротах',draw_need_deposit:'Сначала пополни баланс на нужную сумму',draw_closed:'Розыгрыш уже закончился — подводим итог',
   no_money:'Недостаточно средств',bad_promo:'Такого промокода нет или он закончился',promo_used:'Ты уже использовал этот промокод',
   promo_for_deposit:'Этот промокод работает при пополнении',promo_for_profile:'Этот промокод вводится в профиле',
   deposit_active:'У тебя уже есть заявка в очереди',dep_limit:'За один раз можно внести до 5 предметов',wager_left:'Сначала отыграй баланс',daily_wait:'Бонус ещё не доступен',
@@ -2631,11 +2637,15 @@ function drawCaseItems(){
 const MS=[1,3,5];let mIdx=0,spinning=false,lastWin=[],uid=100;
 var SPIN=null;   // текущая прокрутка кейса: если ушёл с экрана — доигрываем мгновенно и без звука (SPIN.stop())
 const caseFree=()=>!!(CUR_CASE&&(CUR_CASE.free||CUR_CASE.freeCd));
+// кейс за подписку на канал: плашка «Подписаться» (подписку проверяет сервер при открытии)
+function subShow(ch){const b=$('subBox');if(!b)return;b.hidden=!ch;if(!ch)return;$('subName').textContent=ch;b.classList.remove('need');
+  $('subGo').onclick=()=>{const u='https://t.me/'+ch.replace(/^@/,'');haptic('light');if(tg&&tg.openTelegramLink)tg.openTelegramLink(u);else window.open(u,'_blank');};}
 const cdLeft=id=>Math.max(0,(FREE_CD[id]||0)-Date.now());   // сколько ждать бесплатный кейс (мс)
 const drawTotal=()=>{const fr=caseFree();$('mult').hidden=fr;
  if(fr&&CUR_CASE.freeCd){mIdx=0;const left=cdLeft(CUR_CASE.id);$('openBtn').classList.toggle('free',true);
   $('openBtn').innerHTML=left>0?`⏳ Бесплатно через <span class="num" data-cd-end="${FREE_CD[CUR_CASE.id]}">${mmss(left/1000)}</span>`:'🎁 Открыть бесплатно';
-  if(!spinning)$('openBtn').disabled=left>0;const h=$('freeHint');if(h)h.hidden=true;return;}
+  if(!spinning)$('openBtn').disabled=left>0;const h=$('freeHint');if(h)h.hidden=true;subShow(CUR_CASE.sub&&left<=0?CUR_CASE.sub:null);return;}
+ subShow(null);
  if(fr){mIdx=0;const can=FREE_CASES.has(CUR_CASE.id),lock=!can&&!HAS_REF;$('openBtn').classList.toggle('free',true);
   $('openBtn').innerHTML=can?'🎁 Открыть бесплатно':lock?'🔒 Введи код друга или партнёра':'Уже открыт';if(!spinning)$('openBtn').disabled=!can&&!lock;
   const h=$('freeHint');if(h){h.hidden=!lock;}return;}
@@ -2706,7 +2716,8 @@ async function spin(){
  if(API.on()){
   // сервер сам списывает баланс и решает, что выпало
   const res=await API.call('case_open',{case:CUR_CASE?CUR_CASE.id:$('caseName').textContent,count:n});
-  if(!res||!res.items){spinning=false;$('openBtn').disabled=false;SPIN=null;if(!tok.dead)$('caseStage').classList.remove('run');return;}
+  if(!res||!res.items){spinning=false;$('openBtn').disabled=false;SPIN=null;if(!tok.dead)$('caseStage').classList.remove('run');
+   if(API.lastError==='need_sub'){const b=$('subBox');if(b){b.hidden=false;b.classList.remove('need');void b.offsetWidth;b.classList.add('need');}}return;}
   if(cost)addWager(cost,'Кейс «'+$('caseName').textContent+'»');
   // монета: сервер сразу кладёт её на баланс и не даёт ей id в инвентаре
   winners=res.items.map(it=>({...mkItem(it),coin:!!it.coin||it.id==null,sid:it.id}));
@@ -4555,7 +4566,7 @@ async function loadCatalog(){
  const c=await API.call('catalog',{},true);if(!c)return;
 catalogLoaded=true;
  Object.keys(IMG).forEach(k=>delete IMG[k]);Object.assign(IMG,c.imgs||{});
- HOME_PROMO=c.home_promo||null;setTimeout(drawHomePromo,0);SECTIONS=c.sections||[];CASES.length=0;setTimeout(drawMenu,0);c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,sec:k.section??null,img:k.img||null,free:!!k.free,freeCd:k.free_cd||null,items:(k.items||[]).map(mkItem)}));drawCases();
+ HOME_PROMO=c.home_promo||null;setTimeout(drawHomePromo,0);SECTIONS=c.sections||[];CASES.length=0;setTimeout(drawMenu,0);c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,sec:k.section??null,img:k.img||null,free:!!k.free,freeCd:k.free_cd||null,sub:k.sub||null,items:(k.items||[]).map(mkItem)}));drawCases();
  UP_TARGETS=c.upgrade.map(mkItem);
  MINES_POOL=(c.mines_pool||c.upgrade||[]).map(mkItem);
  DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
