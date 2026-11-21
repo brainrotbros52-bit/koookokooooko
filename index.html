@@ -1214,7 +1214,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
       </div>
       <div class="case-res" id="caseRes" hidden><button class="gold" id="caseSell"></button></div>
       <div class="case-ctl">
-        <div id="mult" class="seg mult-seg" role="group" aria-label="Сколько кейсов" style="grid-template-columns:repeat(4,minmax(0,1fr))"></div>
+        <div id="mult" class="seg mult-seg" role="group" aria-label="Сколько кейсов" style="grid-template-columns:repeat(3,minmax(0,1fr))"></div>
         <div class="open-row">
           <button id="openBtn" class="fire">Открыть за <span class="num" id="total">199</span></button>
           <button class="fast-btn" id="fastBtn" aria-pressed="false" aria-label="Быстрое открытие"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>быстро</button>
@@ -2500,7 +2500,7 @@ function drawCaseItems(){
   <span class="ci-p num">${COIN(13)}${fmt(x.p)}</span></div>`).join('');
  {const n=CASE_ITEMS.length,m=n%10,h=n%100;$('caseSub').textContent=`${n} ${m===1&&h!==11?'предмет':m>=2&&m<=4&&(h<12||h>14)?'предмета':'предметов'}`;}
 }
-const MS=[1,2,3,5];let mIdx=0,spinning=false,lastWin=[],uid=100;
+const MS=[1,3,5];let mIdx=0,spinning=false,lastWin=[],uid=100;
 var SPIN=null;   // текущая прокрутка кейса: если ушёл с экрана — доигрываем мгновенно и без звука (SPIN.stop())
 const caseFree=()=>!!(CUR_CASE&&CUR_CASE.free);
 const drawTotal=()=>{const fr=caseFree();$('mult').hidden=fr;
