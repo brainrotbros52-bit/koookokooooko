@@ -2882,8 +2882,8 @@ $('upBtn').onclick=async()=>{
  const phxOn=res?!!res.phx_on:(UPC.phx>0&&Math.random()*100<UPC.show);
  const phx=res?!!res.phoenix:(win&&phxOn&&Math.abs(r-ch/2)<ch*UPC.phx/200);
  if(phxOn){setArc(ch);$('wheel').classList.add('phx-on');$('chanceSub').textContent='пламя феникса!';SFX.play('toggleOn');}
- // попал в пламя — прокрутка всегда медленная, даже с турбо
- const fast=$('upFast').checked&&!phx;
+ // первая прокрутка — как обычно (по ней нельзя заранее понять, что будет феникс); медленно — только стрик после попадания
+ const fast=$('upFast').checked;
  SFX.play('upStart');
  await needleTo(r,ch,fast?2400:8200,fast?3:8);
  // пламя феникса: стрик — каждый шаг 50% на брейнрота вдвое дороже; промах — забираешь, что уже выбил
