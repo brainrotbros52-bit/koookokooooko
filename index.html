@@ -67,12 +67,14 @@ h1,h2,h3{margin:0}
 .chip.on{background:#FBF2EA;color:#1A0F09;border-color:#FBF2EA}
 .bar{height:6px;border-radius:3px;background:#413229;overflow:hidden}
 .bar>i{display:block;height:100%;background:#F28743;border-radius:3px}
+@media (max-width:430px){.acc-t{display:none}}
+.top>div{min-width:0}
 .badge{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:800;white-space:nowrap}
 
 /* внутри Telegram — на весь экран, без «рамки телефона» */
 html.tg body{padding:0;background:#17120F}
-html.tg .phone{width:100%;height:var(--tg-viewport-stable-height,100vh);max-height:none;border-radius:0;border:0}
-html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
+html.tg .phone{width:100%;height:var(--app-h,var(--tg-viewport-stable-height,100vh));max-height:none;border-radius:0;border:0}
+html.tg .top{padding-top:calc(14px + var(--app-top,0px))}
 
 /* огонь в меню */
 .drawer{overflow:hidden}
@@ -1068,7 +1070,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
 @media (min-width:600px){
  body{padding:0}
  .phone{width:100%;height:100vh;max-height:none;border-radius:0;border:0}
- html.tg .phone{height:var(--tg-viewport-stable-height,100vh)}
+ html.tg .phone{height:var(--app-h,var(--tg-viewport-stable-height,100vh))}
  .top{padding-left:max(16px,calc((100% - 1120px)/2 + 16px));padding-right:max(16px,calc((100% - 1120px)/2 + 16px))}
  .screen{width:100%;max-width:620px;margin-inline:auto}
  .screen[data-s="home"]{max-width:1120px}
@@ -1568,7 +1570,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
           <div class="pava u uava">F</div>
         </div>
         <div style="position:relative;display:flex;align-items:center;gap:6px;max-width:100%">
-          <h1 class="uname hero-name">@Fortik2213</h1>
+          <h1 class="uname hero-name">@fokil667</h1>
           <button class="pico" aria-label="Изменить ник" data-toast="Ник берётся из Telegram"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/></svg></button>
         </div>
         <button class="pid" id="pidCopy" aria-label="Скопировать ID"><span class="uid num">ID 48213</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 9h11v11H9zM5 15V6a2 2 0 0 1 2-2h8"/></svg></button>
@@ -1852,7 +1854,7 @@ const EN={
  'Найти баф':'Find a buff','Снижают':'Lower','цена ниже':'lower price','+30% и выше':'+30% and up','Высокие':'High','от +15%':'from +15%','Средние':'Medium','от +5%':'from +5%','Базовые':'Basic','до +5%':'up to +5%',
  'Бафы брейнрота':'Brainrot buffs','Пример':'Example','Чтобы выбрать бафы — нажми «＋ Бафы» на плитке брейнрота.':'To pick buffs, tap «＋ Buffs» on a brainrot tile.','Выбрано':'Selected','Сбросить':'Reset',
  'Без бафов':'No buffs','＋ Бафы':'＋ Buffs','Добавить':'Add','Шаг 1 из 2':'Step 1 of 2','Заявка на пополнение':'Deposit request','Твой ник в Roblox':'Your Roblox nickname',
- 'Например, Fortik2213':'For example, Fortik2213','— необязательно':'— optional','Код партнёра':'Partner code','— бонуса к пополнению нет':'— no deposit bonus','Промокод или код партнёра':'Promo or partner code',
+ 'Закрыто':'Closed','— необязательно':'— optional','Код партнёра':'Partner code','— бонуса к пополнению нет':'— no deposit bonus','Промокод или код партнёра':'Promo or partner code',
  'Предметы':'Items','Отыгрыш перед выводом':'Wagering before withdrawal','Получишь':'You get','Отправить заявку':'Send request','Только латиница, цифры и _ — от 3 до 20 символов':'Latin letters, digits and _ only — 3 to 20 characters',
  'С этого аккаунта ты отправишь трейд':'You’ll send the trade from this account','в очереди':'in queue','Ник бота в Roblox':'Bot’s Roblox nickname','Скопировать ник бота':'Copy bot nickname',
  'Скопируй ник бота и добавь его в друзья в Roblox.':'Copy the bot’s nickname and add it as a friend in Roblox.','с аккаунта':'from account','с выбранными предметами.':'with the selected items.',
@@ -1945,7 +1947,7 @@ const EN_RX=[
  [/^Осталось отыграть (.+)$/,'Left to wager $1'],[new RegExp('^([+−-])'+_N+' к отыгрышу · (.+)$'),(m,s,n,w)=>`${s}${n} to wagering · ${tr(w)}`],[new RegExp('^([+−-])'+_N+' к отыгрышу$'),'$1$2 to wagering'],
  [/^Кейс «(.+)»$/,(m,a)=>`Case «${tr(a)}»`],[/^Апгрейд из (.+)$/,(m,a)=>`Upgrade from ${tr(a)}`],[/^Новый топ дроп: (.+)$/,'New top drop: $1'],
  [/^(.+?) · (Кейс «.+»)$/,(m,a,b)=>`${a} · ${tr(b)}`],
- [/^Улучшить · (.+)$/,'Upgrade · $1'],[/^выбрано (\d+) из (\d+)$/,'selected $1 of $2'],[/^(\d+) шт\.$/,'$1 pcs'],[/^(\d+) шт\. ·$/,'$1 pcs ·'],[/^(.+) — твой! Стрик феникса: (\d+)$/,'$1 is yours! Phoenix streak: $2'],[/^стрик · шаг (\d+)$/,'streak · step $1'],[/^стрик ×(\d+)$/,'streak ×$1'],[/^феникс · стрик (\d+)$/,'phoenix · streak $1'],[/^Стрик! (.+)$/,'Streak! $1'],[/^Можно поставить максимум (\d+) брейнротов$/,'You can stake up to $1 brainrots'],[/^×2 → ([\d\s.,]+)$/,'×2 → $1'],[/^🎁 Бесплатно · раз в (\d+) ч$/,'🎁 Free · every $1 h'],[/^Бесплатный кейс откроется через (.+)$/,'The free case opens in $1'],[/^(.+) — твой!$/,'$1 is yours!'],
+ [/^Улучшить · (.+)$/,'Upgrade · $1'],[/^выбрано (\d+) из (\d+)$/,'selected $1 of $2'],[/^(\d+) шт\.$/,'$1 pcs'],[/^(\d+) шт\. ·$/,'$1 pcs ·'],[/^(.+) — твой! Стрик феникса: (\d+)$/,'$1 is yours! Phoenix streak: $2'],[/^стрик · шаг (\d+)$/,'streak · step $1'],[/^стрик ×(\d+)$/,'streak ×$1'],[/^феникс · стрик (\d+)$/,'phoenix · streak $1'],[/^Стрик! (.+)$/,'Streak! $1'],[/^Можно поставить максимум (\d+) брейнротов$/,'You can stake up to $1 brainrots'],[/^×2 → ([\d\s.,]+)$/,'×2 → $1'],[/^🎁 Бесплатно · раз в (\d+) ч$/,'🎁 Free · every $1 h'],[/^Бесплатный кейс откроется через (.+)$/,'The free case opens in $1'],[/^Например, ([\w.]+)$/,'For example, $1'],[/^(.+) — твой!$/,'$1 is yours!'],
  [/^Клетка (\d+)$/,'Tile $1'],[new RegExp('^\\+ '+_N+' монет сдачей$'),'+ $1 coins change'],[new RegExp('^'+_N+' монет$'),'$1 coins'],
  [/^Заберёшь сейчас · ×(.+)$/,'You get now · ×$1'],[/^Следующая · ×(.+)$/,'Next · ×$1'],
  [new RegExp('^Забрать (.+?) \\+ '+_N+'$'),'Cash out $1 + $2'],[/^Забрать (.+)$/,'Cash out $1'],
@@ -2017,6 +2019,8 @@ function langPick(first){
 
 
 const LIVE=!!CONFIG.SUPABASE_URL;
+var NICK_EX=['fokil667','kolip982','mirex451','zantok309','pelvo774','drufik528','tomrex816','vaxil203'];
+const nickEx=()=>'Например, '+NICK_EX[Math.floor(Math.random()*NICK_EX.length)];   // пример ника в заявках
 
 /* ---------- Telegram Mini App ---------- */
 const tg=window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initData?window.Telegram.WebApp:null;
@@ -2025,11 +2029,22 @@ if(tg){
   tg.ready();tg.expand();
   try{tg.setHeaderColor('#17120F');tg.setBackgroundColor('#17120F');tg.setBottomBarColor&&tg.setBottomBarColor('#17120F');}catch(e){}
   try{tg.disableVerticalSwipes&&tg.disableVerticalSwipes();}catch(e){}   // чтобы приложение не закрывалось свайпом при прокрутке
+  /* Размер окна. После сворачивания Telegram иногда оставляет старые значения высоты и отступа сверху —
+     меню съезжало вниз, а снизу появлялась чёрная полоса. Берём настоящий размер окна и пересчитываем при каждом возврате. */
+  const fitTg=()=>{const r=document.documentElement.style,ae=document.activeElement,typing=ae&&/^(INPUT|TEXTAREA)$/.test(ae.tagName);
+    if(!typing||!r.getPropertyValue('--app-h'))r.setProperty('--app-h',window.innerHeight+'px');   // пока открыта клавиатура — высоту не трогаем
+    const fs=!!tg.isFullscreen,ins=k=>(tg[k]&&tg[k].top)||0;
+    r.setProperty('--app-top',(fs?ins('safeAreaInset')+ins('contentSafeAreaInset'):0)+'px');};
+  const fitSoon=()=>{fitTg();[80,300,700,1500].forEach(t=>setTimeout(fitTg,t));};
+  fitSoon();addEventListener('resize',fitTg);addEventListener('pageshow',fitSoon);addEventListener('focusout',()=>setTimeout(fitTg,350));
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)fitSoon();});
+  ['viewportChanged','safeAreaChanged','contentSafeAreaChanged','fullscreenChanged'].forEach(e=>{try{tg.onEvent(e,fitTg);}catch(_){}});
+  try{tg.onEvent('activated',fitSoon);}catch(_){}
 }
 const TU=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user||null;
 const USER={
   id:TU?TU.id:48213,
-  name:TU?(TU.username?'@'+TU.username:[TU.first_name,TU.last_name].filter(Boolean).join(' ')):'@Fortik2213',
+  name:TU?(TU.username?'@'+TU.username:[TU.first_name,TU.last_name].filter(Boolean).join(' ')):'@fokil667',
   ava:TU&&TU.photo_url?`<img src="${TU.photo_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`:((TU?(TU.first_name||TU.username||'?'):'F')[0]||'?').toUpperCase(),
   ref:TU?String(TU.id):'fortik'
 };
@@ -3487,7 +3502,7 @@ function dqForm(){
   <div class="dq-field">
    <label for="dqNick">Твой ник в Roblox <span style="color:#FF946E">*</span></label>
    <div class="srch${f.nick&&!ok?' err':''}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A49485" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg>
-    <input id="dqNick" value="${f.nick}" placeholder="Например, Fortik2213" autocomplete="off" spellcheck="false" maxlength="20"></div>
+    <input id="dqNick" value="${f.nick}" placeholder="${nickEx()}" autocomplete="off" spellcheck="false" maxlength="20"></div>
    <span class="dq-hint" id="dqNickHint">${f.nick&&!ok?'<span style="color:#FF946E">Только латиница, цифры и _ — от 3 до 20 символов</span>':'С этого аккаунта ты отправишь трейд'}</span>
   </div>
   <div class="dq-field">
@@ -4558,7 +4573,7 @@ $('maintRetry').onclick=async()=>{const b=$('maintRetry');b.disabled=true;b.text
 // админ видит, что для игроков приложение закрыто
 function accChipDraw(a){const c=$('accChip');const m=a&&a.admin?+a.mode||0:0;c.hidden=!m;
  document.querySelector('.top').classList.toggle('acc-on',!!m);
- if(m){c.textContent='🔒 Закрыто';c.title=m===2?'Заходят только админы':'Заходят только партнёры и админы';}}
+ if(m){c.innerHTML='🔒<span class="acc-t"> Закрыто</span>';c.title=m===2?'Заходят только админы':'Заходят только партнёры и админы';}}
 $('accChip').onclick=()=>{AS.tab='site';go('admin');};
 /* ---------- каталог с сервера: кейсы, шансы, предметы, бафы ---------- */
 async function loadCatalog(){
@@ -4645,7 +4660,7 @@ function wdOpen(only){
    <div class="tile" style="width:36px;height:36px;flex:none;border-radius:9px;${tileBg(R[x.r])}"><span class="u" style="font-weight:800;font-size:11px;color:${R[x.r]}">${x.mono}</span></div>
    <span style="flex:1;min-width:0;font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x.name}</span><b class="num" style="font-size:13px">${fmt(x.p)}</b></label>`).join('')}</div>
   <div class="dq-field"><label for="wdNick">Твой ник в Roblox <span style="color:#FF946E">*</span></label>
-   <div class="srch"><input id="wdNick" value="${nick}" placeholder="Например, Fortik2213" autocomplete="off" spellcheck="false" maxlength="20"></div>
+   <div class="srch"><input id="wdNick" value="${nick}" placeholder="${nickEx()}" autocomplete="off" spellcheck="false" maxlength="20"></div>
    <span class="dq-hint">Бот отправит трейд на этот аккаунт</span></div>
   <button class="fire" id="wdGo" style="height:54px;font-size:15px" ${ok?'':'disabled'}>Вывести ${S.length} ${S.length===1?'предмет':S.length>1&&S.length<5?'предмета':'предметов'} · ${fmt(tot)}</button>`;
   $('wdBox').querySelectorAll('input[data-id]').forEach(c=>c.onchange=()=>{const id=+c.dataset.id;c.checked?sel.add(id):sel.delete(id);draw();});
