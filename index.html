@@ -3421,6 +3421,8 @@ function drawBuffs(){
   <button class="fire" style="flex:1;height:50px;font-size:15px" data-close>${sel.size?`Готово · ${sel.size} ${sel.size===1?'баф':sel.size<5?'бафа':'бафов'}`:'Без бафов'}</button>`;
 }
 $('buffList').addEventListener('click',e=>{const b=e.target.closest('.btag.bpk');if(!b||!buffFor)return;
+ // баф добавляет брейнрота в заявку — если уже выбрано максимум, нельзя (было 6 из 5)
+ if(!depQty[buffFor]&&depTotal()>=DEP_MAX){toast(`За один раз — до ${DEP_MAX} предметов. Убери один, чтобы выбрать этот`);haptic('error');return;}
  const S=depBuffs[buffFor]||(depBuffs[buffFor]=new Set()),n=b.dataset.b;S.has(n)?S.delete(n):S.add(n);if(!S.size)delete depBuffs[buffFor];
  if(!depQty[buffFor])depQty[buffFor]=1;               // выбрал баф — брейнрот сразу добавляется
  haptic('light');drawBuffs();drawDep();});
