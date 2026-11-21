@@ -2447,8 +2447,7 @@ if(LIVE){CASES.length=0;}   // в боевом режиме кейсы прих�
 const fl=['Все','До 100','Легенды','Ивент'];let filter=0;
 let SECTIONS=[];   // разделы кейсов из админ-панели: [{id, name}] по порядку
 function drawCases(){
- const freeL=CASES.filter(x=>x.free);
- const list=CASES.filter(x=>!x.free&&(filter===1?x.p<=100:filter===2?x.p>=799:true));
+ const list=CASES.filter(x=>filter===1?x.p<=100:filter===2?x.p>=799:true);   // реферальный — как все: свой раздел и порядок из админки
  $('casesEmpty').hidden=!!list.length||(LIVE&&!catalogLoaded);
  // сначала разделы (как расставлены в админке), потом кейсы без раздела — в блоке «Кейсы»
  const known=new Set(SECTIONS.map(x=>x.id)),groups=[];
@@ -2457,8 +2456,6 @@ function drawCases(){
  if(rest.length||!groups.length)groups.push(['Кейсы',rest]);
  $('cases').innerHTML=groups.map(([t,l])=>`<div class="case-sec"><div class="sec-title"><span></span><h2 class="u">${esc(t)}</h2><span></span></div>
   <div class="case-grid">${l.map(caseCard).join('')}</div></div>`).join('');
- if(freeL.length)$('cases').insertAdjacentHTML('afterbegin',`<div class="case-sec"><div class="sec-title"><span></span><h2 class="u">Бесплатный</h2><span></span></div>
-  <div class="case-grid">${freeL.map(caseCard).join('')}</div></div>`);
 }
 function caseCard(x){return `
  <button class="card" data-case="${x.name}" data-price="${x.p}" style="text-align:left;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:16px">
