@@ -856,6 +856,8 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .ci-n{font-size:12px;font-weight:800;line-height:1.25;min-height:30px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .ci-p{display:flex;align-items:center;gap:4px;font-weight:800;font-size:13px;color:#F7CA7C}
 @media (min-width:900px){.citem{padding:16px 10px 15px;gap:8px}.ci-art{height:112px}.ci-art>.u{font-size:40px!important}.ci-n{font-size:13px}.ci-p{font-size:15px}}
+.cc-free.lock{background:#2B2119;border-color:#503C2F;color:#DED0C3}.cc-free.off{background:#221A15;border-color:#413229;color:#8F7F72}
+.free-hint{font-size:13px;color:#BEAD9E;text-align:center;line-height:1.45;margin:0}
 .cc-free{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:10px;background:#123A35;border:1px solid #2C7C70;color:#7FE6D6;font-weight:800;font-size:13px}
 #openBtn.free{background:linear-gradient(135deg,#3FD0BE,#2AA897);color:#06201C;box-shadow:0 8px 28px rgba(63,208,190,.3),inset 0 -3px 0 rgba(10,70,60,.35)}
 #openBtn.free:disabled{background:#2B3A37;color:#7C9792;box-shadow:none}
@@ -1216,6 +1218,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
           <button class="fast-btn" id="fastBtn" aria-pressed="false" aria-label="Быстрое открытие"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>быстро</button>
           <input type="checkbox" id="fast" hidden>
         </div>
+        <p class="free-hint" id="freeHint" hidden>Этот кейс бесплатный: введи код друга или партнёра (в «Бонусах», в профиле или в заявке на пополнение) — и открой его один раз.</p>
       </div>
       <div class="case-items" style="display:flex;flex-direction:column;gap:12px">
         <h2 class="u" style="font-weight:700;font-size:17px">Что внутри</h2>
@@ -1815,6 +1818,7 @@ const EN={
  'Этот кейс открывается после кода друга или партнёра':"This case unlocks after a friend's or partner's code",'Ты уже открыл этот кейс':"You've already opened this case",
  'Код друга работает в боевом режиме':"Friend codes work in the live app",'Код активирован':'Code activated',
  'Ты партнёр':'You are a partner','Твои реф-ссылки, коды, промокоды и доход — в кабинете партнёра':'Your referral links, codes, promo codes and income are in the partner dashboard','Открыть кабинет партнёра':'Open partner dashboard',
+ '🔒 За код друга':'🔒 For a friend code','🔒 Введи код друга или партнёра':"🔒 Enter a friend's or partner's code",'Введи код друга или партнёра — и кейс откроется бесплатно':"Enter a friend's or partner's code to open this case for free",'Этот кейс бесплатный: введи код друга или партнёра (в «Бонусах», в профиле или в заявке на пополнение) — и открой его один раз.':"This case is free: enter a friend's or partner's code (in Bonuses, your profile or a deposit request) and open it once.",
  'награда':'reward',
  'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
  'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
@@ -2431,7 +2435,7 @@ if(LIVE){CASES.length=0;}   // в боевом режиме кейсы прих�
 const fl=['Все','До 100','Легенды','Ивент'];let filter=0;
 let SECTIONS=[];   // разделы кейсов из админ-панели: [{id, name}] по порядку
 function drawCases(){
- const freeL=CASES.filter(x=>x.free&&FREE_CASES.has(x.id));
+ const freeL=CASES.filter(x=>x.free);
  const list=CASES.filter(x=>!x.free&&(filter===1?x.p<=100:filter===2?x.p>=799:true));
  $('casesEmpty').hidden=!!list.length||(LIVE&&!catalogLoaded);
  // сначала разделы (как расставлены в админке), потом кейсы без раздела — в блоке «Кейсы»
@@ -2453,7 +2457,7 @@ function caseCard(x){return `
     <path d="M14 46c0-9 5-14 14-14h40c9 0 14 5 14 14v2H14z"/><rect x="14" y="48" width="68" height="30" rx="3"/>
     <path d="M30 34v44M66 34v44"/><rect x="42" y="42" width="12" height="15" rx="2.5"/></svg></div>
   <span style="font-weight:800;font-size:15px">${x.name}</span>
-  ${x.free?`<span class="cc-free">🎁 Бесплатно · 1 раз</span>`:`<span class="num" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:10px;background:#31251E;border:1px solid #503C2F;font-weight:800;font-size:14px">
+  ${x.free?(FREE_CASES.has(x.id)?`<span class="cc-free">🎁 Бесплатно · 1 раз</span>`:HAS_REF?`<span class="cc-free off">Уже открыт</span>`:`<span class="cc-free lock">🔒 За код друга</span>`):`<span class="num" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:10px;background:#31251E;border:1px solid #503C2F;font-weight:800;font-size:14px">
    ${COIN(14)}${fmt(x.p)}</span>`}
  </button>`;}
 $('cases').onclick=e=>{const b=e.target.closest('[data-case]');if(!b)return;$('caseName').textContent=b.dataset.case;casePrice=+b.dataset.price;
@@ -2485,8 +2489,10 @@ const MS=[1,2,3,5];let mIdx=0,spinning=false,lastWin=[],uid=100;
 var SPIN=null;   // текущая прокрутка кейса: если ушёл с экрана — доигрываем мгновенно и без звука (SPIN.stop())
 const caseFree=()=>!!(CUR_CASE&&CUR_CASE.free);
 const drawTotal=()=>{const fr=caseFree();$('mult').hidden=fr;
- if(fr){mIdx=0;const can=FREE_CASES.has(CUR_CASE.id);$('openBtn').classList.toggle('free',true);
-  $('openBtn').innerHTML=can?'🎁 Открыть бесплатно':'Уже открыт';if(!spinning)$('openBtn').disabled=!can;return;}
+ if(fr){mIdx=0;const can=FREE_CASES.has(CUR_CASE.id),lock=!can&&!HAS_REF;$('openBtn').classList.toggle('free',true);
+  $('openBtn').innerHTML=can?'🎁 Открыть бесплатно':lock?'🔒 Введи код друга или партнёра':'Уже открыт';if(!spinning)$('openBtn').disabled=!can&&!lock;
+  const h=$('freeHint');if(h){h.hidden=!lock;}return;}
+ {const h=$('freeHint');if(h)h.hidden=true;}
  $('openBtn').classList.remove('free');if(!$('openBtn').querySelector('#total'))$('openBtn').innerHTML='Открыть за <span class="num" id="total"></span>';
  $('total').textContent=fmt(casePrice*MS[mIdx]);document.querySelectorAll('#mult [data-mp]').forEach(e=>e.innerHTML=COIN(11)+fmt(casePrice*+e.dataset.mp));};
 let LEN=90;const STOP=80;
@@ -2539,7 +2545,7 @@ function buildReels(n,winners){
 }
 async function spin(){
  if(spinning)return;const fr=caseFree(),n=fr?1:MS[mIdx],cost=fr?0:casePrice*n;
- if(fr&&!FREE_CASES.has(CUR_CASE.id)){toast('Ты уже открыл этот кейс');return;}
+ if(fr&&!FREE_CASES.has(CUR_CASE.id)){if(!HAS_REF){toast('Введи код друга или партнёра — и кейс откроется бесплатно');go('bonus');return;}toast('Ты уже открыл этот кейс');return;}
  if(cost>bal){toast('Недостаточно средств');haptic('error');return;}
  spinning=true;$('openBtn').disabled=true;haptic('medium');SFX.play('caseStart');caseReset();idleStop();$('caseStage').classList.add('run');
  const tok={dead:false,fin:null,stop(){if(this.dead)return;this.dead=true;if(this.fin)this.fin();}};SPIN=tok;
@@ -3257,7 +3263,7 @@ $('depSort').onclick=()=>{depAsc=!depAsc;$('depSort').classList.toggle('desc',!d
 /* ---------- заявка на пополнение: ник + промокод → очередь ---------- */
 const PROMOS={};          // демо-промокодов нет — создавай свои в базе (admin_add_promo)
 let DEP_PROMO=null;var DEP_PREFILL=null;
-var FRIEND_BONUS=null,FREE_CASES=new Set();   // бонус друга (+% к пополнению) и бесплатные кейсы, доступные игроку       // промокод +% к пополнению, активированный в профиле
+var FRIEND_BONUS=null,FREE_CASES=new Set(),HAS_REF=false;   // бонус друга (+% к пополнению) и бесплатные кейсы, доступные игроку       // промокод +% к пополнению, активированный в профиле
 let DQ=null,dqNick='',dqTimer=null;                       // DQ — активная заявка
 const X_SVG='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DED0C3" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';const XBTN=`<button class="iconbtn card" data-close aria-label="Закрыть">${X_SVG}</button>`;
 const nickOk=v=>/^[A-Za-z0-9_]{3,20}$/.test(v);
@@ -4263,7 +4269,7 @@ function applyState(st,quiet){
  if(Array.isArray(st.daily_rewards)&&st.daily_rewards.length===7)DAYS=st.daily_rewards.map(Number);
  if(st.daily_amount!=null)DAILY_AMOUNT=+st.daily_amount;
  DEP_PROMO=st.deposit_promo||null;drawDaily();
- FRIEND_BONUS=st.pref||null;{const was=[...FREE_CASES].join();FREE_CASES=new Set(st.free_cases||[]);if([...FREE_CASES].join()!==was){drawCases();if(cur==='case')drawTotal();}}
+ FRIEND_BONUS=st.pref||null;{const was=[...FREE_CASES].join()+HAS_REF;FREE_CASES=new Set(st.free_cases||[]);HAS_REF=!!st.has_ref;if([...FREE_CASES].join()+HAS_REF!==was){drawCases();if(cur==='case')drawTotal();}}
  // активная заявка на пополнение
  if(st.deposit){const d=st.deposit;
   const items=(d.items||[]).map(o=>({_srv:1,name:o.name,q:o.q,r:RB(o.price),get mono(){return mk(o.name);},buffs:o.buffs||[],_tot:Math.round(o.price*(1+(o.pct||0)/100))*o.q}));
