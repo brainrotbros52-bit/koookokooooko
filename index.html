@@ -431,6 +431,13 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .dq-sum{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:14px;background:#221A15;border:1px solid #413229}
 #dqSend:disabled{background:#503C2F;color:#938274;box-shadow:none;cursor:default}
 .dq-q{display:flex;align-items:center;gap:16px;padding:16px;border-radius:18px;background:radial-gradient(ellipse at 0% 50%,rgba(242,135,67,0.21),transparent 60%),#221A15;border:1px solid #503C2F}
+.dq-timer{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:16px;background:#2C1F17;border:1px solid #714A31}
+.dq-timer b{font-size:28px;font-weight:800;color:#FFB088;min-width:72px}
+.dq-timer span{font-size:13px;color:#BEAD9E;line-height:1.35}
+.dq-timer b.cd-low{color:#FF6B4A;animation:cdBeat 1s ease-in-out infinite}
+@keyframes cdBeat{50%{opacity:.55}}
+.dq-timer.ok{border-color:#47AF70;background:#14251B}.dq-timer.ok span{color:#88E4A5;font-weight:700}
+.dq-pill b.cd-low{color:#FF6B4A}
 .dq-q.me{border-color:#47AF70;background:radial-gradient(ellipse at 0% 50%,rgba(127,212,154,.16),transparent 60%),#221A15}
 .dq-pos{position:relative;width:76px;height:76px;flex:none;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#2C1F17;border:2px solid #F28743}
 .dq-q.me .dq-pos{border-color:#88E4A5;background:#14251B}
@@ -1888,7 +1895,7 @@ const EN={
  'Код друга работает в боевом режиме':"Friend codes work in the live app",'Код активирован':'Code activated',
  'Ты партнёр':'You are a partner','Твои реф-ссылки, коды, промокоды и доход — в кабинете партнёра':'Your referral links, codes, promo codes and income are in the partner dashboard','Открыть кабинет партнёра':'Open partner dashboard',
  '🔒 За код друга':'🔒 For a friend code','🔒 Введи код друга или партнёра':"🔒 Enter a friend's or partner's code",'Введи код друга или партнёра — и кейс откроется бесплатно':"Enter a friend's or partner's code to open this case for free",'Этот кейс бесплатный: введи код друга или партнёра (в «Бонусах», в профиле или в заявке на пополнение) — и открой его один раз.':"This case is free: enter a friend's or partner's code (in Bonuses, your profile or a deposit request) and open it once.",
- 'награда':'reward','Нет в наличии':'Out of stock','Заменить':'Replace','Замена':'Replacement','Ровно по цене':'Exact price','Не хватает на доплату':'Not enough to top up','Заменено!':'Replaced!','Вместо':'Instead of','Нажми на брейнротов ниже (можно одного и того же несколько раз)':'Tap brainrots below (you can pick the same one several times)','Этот брейнрот можно вывести и так':'This brainrot can be withdrawn as is','Слишком большая доплата — выбери брейнротов подешевле':'Top-up too large — pick cheaper brainrots','пламя феникса!':'phoenix flame!','стрик окончен':'streak over','феникс!':'phoenix!','🔥 Пламя феникса! Стрик: 50% на приз вдвое дороже':'🔥 Phoenix flame! Streak: 50% for a prize twice as valuable','Можно поставить максимум 6 брейнротов':'You can stake up to 6 brainrots','Промокод партнёра':'Partner promo code',
+ 'награда':'reward','Админ уже проверяет твой трейд':'An admin is already checking your trade','на трейд — потом заявка отменится':'to send the trade — then the request is cancelled','Время вышло — заявка отменена. Если трейд уже отправлен, админ его проверит':'Time is up — request cancelled. If you already sent the trade, an admin will check it','Нет в наличии':'Out of stock','Заменить':'Replace','Замена':'Replacement','Ровно по цене':'Exact price','Не хватает на доплату':'Not enough to top up','Заменено!':'Replaced!','Вместо':'Instead of','Нажми на брейнротов ниже (можно одного и того же несколько раз)':'Tap brainrots below (you can pick the same one several times)','Этот брейнрот можно вывести и так':'This brainrot can be withdrawn as is','Слишком большая доплата — выбери брейнротов подешевле':'Top-up too large — pick cheaper brainrots','пламя феникса!':'phoenix flame!','стрик окончен':'streak over','феникс!':'phoenix!','🔥 Пламя феникса! Стрик: 50% на приз вдвое дороже':'🔥 Phoenix flame! Streak: 50% for a prize twice as valuable','Можно поставить максимум 6 брейнротов':'You can stake up to 6 brainrots','Промокод партнёра':'Partner promo code',
  'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
  'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
  'Победителя выберем случайно, когда время выйдет. Приз сразу придёт на склад.':'The winner is picked at random when time runs out. The prize goes straight to the inventory.',
@@ -3424,6 +3431,12 @@ $('depSort').onclick=()=>{depAsc=!depAsc;$('depSort').classList.toggle('desc',!d
 const PROMOS={};          // демо-промокодов нет — создавай свои в базе (admin_add_promo)
 let DEP_PROMO=null;var DEP_PREFILL=null;
 var FRIEND_BONUS=null,FREE_CASES=new Set(),HAS_REF=false;   // бонус друга (+% к пополнению) и бесплатные кейсы, доступные игроку       // промокод +% к пополнению, активированный в профиле
+// обратный отсчёт: каждую секунду обновляем все [data-cd-end] (мм:сс); у игрока по нулю — спрашиваем сервер
+const mmss=sec=>{sec=Math.max(0,Math.ceil(sec));return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');};
+setInterval(()=>{const now=Date.now();
+ document.querySelectorAll('[data-cd-end]').forEach(e=>{const left=(+e.dataset.cdEnd-now)/1000;e.textContent=mmss(left);e.classList.toggle('cd-low',left<=60);});
+ if(DQ&&DQ.end&&DQ.status==='queued'&&now>=DQ.end&&!DQ._ended){DQ._ended=1;if(API.on())dqPoll();else dqTimeout();}
+},1000);
 let DQ=null,dqNick='',dqTimer=null;                       // DQ — активная заявка
 const X_SVG='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DED0C3" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';const XBTN=`<button class="iconbtn card" data-close aria-label="Закрыть">${X_SVG}</button>`;
 const nickOk=v=>/^[A-Za-z0-9_]{3,20}$/.test(v);
@@ -3513,9 +3526,11 @@ function dqQueue(){
   <div class="dq-pos"><span class="dq-pulse"></span><span class="dq-pulse d2"></span><b class="u num">${DQ.pos}</b><small>в очереди</small></div>
   <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
    <b style="font-size:15px">${me?'Твоя очередь!':`Перед тобой ${DQ.pos-1} ${(DQ.pos-1)%10===1&&(DQ.pos-1)%100!==11?'человек':[2,3,4].includes((DQ.pos-1)%10)&&![12,13,14].includes((DQ.pos-1)%100)?'человека':'человек'}`}</b>
-   <span class="muted" style="font-size:13px;line-height:1.4">${me?'Бот ждёт трейд от <b style="color:#FBF2EA">'+DQ.nick+'</b>. Отправь его сейчас.':'Примерно ~'+(DQ.pos-1)*1+' мин. Можно закрыть окно — место сохранится.'}</span>
+   <span class="muted" style="font-size:13px;line-height:1.4">${me?'Бот ждёт трейд от <b style="color:#FBF2EA">'+DQ.nick+'</b>. Отправь его сейчас.':'Примерно ~'+(DQ.pos-1)*5+' мин. Можно закрыть окно — место сохранится.'}</span>
   </div>
  </div>
+ ${me&&DQ.status==='processing'?`<div class="dq-timer ok"><span>Админ уже проверяет твой трейд</span></div>`
+  :me&&DQ.end?`<div class="dq-timer"><b class="num" data-cd-end="${DQ.end}">${mmss((DQ.end-Date.now())/1000)}</b><span>на трейд — потом заявка отменится</span></div>`:''}
  <div class="dq-bot">
   <span class="muted" style="font-size:12px;font-weight:700">Ник бота в Roblox</span>
   <b class="u" style="font-size:18px;letter-spacing:.02em">${CONFIG.BOT_NICK}</b>
@@ -3539,7 +3554,7 @@ function dqQueue(){
 function dqTick(){clearInterval(dqTimer);
  if(API.on()){dqTimer=setInterval(dqPoll,4000);return;}
  dqTimer=setInterval(()=>{if(!DQ){clearInterval(dqTimer);return;}
- if(DQ.pos>1){DQ.pos--;haptic(DQ.pos===1?'success':'light');if(DQ.pos===1)toast('Твоя очередь — отправь трейд!');
+ if(DQ.pos>1){DQ.pos--;haptic(DQ.pos===1?'success':'light');if(DQ.pos===1){DQ.end=Date.now()+5*60000;toast('Твоя очередь — отправь трейд!');}
   if($('depSheet').classList.contains('open'))dqQueue();else dqPill();}
  else if(!DQ._t){DQ._t=Date.now();}
  else if(Date.now()-DQ._t>5000){   // демо: «бот принял трейд» и зачислил монеты
@@ -3552,22 +3567,28 @@ async function dqPoll(){
  if(!DQ){clearInterval(dqTimer);return;}
  const r=await API.call('deposit_status',{id:DQ.id},true);if(!r)return;
  if(r.status==='queued'||r.status==='processing'){
-  const ch=r.pos!==DQ.pos||r.status!==DQ.status;DQ.pos=r.pos;DQ.status=r.status;
+  const ch=r.pos!==DQ.pos||r.status!==DQ.status||(r.left!=null)!==!!DQ.end;DQ.pos=r.pos;DQ.status=r.status;
+  if(r.left!=null){const e=Date.now()+r.left*1000;if(!DQ.end||Math.abs(e-DQ.end)>2500)DQ.end=e;DQ._ended=0;}
   if(ch){if(r.pos===1){haptic('success');toast('Твоя очередь — отправь трейд!');}
    if($('depSheet').classList.contains('open'))dqQueue();else dqPill();}
   return;}
+ if(r.status==='timeout'){dqTimeout();return;}
  clearInterval(dqTimer);const done=r.status==='done';DQ=null;dqPill();
  if($('depSheet').classList.contains('open'))closeSheet('depSheet');
  if(done){SFX.play('depositOk');haptic('success');toast('Трейд принят — +'+fmt(r.credited)+' на баланс');}
  else{haptic('warning');toast(r.status==='rejected'?'Заявку отклонили — напиши в поддержку':'Заявка отменена');}
  loadMe();
 }
+// у игрока вышло 5 минут: заявка для него отменена (админ ещё может принять трейд, если он уже пришёл)
+function dqTimeout(){clearInterval(dqTimer);DQ=null;dqPill();
+ if($('depSheet').classList.contains('open'))closeSheet('depSheet');
+ haptic('warning');toast('Время вышло — заявка отменена. Если трейд уже отправлен, админ его проверит');if(API.on())loadMe();}
 function dqPill(){
  let p=$('dqPill');
  if(!DQ){if(p)p.remove();return;}
  if(!p){p=document.createElement('button');p.id='dqPill';p.className='dq-pill';$('phone').appendChild(p);p.onclick=()=>{haptic('light');openDeposit();dqQueue();openSheet('depSheet');};}
  p.classList.toggle('me',DQ.pos===1);
- p.innerHTML=`<span class="dq-dot"></span>${DQ.pos===1?'Твоя очередь — отправь трейд':'Заявка в очереди · '+DQ.pos}`;
+ p.innerHTML=`<span class="dq-dot"></span>${DQ.pos===1?'Твоя очередь — отправь трейд':'Заявка в очереди · '+DQ.pos}${DQ.pos===1&&DQ.end&&DQ.status==='queued'?` · <b class="num" data-cd-end="${DQ.end}">${mmss((DQ.end-Date.now())/1000)}</b>`:''}`;
  p.hidden=$('depSheet').classList.contains('open');
 }
 $('depGo').onclick=()=>{haptic('medium');if(DQ){dqQueue();openSheet('depSheet');return;}dqForm();openSheet('depSheet');};
@@ -3629,9 +3650,9 @@ async function admLoad(){
   const mode=AS.mode[T],pg=AS.page[T];const r=await adm(T==='dep'?'deposits':'withdrawals',{mode,page:pg},true);if(!r)return;
   const seg=`<div class="seg adm-mode" style="grid-template-columns:1fr 1fr"><button class="${mode==='active'?'on':''}" data-mode="active">В очереди</button><button class="${mode==='history'?'on':''}" data-mode="history">История</button></div>`;
   const ST={queued:['в очереди','#38241A','#FFB088'],processing:['в работе','#193E27','#88E4A5'],done:[T==='dep'?'зачислено':'отправлено','#193E27','#88E4A5'],rejected:['отклонено','#4C2216','#FF946E'],cancelled:['отменено','#31251E','#BEAD9E']};
-  const badge=x=>{const s=ST[x.status]||[x.status,'#31251E','#BEAD9E'];return `<span class="badge" style="background:${s[1]};color:${s[2]}">${T==='dep'&&x.status==='queued'&&x.pos?x.pos+' в очереди':s[0]}</span>`;};
+  const badge=x=>{const s=ST[x.status]||[x.status,'#31251E','#BEAD9E'];return `<span class="badge" style="background:${s[1]};color:${s[2]}">${T==='dep'&&x.status==='queued'&&x.pos?x.pos+' в очереди':s[0]}${x.note?' · '+esc(x.note):''}</span>`;};
   const card=x=>T==='dep'?`<div class="adm-card${x.status==='processing'?' hot':''}">
-    <div class="adm-row"><b class="u">#${x.id}</b>${badge(x)}<span class="muted" style="margin-left:auto;font-size:12px">${ago(Date.parse(x.ts))}</span></div>
+    <div class="adm-row"><b class="u">#${x.id}</b>${badge(x)}${x.left!=null?`<span class="badge num" style="background:${x.left<=180?'#4C2216;color:#FF946E':'#2C1F17;color:#FFB088'}">⏱ <span data-cd-end="${Date.now()+x.left*1000}">${mmss(x.left)}</span></span>`:''}${x.player_out?'<span class="badge" style="background:#31251E;color:#BEAD9E">у игрока вышло время</span>':''}<span class="muted" style="margin-left:auto;font-size:12px">${ago(Date.parse(x.ts))}</span></div>
     <button class="adm-sub adm-link" data-user="${x.tg_id}">${who(x)} ›</button>
     <button class="adm-nick" data-copy="${esc(x.nick)}">Roblox: <b>${esc(x.nick)}</b> ${CPY}</button>
     ${admItemsList(x.items)}
@@ -4472,7 +4493,7 @@ function applyState(st,quiet){
  // активная заявка на пополнение
  if(st.deposit){const d=st.deposit;
   const items=(d.items||[]).map(o=>({_srv:1,name:o.name,q:o.q,r:RB(o.price),get mono(){return mk(o.name);},buffs:o.buffs||[],_tot:Math.round(o.price*(1+(o.pct||0)/100))*o.q}));
-  const was=DQ;DQ={id:d.id,status:d.status,pos:d.pos,nick:d.nick,sum:d.sum,bonus:d.bonus,promo:d.promo||'',items};
+  const was=DQ;DQ={id:d.id,status:d.status,pos:d.pos,nick:d.nick,sum:d.sum,bonus:d.bonus,promo:d.promo||'',items,end:d.left!=null?Date.now()+d.left*1000:null};
   if(!was)dqTick();dqPill();
  }else if(DQ&&LIVE){DQ=null;clearInterval(dqTimer);dqPill();}
  // незаконченная игра в мины
