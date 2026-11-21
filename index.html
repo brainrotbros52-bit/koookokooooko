@@ -687,7 +687,7 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .ms-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:46vh;overflow-y:auto;scrollbar-width:thin}
 /* рулетка */
 .reels{display:flex;flex-direction:column;gap:8px}
-.reel{position:relative;width:100%;border-radius:18px;background:#1B1511;border:1px solid #413229;overflow:hidden}
+.reel{position:relative;width:100%;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%)}   /* без рамки: лента во всю ширину, края растворяются */
 .track{position:absolute;left:0;display:flex;gap:8px;will-change:transform;backface-visibility:hidden}
 .rt{flex:none;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:transform .3s,box-shadow .3s,opacity .3s}
 .rt span.n{font-size:11px;font-weight:700;color:#DED0C3;text-align:center;padding:0 6px;line-height:1.2}
@@ -712,8 +712,7 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 @keyframes beat{50%{box-shadow:0 0 18px 4px rgba(240,160,96,.9)}}
 @keyframes beatG{50%{transform:scaleX(1.8)}}
 .reel.done .mk::before{background:linear-gradient(rgba(255,210,168,0),#FFD2A8 18%,#fff 50%,#FFD2A8 82%,rgba(255,210,168,0))}
-.reel .fade{position:absolute;inset:0;background:linear-gradient(90deg,#1B1511 0%,rgba(27,21,17,0) 22%,rgba(27,21,17,0) 78%,#1B1511 100%);z-index:1;pointer-events:none}
-.spinning .reel{border-color:#714A31}
+.reel .fade{display:none}
 .reel .flash{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;background:radial-gradient(ellipse 34% 70% at 50% 50%,var(--fc,#fff),transparent 70%)}
 .reel.flashing .flash{animation:rflash .7s ease-out}
 @keyframes rflash{0%{opacity:.75}100%{opacity:0}}
@@ -2545,7 +2544,12 @@ function idleStart(d){
  const fr=now=>{if(spinning||cur!=='case'||$('caseStage').classList.contains('run')){idleRAF=null;return;}
   tracks.forEach((t,i)=>{t.style.transform=`translate3d(${x0-((now-t0)/1000*sp[i])%period}px,0,0)`;});idleRAF=requestAnimationFrame(fr);};
  idleRAF=requestAnimationFrame(fr);}
+// лента во всю ширину области экрана (без полей страницы)
+function reelBleed(){const r=$('reels'),host=r.closest('.body')||document.body;r.style.marginLeft='';r.style.width='';
+ const rb=r.getBoundingClientRect();if(!rb.width)return;const hb=host.getBoundingClientRect(),W=host.clientWidth;
+ r.style.marginLeft=Math.round(hb.left-rb.left)+'px';r.style.width=W+'px';}
 function buildReels(n,winners){
+ reelBleed();
  if(!winners){caseReset();$('caseStage').classList.remove('run');}else idleStop();
  const rw0=$('reels').clientWidth||358,d=reelDims(n,rw0),P=showPool();
  LEN=Math.max(90,STOP+Math.ceil((rw0/2+d.tw)/(d.tw+8))+2);   // справа от остановки тоже хватает плиток
@@ -2553,7 +2557,7 @@ function buildReels(n,winners){
   const list=winners?reelList(P,winners[r],n>1):idleList(P);
   return `<div class="reel" style="height:${d.h}px"><div class="track" style="top:${(d.h-d.th)/2}px">${list.map((x,i)=>`
    <div class="rt${winners&&i===STOP?' win':''}" style="--c:${R[x.r]}88;width:${d.tw}px;height:${d.th}px;${tileBg(R[x.r])}">
-    ${mono(x,d.f)}${d.tw>=80?`<span class="n" style="font-size:${d.nf}px">${x.name}</span>`:''}</div>`).join('')}</div><div class="fade"></div><div class="flash"></div><div class="mk"><svg class="cap t" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg><svg class="cap b" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg></div></div>`;}).join('');
+    ${mono(x,d.f)}${d.tw>=80?`<span class="n" style="font-size:${d.nf}px">${x.name}</span>`:''}</div>`).join('')}</div><div class="fade"></div><div class="flash"></div><div class="mk"></div></div></div>`;}).join('');
  const rw=$('reels').clientWidth||358;
  document.querySelectorAll('#reels .track').forEach(t=>{t.style.transition='none';t.style.transform=`translate3d(${reelStartX(d,rw)}px,0,0)`;});
  if(!winners)idleStart(d);
