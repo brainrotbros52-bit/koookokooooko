@@ -1814,6 +1814,7 @@ const EN={
  'Введи код друга':"Enter a friend's code",'Промокод, код партнёра или друга':'Promo, partner or friend code','Реферал':'Referral',
  'Этот кейс открывается после кода друга или партнёра':"This case unlocks after a friend's or partner's code",'Ты уже открыл этот кейс':"You've already opened this case",
  'Код друга работает в боевом режиме':"Friend codes work in the live app",'Код активирован':'Code activated',
+ 'Ты партнёр':'You are a partner','Твои реф-ссылки, коды, промокоды и доход — в кабинете партнёра':'Your referral links, codes, promo codes and income are in the partner dashboard','Открыть кабинет партнёра':'Open partner dashboard',
  'награда':'reward',
  'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
  'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
@@ -2902,9 +2903,13 @@ $('mBetBr').addEventListener('click',e=>{if(mState==='play')return;
 
 /* ---------- «Пригласи друга»: свой код, другу +%, тебе % с его пополнений ---------- */
 let PREFI=null;
-async function loadPref(){if(LIVE){const r=await API.call('pref',{},true);if(r)PREFI=r;}else PREFI=PREFI||{code:'FIRE7K',friend_pct:5,owner_pct:5,friends:0,friends_dep:0,earned:0,my_ref:null};drawPref();}
+async function loadPref(){if(USER.partner){drawPref();return;}if(LIVE){const r=await API.call('pref',{},true);if(r)PREFI=r;}else PREFI=PREFI||{code:'FIRE7K',friend_pct:5,owner_pct:5,friends:0,friends_dep:0,earned:0,my_ref:null};drawPref();}
 const prefLink=()=>`https://t.me/${CONFIG.BOT_USERNAME}?startapp=f_${PREFI.code}`;
-function drawPref(){const el=$('prefBox');if(!el)return;const p=PREFI;
+function drawPref(){const el=$('prefBox');if(!el)return;
+ if(USER.partner){   // у партнёра вместо кода друга — его кабинет (там свои ссылки, коды и доход)
+  el.innerHTML=`<div style="display:flex;flex-direction:column;gap:4px"><h2>Ты партнёр</h2><span class="muted" style="font-size:13px">Твои реф-ссылки, коды, промокоды и доход — в кабинете партнёра</span></div>
+   <button class="fire" data-go="partner" style="height:50px;font-size:15px">Открыть кабинет партнёра</button>`;return;}
+ const p=PREFI;
  if(!p){el.innerHTML='<p class="muted" style="margin:0;font-size:13px">Загружаем твой код…</p>';return;}
  el.innerHTML=`<div style="display:flex;flex-direction:column;gap:4px"><h2>Пригласи друга</h2><span class="muted" style="font-size:13px">Дай другу свой код или ссылку — бонус получите оба</span></div>
   <div class="pref-perks"><div class="pref-perk"><b>+${+p.friend_pct}%</b><span>другу к каждому пополнению и бесплатный кейс «Реферальный»</span></div>
@@ -4252,7 +4257,7 @@ function applyState(st,quiet){
  WG.left=st.wager_left;WG.total=st.wager_total;
  STATS=st.stats||STATS;BEST=st.best?{...mkItem(st.best),src:st.best.src}:null;
  const wasP=USER.partner;USER.partner=!!st.is_partner;$('partnerRow').hidden=!USER.partner;USER.canApply=!!st.can_apply;USER.app=st.partner_app||null;paRow();
- if(wasP!==USER.partner){drawMenu();if(cur==='partner'&&!USER.partner)go('profile');}
+ if(wasP!==USER.partner){drawMenu();if(cur==='bonus')loadPref();if(cur==='partner'&&!USER.partner)go('profile');}
  const wasAdm=USER.admin;USER.admin=!!st.is_admin;$('admEntry').hidden=!USER.admin;if(USER.admin&&!wasAdm)setTimeout(admPoll,500);
  DAILY_NEXT=st.daily_next?Date.parse(st.daily_next):null;DAILY_DAY=st.daily_day||1;DAILY_STREAK=st.daily_streak||0;
  if(Array.isArray(st.daily_rewards)&&st.daily_rewards.length===7)DAYS=st.daily_rewards.map(Number);
