@@ -1734,7 +1734,7 @@ const EN={
  // мины
  'Мины':'Mines','Открывай клетки, не задень мину':'Open tiles, avoid the mines','Множитель':'Multiplier','Чем ставить':'Bet with','Следующая клетка':'Next tile',
  'Ставка брейнротами':'Bet with brainrots','Ставка':'Bet','Количество мин':'Number of mines','Начать игру':'Start game','Монеты':'Coins','Брейнроты':'Brainrots',
- 'Выбрать брейнротов со склада':'Choose brainrots from inventory','Открой клетку — появится приз':'Open a tile — a prize will appear','Выбери клетку':'Pick a tile','Выбери брейнротов':'Pick brainrots',
+ 'Выбрать брейнротов со склада':'Choose brainrots from inventory','Твоя ставка · открой клетку':'Your stake · open a tile','Открой клетку — появится приз':'Open a tile — a prize will appear','Выбери клетку':'Pick a tile','Выбери брейнротов':'Pick brainrots',
  'Выбери брейнротов — в каждой открытой клетке будет брейнрот, которого заберёшь':'Pick brainrots — every opened tile shows the brainrot you’ll get',
  'Бум! Ставка сгорела':'Boom! Your bet burned','Выиграешь — получишь брейнрота дороже. Мина — поставленные сгорят.':'Win — get a pricier brainrot. Hit a mine — the staked ones burn.',
  'Выбрать все':'Select all','Снять все':'Clear all','Поставлено брейнротов на':'Brainrots staked:','Найди и не взорвись':'Find gems, don’t blow up','бум':'boom',
@@ -2796,22 +2796,21 @@ $('upBtn').onclick=async()=>{
 const MC=[3,5,10,24];let mines=3,mState='idle',bombs=new Set(),opened=0;
 const gemSvg=ic(I.gem,'#F7CA7C',26,1.8);
 const bombSvg=ic(I.mines,'#FF946E',26,1.8);
-function coef(k){let c=1;for(let i=0;i<k;i++)c*=(25-i)/(25-mines-i);return c*0.97;}
+function coef(k){if(k<=0)return 1;let c=1;for(let i=0;i<k;i++)c*=(25-i)/(25-mines-i);return c*0.97;}
 // мины на брейнротах: ставим брейнротов со склада, в клетке — брейнрот, которого заберёшь на этом шаге
 let mMode='br',mSel=new Set(),mStake=0,mGameBr=false;   // мины только на брейнротах
 let MINES_POOL=LIVE?[]:ITEMS.filter(x=>x.p>0);      // призы (с сервера — mines_pool)
 const mPrize=v=>{let b=null;for(const x of MINES_POOL)if(x.p<=v&&(!b||x.p>b.p))b=x;return b;};   // самый дорогой брейнрот не дороже v
-// лестница приза (так же считает сервер): на шаге j — брейнрот по ставке × множитель; если следующий
-// дороже всего на 3% и ближе — берём его; брейнрот от клетки к клетке только дорожает; остаток — монетами
-let mLadC={key:'',L:[]};
-function mLadder(st,k){if(!st||k<=0)return null;const key=st+':'+mines+':'+MINES_POOL.length;
- if(mLadC.key!==key){mLadC={key,L:[]};}const L=mLadC.L;
- const P=MINES_POOL.slice().sort((a,b)=>a.p-b.p||(a.name<b.name?-1:1));
- for(let j=L.length+1;j<=k;j++){const v=Math.floor(st*coef(j)),pv=L[j-2]||null;
-  let a=null,b=null;for(const x of P){if(x.p<=v){if(!a||x.p>a.p)a=x;}else{b=x;break;}}   // при равной цене — первый по имени, как на сервере
-  let c=a;if(b&&b.p<=v*1.03&&(!a||a.p<=(pv?pv.p:0)||(v-a.p)>(b.p-v)))c=b;
-  if(pv&&(!c||c.p<pv.p))c=pv;L.push(c);}
- return L[k-1];}
+// лестница приза (так же считает сервер): на шаге k — самый дорогой брейнрот не дороже ставка × множитель k.
+// k = 0 — сама ставка (поставил брейнрота за 800 — приз он же). Следующий становится призом, когда хватает икса.
+// При равной цене — свой брейнрот. Остаток до суммы — монетами.
+let mStakeItems=[];   // что поставили: [{name,p}]
+const mPref=()=>mState==='play'?mStakeItems:mSelItems();
+function mLadder(st,k){if(!st||k<0)return null;const v=Math.floor(st*coef(k)),pref=new Set(mPref().map(x=>x.name));
+ let best=null;const cand=MINES_POOL.concat(mPref().filter(x=>!MINES_POOL.some(y=>y.name===x.name)));
+ for(const x of cand){if(!(x.p>0)||x.p>v||x.coin)continue;
+  if(!best||x.p>best.p||(x.p===best.p&&(pref.has(x.name)&&!pref.has(best.name)||pref.has(x.name)===pref.has(best.name)&&x.name<best.name)))best=x;}
+ return best;}
 const mBr=()=>mState==='idle'?mMode==='br':mGameBr;
 const mSelItems=()=>INV.filter(x=>mSel.has(x.id)&&!x.coin);
 const mStakeNow=()=>mState==='play'?mStake:mMode==='br'?mSelItems().reduce((a,x)=>a+x.p,0):Math.floor(+$('bet').value||0);
@@ -2836,9 +2835,9 @@ function drawMines(reveal){
  if(br){
   mInvDraw(st);
   // что заберёшь сейчас и на следующей клетке
-  const now=opened?Math.floor(st*coef(opened)):0,nx=Math.floor(st*coef(opened+1)),pz=now?mLadder(st,opened):null,pn=st?mLadder(st,opened+1):null;
+  const now=st?Math.floor(st*coef(opened)):0,nx=Math.floor(st*coef(opened+1)),pz=st?mLadder(st,opened):null,pn=st?mLadder(st,opened+1):null;
   $('mPrize').innerHTML=st?`<div class="mp-row">${pz?mArt(pz):`<div class="mp-art" style="background:#2B2119;border:1px solid #503C2F">${ic(I.gem,'#F7CA7C',22,1.8)}</div>`}
-    <span class="mp-t"><small>${opened?'Заберёшь сейчас · ×'+coef(opened).toFixed(2):'Открой клетку — появится приз'}</small><b>${pz?pz.name:opened?fmt(now)+' монет':'—'}</b>${pz&&now-pz.p>0?`<small class="num">+ ${fmt(now-pz.p)} монет сдачей</small>`:''}</span>
+    <span class="mp-t"><small>${opened?'Заберёшь сейчас · ×'+coef(opened).toFixed(2):'Твоя ставка · открой клетку'}</small><b>${pz?pz.name:opened?fmt(now)+' монет':'—'}</b>${pz&&now-pz.p>0?`<small class="num">+ ${fmt(now-pz.p)} монет сдачей</small>`:''}</span>
     ${pz?`<b class="num" style="display:flex;align-items:center;gap:4px">${COIN(13)}${fmt(pz.p)}</b>`:''}</div>
    ${mState==='play'||!opened?`<div class="mp-next"><span style="flex:none">Следующая · ×${coef(opened+1).toFixed(2)}</span>${pn?mArt(pn)+`<b>${pn.name}</b>`:`<b class="num">${fmt(nx)}</b>`}</div>`:''}`
    :`<span class="muted" style="font-size:13px">Отметь брейнротов со склада — на каждой открытой клетке брейнрот будет дорожать по множителю</span>`;
@@ -2879,9 +2878,9 @@ $('mbtn').onclick=async()=>{
   const st=S.reduce((a,x)=>a+x.p,0),ids=S.map(x=>x.id);
   if(API.on()){
    if(mBusy)return;mBusy=true;const res=await API.call('mines_start_br',{items:ids,mines});mBusy=false;if(!res)return;
-   mGame=res.game.id;mStake=res.game.bet;mGameBr=true;mSel.clear();applyState(res.state);resetGrid();bombs=new Set();mState='play';drawMines();SFX.play('mineStart');haptic('medium');return;}
+   mGame=res.game.id;mStake=res.game.bet;mGameBr=true;mStakeItems=res.game.stake?res.game.stake.map(x=>mkItem({name:x.name,price:+x.price})):S.map(x=>({...x}));mSel.clear();applyState(res.state);resetGrid();bombs=new Set();mState='play';drawMines();SFX.play('mineStart');haptic('medium');return;}
   for(const x of S){const k=INV.indexOf(x);if(k>=0)INV.splice(k,1);}
-  addWager(st,'Мины');QD.mines++;QD.spend+=st;mStake=st;mGameBr=true;mSel.clear();resetGrid();bombs=new Set();while(bombs.size<mines)bombs.add(Math.random()*25|0);mState='play';drawMines();SFX.play('mineStart');haptic('medium');return;
+  addWager(st,'Мины');QD.mines++;QD.spend+=st;mStake=st;mGameBr=true;mStakeItems=S.map(x=>({...x}));mSel.clear();resetGrid();bombs=new Set();while(bombs.size<mines)bombs.add(Math.random()*25|0);mState='play';drawMines();SFX.play('mineStart');haptic('medium');return;
  }
  const bet=Math.floor(+$('bet').value||0);if(bet<=0||bet>bal){toast('Недостаточно средств');haptic('error');return;}
  mStake=bet;mGameBr=false;
@@ -4289,7 +4288,7 @@ function applyState(st,quiet){
   if(!was)dqTick();dqPill();
  }else if(DQ&&LIVE){DQ=null;clearInterval(dqTimer);dqPill();}
  // незаконченная игра в мины
- if(st.mines&&mState!=='play'){const g=st.mines;mGame=g.id;mines=g.mines;mStake=g.bet;mGameBr=g.mode==='br';if(!mGameBr)$('bet').value=g.bet;resetGrid();
+ if(st.mines&&mState!=='play'){const g=st.mines;mGame=g.id;mines=g.mines;mStake=g.bet;mGameBr=g.mode==='br';mStakeItems=(g.stake||[]).map(x=>mkItem({name:x.name,price:+x.price}));if(!mGameBr)$('bet').value=g.bet;resetGrid();
   (g.opened||[]).forEach((i,k)=>{$('mgrid').dataset['o'+i]='g';$('mgrid').dataset['k'+i]=k+1;});opened=(g.opened||[]).length;bombs=new Set();mState='play';
   if(mGameBr){mMode='br';[...$('mmode').children].forEach((x,i)=>x.classList.toggle('on',i===1));}
   [...$('mcount').children].forEach((x,i)=>x.classList.toggle('on',MC[i]===mines));drawMines();}
