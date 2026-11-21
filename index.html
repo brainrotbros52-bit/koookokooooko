@@ -932,6 +932,23 @@ html.tg .top{padding-top:calc(14px + var(--app-top,0px))}
 #openBtn.free{background:linear-gradient(135deg,#3FD0BE,#2AA897);color:#06201C;box-shadow:0 8px 28px rgba(63,208,190,.3),inset 0 -3px 0 rgba(10,70,60,.35)}
 #openBtn.free:disabled{background:#2B3A37;color:#7C9792;box-shadow:none}
 /* «Пригласи друга» во вкладке «Бонусы» */
+/* бесплатные кейсы во вкладке «Бонусы» */
+.bc-hero{position:relative;overflow:hidden;display:flex;gap:10px;padding:18px 16px;border-radius:20px;border:1px solid #2C6B62;background:radial-gradient(ellipse at 100% 20%,rgba(63,208,122,.16),rgba(0,0,0,0) 60%),linear-gradient(160deg,#1B231F,#17120F 70%)}
+.bc-hero .bh-l{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
+.bh-k{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#3FD07A}
+.bh-t{font-family:Unbounded,sans-serif;font-weight:700;font-size:21px;line-height:1.15}
+.bh-s{font-size:13px;color:#BEAD9E;line-height:1.4}
+.bh-tm{display:flex;gap:6px}.bh-tm b{min-width:44px;height:42px;display:grid;place-items:center;border-radius:10px;background:#120E0C;border:1px solid #2F3A33;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.bh-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;position:relative;z-index:2}.bh-acts .bc-btn{min-width:0;padding:0 13px;height:42px;font-size:13.5px}.bh-acts button{height:44px;padding:0 16px;border-radius:12px;font-size:14px;font-weight:800}
+.bh-img{width:112px;flex:none;align-self:center;margin-right:-6px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
+.bc-sec{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#BEAD9E;margin:6px 2px -2px}
+.bc-row{display:flex;align-items:center;gap:12px;padding:10px 12px 10px 10px;border-radius:16px;background:#1F1814;border:1px solid #3A2C24;text-align:left;color:inherit;font:inherit;width:100%}
+.bc-row img{width:64px;height:64px;object-fit:contain;flex:none}
+.bc-row .bc-n{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left}.bc-n b{font-size:16px;font-weight:800}.bc-n span{font-size:12.5px;color:#BEAD9E;line-height:1.35}.bc-n .nw{white-space:nowrap}
+.bc-btn{flex:none;min-width:96px;height:42px;padding:0 14px;border-radius:12px;font-weight:800;font-size:14px;border:1px solid #3B5486;background:#1C2438;color:#8DB6FF}
+.bc-btn.go{background:linear-gradient(#3FD07A,#22A85A);border-color:#3FD07A;color:#0D1A12}
+.bc-btn.off{background:#221A15;border-color:#413229;color:#827265}
+.bc-row.done{opacity:.6}
 .pref{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:20px;border:1px solid #2C6B62;background:radial-gradient(ellipse at 100% 0%,rgba(63,208,190,.22),transparent 60%),radial-gradient(ellipse at 0% 100%,rgba(242,135,67,.16),transparent 60%),rgba(30,26,22,.92)}
 .pref h2{font-weight:800;font-size:18px}
 .pref-perks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -1540,6 +1557,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
     <!-- ===== БОНУСЫ ===== -->
     <section class="screen" data-s="bonus">
       <div class="ptitle"><h1>Бонусы</h1><span class="muted" style="font-size:13px">Заходи каждый день — награда растёт</span></div>
+      <div id="bcases" style="display:flex;flex-direction:column;gap:12px"></div>
       <div class="card" style="border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px">
         <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-weight:800;font-size:16px">Ежедневная награда</h2><span class="muted" style="font-size:13px" id="streakTxt">серия: <b style="color:#FBF2EA">0 дней</b></span></div>
         <div id="days" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px"></div>
@@ -1912,7 +1930,7 @@ const EN={
  'Код друга работает в боевом режиме':"Friend codes work in the live app",'Код активирован':'Code activated',
  'Ты партнёр':'You are a partner','Твои реф-ссылки, коды, промокоды и доход — в кабинете партнёра':'Your referral links, codes, promo codes and income are in the partner dashboard','Открыть кабинет партнёра':'Open partner dashboard',
  '🔒 За код друга':'🔒 For a friend code','🔒 Введи код друга или партнёра':"🔒 Enter a friend's or partner's code",'Введи код друга или партнёра — и кейс откроется бесплатно':"Enter a friend's or partner's code to open this case for free",'Этот кейс бесплатный: введи код друга или партнёра (в «Бонусах», в профиле или в заявке на пополнение) — и открой его один раз.':"This case is free: enter a friend's or partner's code (in Bonuses, your profile or a deposit request) and open it once.",
- 'награда':'reward','💳 Пополнить от':'💳 Deposit','За депозит':'Deposit case','Сначала пополни баланс через заявку на пополнение':'Make a deposit first','📢 Только для подписчиков':'📢 Subscribers only:','Сначала подпишись на канал — потом жми «Открыть»':'Subscribe to the channel first, then tap “Open”','Не получилось проверить подписку — попробуй чуть позже':'Could not check the subscription — try again a bit later','Подписаться':'Subscribe','⏳ через':'⏳ in','⏳ Бесплатно через':'⏳ Free in','Бесплатный кейс ещё перезаряжается — загляни позже':'The free case is recharging — come back later','Админ уже проверяет твой трейд':'An admin is already checking your trade','на трейд — потом заявка отменится':'to send the trade — then the request is cancelled','Время вышло — заявка отменена. Если трейд уже отправлен, админ его проверит':'Time is up — request cancelled. If you already sent the trade, an admin will check it','Нет в наличии':'Out of stock','Заменить':'Replace','Замена':'Replacement','Ровно по цене':'Exact price','Не хватает на доплату':'Not enough to top up','Заменено!':'Replaced!','Вместо':'Instead of','Нажми на брейнротов ниже (можно одного и того же несколько раз)':'Tap brainrots below (you can pick the same one several times)','Этот брейнрот можно вывести и так':'This brainrot can be withdrawn as is','Слишком большая доплата — выбери брейнротов подешевле':'Top-up too large — pick cheaper brainrots','пламя феникса!':'phoenix flame!','стрик окончен':'streak over','феникс!':'phoenix!','🔥 Пламя феникса! Стрик: 50% на приз вдвое дороже':'🔥 Phoenix flame! Streak: 50% for a prize twice as valuable','Можно поставить максимум 6 брейнротов':'You can stake up to 6 brainrots','Промокод партнёра':'Partner promo code',
+ 'награда':'reward','Код или ID партнёра':'Partner code or ID','После пополнения':'After a deposit','Без пополнения. Следующий откроется через:':'No deposit needed. Next one opens in:','Без пополнения — открывай прямо сейчас':'No deposit needed — open it now','За пополнение':'For a deposit','За друга':'For a friend','Ввести код':'Enter code','Забрано':'Claimed','Подарок за код друга или партнёра':'Gift for a friend’s or partner’s code','Очистить историю':'Clear history','Очистить всю историю':'Clear all history','История победителей':'Winners history','Субпартнёры':'Sub-partners','Привязать':'Link','Субпартнёров пока нет':'No sub-partners yet','💳 Пополнить от':'💳 Deposit','За депозит':'Deposit case','Сначала пополни баланс через заявку на пополнение':'Make a deposit first','📢 Только для подписчиков':'📢 Subscribers only:','Сначала подпишись на канал — потом жми «Открыть»':'Subscribe to the channel first, then tap “Open”','Не получилось проверить подписку — попробуй чуть позже':'Could not check the subscription — try again a bit later','Подписаться':'Subscribe','⏳ через':'⏳ in','⏳ Бесплатно через':'⏳ Free in','Бесплатный кейс ещё перезаряжается — загляни позже':'The free case is recharging — come back later','Админ уже проверяет твой трейд':'An admin is already checking your trade','на трейд — потом заявка отменится':'to send the trade — then the request is cancelled','Время вышло — заявка отменена. Если трейд уже отправлен, админ его проверит':'Time is up — request cancelled. If you already sent the trade, an admin will check it','Нет в наличии':'Out of stock','Заменить':'Replace','Замена':'Replacement','Ровно по цене':'Exact price','Не хватает на доплату':'Not enough to top up','Заменено!':'Replaced!','Вместо':'Instead of','Нажми на брейнротов ниже (можно одного и того же несколько раз)':'Tap brainrots below (you can pick the same one several times)','Этот брейнрот можно вывести и так':'This brainrot can be withdrawn as is','Слишком большая доплата — выбери брейнротов подешевле':'Top-up too large — pick cheaper brainrots','пламя феникса!':'phoenix flame!','стрик окончен':'streak over','феникс!':'phoenix!','🔥 Пламя феникса! Стрик: 50% на приз вдвое дороже':'🔥 Phoenix flame! Streak: 50% for a prize twice as valuable','Можно поставить максимум 6 брейнротов':'You can stake up to 6 brainrots','Промокод партнёра':'Partner promo code',
  'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
  'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
  'Победителя выберем случайно, когда время выйдет. Приз сразу придёт на склад.':'The winner is picked at random when time runs out. The prize goes straight to the inventory.',
@@ -1953,7 +1971,7 @@ const EN_RX=[
  [/^Осталось отыграть (.+)$/,'Left to wager $1'],[new RegExp('^([+−-])'+_N+' к отыгрышу · (.+)$'),(m,s,n,w)=>`${s}${n} to wagering · ${tr(w)}`],[new RegExp('^([+−-])'+_N+' к отыгрышу$'),'$1$2 to wagering'],
  [/^Кейс «(.+)»$/,(m,a)=>`Case «${tr(a)}»`],[/^Апгрейд из (.+)$/,(m,a)=>`Upgrade from ${tr(a)}`],[/^Новый топ дроп: (.+)$/,'New top drop: $1'],
  [/^(.+?) · (Кейс «.+»)$/,(m,a,b)=>`${a} · ${tr(b)}`],
- [/^Улучшить · (.+)$/,'Upgrade · $1'],[/^выбрано (\d+) из (\d+)$/,'selected $1 of $2'],[/^(\d+) шт\.$/,'$1 pcs'],[/^(\d+) шт\. ·$/,'$1 pcs ·'],[/^(.+) — твой! Стрик феникса: (\d+)$/,'$1 is yours! Phoenix streak: $2'],[/^стрик · шаг (\d+)$/,'streak · step $1'],[/^стрик ×(\d+)$/,'streak ×$1'],[/^феникс · стрик (\d+)$/,'phoenix · streak $1'],[/^Стрик! (.+)$/,'Streak! $1'],[/^Можно поставить максимум (\d+) брейнротов$/,'You can stake up to $1 brainrots'],[/^×2 → ([\d\s.,]+)$/,'×2 → $1'],[/^🎁 Бесплатно · раз в (\d+) ч$/,'🎁 Free · every $1 h'],[/^Бесплатный кейс откроется через (.+)$/,'The free case opens in $1'],[/^Например, ([\w.]+)$/,'For example, $1'],[/^💳 За пополнение от ([\d\s]+?)( · [\d\s/]+)?$/,'💳 For a deposit of $1+$2'],[/^💳 Пополнить от ([\d\s]+)$/,'💳 Deposit $1+'],[/^Пополнено ([\d\s]+) из ([\d\s]+)$/,'Deposited $1 of $2'],[/^Пополни баланс от ([\d\s]+) монет — и кейс откроется бесплатно$/,'Deposit $1+ coins and the case opens for free'],[/^💳 Пополни баланс через заявку хотя бы на ([\d\s]+) — и открой кейс бесплатно\. Раз в (\d+) ч\.$/,'💳 Deposit at least $1 coins and open this case for free. Once every $2 h.'],[/^(.+) — твой!$/,'$1 is yours!'],
+ [/^Улучшить · (.+)$/,'Upgrade · $1'],[/^выбрано (\d+) из (\d+)$/,'selected $1 of $2'],[/^(\d+) шт\.$/,'$1 pcs'],[/^(\d+) шт\. ·$/,'$1 pcs ·'],[/^(.+) — твой! Стрик феникса: (\d+)$/,'$1 is yours! Phoenix streak: $2'],[/^стрик · шаг (\d+)$/,'streak · step $1'],[/^стрик ×(\d+)$/,'streak ×$1'],[/^феникс · стрик (\d+)$/,'phoenix · streak $1'],[/^Стрик! (.+)$/,'Streak! $1'],[/^Можно поставить максимум (\d+) брейнротов$/,'You can stake up to $1 brainrots'],[/^×2 → ([\d\s.,]+)$/,'×2 → $1'],[/^🎁 Бесплатно · раз в (\d+) ч$/,'🎁 Free · every $1 h'],[/^Бесплатный кейс откроется через (.+)$/,'The free case opens in $1'],[/^Например, ([\w.]+)$/,'For example, $1'],[/^💳 За пополнение от ([\d\s]+?)( · [\d\s/]+)?$/,'💳 For a deposit of $1+$2'],[/^💳 Пополнить от ([\d\s]+)$/,'💳 Deposit $1+'],[/^Пополнено ([\d\s]+) из ([\d\s]+)$/,'Deposited $1 of $2'],[/^Пополни баланс от ([\d\s]+) монет — и кейс откроется бесплатно$/,'Deposit $1+ coins and the case opens for free'],[/^💳 Пополни баланс через заявку хотя бы на ([\d\s]+) — и открой кейс бесплатно\. Раз в (\d+) ч\.$/,'💳 Deposit at least $1 coins and open this case for free. Once every $2 h.'],[/^Каждые (\d+) (час|часа|часов)$/,'Every $1 h'],[/^Без пополнения — нужна только подписка на (\S+)$/,'No deposit needed — just subscribe to $1'],[/^После пополнения от ([\d\s]+)$/,'After a deposit of $1+'],[/^Ещё ([\d\s]+)$/,'$1 more'],[/^от ([\d\s]+)$/,'from $1'],[/^(.+) — твой!$/,'$1 is yours!'],
  [/^Клетка (\d+)$/,'Tile $1'],[new RegExp('^\\+ '+_N+' монет сдачей$'),'+ $1 coins change'],[new RegExp('^'+_N+' монет$'),'$1 coins'],
  [/^Заберёшь сейчас · ×(.+)$/,'You get now · ×$1'],[/^Следующая · ×(.+)$/,'Next · ×$1'],
  [new RegExp('^Забрать (.+?) \\+ '+_N+'$'),'Cash out $1 + $2'],[/^Забрать (.+)$/,'Cash out $1'],
@@ -2209,7 +2227,7 @@ const ERR={need_dep:'Сначала пополни баланс через за�
   unauthorized:'Открой приложение через Telegram',bad_nick:'Неверный ник Roblox',game_active:'Сначала закончи текущую игру',
   target_cheap:'Цель должна быть дороже ставки',banned:'Аккаунт заблокирован',bad_items:'Предметы не найдены — обнови страницу',
   cannot_cancel:'Заявку уже взяли в работу',not_admin:'Нет прав администратора',bad_input:'Проверь поля',bad_case_id:'id кейса: латиница, цифры, - или _',item_owned:'Этот предмет есть у игроков — удалить нельзя',no_user:'Игрок не найден',quest_not_done:'Квест ещё не выполнен',quest_claimed:'Награда уже получена',no_quest:'Квест не найден',open_first:'Сначала открой клетку',no_game:'Игра не найдена',server_error:'Ошибка сервера, попробуй ещё раз',
-  own_code:'Это твой собственный код',already_bound:'Ты уже закреплён за другим партнёром',partner_no_bind:'Ты партнёр — привязаться к другому партнёру нельзя (только субпартнёрство)',not_partner:'Партнёрка не активна',bad_code:'Код: латиница и цифры',code_taken:'Такой код уже занят',no_partner_money:'Не хватает партнёрского баланса',promos_off:'Создание промокодов выключено',pwd_active:'Заявка на вывод уже ждёт',pwd_closed:'Окно вывода сейчас закрыто',pwd_min:'Недостаточно для вывода',bad_parent:'Партнёр-пригласитель не найден',already_partner:'Ты уже партнёр',not_found:'Не найдено',case_not_found:'Кейс не найден',not_withdrawable:'Этот предмет нельзя вывести — его можно только продать',case_exists:'Кейс с таким названием уже есть',bad_chance:'Шанс — число больше 0 и до 100',
+  own_code:'Это твой собственный код',already_bound:'Ты уже закреплён за другим партнёром',partner_no_bind:'Ты партнёр — привязаться к другому партнёру нельзя (только субпартнёрство)',not_partner:'Партнёрка не активна',bad_code:'Код: латиница и цифры',code_taken:'Такой код уже занят',no_partner_money:'Не хватает партнёрского баланса',promos_off:'Создание промокодов выключено',pwd_active:'Заявка на вывод уже ждёт',pwd_closed:'Окно вывода сейчас закрыто',pwd_min:'Недостаточно для вывода',bad_parent:'Так привязать нельзя: проверь код (не сам к себе и не по кругу)',sub_not_partner:'Это не партнёр — сначала выдай ему партнёрку',already_partner:'Ты уже партнёр',not_found:'Не найдено',case_not_found:'Кейс не найден',not_withdrawable:'Этот предмет нельзя вывести — его можно только продать',case_exists:'Кейс с таким названием уже есть',bad_chance:'Шанс — число больше 0 и до 100',
   case_balance:'Шансы не посчитать: средний дроп должен быть между самым дешёвым и самым дорогим брейнротом кейса',item_exists:'Брейнрот с таким названием уже есть',bad_image:'Картинка слишком большая или не PNG/JPG/WEBP',upload_failed:'Не удалось загрузить фото — проверь Storage в Supabase'
 };
 const API={
@@ -2415,7 +2433,7 @@ function go(s){
  if(s==='draws')loadDraws();
  if(s==='admin')admOpen();
  if(s==='partner')pcOpen();
- if(s==='bonus'){drawDaily();loadPref();}
+ if(s==='bonus'){drawDaily();loadPref();drawBonusCases();}
  if(s==='profile'){drawProfile();wDraw();}
 
  $('body').scrollTop=0;$('phone').classList.remove('open');drawMenu();
@@ -3497,7 +3515,8 @@ var FRIEND_BONUS=null,FREE_CASES=new Set(),HAS_REF=false,FREE_CD={},DEP_PROG={};
 const mmss=sec=>{sec=Math.max(0,Math.ceil(sec));const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),z=n=>String(n).padStart(2,'0');return h?h+':'+z(m)+':'+z(sec%60):m+':'+z(sec%60);};
 setInterval(()=>{const now=Date.now();
  document.querySelectorAll('[data-cd-end]').forEach(e=>{const left=(+e.dataset.cdEnd-now)/1000;e.textContent=mmss(left);e.classList.toggle('cd-low',left<=60);});
- for(const k in FREE_CD){if(FREE_CD[k]&&now>=FREE_CD[k]){FREE_CD[k]=0;drawCases();if(cur==='case'&&!spinning)drawTotal();}}   // бесплатный кейс снова доступен
+ document.querySelectorAll('[data-hms-end]').forEach(e=>{const l=Math.max(0,Math.ceil((+e.dataset.hmsEnd-now)/1000)),v=[Math.floor(l/3600),Math.floor(l%3600/60),l%60];e.querySelectorAll('b').forEach((b,i)=>b.textContent=String(v[i]).padStart(2,'0'));});
+ for(const k in FREE_CD){if(FREE_CD[k]&&now>=FREE_CD[k]){FREE_CD[k]=0;drawCases();if(cur==='case'&&!spinning)drawTotal();if(cur==='bonus')drawBonusCases();}}   // бесплатный кейс снова доступен
  if(DQ&&DQ.end&&DQ.status==='queued'&&now>=DQ.end&&!DQ._ended){DQ._ended=1;if(API.on())dqPoll();else dqTimeout();}
 },1000);
 let DQ=null,dqNick='',dqTimer=null;                       // DQ — активная заявка
@@ -3656,6 +3675,31 @@ function dqPill(){
 }
 $('depGo').onclick=()=>{haptic('medium');if(DQ){dqQueue();openSheet('depSheet');return;}dqForm();openSheet('depSheet');};
 let DAILY_NEXT=null;
+/* ---------- бесплатные кейсы во вкладке «Бонусы»: раз в N часов, за пополнение, за друга ---------- */
+const hrsW=h=>h%10===1&&h%100!==11?'час':[2,3,4].includes(h%10)&&![12,13,14].includes(h%100)?'часа':'часов';
+function openCaseByName(n){const x=CASES.find(c=>c.name===n);if(!x)return;$('cases').onclick({target:{closest:()=>({dataset:{case:x.name,price:String(x.p)}})}});}
+function drawBonusCases(){const box=$('bcases');if(!box)return;
+ const img=c=>c.img?`<img src="${esc(imgSrc(c.img))}" alt="" onerror="this.style.visibility='hidden'">`:'';
+ const hero=CASES.filter(c=>c.freeCd&&!c.depNeed),dep=CASES.filter(c=>c.freeCd&&c.depNeed),ref=CASES.filter(c=>c.free);
+ const hms=end=>{const l=Math.max(0,Math.ceil((end-Date.now())/1000)),z=n=>String(n).padStart(2,'0');return `<div class="bh-tm num" data-hms-end="${end}"><b>${z(Math.floor(l/3600))}</b><b>${z(Math.floor(l%3600/60))}</b><b>${z(l%60)}</b></div>`;};
+ box.innerHTML=hero.map(c=>{const left=cdLeft(c.id);return `<div class="bc-hero"><div class="bh-l">
+   <span class="bh-k">Каждые ${c.freeCd} ${hrsW(c.freeCd)}</span>
+   <span class="bh-t">${esc(/кейс/i.test(c.name)?c.name:c.name+' кейс')}</span>
+   ${left>0?`<span class="bh-s">Без пополнения. Следующий откроется через:</span>${hms(FREE_CD[c.id])}`
+     :`<span class="bh-s">${c.sub?`Без пополнения — нужна только подписка на ${esc(c.sub)}`:'Без пополнения — открывай прямо сейчас'}</span>`}
+   <div class="bh-acts">${left>0?'':`<button class="bc-btn go" data-bopen="${esc(c.name)}">Открыть</button>`}<button class="bc-btn" data-bopen="${esc(c.name)}">Что внутри</button></div>
+  </div>${c.img?`<img class="bh-img" src="${esc(imgSrc(c.img))}" alt="" onerror="this.remove()">`:''}</div>`;}).join('')
+ +(dep.length?`<div class="bc-sec">За пополнение</div>`+dep.map(c=>{const left=cdLeft(c.id),got=DEP_PROG[c.id]||0,rest=Math.max(0,c.depNeed-got);
+   const btn=left>0?`<button class="bc-btn off" data-bopen="${esc(c.name)}">⏳ <span class="num" data-cd-end="${FREE_CD[c.id]}">${mmss(left/1000)}</span></button>`
+     :rest>0?`<button class="bc-btn" data-bdep="1">Ещё ${fmt(rest)}</button>`:`<button class="bc-btn go" data-bopen="${esc(c.name)}">Открыть</button>`;
+   return `<div class="bc-row"><button data-bopen="${esc(c.name)}" style="display:contents">${img(c)}<span class="bc-n"><b>${esc(c.name)}</b><span>После пополнения <span class="nw">от ${fmt(c.depNeed)} ${COIN(12)}</span></span></span></button>${btn}</div>`;}).join(''):'')
+ +(ref.length?`<div class="bc-sec">За друга</div>`+ref.map(c=>{const can=FREE_CASES.has(c.id);
+   const btn=can?`<button class="bc-btn go" data-bopen="${esc(c.name)}">Забрать</button>`:HAS_REF?`<button class="bc-btn off" data-bopen="${esc(c.name)}">Забрано</button>`:`<button class="bc-btn" data-bref="1">Ввести код</button>`;
+   return `<div class="bc-row${!can&&HAS_REF?' done':''}"><button data-bopen="${esc(c.name)}" style="display:contents">${img(c)}<span class="bc-n"><b>${esc(c.name)}</b><span>Подарок за код друга или партнёра</span></span></button>${btn}</div>`;}).join(''):'');
+}
+$('bcases').onclick=e=>{const o=e.target.closest('[data-bopen]');if(o){haptic('light');openCaseByName(o.dataset.bopen);return;}
+ if(e.target.closest('[data-bdep]')){haptic('light');openDeposit();return;}
+ if(e.target.closest('[data-bref]')){haptic('light');const p=$('prefBox');if(p){p.scrollIntoView({behavior:'smooth',block:'center'});const i=p.querySelector('input');if(i)setTimeout(()=>i.focus(),350);}}};
 function drawDaily(){const b=$('dailyClaim');if(!b)return;const left=DAILY_NEXT?DAILY_NEXT-Date.now():0;
  const amt=DAYS[DAILY_DAY-1]??DAILY_AMOUNT;
  if(left>0){const h=Math.floor(left/36e5),m=Math.floor(left%36e5/6e4);b.disabled=true;b.textContent=`Следующий через ${h} ч ${m} м`;
@@ -3851,7 +3895,14 @@ async function admPartnerCard(){
    ${tgl('peAuto',p.wd_auto,'Вывод без подтверждения','Монеты сразу падают на игровой баланс')}
    ${tgl('peAct',p.active,'Партнёрка активна','Выключишь — доход перестанет начисляться, игроки останутся закреплены')}</div>
   <button class="fire" data-a="pe_save" style="height:48px;font-size:14px;box-shadow:none">${p.exists?'Сохранить':'Выдать партнёрку'}</button></div>
- ${p.exists?`<div class="adm-card"><b>Партнёрский баланс</b>
+ ${p.exists?`<div class="adm-card"><div class="adm-row"><b>Субпартнёры</b><span class="muted num" style="margin-left:auto;font-size:12px">${fmt((p.subs_list||[]).length)} · ${String(+p.sub_pct).replace('.',',')}% с их дохода</span></div>
+  <div style="display:flex;gap:8px"><label class="srch" style="flex:1;height:44px"><input id="peSubAdd" placeholder="Код или ID партнёра" autocomplete="off"></label>
+   <button class="ghost" data-a="psub_bind" style="height:44px;padding:0 14px;border-radius:12px;font-size:13px">Привязать</button></div>
+  ${(p.subs_list||[]).length?`<div class="adm-its">${p.subs_list.map(x=>`<div class="adm-li"><button data-pcard="${x.id}" style="flex:1;min-width:0;text-align:left;background:none;border:0;padding:0;color:inherit;font:inherit">
+    <b>${esc(x.code)}</b> <span class="muted">${x.username?'@'+esc(x.username):esc(x.first_name||'')}</span><small class="muted">ID ${x.id} · заработал ${pn(x.earned)} · отсюда ${pn(x.paid)}${x.active?'':' · выключен'}</small></button>
+    <button class="adm-x" data-a="psub_unbind" data-sid="${x.id}" aria-label="Убрать из субпартнёров">${ic(I.x,'#FF946E',14,2.4)}</button></div>`).join('')}</div>`:admEmpty('Субпартнёров пока нет')}
+  <span class="muted" style="font-size:12px">Привязать можно только того, у кого уже есть партнёрка. Этот партнёр будет получать ${String(+p.sub_pct).replace('.',',')}% с дохода субпартнёра. ✕ — отвязать.</span></div>
+ <div class="adm-card"><b>Партнёрский баланс</b>
    <div class="adm-acts"><label class="adm-in"><span>Сумма</span><input type="number" inputmode="decimal" id="peBal" placeholder="100"></label>
     <button class="fire" data-a="pe_add">Начислить</button><button class="ghost" data-a="pe_sub">Списать</button></div>
    <label class="adm-in" style="flex:none"><span>Причина</span><input id="peBalNote" placeholder="необязательно" maxlength="100"></label>
@@ -3933,12 +3984,16 @@ function admDrawsDraw(){const P=AS.drw||[];
    <div class="adm-acts"><button class="fire" data-a="draw_save" data-per="${p.period}">Сохранить</button>
     <button class="ghost" data-a="draw_finish" data-per="${p.period}" ${o?'':'disabled'}>Подвести итог сейчас</button>
     <button class="ghost danger" data-a="draw_reset" data-per="${p.period}">Сбросить</button></div>
-   ${p.done&&p.done.length?`<div style="display:flex;flex-direction:column;gap:6px"><span class="muted" style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase">прошлые итоги</span>
+   ${p.done&&p.done.length?`<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:8px"><span class="muted" style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase">прошлые итоги</span>
+    <button class="ghost danger" data-a="draw_hist" data-per="${p.period}" style="margin-left:auto;height:30px;padding:0 10px;font-size:12px;border-radius:9px">Очистить историю</button></div>
     ${p.done.map(d=>`<div class="adm-li"><span style="flex:1;min-width:0"><b>${esc(d.prize.name)}</b><small class="muted" style="display:block;font-size:11px">${d.winner?(d.username?'@'+esc(d.username):esc(d.first_name||'игрок'))+' · ID '+d.winner+' · участников: '+d.entries:'участников не было — приз никому не ушёл'}</small></span><span class="muted" style="font-size:11px">${ago(Date.parse(d.ts))}</span></div>`).join('')}</div>`:''}
   </div>`;}).join(''):admEmpty('Розыгрыши ещё не настроены — запусти новый schema.sql'))
   +(P.length?`<div class="adm-card"><div class="adm-row"><b>Сбросить все розыгрыши</b></div>
    <p class="pc-hint" style="margin:0">Удаляет текущие розыгрыши, участников и прошлые итоги. Новые начнутся с этой минуты — пополнения считаются заново, игрокам нужно снова нажать «Участвовать». Призы и пороги сохраняются. Нажми два раза.</p>
-   <div class="adm-acts"><button class="ghost danger" data-a="draws_reset_all">Сбросить все</button></div></div>`:'')
+   <div class="adm-acts"><button class="ghost danger" data-a="draws_reset_all">Сбросить все</button></div></div>
+  <div class="adm-card"><div class="adm-row"><b>История победителей</b></div>
+   <p class="pc-hint" style="margin:0">Удаляет только прошлые итоги — кто и что выиграл (у игроков пропадает список «Победители»). Текущие розыгрыши, участники и пополнения не трогаются. Нажми два раза.</p>
+   <div class="adm-acts"><button class="ghost danger" data-a="draws_hist_all">Очистить всю историю</button></div></div>`:'')
   +`<p class="pc-hint" style="padding:0 4px">Участвует игрок, который за период пополнил баланс на порог и нажал «Участвовать». Когда время выходит, сервер сам выбирает случайного участника, кладёт приз ему на склад, пишет ему в бота, а админам — кто победил.</p>`;}
 
 // ---------- кейсы: цена, % отдачи, содержимое ----------
@@ -4165,7 +4220,7 @@ $('admBody').addEventListener('click',async e=>{
  if(a==='pe_new'){const v=$('apId').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');return;}AS.pcard=+v;AS.pcPage=1;haptic('light');await admLoad();return;}
  if(a==='find'){AS.q[AS.tab]=$('auQ').value.trim();AS.page[AS.tab]=1;admLoad();return;}
  if(a==='acc_save'&&AS.accSel>0&&AS.accSel!==(+(AS.acc||{}).mode||0)&&!sure(b))return;   // закрыть — по второму нажатию
- const danger=['user_stats_reset','sec_del','deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg','draw_finish','draw_reset','draws_reset_all'];
+ const danger=['user_stats_reset','sec_del','deposit_reject','withdraw_cancel','user_ban','promo_off','inv_remove','user_sub','pwd_reject','papp_reject','pe_unbind','pe_sub','ref_unbind','item_delete','item_noimg','draw_finish','draw_reset','draws_reset_all','draw_hist','draws_hist_all','psub_unbind'];
  if(danger.includes(a)&&!sure(b))return;
  let r=null;b.disabled=true;
  try{
@@ -4191,6 +4246,8 @@ $('admBody').addEventListener('click',async e=>{
    r=await adm('partner_balance',{id:AS.pcard,delta:a==='pe_add'?v:-v,note:$('peBalNote').value.trim()});}
   else if(a==='pe_bind'){const v=$('peBind').value.trim();if(!/^\d{3,15}$/.test(v)){toast('Введи Telegram ID цифрами');b.disabled=false;return;}r=await adm('ref_set',{id:v,code:AS.pcode});}
   else if(a==='pe_unbind')r=await adm('ref_set',{id:b.dataset.pid,code:''});
+  else if(a==='psub_bind'){const v=$('peSubAdd').value.trim();if(!v){toast('Впиши код или Telegram ID партнёра');b.disabled=false;return;}r=await adm('psub_bind',{id:AS.pcard,sub:v});}
+  else if(a==='psub_unbind')r=await adm('psub_unbind',{sub:b.dataset.sid});
   else if(a==='ref_bind'){const v=$('cRef').value.trim().toUpperCase();if(!v){toast('Введи код партнёра');b.disabled=false;return;}r=await adm('ref_set',{id:uid,code:v});}
   else if(a==='ref_unbind')r=await adm('ref_set',{id:uid,code:''});
   else if(a==='case_save'){AS.ckeep();const F=AS.cform;if(!(F.price>0)||(!F.manual&&!(F.rtp>=10&&F.rtp<=120))){toast('Проверь цену и %');b.disabled=false;return;}
@@ -4207,6 +4264,8 @@ $('admBody').addEventListener('click',async e=>{
   else if(a==='draw_finish'){r=await adm('draw_finish',{period:b.dataset.per});if(r)DRW=null;}
   else if(a==='draw_reset'){r=await adm('draws_reset',{period:b.dataset.per});if(r)DRW=null;}
   else if(a==='draws_reset_all'){r=await adm('draws_reset',{});if(r)DRW=null;}
+  else if(a==='draw_hist'){r=await adm('draws_history_reset',{period:b.dataset.per});if(r)DRW=null;}
+  else if(a==='draws_hist_all'){r=await adm('draws_history_reset',{});if(r)DRW=null;}
   else if(a==='acc_save'){r=await adm('access_set',{mode:AS.accSel,msg:AS.accMsg.trim()});if(r){AS.acc={...AS.acc,mode:AS.accSel,msg:AS.accMsg.trim()};accChipDraw({admin:true,mode:AS.accSel});}}
   else if(a==='sec_add'){const v=$('secNew').value.trim();if(!v){toast('Впиши название раздела');b.disabled=false;return;}r=await adm('section_save',{name:v});if(r)loadCatalog();}
   else if(a==='sec_up'||a==='sec_down'){r=await adm('section_move',{id,dir:a==='sec_up'?-1:1},true);if(r)loadCatalog();}
@@ -4555,7 +4614,7 @@ function applyState(st,quiet){
  FRIEND_BONUS=st.pref||null;{const was=[...FREE_CASES].join()+HAS_REF;FREE_CASES=new Set(st.free_cases||[]);HAS_REF=!!st.has_ref;
   const cdWas=JSON.stringify(Object.keys(FREE_CD).map(k=>[k,FREE_CD[k]>Date.now()]));FREE_CD={};for(const k in (st.free_cd||{}))FREE_CD[k]=Date.now()+st.free_cd[k]*1000;
   const dpWas=JSON.stringify(DEP_PROG);DEP_PROG=st.dep_prog||{};
-  if([...FREE_CASES].join()+HAS_REF!==was||JSON.stringify(Object.keys(FREE_CD).map(k=>[k,FREE_CD[k]>Date.now()]))!==cdWas||JSON.stringify(DEP_PROG)!==dpWas){drawCases();if(cur==='case')drawTotal();}}
+  if([...FREE_CASES].join()+HAS_REF!==was||JSON.stringify(Object.keys(FREE_CD).map(k=>[k,FREE_CD[k]>Date.now()]))!==cdWas||JSON.stringify(DEP_PROG)!==dpWas){drawCases();if(cur==='case')drawTotal();if(cur==='bonus')drawBonusCases();}}
  // активная заявка на пополнение
  if(st.deposit){const d=st.deposit;
   const items=(d.items||[]).map(o=>({_srv:1,name:o.name,q:o.q,r:RB(o.price),get mono(){return mk(o.name);},buffs:o.buffs||[],_tot:Math.round(o.price*(1+(o.pct||0)/100))*o.q}));
@@ -4602,7 +4661,7 @@ async function loadCatalog(){
  const c=await API.call('catalog',{},true);if(!c)return;
 catalogLoaded=true;
  Object.keys(IMG).forEach(k=>delete IMG[k]);Object.assign(IMG,c.imgs||{});
- HOME_PROMO=c.home_promo||null;setTimeout(drawHomePromo,0);SECTIONS=c.sections||[];CASES.length=0;setTimeout(drawMenu,0);c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,sec:k.section??null,img:k.img||null,free:!!k.free,freeCd:k.free_cd||null,sub:k.sub||null,depNeed:k.dep_need||null,items:(k.items||[]).map(mkItem)}));drawCases();
+ HOME_PROMO=c.home_promo||null;setTimeout(drawHomePromo,0);SECTIONS=c.sections||[];CASES.length=0;setTimeout(drawMenu,0);c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,sec:k.section??null,img:k.img||null,free:!!k.free,freeCd:k.free_cd||null,sub:k.sub||null,depNeed:k.dep_need||null,items:(k.items||[]).map(mkItem)}));drawCases();if(cur==='bonus')drawBonusCases();
  UP_TARGETS=c.upgrade.map(mkItem);
  MINES_POOL=(c.mines_pool||c.upgrade||[]).map(mkItem);
  DEP.br=c.deposit.br.map((o,i)=>({key:'br'+i,name:o.name,p:o.price,r:o.rarity,get mono(){return mk(o.name);}}));
