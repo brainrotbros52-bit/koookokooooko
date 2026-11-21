@@ -714,6 +714,9 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 .reel.done .mk::before{background:linear-gradient(rgba(255,210,168,0),#FFD2A8 18%,#fff 50%,#FFD2A8 82%,rgba(255,210,168,0))}
 .reel .fade{position:absolute;inset:0;background:linear-gradient(90deg,#1B1511 0%,rgba(27,21,17,0) 22%,rgba(27,21,17,0) 78%,#1B1511 100%);z-index:1;pointer-events:none}
 .spinning .reel{border-color:#714A31}
+.reel .flash{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;background:radial-gradient(ellipse 34% 70% at 50% 50%,var(--fc,#fff),transparent 70%)}
+.reel.flashing .flash{animation:rflash .7s ease-out}
+@keyframes rflash{0%{opacity:.75}100%{opacity:0}}
 /* апгрейдер */
 .arcc{transform-origin:135px 135px;transform:rotate(90deg);transition:stroke-dasharray .5s cubic-bezier(.2,.8,.2,1),transform .5s cubic-bezier(.2,.8,.2,1)}
 .edge{transform-origin:135px 135px;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
@@ -2550,7 +2553,7 @@ function buildReels(n,winners){
   const list=winners?reelList(P,winners[r],n>1):idleList(P);
   return `<div class="reel" style="height:${d.h}px"><div class="track" style="top:${(d.h-d.th)/2}px">${list.map((x,i)=>`
    <div class="rt${winners&&i===STOP?' win':''}" style="--c:${R[x.r]}88;width:${d.tw}px;height:${d.th}px;${tileBg(R[x.r])}">
-    ${mono(x,d.f)}${d.tw>=80?`<span class="n" style="font-size:${d.nf}px">${x.name}</span>`:''}</div>`).join('')}</div><div class="fade"></div><div class="mk"><svg class="cap t" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg><svg class="cap b" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg></div></div>`;}).join('');
+    ${mono(x,d.f)}${d.tw>=80?`<span class="n" style="font-size:${d.nf}px">${x.name}</span>`:''}</div>`).join('')}</div><div class="fade"></div><div class="flash"></div><div class="mk"><svg class="cap t" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg><svg class="cap b" viewBox="0 0 22 15" aria-hidden="true"><path d="M2.5 1.5h17a1.2 1.2 0 0 1 .95 1.93l-8.1 10.3a1.7 1.7 0 0 1-2.7 0L1.55 3.43A1.2 1.2 0 0 1 2.5 1.5z" fill="#F28743" stroke="#17120F" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.2h10" stroke="#FFD2A8" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg></div></div>`;}).join('');
  const rw=$('reels').clientWidth||358;
  document.querySelectorAll('#reels .track').forEach(t=>{t.style.transition='none';t.style.transform=`translate3d(${reelStartX(d,rw)}px,0,0)`;});
  if(!winners)idleStart(d);
@@ -2591,7 +2594,7 @@ async function spin(){
   let sum=0;for(let k=1;k<=N;k++){sum+=(v[k]+v[k-1])/2;p.push(sum);}
   return x=>{const f=Math.min(N,Math.max(0,x*N)),i=Math.floor(f),r=f-i;return (p[i]+(p[Math.min(N,i+1)]-p[i])*r)/sum;};
  }
- const io=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2, out=x=>1-Math.pow(1-x,3), lin=x=>x;
+ const oLong=x=>1-Math.pow(1-x,4.6);   // длинный хвост торможения, как в CS
  const caps=tracks.map(t=>[...t.closest('.reel').querySelectorAll('.cap')]);
  let finished=0,cT=0;
  // мгновенно доиграть: все ленты сразу на выпавших предметах, без щелчков и звука выигрыша
@@ -2602,20 +2605,10 @@ async function spin(){
  tracks.forEach((t,i)=>{
   const x0=new DOMMatrixReadOnly(getComputedStyle(t).transform).m41;
   const reel=t.closest('.reel');
-  let segs;
-  if(fast){
-   segs=[{to:C+(Math.random()-.5)*(d.tw-20),dur:2900+i*300,f:profile(.16,2.4)}];
-  }else{
-   const sc=Math.random(),extra=i*700;
-   if(sc<.4)      // зависает на краю соседнего… и в последний момент переползает
-    segs=[{to:edge+5,dur:9200+extra,f:profile(.17,2.6)},{to:edge+2,dur:1100,f:lin},{to:edge-8-Math.random()*16,dur:1400,f:io}];
-   else if(sc<.75) // долго ползёт через весь предмет и едва не уходит на следующий
-    segs=[{to:C-(d.tw/2-5),dur:11500+extra,f:profile(.15,3.3)}];
-   else            // почти проскакивает на следующий, но замирает у самой границы
-    segs=[{to:C-d.tw/2+12,dur:9800+extra,f:profile(.16,2.6)},{to:C-d.tw/2+3,dur:1500,f:out}];
-  }
+  // «Классика CS»: долгое плавное торможение (7 с, «быстро» — 3,5 с); где остановилась — там и приз, без доводки.
+  // Точка остановки — случайное место внутри выпавшей плитки (указатель всегда на ней).
+  const segs=[{to:C+(Math.random()-.5)*d.tw*.84,dur:(fast?3500:7000)+i*220,f:oLong}];
   const total=segs.reduce((a,x)=>a+x.dur,0);
-  if(!fast)setTimeout(()=>{if(!tok.dead)reel.classList.add('tense');},total*.62);
   let si=0,from=x0,st=performance.now(),lastIdx=-1;
   (function frame(now){
    if(tok.dead)return;
@@ -2626,15 +2619,12 @@ async function spin(){
    if(idx!==lastIdx){lastIdx=idx;caps[i].forEach(c=>{c.classList.remove('tick');c.getBoundingClientRect();c.classList.add('tick');});if(i===0){haptic('tick');cTick();}}
    if(k<1){requestAnimationFrame(frame);return;}
    if(si<segs.length-1){from=sg.to;si++;st=now;requestAnimationFrame(frame);return;}
-   // остановка → пауза → плавно в центр
-   setTimeout(()=>{
-    if(tok.dead)return;
-    reel.classList.remove('tense');reel.classList.add('done');
-    const a2=t.animate([{transform:T(sg.to)},{transform:T(C)}],{duration:650,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});
-    a2.onfinish=()=>{if(tok.dead)return;t.style.transform=T(C);a2.cancel();
-     SFX.play('caseStop');
-     if(++finished===tracks.length){const bw=lastWin.slice().sort((a,b)=>b.p-a.p)[0];setTimeout(()=>{if(SPIN===tok||!tok.dead)SFX.play('win_'+(bw&&R[bw.r]?bw.r:'common'));},120);haptic('success');}if(finished===tracks.length)setTimeout(()=>{if(tok.dead)return;tok.dead=true;SPIN=null;spinning=false;$('openBtn').disabled=false;$('reels').classList.remove('spinning');caseDone();},350);};
-   },fast?120:450);
+   // остановка: где встала — там и приз; вспышка цвета редкости
+   reel.classList.add('done');
+   reel.style.setProperty('--fc',(R[winners[i].r]||'#fff')+'aa');reel.classList.remove('flashing');void reel.offsetWidth;reel.classList.add('flashing');
+   SFX.play('caseStop');
+   if(++finished===tracks.length){const bw=lastWin.slice().sort((a,b)=>b.p-a.p)[0];setTimeout(()=>{if(SPIN===tok||!tok.dead)SFX.play('win_'+(bw&&R[bw.r]?bw.r:'common'));},120);haptic('success');
+    setTimeout(()=>{if(tok.dead)return;tok.dead=true;SPIN=null;spinning=false;$('openBtn').disabled=false;$('reels').classList.remove('spinning');caseDone();},350);}
   })(st);
  });
 }
