@@ -2266,6 +2266,15 @@ const ERR={bot_bad_url:'Адрес сайта должен начинаться 
 };
 const API={
   on:()=>LIVE,lastError:null,
+  // общие данные (каталог, лента, топ, профиль из ленты) — с нашего сервера на Railway (кэш), без вызова функции api.
+  // Если сервер старый или сайт не на Railway — берём как раньше, через функцию api.
+  pubOk:/^https?:$/.test(location.protocol)?null:false,
+  async pub(name,params){
+    if(API.pubOk!==false){try{const q=new URLSearchParams(params||{}).toString(),r=await fetch('pub/'+name+(q?'?'+q:''),{cache:'no-store'});
+      if(!(r.headers.get('content-type')||'').includes('json')){try{r.body&&r.body.cancel();}catch(e){}if(API.pubOk!==true)API.pubOk=false;}
+      else if(r.ok){const j=await r.json();if(j&&j.ok){API.pubOk=true;return j.data;}}
+    }catch(e){if(API.pubOk!==true)API.pubOk=false;}}
+    return API.call(name,params||{},true);},
   async call(action,body,silent){
     API.lastError=null;
     try{
@@ -2575,12 +2584,12 @@ function srcArt(d){
 $('topDrop').addEventListener('click',()=>{if(TOP){haptic('light');openPlayer(TOP.id,TOP);}});
 function demoPlayer(d){if(!d)return null;const pick=n=>Array.from({length:n},()=>ITEMS[Math.random()*Math.min(ITEMS.length,30)|0]);
  const inv=pick(6).map(x=>({name:x.name,price:x.p,rarity:x.r,n:1})).sort((a,b)=>b.price-a.price),rec=pick(5).map(x=>({name:x.name,price:x.p,rarity:x.r,src:'case',from:(CASES[0]||{}).name||'',ts:new Date(Date.now()-Math.random()*864e5).toISOString()}));
- return {user:d.user,since:new Date(Date.now()-20*864e5).toISOString(),stats:{cases:30+(Math.random()*200|0),upgrades:Math.random()*40|0,up_wins:Math.random()*15|0,mines:Math.random()*60|0,won:d.p*3},
+ return {user:d.user,since:new Date(Date.now()-20*864e5).toISOString(),stats:{cases:30+(Math.random()*200|0),upgrades:20+(Math.random()*40|0),up_wins:Math.random()*20|0,mines:Math.random()*60|0,won:d.p*3},
   best:{name:d.name,price:d.p,rarity:d.r,src:d.src,from:d.from},inv_count:inv.length,inv_sum:inv.reduce((a,x)=>a+x.price,0),inventory:inv,recent:rec};}
 async function openPlayer(id,d){const box=$('plBox');
  box.innerHTML=`<div class="pl-head"><span class="pl-ava u">${esc(((d&&d.user)||'?')[0].toUpperCase())}</span><div class="pl-hn"><h2 class="u">${d?d.user:'Игрок'}</h2><small class="muted">Загружаем профиль…</small></div>${XBTN}</div>`;
  openSheet('plSheet');box.scrollTop=0;
- let r=null;if(LIVE&&/^f\d+$/.test(String(id)))r=await API.call('player',{drop:String(id)},true);else if(!LIVE)r=demoPlayer(d);
+ let r=null;if(LIVE&&/^f\d+$/.test(String(id)))r=await API.pub('player',{drop:String(id)});else if(!LIVE)r=demoPlayer(d);
  if(!r){box.querySelector('.pl-hn small').textContent='Профиль не открылся — попробуй позже';return;}
  drawPlayer(r);}
 function drawPlayer(r){const st=r.stats||{},it=o=>mkItem(o);
@@ -2665,15 +2674,17 @@ function fakeSrc(it){const r=Math.random();
  if(r<.95){const f=ITEMS.filter(x=>x.p<it.p);const x=f.length?f[Math.random()*f.length|0]:ITEMS[8];return {src:'upgrade',from:x.name,cost:x.p};}
  return {src:'draw',from:'',cost:0};}
 const fakeDrop=(ts)=>{const it=roll();return {...it,...fakeSrc(it),user:NICKS[Math.random()*NICKS.length|0],ts:ts||Date.now()};};
-let feedReady=false,feedLast=0;
+let feedReady=false,feedLast=0,feedBusy=false;
 const srvDrop=o=>({name:esc(o.name),p:o.price,r:o.rarity,get mono(){return mk(o.name);},user:esc(o.user),src:o.src,from:o.from||(o.src==='upgrade'?'':''),cost:o.cost,ts:Date.parse(o.ts),id:'f'+o.id});
 async function liveFeed(){
- const top=await API.call('top',{},true);TOP=top?srvDrop(top):null;drawTop();
- const first=await API.call('feed',{after:0},true)||[];
+ const top=await API.pub('top');TOP=top?srvDrop(top):null;drawTop();
+ const first=await API.pub('feed',{after:0})||[];
  first.forEach(o=>{FEED.unshift(srvDrop(o));feedLast=Math.max(feedLast,o.id);});drawFeed();feedReady=true;
- setInterval(async()=>{const L=await API.call('feed',{after:feedLast},true);if(!L)return;
-  L.forEach(o=>{feedLast=Math.max(feedLast,o.id);pushDrop(srvDrop(o));});},5000);
- setInterval(async()=>{const t=await API.call('top',{},true);if(t&&(!TOP||t.price>TOP.p)){TOP=srvDrop(t);drawTop(true);}},60000);
+ // приложение свёрнуто — ленту не спрашиваем (меньше нагрузки на сервер), вернулся — сразу догоняем
+ const pull=async()=>{if(document.hidden||feedBusy)return;feedBusy=true;try{const L=await API.pub('feed',{after:feedLast});if(!L)return;
+  L.forEach(o=>{if(o.id>feedLast){feedLast=o.id;pushDrop(srvDrop(o));}});}finally{feedBusy=false;}};
+ setInterval(pull,5000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)pull();});
+ setInterval(async()=>{if(document.hidden)return;const t=await API.pub('top');if(t&&(!TOP||t.price>TOP.p)){TOP=srvDrop(t);drawTop(true);}},60000);
 }
 function initFeed(){if(LIVE){TOP=null;liveFeed();return;}
  for(let i=0;i<10;i++)FEED.push(fakeDrop(Date.now()-(i+1)*(40000+Math.random()*90000)));
@@ -3728,6 +3739,7 @@ function dqTick(){clearInterval(dqTimer);
 // боевой режим: спрашиваем сервер, что с заявкой
 async function dqPoll(){
  if(!DQ){clearInterval(dqTimer);return;}
+ if(document.hidden)return;   // свёрнуто — не спрашиваем, вернётся — спросим
  const r=await API.call('deposit_status',{id:DQ.id},true);if(!r)return;
  if(r.status==='queued'||r.status==='processing'){
   const ch=r.pos!==DQ.pos||r.status!==DQ.status||(r.left!=null)!==!!DQ.end;DQ.pos=r.pos;DQ.status=r.status;
@@ -4428,7 +4440,7 @@ $('admBody').addEventListener('click',async e=>{
 });
 
 // ---------- новые заявки: панель и уведомление (проверяем каждые 12 секунд) ----------
-async function admPoll(){if(!LIVE||!USER.admin)return;const o=await API.call('admin',{op:'overview'},true);if(!o)return;
+async function admPoll(){if(!LIVE||!USER.admin||document.hidden)return;const o=await API.call('admin',{op:'overview'},true);if(!o)return;
  if(AS.last.dep>=0&&o.dep_queue>AS.last.dep){toast('🔔 Новая заявка на пополнение');haptic('warning');}
  else if(AS.last.wd>=0&&o.wd_queue>AS.last.wd){toast('🔔 Новая заявка на вывод');haptic('warning');}
  else if(AS.last.pwd>=0&&o.pwd_queue>AS.last.pwd){toast('🔔 Партнёр просит вывод');haptic('warning');}
@@ -4801,7 +4813,7 @@ $('accChip').onclick=()=>{AS.tab='site';go('admin');};
 /* ---------- каталог с сервера: кейсы, шансы, предметы, бафы ---------- */
 async function loadCatalog(){
  if(!LIVE)return;
- const c=await API.call('catalog',{},true);if(!c)return;
+ const c=USER.admin?await API.call('catalog',{},true):await API.pub('catalog');if(!c)return;   // админу — всегда свежий
 catalogLoaded=true;
  Object.keys(IMG).forEach(k=>delete IMG[k]);Object.assign(IMG,c.imgs||{});
  HOME_PROMO=c.home_promo||null;setTimeout(drawHomePromo,0);SECTIONS=c.sections||[];CASES.length=0;setTimeout(drawMenu,0);c.cases.forEach(k=>CASES.push({id:k.id,name:k.name,p:k.price,c:k.color,hot:k.hot,sec:k.section??null,img:k.img||null,free:!!k.free,freeCd:k.free_cd||null,sub:k.sub||null,depNeed:k.dep_need||null,nameTag:k.name_tag||null,share:!!k.share,items:(k.items||[]).map(mkItem)}));drawCases();if(cur==='bonus')drawBonusCases();
