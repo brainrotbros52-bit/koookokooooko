@@ -747,7 +747,11 @@ html.tg .top{padding-top:calc(14px + var(--tg-content-safe-area-inset-top,0px))}
 /* пламя феникса: золотая середина зоны выигрыша; попал — стрик, огонь становится фиолетово-розово-красным, в центре феникс */
 #arcPhx{animation:phxPulse 1.3s ease-in-out infinite;transition:opacity .4s,stroke-dasharray .5s cubic-bezier(.2,.8,.2,1),transform .5s cubic-bezier(.2,.8,.2,1)}
 .wheel.streak #arcPhx{opacity:0}
-@keyframes phxPulse{0%,100%{filter:drop-shadow(0 0 3px #FFD23F) drop-shadow(0 0 1px #fff)}50%{filter:drop-shadow(0 0 10px #FFE14D) drop-shadow(0 0 2px #fff)}}
+@keyframes phxPulse{0%,100%{filter:drop-shadow(0 0 3px #B44CFF) drop-shadow(0 0 1px #fff)}50%{filter:drop-shadow(0 0 12px #C45CFF) drop-shadow(0 0 2px #fff)}}
+/* пламя феникса появляется не всегда: только когда сервер его зажёг на этой прокрутке */
+#arcPhx{opacity:0}
+.wheel.phx-on:not(.streak) #arcPhx{opacity:1}
+.wheel.phx-on .wheel-c{border-color:#B44CFF}
 .wheel .wl-phx{display:none}
 .wheel.phoenix .wl-fire{display:none}.wheel.phoenix .wl-phx{display:inline}
 .wheel.phoenix #arcGlow,.wheel.phoenix #arc{stroke:url(#arcPG)}
@@ -1268,7 +1272,7 @@ img.bri{display:block;width:2.6em;height:2.6em;object-fit:contain;filter:drop-sh
               <stop offset="0" stop-color="#FFB0E0"/><stop offset=".35" stop-color="#FF3D8B"/><stop offset=".7" stop-color="#B23BFF"/><stop offset="1" stop-color="#E01E37"/>
             </linearGradient>
             <linearGradient id="phxGold" gradientUnits="userSpaceOnUse" x1="0" y1="262" x2="0" y2="200">
-              <stop offset="0" stop-color="#FFFBE6"/><stop offset=".35" stop-color="#FFE14D"/><stop offset="1" stop-color="#FFB300"/>
+              <stop offset="0" stop-color="#F6E3FF"/><stop offset=".35" stop-color="#C45CFF"/><stop offset="1" stop-color="#7A1FD6"/>
             </linearGradient>
             <radialGradient id="bezG" cx=".5" cy="1" r=".9"><stop offset="0" stop-color="#F28743" stop-opacity=".35"/><stop offset="1" stop-color="#F28743" stop-opacity="0"/></radialGradient>
           </defs>
@@ -1861,7 +1865,7 @@ const EN={
  'Код друга работает в боевом режиме':"Friend codes work in the live app",'Код активирован':'Code activated',
  'Ты партнёр':'You are a partner','Твои реф-ссылки, коды, промокоды и доход — в кабинете партнёра':'Your referral links, codes, promo codes and income are in the partner dashboard','Открыть кабинет партнёра':'Open partner dashboard',
  '🔒 За код друга':'🔒 For a friend code','🔒 Введи код друга или партнёра':"🔒 Enter a friend's or partner's code",'Введи код друга или партнёра — и кейс откроется бесплатно':"Enter a friend's or partner's code to open this case for free",'Этот кейс бесплатный: введи код друга или партнёра (в «Бонусах», в профиле или в заявке на пополнение) — и открой его один раз.':"This case is free: enter a friend's or partner's code (in Bonuses, your profile or a deposit request) and open it once.",
- 'награда':'reward','Промокод партнёра':'Partner promo code',
+ 'награда':'reward','пламя феникса!':'phoenix flame!','стрик окончен':'streak over','феникс!':'phoenix!','🔥 Пламя феникса! Стрик: 50% на приз вдвое дороже':'🔥 Phoenix flame! Streak: 50% for a prize twice as valuable','Можно поставить максимум 6 брейнротов':'You can stake up to 6 brainrots','Промокод партнёра':'Partner promo code',
  'Розыгрыш недели':'Weekly giveaway','Розыгрыш месяца':'Monthly giveaway','Условие выполнено':'Condition met','Ты в игре ✓':'You’re in ✓',
  'Ты участвуешь! Итоги — когда выйдет время':'You’re in! Results when the time runs out','Участие бесплатное — нужно пополнение за период розыгрыша':'Free to join — just top up during the giveaway period',
  'Победителя выберем случайно, когда время выйдет. Приз сразу придёт на склад.':'The winner is picked at random when time runs out. The prize goes straight to the inventory.',
@@ -1902,7 +1906,7 @@ const EN_RX=[
  [/^Осталось отыграть (.+)$/,'Left to wager $1'],[new RegExp('^([+−-])'+_N+' к отыгрышу · (.+)$'),(m,s,n,w)=>`${s}${n} to wagering · ${tr(w)}`],[new RegExp('^([+−-])'+_N+' к отыгрышу$'),'$1$2 to wagering'],
  [/^Кейс «(.+)»$/,(m,a)=>`Case «${tr(a)}»`],[/^Апгрейд из (.+)$/,(m,a)=>`Upgrade from ${tr(a)}`],[/^Новый топ дроп: (.+)$/,'New top drop: $1'],
  [/^(.+?) · (Кейс «.+»)$/,(m,a,b)=>`${a} · ${tr(b)}`],
- [/^Улучшить · (.+)$/,'Upgrade · $1'],[/^выбрано (\d+) из (\d+)$/,'selected $1 of $2'],[/^(\d+) шт\.$/,'$1 pcs'],[/^(\d+) шт\. ·$/,'$1 pcs ·'],[/^(.+) — твой!$/,'$1 is yours!'],
+ [/^Улучшить · (.+)$/,'Upgrade · $1'],[/^выбрано (\d+) из (\d+)$/,'selected $1 of $2'],[/^(\d+) шт\.$/,'$1 pcs'],[/^(\d+) шт\. ·$/,'$1 pcs ·'],[/^(.+) — твой! Стрик феникса: (\d+)$/,'$1 is yours! Phoenix streak: $2'],[/^стрик · шаг (\d+)$/,'streak · step $1'],[/^стрик ×(\d+)$/,'streak ×$1'],[/^феникс · стрик (\d+)$/,'phoenix · streak $1'],[/^Стрик! (.+)$/,'Streak! $1'],[/^Можно поставить максимум (\d+) брейнротов$/,'You can stake up to $1 brainrots'],[/^×2 → ([\d\s.,]+)$/,'×2 → $1'],[/^(.+) — твой!$/,'$1 is yours!'],
  [/^Клетка (\d+)$/,'Tile $1'],[new RegExp('^\\+ '+_N+' монет сдачей$'),'+ $1 coins change'],[new RegExp('^'+_N+' монет$'),'$1 coins'],
  [/^Заберёшь сейчас · ×(.+)$/,'You get now · ×$1'],[/^Следующая · ×(.+)$/,'Next · ×$1'],
  [new RegExp('^Забрать (.+?) \\+ '+_N+'$'),'Cash out $1 + $2'],[/^Забрать (.+)$/,'Cash out $1'],
@@ -2734,10 +2738,10 @@ let UP_TARGETS=LIVE?[]:ITEMS;                         // во что можно 
 const ARC=2*Math.PI*122;
 const stakeSum=()=>INV.filter(x=>upSel.has(x.id)).reduce((s,x)=>s+x.p,0);
 // настройки апгрейда (с сервера — settings): макс. шанс, «честность», пламя феникса, стрик, лимит ставки
-var UPC={max:75,edge:95,phx:8,smax:4,spct:50,items:6};
+var UPC={max:75,edge:90,phx:15,show:25,smax:4,spct:50,items:6};
 // ожидаемый множитель стрика (как _up_streak_e на сервере) → поправка шанса, чтобы отдача осталась ~95%
 const upE=()=>{const n=Math.max(0,UPC.smax|0),p=UPC.spct/100;let e=0;for(let k=0;k<n;k++)e+=Math.pow(p,k)*(1-p)*Math.pow(2,k);return e+Math.pow(p,n)*Math.pow(2,n);};
-const upF=()=>1+UPC.phx/100*(upE()-1);
+const upF=()=>1+UPC.show/100*UPC.phx/100*(upE()-1);
 const upChance=()=>{const s=stakeSum();if(!s||!upTarget)return 0;return Math.min(UPC.max,s/upTarget.p*UPC.edge/upF());};
 // содержимое окошек «Ставлю» (k=0) и «Цель» (k=1)
 const UP_IC=['M12 4v14M6 12l6 6 6-6','M12 5v14M5 12h14'];
@@ -2785,7 +2789,7 @@ function drawUp(){
    <div class="num" style="display:flex;justify-content:space-between;font-size:12px"><b>${fmt(x.p)}</b>${s?`<span style="color:#F8AE74;font-weight:800">×${(x.p/s).toFixed(1)}</span>`:''}</div></button>`).join('')
    :`<p class="muted" style="grid-column:1/-1;text-align:center;font-size:13px;margin:0;padding:24px 0">${q?'Ничего не нашлось':'Нет предметов дороже ставки'}</p>`;}
 }
-const upReset=()=>{$('wheel').classList.remove('win','lose','phoenix','streak','hit');$('chanceSub').textContent='шанс';};
+const upReset=()=>{$('wheel').classList.remove('win','lose','phoenix','streak','hit','phx-on');$('chanceSub').textContent='шанс';};
 $('upLists').onclick=e=>{if(upBusy)return;const b=e.target.closest('.pick');if(!b)return;
  if(b.dataset.id){const id=+b.dataset.id;if(upSel.has(id))upSel.delete(id);else{if(upSel.size>=UPC.items){toast(`Можно поставить максимум ${UPC.items} брейнротов`);haptic('warning');return;}upSel.add(id);}}
  else{const x=UP_TARGETS.find(i=>i.name===b.dataset.t);upTarget=upTarget&&upTarget.name===x.name?null:x;upQuickInit();}
@@ -2848,12 +2852,17 @@ $('upBtn').onclick=async()=>{
   if(res.win&&r>=ch)r=Math.max(0,ch-0.5);if(!res.win&&r<ch)r=Math.min(99.99,ch+0.5);  // на случай округления
  }else{r=Math.random()*100;QD.upgrades++;QD.spend+=stakeSum();if(r<ch&&upTarget&&(upTarget.r==='legend'||upTarget.r==='myth'))QD.legend++;}
  addWager(stakeSum(),'Апгрейд');
- $('wheel').classList.remove('win','lose','phoenix','streak','hit');$('wheel').classList.add('busy');$('chanceSub').textContent='крутим…';
- const win=r<ch,fast=$('upFast').checked;
+ $('wheel').classList.remove('win','lose','phoenix','streak','hit','phx-on');$('wheel').classList.add('busy');$('chanceSub').textContent='крутим…';
+ const win=r<ch;
+ // пламя феникса появляется не на каждой прокрутке (решает сервер)
+ const phxOn=res?!!res.phx_on:(UPC.phx>0&&Math.random()*100<UPC.show);
+ const phx=res?!!res.phoenix:(win&&phxOn&&Math.abs(r-ch/2)<ch*UPC.phx/200);
+ if(phxOn){setArc(ch);$('wheel').classList.add('phx-on');$('chanceSub').textContent='пламя феникса!';SFX.play('toggleOn');}
+ // попал в пламя — прокрутка всегда медленная, даже с турбо
+ const fast=$('upFast').checked&&!phx;
  SFX.play('upStart');
  await needleTo(r,ch,fast?2400:8200,fast?3:8);
  // пламя феникса: стрик — каждый шаг 50% на брейнрота вдвое дороже; промах — забираешь, что уже выбил
- const phx=res?!!res.phoenix:(win&&UPC.phx>0&&Math.abs(r-ch/2)<ch*UPC.phx/200);
  let streak=0,finalItem=tgt0;
  if(phx){
   const steps=res?(res.streak||[]):upDemoStreak(tgt0.p);
@@ -2864,7 +2873,7 @@ $('upBtn').onclick=async()=>{
    setArc(UPC.spct,true);$('chance').textContent=fmt(UPC.spct)+'%';$('chanceSub').textContent='стрик · шаг '+(i+1);
    $('upX').textContent='×2 → '+fmt(finalItem.p*2);
    await upSleep(450);SFX.play('upStart');
-   await needleTo(Math.min(99.99,Math.max(0,st.roll)),UPC.spct,fast?1400:3000,fast?2:3);
+   await needleTo(Math.min(99.99,Math.max(0,st.roll)),UPC.spct,3200,3);   // стрик — всегда медленно
    if(st.ok){finalItem=mkItem(st.item);streak++;
     $('upTo').innerHTML=upSlot([finalItem],1);W.classList.remove('hit');void W.offsetWidth;W.classList.add('hit');
     SFX.play('upWin');haptic('success');$('chanceSub').textContent='стрик ×'+Math.pow(2,streak);toast('Стрик! '+finalItem.name);await upSleep(1000);}
@@ -3540,7 +3549,7 @@ setInterval(drawDaily,30000);
    АДМИН-ПАНЕЛЬ. Все действия идут на сервер (action 'admin'),
    сервер сам проверяет, что ты в таблице admins.
    ===================================================================== */
-const ADM_TABS=[['dep','Пополнения'],['wd','Выводы'],['users','Игроки'],['partners','Партнёры'],['cases','Кейсы'],['items','Брейнроты'],['promo','Промо'],['draws','Розыгрыши'],['site','Доступ']];
+const ADM_TABS=[['dep','Пополнения'],['wd','Выводы'],['users','Игроки'],['partners','Партнёры'],['cases','Кейсы'],['items','Брейнроты'],['promo','Промо'],['draws','Розыгрыши'],['up','Апгрейд'],['site','Доступ']];
 const AS={tab:'dep',mode:{dep:'active',wd:'active',partners:'list'},page:{dep:1,wd:1,users:1,partners:1,pwd:1,apps:1},q:{users:'',partners:''},card:null,cardPage:1,pcard:null,pcPage:1,pcode:'',pwdHist:false,cnt:{},last:{dep:-1,wd:-1,pwd:-1,apps:-1}};
 const RCOL=r=>R[r]||'#BEAD9E';
 async function adm(op,args,quiet){const r=await API.call('admin',{op,args:args||{}});if(r&&r.msg&&!quiet){toast(r.msg);haptic('success');}return r;}
@@ -3598,6 +3607,7 @@ async function admLoad(){
  else if(T==='partners')await admPartners(B);
  else if(T==='cases')await admCases(B);
  else if(T==='site')await admSite(B);
+ else if(T==='up')await admUp(B);
  else if(T==='draws')await admDraws(B);
  else if(T==='items')await admItems(B);
  else if(T==='users'){
@@ -3731,6 +3741,31 @@ async function admPartnerCard(){
 const ACC=[[0,'Открыто для всех','Приложение работает как обычно'],
  [1,'Только партнёры и админы','Обычные игроки видят «Мы на обновлении»'],
  [2,'Только админы','Игроки и партнёры видят «Мы на обновлении»']];
+// ---------- апгрейд: отдача, пламя феникса, стрик, подкрутка (только себе) ----------
+async function admUp(B){const r=await adm('up_get',{},true);if(!r)return;AS.up=r;admUpDraw();}
+function admUpDraw(){const r=AS.up||{},st=r.stats||{};
+ const F=1+(+r.show||0)/100*(+r.phx||0)/100*((+r.e||1)-1),cut=(1-1/F)*100,real=st.bet?st.pay/st.bet*100:null;
+ const fld=(id,t,v,hint)=>`<label>${t}<input id="${id}" type="number" inputmode="decimal" value="${v??''}">${hint?`<small class="muted" style="font-size:11px;font-weight:600">${hint}</small>`:''}</label>`;
+ $('admBody').innerHTML=`<div class="adm-card${r.rig?' hot':''}">
+   <div class="adm-row"><b>Подкрутка феникса</b><span class="badge" style="margin-left:auto;${r.rig?'background:#3A1F4C;color:#E3B3FF':'background:#31251E;color:#BEAD9E'}">${r.rig?'включена':'выключена'}</span></div>
+   ${tgl('upRig',!!r.rig,'У меня всегда пламя феникса','Только на твоём аккаунте: стрелка всегда попадает в пламя, дальше стрик как у всех. Такие выигрыши не показываются в ленте дропов и топе.')}
+  </div>
+  <div class="adm-card">
+   <div class="adm-row"><b>Отдача и пламя феникса</b></div>
+   <div class="pc-f c2">
+    ${fld('upEdge','Отдача (RTP), %',r.edge,'шанс = ставка / цель × это')}
+    ${fld('upMax','Макс. шанс, %',r.max)}
+    ${fld('upShow','Как часто появляется пламя, %',r.show,'доля прокруток')}
+    ${fld('upPhx','Размер пламени, %',r.phx,'от зоны выигрыша; 0 — выключить')}
+    ${fld('upSmax','Шагов стрика',r.smax,'каждый ×2 к цене')}
+    ${fld('upSpct','Шанс шага стрика, %',r.spct)}
+    ${fld('upItems','Брейнротов в ставке, макс.',r.items)}
+   </div>
+   <p class="pc-hint" style="margin:0">Чтобы отдача оставалась около ${fmt(+r.edge||0)}%, показанный шанс ниже на ${cut.toFixed(1).replace('.',',')}% — это «оплата» стрика феникса.${real!=null?` За 7 дней: ${fmt(st.n)} апгрейдов, отдача ${real.toFixed(1).replace('.',',')}%, фениксов ${fmt(st.phx)}.`:''}</p>
+   <div class="adm-acts"><button class="fire" data-a="up_save">Сохранить</button></div>
+  </div>`;
+ $('upRig').onchange=async e=>{const on=e.target.checked;e.target.disabled=true;const x=await adm('up_rig',{on});e.target.disabled=false;if(!x){e.target.checked=!on;return;}AS.up.rig=on;admUpDraw();};
+}
 async function admSite(B){const r=await adm('access_get',{},true);if(!r)return;AS.acc=r;AS.accSel=+r.mode||0;AS.accMsg=r.msg||'';admSiteDraw();}
 function admSiteDraw(){const r=AS.acc||{},sel=AS.accSel,cur=+r.mode||0;
  $('admBody').innerHTML=`<div class="adm-card">
@@ -4036,6 +4071,9 @@ $('admBody').addEventListener('click',async e=>{
   else if(a==='draw_save'){const per=b.dataset.per,v=k=>$(k+per).value,m=v('drM_').trim();
    if(!/^\d{1,7}$/.test(m)){toast('Порог пополнения — целое число');b.disabled=false;return;}
    r=await adm('draw_set',{period:per,prize:v('drP_'),next:v('drN_'),min_dep:m});if(r)DRW=null;}
+  else if(a==='up_save'){const v=id=>$(id).value.trim();
+   r=await adm('up_set',{edge:v('upEdge'),max:v('upMax'),show:v('upShow'),phx:v('upPhx'),smax:v('upSmax'),spct:v('upSpct'),items:v('upItems')});
+   if(r)loadCatalog();}
   else if(a==='draw_finish'){r=await adm('draw_finish',{period:b.dataset.per});if(r)DRW=null;}
   else if(a==='draw_reset'){r=await adm('draws_reset',{period:b.dataset.per});if(r)DRW=null;}
   else if(a==='draws_reset_all'){r=await adm('draws_reset',{});if(r)DRW=null;}
@@ -4442,7 +4480,7 @@ catalogLoaded=true;
   if(l.length)BUFFS.push({t:T[t][0],d:T[t][1],c:T[t][2],neg:t==='down'?1:0,l});l.forEach(([n,v])=>BUFF_V[n]=v);}
  if(c.settings){if(c.settings.daily_amount)DAILY_AMOUNT=+c.settings.daily_amount;
   const S=c.settings,n=(k,d)=>S[k]!=null&&isFinite(+S[k])?+S[k]:d;
-  UPC={max:n('upgrade_max',75),edge:n('upgrade_edge',95),phx:n('upgrade_phoenix',8),smax:n('upgrade_streak_max',4),spct:n('upgrade_streak_pct',50),items:n('upgrade_max_items',6)};}
+  UPC={max:n('upgrade_max',75),edge:n('upgrade_edge',90),phx:n('upgrade_phoenix',15),show:n('upgrade_phoenix_show',25),smax:n('upgrade_streak_max',4),spct:n('upgrade_streak_pct',50),items:n('upgrade_max_items',6)};}
  const mx=Math.max(0,...c.buffs.map(b=>+b.pct));const bb=document.querySelector('.buffbar .badge');if(bb)bb.textContent='до +'+String(mx).replace('.',',')+'%';
  drawDaily();if($('depModal').classList.contains('open'))drawDep();
  // картинки пришли — перерисовать ленту и открытый экран
